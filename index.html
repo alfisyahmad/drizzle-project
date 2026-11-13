@@ -3,43 +3,81 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Drizzle Project</title>
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      margin: 0;
-      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-      color: #f8fafc;
-    }
-    .card {
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 2.5rem;
-      border-radius: 1rem;
-      text-align: center;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
-      max-width: 480px;
-    }
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 0.5rem;
-      color: #38bdf8;
-    }
-    p {
-      color: #94a3b8;
-      line-height: 1.6;
-    }
-  </style>
+  <title>Drizzle Project - Custom Merchandise & Tracking</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-  <div class="card">
-    <h1>Drizzle Project</h1>
-    <p>Inisialisasi proyek berhasil. Halaman ini siap untuk pengembangan lebih lanjut.</p>
-  </div>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
+  <!-- Navbar -->
+  <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <span class="text-2xl font-black tracking-wider text-sky-400">DRIZZLE</span>
+        <span class="text-xs font-semibold px-2 py-0.5 rounded bg-sky-950 text-sky-300 border border-sky-800">PROJECT</span>
+      </div>
+      <nav class="flex items-center space-x-6 text-sm font-medium">
+        <a href="index.html" class="text-sky-400 hover:text-sky-300 transition">Beranda</a>
+        <a href="order.html" class="text-slate-300 hover:text-sky-400 transition">Order Custom</a>
+        <a href="tracking.html" class="text-slate-300 hover:text-sky-400 transition">Lacak Pesanan</a>
+        <a href="admin.html" class="text-slate-400 hover:text-slate-200 text-xs px-3 py-1.5 rounded-lg border border-slate-700 hover:border-slate-500 transition">Admin Portal</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main class="flex-1">
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
+      <span class="inline-block py-1 px-3 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-400 text-xs font-semibold uppercase tracking-wider mb-4">
+        Custom Merchandise & Apparel Vendor
+      </span>
+      <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-white max-w-3xl mx-auto leading-tight">
+        Satu Sistem Terpusat untuk <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400">Order & Tracking</span> Merchandise
+      </h1>
+      <p class="mt-6 text-lg text-slate-400 max-w-2xl mx-auto">
+        Kustomisasi T-Shirt, PDH/Kemeja, Hoodie, Varsity, Bomber, Coach, Vest, Lanyard, hingga Tote Bag dengan alur produksi yang transparan dan terstruktur.
+      </p>
+      <div class="mt-8 flex justify-center gap-4">
+        <a href="order.html" class="px-6 py-3 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-semibold transition shadow-lg shadow-sky-500/20">
+          Mulai Buat Pesanan
+        </a>
+        <a href="tracking.html" class="px-6 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold border border-slate-700 transition">
+          Lacak Pesanan Saya
+        </a>
+      </div>
+    </section>
+
+    <!-- Catalog Overview -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <h2 class="text-2xl font-bold text-slate-200 mb-6 text-center">Kategori Produk Unggulan</h2>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+        <div class="p-4 rounded-xl bg-slate-800/50 border border-slate-700/60 text-center">
+          <div class="text-2xl mb-2">👕</div>
+          <h3 class="font-semibold text-white text-sm">T-Shirt & Kaos</h3>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-800/50 border border-slate-700/60 text-center">
+          <div class="text-2xl mb-2">👔</div>
+          <h3 class="font-semibold text-white text-sm">PDH & Kemeja</h3>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-800/50 border border-slate-700/60 text-center">
+          <div class="text-2xl mb-2">🧥</div>
+          <h3 class="font-semibold text-white text-sm">Hoodie & Zipper</h3>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-800/50 border border-slate-700/60 text-center">
+          <div class="text-2xl mb-2">🎓</div>
+          <h3 class="font-semibold text-white text-sm">Varsity & Bomber</h3>
+        </div>
+        <div class="p-4 rounded-xl bg-slate-800/50 border border-slate-700/60 text-center">
+          <div class="text-2xl mb-2">👜</div>
+          <h3 class="font-semibold text-white text-sm">Lanyard & Tote Bag</h3>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-800 py-6 text-center text-xs text-slate-500">
+    <p>&copy; 2026 Drizzle Project. All rights reserved.</p>
+  </footer>
+
+  <script src="js/app.js"></script>
 </body>
 </html>

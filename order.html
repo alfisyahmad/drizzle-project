@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Pemesanan Custom - Drizzle Project</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
+  <!-- Navbar -->
+  <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <a href="index.html" class="text-2xl font-black tracking-wider text-sky-400">DRIZZLE</a>
+        <span class="text-xs font-semibold px-2 py-0.5 rounded bg-sky-950 text-sky-300 border border-sky-800">PROJECT</span>
+      </div>
+      <nav class="flex items-center space-x-6 text-sm font-medium">
+        <a href="index.html" class="text-slate-300 hover:text-sky-400 transition">Beranda</a>
+        <a href="order.html" class="text-sky-400 hover:text-sky-300 transition">Order Custom</a>
+        <a href="tracking.html" class="text-slate-300 hover:text-sky-400 transition">Lacak Pesanan</a>
+        <a href="admin.html" class="text-slate-400 hover:text-slate-200 text-xs px-3 py-1.5 rounded-lg border border-slate-700 hover:border-slate-500 transition">Admin Portal</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex-1 py-12 px-4 sm:px-6 lg:px-8 max-w-4xl mx-auto w-full">
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-white">Form Pemesanan Custom</h1>
+      <p class="text-slate-400 text-sm mt-1">Lengkapi spesifikasi pesanan merchandise vendor Anda di bawah ini.</p>
+    </div>
+
+    <form id="order-form" class="space-y-8 bg-slate-800/40 p-6 sm:p-8 rounded-2xl border border-slate-800">
+      <!-- 1. Kategori & Quantity -->
+      <div>
+        <h2 class="text-lg font-semibold text-sky-400 mb-4 flex items-center gap-2">
+          <span class="w-6 h-6 rounded-full bg-sky-500/20 text-sky-400 text-xs flex items-center justify-center font-bold">1</span>
+          Pilihan Produk & Kategori
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-2">Kategori Produk</label>
+            <select class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-sky-500">
+              <option value="T-Shirt">T-Shirt (Kaos Katun)</option>
+              <option value="PDH/Shirt">PDH / Kemeja Kantor</option>
+              <option value="Hoodie">Hoodie / Zipper</option>
+              <option value="Coach">Coach Jacket</option>
+              <option value="Vest">Vest Rompi</option>
+              <option value="Varsity">Varsity Jacket</option>
+              <option value="Bomber">Bomber Jacket</option>
+              <option value="Lanyard">Lanyard</option>
+              <option value="Tote Bag">Tote Bag Kanvas</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-2">Estimasi Total Quantity (Pcs)</label>
+            <input type="number" min="1" placeholder="Contoh: 30" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-sky-500" required>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Identitas Pemesan -->
+      <div>
+        <h2 class="text-lg font-semibold text-sky-400 mb-4 flex items-center gap-2">
+          <span class="w-6 h-6 rounded-full bg-sky-500/20 text-sky-400 text-xs flex items-center justify-center font-bold">2</span>
+          Identitas Pemesan / Komunitas
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-2">Nama Pemesan / Lembaga</label>
+            <input type="text" placeholder="Nama lengkap atau organisasi" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-sky-500" required>
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-2">No. WhatsApp</label>
+            <input type="tel" placeholder="08xxxxxxxxxx" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-sky-500" required>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Breakdown Ukuran -->
+      <div>
+        <h2 class="text-lg font-semibold text-sky-400 mb-4 flex items-center gap-2">
+          <span class="w-6 h-6 rounded-full bg-sky-500/20 text-sky-400 text-xs flex items-center justify-center font-bold">3</span>
+          Breakdown Ukuran (Qty)
+        </h2>
+        <div class="grid grid-cols-5 gap-3">
+          <div>
+            <label class="block text-xs text-center text-slate-400 mb-1">S</label>
+            <input type="number" min="0" value="0" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-center text-sm text-slate-200 focus:border-sky-500">
+          </div>
+          <div>
+            <label class="block text-xs text-center text-slate-400 mb-1">M</label>
+            <input type="number" min="0" value="0" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-center text-sm text-slate-200 focus:border-sky-500">
+          </div>
+          <div>
+            <label class="block text-xs text-center text-slate-400 mb-1">L</label>
+            <input type="number" min="0" value="0" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-center text-sm text-slate-200 focus:border-sky-500">
+          </div>
+          <div>
+            <label class="block text-xs text-center text-slate-400 mb-1">XL</label>
+            <input type="number" min="0" value="0" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-center text-sm text-slate-200 focus:border-sky-500">
+          </div>
+          <div>
+            <label class="block text-xs text-center text-slate-400 mb-1">XXL</label>
+            <input type="number" min="0" value="0" class="w-full bg-slate-900 border border-slate-700 rounded-lg px-2 py-1.5 text-center text-sm text-slate-200 focus:border-sky-500">
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Desain & Spesifikasi -->
+      <div>
+        <h2 class="text-lg font-semibold text-sky-400 mb-4 flex items-center gap-2">
+          <span class="w-6 h-6 rounded-full bg-sky-500/20 text-sky-400 text-xs flex items-center justify-center font-bold">4</span>
+          Upload Mockup & Spesifikasi
+        </h2>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-2">Upload Desain / Mockup / Logo</label>
+            <input type="file" class="w-full text-xs text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-sky-500/10 file:text-sky-400 hover:file:bg-sky-500/20">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-slate-300 mb-2">Spesifikasi Sablon / Bordir & Catatan Khusus</label>
+            <textarea rows="3" placeholder="Contoh: Sablon plastisol dada kiri dan punggung, warna dasar kain navy..." class="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:outline-none focus:border-sky-500"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" class="w-full py-3 bg-sky-500 hover:bg-sky-400 text-slate-950 font-semibold rounded-xl transition shadow-lg shadow-sky-500/20">
+        Kirim & Buat Pesanan
+      </button>
+    </form>
+  </main>
+
+  <footer class="border-t border-slate-800 py-6 text-center text-xs text-slate-500">
+    <p>&copy; 2026 Drizzle Project. All rights reserved.</p>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
