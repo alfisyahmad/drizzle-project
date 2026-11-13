@@ -1,83 +1,644 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Drizzle Project - Custom Merchandise & Tracking</title>
+  <title>DRIZZLE PROJECT // Custom Merchandise & Apparel SaaS</title>
+
+  <!-- Google Fonts: Anton, Space Grotesk, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            carbon: '#0A0A0A',
+            card: '#141414',
+            subtle: '#262626',
+            neon: '#D2FF00',
+            textLight: '#F5F5F5'
+          },
+          fontFamily: {
+            anton: ['Anton', 'sans-serif'],
+            space: ['Space Grotesk', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #0A0A0A;
+      color: #F5F5F5;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    @keyframes marquee {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+    .animate-marquee {
+      display: flex;
+      width: max-content;
+      animation: marquee 28s linear infinite;
+    }
+    .animate-marquee:hover {
+      animation-play-state: paused;
+    }
+    /* Grid background pattern */
+    .bg-grid-pattern {
+      background-size: 40px 40px;
+      background-image: 
+        linear-gradient(to right, rgba(38, 38, 38, 0.4) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(38, 38, 38, 0.4) 1px, transparent 1px);
+    }
+  </style>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
-  <!-- Navbar -->
-  <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-      <div class="flex items-center space-x-3">
-        <span class="text-2xl font-black tracking-wider text-sky-400">DRIZZLE</span>
-        <span class="text-xs font-semibold px-2 py-0.5 rounded bg-sky-950 text-sky-300 border border-sky-800">PROJECT</span>
-      </div>
-      <nav class="flex items-center space-x-6 text-sm font-medium">
-        <a href="index.html" class="text-sky-400 hover:text-sky-300 transition">Beranda</a>
-        <a href="order.html" class="text-slate-300 hover:text-sky-400 transition">Order Custom</a>
-        <a href="tracking.html" class="text-slate-300 hover:text-sky-400 transition">Lacak Pesanan</a>
-        <a href="admin.html" class="text-slate-400 hover:text-slate-200 text-xs px-3 py-1.5 rounded-lg border border-slate-700 hover:border-slate-500 transition">Admin Portal</a>
+<body class="bg-carbon text-textLight antialiased selection:bg-neon selection:text-black">
+
+  <!-- ================= NAVBAR ================= -->
+  <header class="sticky top-0 z-50 backdrop-blur-md bg-[#0A0A0A]/85 border-b border-subtle">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <!-- Logo Brand -->
+      <a href="index.html" class="flex items-center space-x-3 group">
+        <div class="w-9 h-9 bg-neon flex items-center justify-center font-anton text-black text-xl rounded tracking-tighter group-hover:scale-105 transition-transform">
+          D
+        </div>
+        <div>
+          <span class="font-anton text-2xl tracking-wider text-white group-hover:text-neon transition-colors">DRIZZLE</span>
+          <span class="block font-mono text-[10px] text-zinc-500 tracking-widest uppercase -mt-1">PROJECT // SAAS 2.0</span>
+        </div>
+      </a>
+
+      <!-- Navigation Links -->
+      <nav class="hidden md:flex items-center space-x-8 text-sm font-medium">
+        <a href="index.html" class="text-neon flex items-center gap-1.5 font-semibold">
+          <span class="w-1.5 h-1.5 rounded-full bg-neon"></span>
+          Katalog & Home
+        </a>
+        <a href="order.html" class="text-zinc-400 hover:text-white transition font-mono uppercase text-xs tracking-wider">
+          Order Custom
+        </a>
+        <a href="tracking.html" class="text-zinc-400 hover:text-white transition font-mono uppercase text-xs tracking-wider">
+          Lacak Pesanan
+        </a>
+        <a href="admin.html" class="px-3.5 py-1.5 rounded-lg border border-subtle hover:border-zinc-500 text-zinc-300 hover:text-white text-xs font-mono tracking-wider transition bg-card">
+          Admin ERP
+        </a>
       </nav>
+
+      <!-- CTA Nav -->
+      <div class="flex items-center space-x-4">
+        <div class="hidden lg:flex items-center space-x-2 font-mono text-xs text-zinc-400 bg-card px-3 py-1.5 rounded-full border border-subtle">
+          <span class="w-2 h-2 rounded-full bg-neon animate-pulse"></span>
+          <span>CRM &bull; ERP &bull; SCM</span>
+        </div>
+        <a href="order.html" class="bg-neon text-black font-anton tracking-wider uppercase px-5 py-2.5 rounded text-sm hover:bg-white transition-all shadow-[0_0_20px_rgba(210,255,0,0.25)] hover:shadow-[0_0_25px_rgba(255,255,255,0.4)]">
+          ORDER NOW &rarr;
+        </a>
+      </div>
     </div>
   </header>
 
-  <!-- Hero Section -->
-  <main class="flex-1">
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
-      <span class="inline-block py-1 px-3 rounded-full bg-sky-500/10 border border-sky-500/20 text-sky-400 text-xs font-semibold uppercase tracking-wider mb-4">
-        Custom Merchandise & Apparel Vendor
-      </span>
-      <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-white max-w-3xl mx-auto leading-tight">
-        Satu Sistem Terpusat untuk <span class="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-indigo-400">Order & Tracking</span> Merchandise
+  <!-- ================= HERO SECTION (MOTORSPORT & STREETWEAR EDITORIAL) ================= -->
+  <section class="relative min-h-[90vh] flex flex-col justify-center items-center text-center px-4 sm:px-6 lg:px-8 overflow-hidden bg-grid-pattern border-b border-subtle">
+    <!-- Ambient Glow Backgrounds -->
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-neon/10 rounded-full blur-[140px] pointer-events-none"></div>
+
+    <div class="relative z-10 max-w-5xl mx-auto pt-12 pb-16">
+      <!-- Top Badges -->
+      <div class="inline-flex items-center gap-3 px-3 py-1 rounded-full bg-card border border-subtle mb-6">
+        <span class="font-mono text-xs text-neon font-bold tracking-wider">// MOTORSPORT & STREETWEAR VENDOR</span>
+        <span class="w-1 h-1 rounded-full bg-zinc-600"></span>
+        <span class="font-mono text-xs text-zinc-400 uppercase">INTEGRATED SIM SAAS</span>
+      </div>
+
+      <!-- Main Headline in Anton Font -->
+      <h1 class="font-anton text-6xl sm:text-8xl lg:text-9xl tracking-tight leading-[0.9] text-white uppercase select-none">
+        ENGINEERED <br>
+        <span class="text-transparent bg-clip-text bg-gradient-to-r from-neon via-white to-neon">MERCHANDISE</span>
       </h1>
-      <p class="mt-6 text-lg text-slate-400 max-w-2xl mx-auto">
-        Kustomisasi T-Shirt, PDH/Kemeja, Hoodie, Varsity, Bomber, Coach, Vest, Lanyard, hingga Tote Bag dengan alur produksi yang transparan dan terstruktur.
+
+      <!-- Editorial Subtitle in Space Grotesk -->
+      <p class="mt-8 text-base sm:text-lg lg:text-xl text-zinc-400 max-w-2xl mx-auto font-light leading-relaxed">
+        Sistem ERP, CRM & SCM terintegrasi untuk custom apparel kelas motorsport & streetwear. Dari pemilihan 11 kategori produk, spesifikasi bordir & sablon, hingga pelacakan produksi 6 tahap secara real-time.
       </p>
-      <div class="mt-8 flex justify-center gap-4">
-        <a href="order.html" class="px-6 py-3 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-semibold transition shadow-lg shadow-sky-500/20">
-          Mulai Buat Pesanan
+
+      <!-- Hero CTAs -->
+      <div class="mt-10 flex flex-wrap justify-center items-center gap-4">
+        <a href="order.html" class="bg-neon text-black font-anton tracking-wider uppercase text-base px-8 py-4 rounded hover:bg-white transition-all shadow-[0_0_30px_rgba(210,255,0,0.35)] flex items-center gap-2">
+          <span>BUAT PESANAN CUSTOM</span>
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
-        <a href="tracking.html" class="px-6 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold border border-slate-700 transition">
-          Lacak Pesanan Saya
+        <a href="tracking.html" class="bg-card hover:bg-zinc-900 text-white font-mono uppercase text-xs tracking-wider px-6 py-4 rounded border border-subtle hover:border-neon transition flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-neon"></span>
+          <span>PORTAL LACAK PESANAN</span>
         </a>
       </div>
-    </section>
 
-    <!-- Catalog Overview -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <h2 class="text-2xl font-bold text-slate-200 mb-6 text-center">Kategori Produk Unggulan</h2>
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-        <div class="p-4 rounded-xl bg-slate-800/50 border border-slate-700/60 text-center">
-          <div class="text-2xl mb-2">👕</div>
-          <h3 class="font-semibold text-white text-sm">T-Shirt & Kaos</h3>
+      <!-- Quick Metrics -->
+      <div class="mt-16 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto border-t border-subtle pt-8 text-left">
+        <div>
+          <span class="font-mono text-[11px] text-zinc-500 uppercase tracking-widest block">CATALOG ITEMS</span>
+          <span class="font-anton text-3xl text-white">11 PRODUCTS</span>
         </div>
-        <div class="p-4 rounded-xl bg-slate-800/50 border border-slate-700/60 text-center">
-          <div class="text-2xl mb-2">👔</div>
-          <h3 class="font-semibold text-white text-sm">PDH & Kemeja</h3>
+        <div>
+          <span class="font-mono text-[11px] text-zinc-500 uppercase tracking-widest block">PRODUCTION STAGES</span>
+          <span class="font-anton text-3xl text-neon">6 TIMELINES</span>
         </div>
-        <div class="p-4 rounded-xl bg-slate-800/50 border border-slate-700/60 text-center">
-          <div class="text-2xl mb-2">🧥</div>
-          <h3 class="font-semibold text-white text-sm">Hoodie & Zipper</h3>
+        <div>
+          <span class="font-mono text-[11px] text-zinc-500 uppercase tracking-widest block">INTEGRATION ARCH</span>
+          <span class="font-anton text-3xl text-white">CRM &bull; ERP &bull; SCM</span>
         </div>
-        <div class="p-4 rounded-xl bg-slate-800/50 border border-slate-700/60 text-center">
-          <div class="text-2xl mb-2">🎓</div>
-          <h3 class="font-semibold text-white text-sm">Varsity & Bomber</h3>
-        </div>
-        <div class="p-4 rounded-xl bg-slate-800/50 border border-slate-700/60 text-center">
-          <div class="text-2xl mb-2">👜</div>
-          <h3 class="font-semibold text-white text-sm">Lanyard & Tote Bag</h3>
+        <div>
+          <span class="font-mono text-[11px] text-zinc-500 uppercase tracking-widest block">CLIENT SATISFACTION</span>
+          <span class="font-anton text-3xl text-neon">100% QUALITY</span>
         </div>
       </div>
-    </section>
-  </main>
+    </div>
+  </section>
 
-  <!-- Footer -->
-  <footer class="border-t border-slate-800 py-6 text-center text-xs text-slate-500">
-    <p>&copy; 2026 Drizzle Project. All rights reserved.</p>
+  <!-- ================= MARQUEE / RUNNING TEXT RIBBON ================= -->
+  <div class="w-full bg-neon py-3 overflow-hidden border-y border-neon">
+    <div class="animate-marquee font-anton text-black text-sm sm:text-base tracking-widest uppercase flex items-center space-x-8">
+      <span>// DRIZZLE PROJECT MOTORSPORT & STREETWEAR</span>
+      <span>&bull;</span>
+      <span>T-SHIRT COTTON COMBED</span>
+      <span>&bull;</span>
+      <span>KEMEJA/PDH DRILL</span>
+      <span>&bull;</span>
+      <span>HOODIE HEAVYWEIGHT</span>
+      <span>&bull;</span>
+      <span>POLO SHIRT</span>
+      <span>&bull;</span>
+      <span>VARSITY SIGNATURE</span>
+      <span>&bull;</span>
+      <span>BOMBER JACKET</span>
+      <span>&bull;</span>
+      <span>COACH JACKET</span>
+      <span>&bull;</span>
+      <span>TACTICAL VEST</span>
+      <span>&bull;</span>
+      <span>LANYARD SUBLIMASI</span>
+      <span>&bull;</span>
+      <span>TOTE BAG KANVAS</span>
+      <span>&bull;</span>
+      <span>REAL-TIME TRACKING TIMELINE</span>
+      <span>&bull;</span>
+      <span>SUPPLY CHAIN AUTOMATION</span>
+      <span>&bull;</span>
+      <!-- Duplicate for infinite continuous loop -->
+      <span>// DRIZZLE PROJECT MOTORSPORT & STREETWEAR</span>
+      <span>&bull;</span>
+      <span>T-SHIRT COTTON COMBED</span>
+      <span>&bull;</span>
+      <span>KEMEJA/PDH DRILL</span>
+      <span>&bull;</span>
+      <span>HOODIE HEAVYWEIGHT</span>
+      <span>&bull;</span>
+      <span>POLO SHIRT</span>
+      <span>&bull;</span>
+      <span>VARSITY SIGNATURE</span>
+      <span>&bull;</span>
+      <span>BOMBER JACKET</span>
+      <span>&bull;</span>
+      <span>COACH JACKET</span>
+      <span>&bull;</span>
+      <span>TACTICAL VEST</span>
+      <span>&bull;</span>
+      <span>LANYARD SUBLIMASI</span>
+      <span>&bull;</span>
+      <span>TOTE BAG KANVAS</span>
+      <span>&bull;</span>
+    </div>
+  </div>
+
+  <!-- ================= BENTO GRID KATALOG PRODUK (11 ITEMS) ================= -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 border-b border-subtle pb-6">
+      <div>
+        <div class="flex items-center gap-2 font-mono text-xs text-neon mb-2">
+          <span class="w-2 h-2 bg-neon rounded-none"></span>
+          <span>CURATED COLLECTION // 11 MERCHANDISE ITEMS</span>
+        </div>
+        <h2 class="font-anton text-4xl sm:text-6xl text-white uppercase tracking-tight">
+          PRODUCT CATALOG
+        </h2>
+      </div>
+      <p class="text-zinc-400 text-sm max-w-md mt-4 md:mt-0 font-light">
+        Dibuat dengan standar garmen tertinggi. Pilih item yang Anda butuhkan dan tentukan spesifikasi sablon, bordir, serta rincian ukuran di form custom.
+      </p>
+    </div>
+
+    <!-- Bento Grid Container -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="product-grid">
+      <!-- 1. T-Shirt -->
+      <div class="bg-card border border-subtle rounded-xl p-6 flex flex-col justify-between hover:border-neon transition-all duration-300 hover:-translate-y-1.5 group">
+        <div>
+          <div class="flex justify-between items-start mb-4">
+            <span class="font-mono text-xs px-2 py-0.5 rounded bg-neon/10 text-neon border border-neon/30">BESTSELLER</span>
+            <span class="font-mono text-xs text-zinc-500">MIN 24 PCS</span>
+          </div>
+          <h3 class="font-anton text-3xl text-white group-hover:text-neon transition-colors tracking-wide uppercase">T-SHIRT</h3>
+          <p class="text-zinc-400 text-xs mt-2 line-clamp-2">Cotton Combed 30s/24s Reactive super lembut, aplikasi sablon DTF & Plastisol high density tajam.</p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-subtle flex items-center justify-between">
+          <div>
+            <span class="font-mono text-[10px] text-zinc-500 uppercase block">STARTING PRICE</span>
+            <span class="font-mono font-bold text-neon text-lg">Rp 65.000</span>
+          </div>
+          <a href="order.html?product=T-Shirt" class="bg-neon text-black font-anton tracking-wider text-xs px-4 py-2 rounded uppercase hover:bg-white transition">
+            ORDER CUSTOM &rarr;
+          </a>
+        </div>
+      </div>
+
+      <!-- 2. Kemeja/PDH -->
+      <div class="bg-card border border-subtle rounded-xl p-6 flex flex-col justify-between hover:border-neon transition-all duration-300 hover:-translate-y-1.5 group">
+        <div>
+          <div class="flex justify-between items-start mb-4">
+            <span class="font-mono text-xs px-2 py-0.5 rounded bg-sky-500/10 text-sky-400 border border-sky-500/30">CAMPUS & BEM</span>
+            <span class="font-mono text-xs text-zinc-500">MIN 12 PCS</span>
+          </div>
+          <h3 class="font-anton text-3xl text-white group-hover:text-neon transition-colors tracking-wide uppercase">KEMEJA / PDH</h3>
+          <p class="text-zinc-400 text-xs mt-2 line-clamp-2">American & Japan Drill premium, jahitan jarum dua rapi, bordir komputer presisi instansi/organisasi.</p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-subtle flex items-center justify-between">
+          <div>
+            <span class="font-mono text-[10px] text-zinc-500 uppercase block">STARTING PRICE</span>
+            <span class="font-mono font-bold text-neon text-lg">Rp 110.000</span>
+          </div>
+          <a href="order.html?product=Kemeja/PDH" class="bg-neon text-black font-anton tracking-wider text-xs px-4 py-2 rounded uppercase hover:bg-white transition">
+            ORDER CUSTOM &rarr;
+          </a>
+        </div>
+      </div>
+
+      <!-- 3. Hoodie -->
+      <div class="bg-card border border-subtle rounded-xl p-6 flex flex-col justify-between hover:border-neon transition-all duration-300 hover:-translate-y-1.5 group">
+        <div>
+          <div class="flex justify-between items-start mb-4">
+            <span class="font-mono text-xs px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">HEAVYWEIGHT</span>
+            <span class="font-mono text-xs text-zinc-500">MIN 12 PCS</span>
+          </div>
+          <h3 class="font-anton text-3xl text-white group-hover:text-neon transition-colors tracking-wide uppercase">HOODIE</h3>
+          <p class="text-zinc-400 text-xs mt-2 line-clamp-2">Heavyweight Cotton Fleece 330gsm, tali katun tebal, eyelet metal, saku kangguru lapang.</p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-subtle flex items-center justify-between">
+          <div>
+            <span class="font-mono text-[10px] text-zinc-500 uppercase block">STARTING PRICE</span>
+            <span class="font-mono font-bold text-neon text-lg">Rp 145.000</span>
+          </div>
+          <a href="order.html?product=Hoodie" class="bg-neon text-black font-anton tracking-wider text-xs px-4 py-2 rounded uppercase hover:bg-white transition">
+            ORDER CUSTOM &rarr;
+          </a>
+        </div>
+      </div>
+
+      <!-- 4. Polo -->
+      <div class="bg-card border border-subtle rounded-xl p-6 flex flex-col justify-between hover:border-neon transition-all duration-300 hover:-translate-y-1.5 group">
+        <div>
+          <div class="flex justify-between items-start mb-4">
+            <span class="font-mono text-xs px-2 py-0.5 rounded bg-purple-500/10 text-purple-400 border border-purple-500/30">SEMI-FORMAL</span>
+            <span class="font-mono text-xs text-zinc-500">MIN 20 PCS</span>
+          </div>
+          <h3 class="font-anton text-3xl text-white group-hover:text-neon transition-colors tracking-wide uppercase">POLO SHIRT</h3>
+          <p class="text-zinc-400 text-xs mt-2 line-clamp-2">Bahan Lacoste CVC Pique adem dan tidak menyusut, kerah rajut padat & bordir dada berkelas.</p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-subtle flex items-center justify-between">
+          <div>
+            <span class="font-mono text-[10px] text-zinc-500 uppercase block">STARTING PRICE</span>
+            <span class="font-mono font-bold text-neon text-lg">Rp 85.000</span>
+          </div>
+          <a href="order.html?product=Polo" class="bg-neon text-black font-anton tracking-wider text-xs px-4 py-2 rounded uppercase hover:bg-white transition">
+            ORDER CUSTOM &rarr;
+          </a>
+        </div>
+      </div>
+
+      <!-- 5. Jacket -->
+      <div class="bg-card border border-subtle rounded-xl p-6 flex flex-col justify-between hover:border-neon transition-all duration-300 hover:-translate-y-1.5 group">
+        <div>
+          <div class="flex justify-between items-start mb-4">
+            <span class="font-mono text-xs px-2 py-0.5 rounded bg-zinc-500/10 text-zinc-300 border border-zinc-500/30">ALL-WEATHER</span>
+            <span class="font-mono text-xs text-zinc-500">MIN 15 PCS</span>
+          </div>
+          <h3 class="font-anton text-3xl text-white group-hover:text-neon transition-colors tracking-wide uppercase">JACKET</h3>
+          <p class="text-zinc-400 text-xs mt-2 line-clamp-2">Taslan / Microfiber tahan angin dan percikan air, furing jaring bernapas & resleting waterproof.</p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-subtle flex items-center justify-between">
+          <div>
+            <span class="font-mono text-[10px] text-zinc-500 uppercase block">STARTING PRICE</span>
+            <span class="font-mono font-bold text-neon text-lg">Rp 140.000</span>
+          </div>
+          <a href="order.html?product=Jacket" class="bg-neon text-black font-anton tracking-wider text-xs px-4 py-2 rounded uppercase hover:bg-white transition">
+            ORDER CUSTOM &rarr;
+          </a>
+        </div>
+      </div>
+
+      <!-- 6. Coach -->
+      <div class="bg-card border border-subtle rounded-xl p-6 flex flex-col justify-between hover:border-neon transition-all duration-300 hover:-translate-y-1.5 group">
+        <div>
+          <div class="flex justify-between items-start mb-4">
+            <span class="font-mono text-xs px-2 py-0.5 rounded bg-orange-500/10 text-orange-400 border border-orange-500/30">STREETWEAR</span>
+            <span class="font-mono text-xs text-zinc-500">MIN 15 PCS</span>
+          </div>
+          <h3 class="font-anton text-3xl text-white group-hover:text-neon transition-colors tracking-wide uppercase">COACH JACKET</h3>
+          <p class="text-zinc-400 text-xs mt-2 line-clamp-2">Windbreaker coach jacket kasual dengan kancing snap logam anti karat dan sablon punggung A3.</p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-subtle flex items-center justify-between">
+          <div>
+            <span class="font-mono text-[10px] text-zinc-500 uppercase block">STARTING PRICE</span>
+            <span class="font-mono font-bold text-neon text-lg">Rp 135.000</span>
+          </div>
+          <a href="order.html?product=Coach" class="bg-neon text-black font-anton tracking-wider text-xs px-4 py-2 rounded uppercase hover:bg-white transition">
+            ORDER CUSTOM &rarr;
+          </a>
+        </div>
+      </div>
+
+      <!-- 7. Vest -->
+      <div class="bg-card border border-subtle rounded-xl p-6 flex flex-col justify-between hover:border-neon transition-all duration-300 hover:-translate-y-1.5 group">
+        <div>
+          <div class="flex justify-between items-start mb-4">
+            <span class="font-mono text-xs px-2 py-0.5 rounded bg-yellow-500/10 text-yellow-400 border border-yellow-500/30">TACTICAL UTILITY</span>
+            <span class="font-mono text-xs text-zinc-500">MIN 15 PCS</span>
+          </div>
+          <h3 class="font-anton text-3xl text-white group-hover:text-neon transition-colors tracking-wide uppercase">VEST / ROMPI</h3>
+          <p class="text-zinc-400 text-xs mt-2 line-clamp-2">Rompi lapangan / tactical dengan multiple utility pockets, padding dacron ringan, dan zipper YKK.</p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-subtle flex items-center justify-between">
+          <div>
+            <span class="font-mono text-[10px] text-zinc-500 uppercase block">STARTING PRICE</span>
+            <span class="font-mono font-bold text-neon text-lg">Rp 125.000</span>
+          </div>
+          <a href="order.html?product=Vest" class="bg-neon text-black font-anton tracking-wider text-xs px-4 py-2 rounded uppercase hover:bg-white transition">
+            ORDER CUSTOM &rarr;
+          </a>
+        </div>
+      </div>
+
+      <!-- 8. Varsity -->
+      <div class="bg-card border border-subtle rounded-xl p-6 flex flex-col justify-between hover:border-neon transition-all duration-300 hover:-translate-y-1.5 group">
+        <div>
+          <div class="flex justify-between items-start mb-4">
+            <span class="font-mono text-xs px-2 py-0.5 rounded bg-red-500/10 text-red-400 border border-red-500/30">SIGNATURE MERCH</span>
+            <span class="font-mono text-xs text-zinc-500">MIN 12 PCS</span>
+          </div>
+          <h3 class="font-anton text-3xl text-white group-hover:text-neon transition-colors tracking-wide uppercase">VARSITY JACKET</h3>
+          <p class="text-zinc-400 text-xs mt-2 line-clamp-2">Wool blend body dipadu synthetic leather sleeve premium, aksen bordir chenille towel timbul.</p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-subtle flex items-center justify-between">
+          <div>
+            <span class="font-mono text-[10px] text-zinc-500 uppercase block">STARTING PRICE</span>
+            <span class="font-mono font-bold text-neon text-lg">Rp 175.000</span>
+          </div>
+          <a href="order.html?product=Varsity" class="bg-neon text-black font-anton tracking-wider text-xs px-4 py-2 rounded uppercase hover:bg-white transition">
+            ORDER CUSTOM &rarr;
+          </a>
+        </div>
+      </div>
+
+      <!-- 9. Bomber -->
+      <div class="bg-card border border-subtle rounded-xl p-6 flex flex-col justify-between hover:border-neon transition-all duration-300 hover:-translate-y-1.5 group">
+        <div>
+          <div class="flex justify-between items-start mb-4">
+            <span class="font-mono text-xs px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/30">MILITARY SPEC</span>
+            <span class="font-mono text-xs text-zinc-500">MIN 12 PCS</span>
+          </div>
+          <h3 class="font-anton text-3xl text-white group-hover:text-neon transition-colors tracking-wide uppercase">BOMBER JACKET</h3>
+          <p class="text-zinc-400 text-xs mt-2 line-clamp-2">Classic flight jacket silhouette dengan saku zipper lengan, rib elastis leher & pergelangan tangan tebal.</p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-subtle flex items-center justify-between">
+          <div>
+            <span class="font-mono text-[10px] text-zinc-500 uppercase block">STARTING PRICE</span>
+            <span class="font-mono font-bold text-neon text-lg">Rp 165.000</span>
+          </div>
+          <a href="order.html?product=Bomber" class="bg-neon text-black font-anton tracking-wider text-xs px-4 py-2 rounded uppercase hover:bg-white transition">
+            ORDER CUSTOM &rarr;
+          </a>
+        </div>
+      </div>
+
+      <!-- 10. Lanyard -->
+      <div class="bg-card border border-subtle rounded-xl p-6 flex flex-col justify-between hover:border-neon transition-all duration-300 hover:-translate-y-1.5 group">
+        <div>
+          <div class="flex justify-between items-start mb-4">
+            <span class="font-mono text-xs px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">EVENT MERCH</span>
+            <span class="font-mono text-xs text-zinc-500">MIN 50 PCS</span>
+          </div>
+          <h3 class="font-anton text-3xl text-white group-hover:text-neon transition-colors tracking-wide uppercase">LANYARD</h3>
+          <p class="text-zinc-400 text-xs mt-2 line-clamp-2">Tali tisu polyester premium lebar 2cm/2.5cm, print full-color sublimasi 2 sisi, stopper & kait kokoh.</p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-subtle flex items-center justify-between">
+          <div>
+            <span class="font-mono text-[10px] text-zinc-500 uppercase block">STARTING PRICE</span>
+            <span class="font-mono font-bold text-neon text-lg">Rp 15.000</span>
+          </div>
+          <a href="order.html?product=Lanyard" class="bg-neon text-black font-anton tracking-wider text-xs px-4 py-2 rounded uppercase hover:bg-white transition">
+            ORDER CUSTOM &rarr;
+          </a>
+        </div>
+      </div>
+
+      <!-- 11. Tote Bag -->
+      <div class="bg-card border border-subtle rounded-xl p-6 flex flex-col justify-between hover:border-neon transition-all duration-300 hover:-translate-y-1.5 group">
+        <div>
+          <div class="flex justify-between items-start mb-4">
+            <span class="font-mono text-xs px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">ECO CANVAS</span>
+            <span class="font-mono text-xs text-zinc-500">MIN 30 PCS</span>
+          </div>
+          <h3 class="font-anton text-3xl text-white group-hover:text-neon transition-colors tracking-wide uppercase">TOTE BAG</h3>
+          <p class="text-zinc-400 text-xs mt-2 line-clamp-2">Kanvas tebal 12oz atau blacu natural, opsi perekat velcro / zipper, sablon awet untuk goodie bag.</p>
+        </div>
+        <div class="mt-6 pt-4 border-t border-subtle flex items-center justify-between">
+          <div>
+            <span class="font-mono text-[10px] text-zinc-500 uppercase block">STARTING PRICE</span>
+            <span class="font-mono font-bold text-neon text-lg">Rp 35.000</span>
+          </div>
+          <a href="order.html?product=Tote Bag" class="bg-neon text-black font-anton tracking-wider text-xs px-4 py-2 rounded uppercase hover:bg-white transition">
+            ORDER CUSTOM &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= LAYANAN PENDUKUNG (SUPPORTING SERVICES) ================= -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-subtle">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <span class="font-mono text-xs text-neon uppercase tracking-widest">// VALUE-ADDED SERVICES</span>
+      <h2 class="font-anton text-4xl sm:text-5xl text-white uppercase mt-2">LAYANAN PENDUKUNG PRODUKSI</h2>
+      <p class="text-zinc-400 text-sm mt-3">Tidak hanya memproduksi, Drizzle Project mendampingi dari tahap ide konsep hingga visualisasi merchandise siap rilis.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Service 1: Design -->
+      <div class="bg-card border border-subtle p-8 rounded-xl hover:border-neon transition group">
+        <div class="w-12 h-12 rounded bg-neon/10 border border-neon/30 flex items-center justify-center font-mono text-neon text-lg font-bold mb-6">
+          01
+        </div>
+        <h3 class="font-anton text-2xl text-white uppercase group-hover:text-neon transition-colors">CUSTOM DESIGN & 3D MOCKUP</h3>
+        <p class="text-zinc-400 text-xs mt-3 leading-relaxed">
+          Tim desainer in-house kami membantu merevisi, mentransformasikan file vektor (AI, CDR, PDF), serta menyusun rendering mockup realistis sebelum naik potong bahan.
+        </p>
+      </div>
+
+      <!-- Service 2: Merchandising Consultant -->
+      <div class="bg-card border border-subtle p-8 rounded-xl hover:border-neon transition group">
+        <div class="w-12 h-12 rounded bg-neon/10 border border-neon/30 flex items-center justify-center font-mono text-neon text-lg font-bold mb-6">
+          02
+        </div>
+        <h3 class="font-anton text-2xl text-white uppercase group-hover:text-neon transition-colors">MERCHANDISING CONSULTANT</h3>
+        <p class="text-zinc-400 text-xs mt-3 leading-relaxed">
+          Konsultasi pemilihan gramasi bahan kain, teknologi sablon (Plastisol vs DTF), jenis bordir komputer, dan kalkulasi HPP agar pesanan Anda ekonomis namun tetap eksklusif.
+        </p>
+      </div>
+
+      <!-- Service 3: Brand Identity -->
+      <div class="bg-card border border-subtle p-8 rounded-xl hover:border-neon transition group">
+        <div class="w-12 h-12 rounded bg-neon/10 border border-neon/30 flex items-center justify-center font-mono text-neon text-lg font-bold mb-6">
+          03
+        </div>
+        <h3 class="font-anton text-2xl text-white uppercase group-hover:text-neon transition-colors">BRAND IDENTITY & PACKAGING</h3>
+        <p class="text-zinc-400 text-xs mt-3 leading-relaxed">
+          Penyediaan aksesori branding lengkap: woven label leher, satin wash tag, sticker pack, hangtag custom, hingga plastik ziplock frosted untuk unboxing berkelas.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FAQ SECTION (DARK ACCORDION) ================= -->
+  <section class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-subtle">
+    <div class="text-center mb-12">
+      <span class="font-mono text-xs text-neon uppercase tracking-widest">// FREQUENTLY ASKED QUESTIONS</span>
+      <h2 class="font-anton text-4xl sm:text-5xl text-white uppercase mt-2">PERTANYAAN UMUM (FAQ)</h2>
+    </div>
+
+    <div class="space-y-4" id="faq-accordion">
+      <!-- FAQ 1 -->
+      <div class="bg-card border border-subtle rounded-xl overflow-hidden transition">
+        <button class="w-full text-left px-6 py-5 flex justify-between items-center text-sm font-semibold text-white focus:outline-none" onclick="toggleFaq(1)">
+          <span>Berapa batas minimal pemesanan (Minimum Order Quantity / MOQ)?</span>
+          <span class="font-mono text-neon text-lg" id="faq-icon-1">+</span>
+        </button>
+        <div id="faq-body-1" class="hidden px-6 pb-5 text-xs text-zinc-400 leading-relaxed border-t border-subtle/50 pt-3">
+          MOQ bervariasi per produk: T-Shirt mulai dari 24 pcs; Kemeja/PDH, Hoodie, Bomber, dan Varsity mulai dari 12 pcs; Lanyard 50 pcs; dan Tote Bag 30 pcs. Untuk quantity di bawah MOQ, silakan hubungi admin kami untuk penyesuaian biaya pengerjaan sample.
+        </div>
+      </div>
+
+      <!-- FAQ 2 -->
+      <div class="bg-card border border-subtle rounded-xl overflow-hidden transition">
+        <button class="w-full text-left px-6 py-5 flex justify-between items-center text-sm font-semibold text-white focus:outline-none" onclick="toggleFaq(2)">
+          <span>Berapa estimasi waktu pengerjaan produksi?</span>
+          <span class="font-mono text-neon text-lg" id="faq-icon-2">+</span>
+        </button>
+        <div id="faq-body-2" class="hidden px-6 pb-5 text-xs text-zinc-400 leading-relaxed border-t border-subtle/50 pt-3">
+          Standar produksi normal adalah 10 hingga 18 hari kerja terhitung sejak sampel desain disetujui (Design Approved) dan Down Payment (DP) 50% diverifikasi. Kami juga menyediakan opsi Express Order untuk kebutuhan event mendesak.
+        </div>
+      </div>
+
+      <!-- FAQ 3 -->
+      <div class="bg-card border border-subtle rounded-xl overflow-hidden transition">
+        <button class="w-full text-left px-6 py-5 flex justify-between items-center text-sm font-semibold text-white focus:outline-none" onclick="toggleFaq(3)">
+          <span>Bagaimana cara kerja pelacakan (Order Tracking)?</span>
+          <span class="font-mono text-neon text-lg" id="faq-icon-3">+</span>
+        </button>
+        <div id="faq-body-3" class="hidden px-6 pb-5 text-xs text-zinc-400 leading-relaxed border-t border-subtle/50 pt-3">
+          Setiap formulir yang disubmit akan otomatis menghasilkan Kode Pesanan unik (contoh: <code class="text-neon font-mono">DRZ-2026-001</code>). Anda cukup memasukkan kode tersebut pada halaman Lacak Pesanan untuk melihat timeline 6 tahap secara live.
+        </div>
+      </div>
+
+      <!-- FAQ 4 -->
+      <div class="bg-card border border-subtle rounded-xl overflow-hidden transition">
+        <button class="w-full text-left px-6 py-5 flex justify-between items-center text-sm font-semibold text-white focus:outline-none" onclick="toggleFaq(4)">
+          <span>Bagaimana mekanisme pembayaran DP dan pelunasan?</span>
+          <span class="font-mono text-neon text-lg" id="faq-icon-4">+</span>
+        </button>
+        <div id="faq-body-4" class="hidden px-6 pb-5 text-xs text-zinc-400 leading-relaxed border-t border-subtle/50 pt-3">
+          Produksi dimulai setelah DP 50% diverifikasi oleh admin ERP. Pelunasan 50% sisanya dilakukan saat pesanan telah selesai melalui tahap quality control dan berstatus "Siap Kirim/Ambil".
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PORTAL KONTAK CEPAT (CRM DIRECT CONNECT) ================= -->
+  <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 border-t border-subtle">
+    <div class="bg-card border border-subtle rounded-2xl p-8 sm:p-12 relative overflow-hidden">
+      <div class="absolute -right-20 -bottom-20 w-80 h-80 bg-neon/10 rounded-full blur-[100px] pointer-events-none"></div>
+
+      <div class="relative z-10 max-w-2xl">
+        <span class="font-mono text-xs text-neon uppercase tracking-wider">// DIRECT CRM CHANNEL</span>
+        <h2 class="font-anton text-4xl sm:text-5xl text-white uppercase mt-2">HUBUNGI MITRA DRIZZLE PROJECT</h2>
+        <p class="text-zinc-400 text-sm mt-3 font-light">
+          Butuh penawaran resmi, konsultasi bahan kain, atau invoice lembaga? Tim representatif Drizzle siap membantu Anda 7 hari seminggu.
+        </p>
+
+        <!-- Official Contact Buttons -->
+        <div class="mt-8 flex flex-wrap gap-4">
+          <!-- WhatsApp Button -->
+          <a href="https://wa.me/62882007546920" target="_blank" rel="noopener noreferrer" class="bg-neon text-black font-anton tracking-wider text-sm px-6 py-3.5 rounded uppercase hover:bg-white transition flex items-center gap-2.5 shadow-[0_0_20px_rgba(210,255,0,0.25)]">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.086.275.072.376-.043.101-.116.433-.506.549-.68.116-.173.231-.145.39-.086s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824z"/></svg>
+            <span>WHATSAPP (+62 882-0075-46920)</span>
+          </a>
+
+          <!-- Email Button -->
+          <a href="mailto:drizzlethelabel@gmail.com" class="bg-card border border-subtle hover:border-zinc-400 text-white font-mono text-xs tracking-wider px-5 py-3.5 rounded transition flex items-center gap-2">
+            <svg class="w-4 h-4 text-neon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            <span>drizzlethelabel@gmail.com</span>
+          </a>
+
+          <!-- Instagram Button -->
+          <a href="https://instagram.com/drizzleproject" target="_blank" rel="noopener noreferrer" class="bg-card border border-subtle hover:border-zinc-400 text-white font-mono text-xs tracking-wider px-5 py-3.5 rounded transition flex items-center gap-2">
+            <span class="text-neon font-bold">@</span>
+            <span>@drizzleproject</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="border-t border-subtle py-10 bg-carbon text-zinc-500 text-xs font-mono">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div>
+        <span class="text-white font-anton tracking-wider text-base">DRIZZLE PROJECT</span>
+        <p class="text-zinc-500 mt-1">&copy; 2026 Drizzle Project SaaS. All rights reserved.</p>
+      </div>
+      <div class="flex items-center space-x-6 text-[11px]">
+        <a href="index.html" class="hover:text-neon transition">Home</a>
+        <a href="order.html" class="hover:text-neon transition">Order Custom</a>
+        <a href="tracking.html" class="hover:text-neon transition">Order Tracking</a>
+        <a href="admin.html" class="hover:text-neon transition">Admin Portal</a>
+      </div>
+    </div>
   </footer>
 
   <script src="js/app.js"></script>
+  <script>
+    // FAQ Accordion Toggle
+    function toggleFaq(id) {
+      const body = document.getElementById(`faq-body-${id}`);
+      const icon = document.getElementById(`faq-icon-${id}`);
+      if (body.classList.contains('hidden')) {
+        body.classList.remove('hidden');
+        icon.textContent = '−';
+        icon.classList.add('text-white');
+        icon.classList.remove('text-neon');
+      } else {
+        body.classList.add('hidden');
+        icon.textContent = '+';
+        icon.classList.remove('text-white');
+        icon.classList.add('text-neon');
+      }
+    }
+  </script>
 </body>
 </html>
