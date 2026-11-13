@@ -12,18 +12,17 @@ Web-based Order Management & Tracking System untuk **Drizzle Project** (Vendor c
 - **Deployment**: Cloudflare Pages via GitHub Repository
 
 ## 📁 Struktur Proyek
-```text
+```plaintext
 drizzle-project/
-├── assets/
-│   └── .gitkeep
+├── index.html          # Landing Page & Katalog Produk
+├── order.html          # Form Pemesanan Custom Merchandise
+├── tracking.html       # Portal Lacak Pesanan Pelanggan
+├── admin.html          # Dashboard ERP & Pipeline Produksi Internal
+├── assets/             # Gambar portofolio / logo Drizzle
 ├── js/
-│   ├── app.js
-│   └── tracking.js
-├── index.html
-├── order.html
-├── tracking.html
-├── admin.html
-├── wrangler.json
-├── PROMPT.md
+│   ├── app.js          # Navigasi & interaksi UI
+│   └── tracking.js     # Logika pencarian status pesanan
+├── wrangler.json       # Konfigurasi deployment Cloudflare
+├── PROMPT.md           # File konteks untuk AntiGravity + Z Code
 └── README.md
 ```
