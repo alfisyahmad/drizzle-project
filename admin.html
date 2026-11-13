@@ -1,128 +1,956 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin ERP & Production Dashboard - Drizzle Project</title>
+  <title>ADMIN ERP // DRIZZLE PROJECT SAAS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            carbon: '#0A0A0A', card: '#141414', subtle: '#262626',
+            neon: '#D2FF00', textLight: '#F5F5F5'
+          },
+          fontFamily: {
+            anton: ['Anton', 'sans-serif'],
+            space: ['Space Grotesk', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background-color: #0A0A0A; color: #F5F5F5; font-family: 'Space Grotesk', sans-serif; }
+    .tab-btn.active { background-color: #D2FF00; color: #000; border-color: #D2FF00; }
+    .tab-btn.active span { color: #000; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .kanban-col { min-height: 220px; }
+    .kanban-card { cursor: grab; }
+    .kanban-card:active { cursor: grabbing; }
+    .kanban-col.drag-over { border-color: #D2FF00; background-color: rgba(210,255,0,0.05); }
+    @media print {
+      body * { visibility: hidden; }
+      #spk-print-area, #spk-print-area * { visibility: visible; }
+      #spk-print-area { position: fixed; inset: 0; background: white; color: black; padding: 2rem; font-family: monospace; z-index: 9999; }
+    }
+  </style>
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
-  <!-- Navbar -->
-  <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-      <div class="flex items-center space-x-3">
-        <a href="index.html" class="text-2xl font-black tracking-wider text-sky-400">DRIZZLE</a>
-        <span class="text-xs font-semibold px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">ADMIN ERP</span>
-      </div>
-      <nav class="flex items-center space-x-6 text-sm font-medium">
-        <a href="index.html" class="text-slate-300 hover:text-sky-400 transition">Lihat Web</a>
-        <a href="admin.html" class="text-sky-400 hover:text-sky-300 transition">Dashboard</a>
+<body class="bg-carbon text-textLight antialiased selection:bg-neon selection:text-black min-h-screen flex flex-col">
+
+  <!-- ==================== NAVBAR ==================== -->
+  <header class="sticky top-0 z-50 backdrop-blur-md bg-[#0A0A0A]/85 border-b border-subtle">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <a href="index.html" class="flex items-center space-x-3 group">
+        <div class="w-9 h-9 bg-neon flex items-center justify-center font-anton text-black text-xl rounded tracking-tighter group-hover:scale-105 transition-transform">D</div>
+        <div>
+          <span class="font-anton text-2xl tracking-wider text-white group-hover:text-neon transition-colors">DRIZZLE</span>
+          <span class="block font-mono text-[10px] text-zinc-500 tracking-widest uppercase -mt-1">PROJECT // SAAS 2.0</span>
+        </div>
+      </a>
+      <nav class="hidden md:flex items-center space-x-8 text-sm font-medium">
+        <a href="index.html" class="text-zinc-400 hover:text-white transition font-mono uppercase text-xs tracking-wider">Katalog & Home</a>
+        <a href="order.html" class="text-zinc-400 hover:text-white transition font-mono uppercase text-xs tracking-wider">Order Custom</a>
+        <a href="tracking.html" class="text-zinc-400 hover:text-white transition font-mono uppercase text-xs tracking-wider">Lacak Pesanan</a>
+        <a href="admin.html" class="text-neon flex items-center gap-1.5 font-semibold">
+          <span class="w-1.5 h-1.5 rounded-full bg-neon"></span>Admin ERP
+        </a>
       </nav>
+      <div class="flex items-center gap-3">
+        <div class="hidden sm:flex items-center gap-2 font-mono text-xs text-amber-400 bg-card px-3 py-1.5 rounded-full border border-amber-500/30">
+          <span class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
+          <span>ADMIN PORTAL ACTIVE</span>
+        </div>
+      </div>
     </div>
   </header>
 
-  <main class="flex-1 py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
-      <div>
-        <h1 class="text-2xl sm:text-3xl font-bold text-white">Production & Order Management</h1>
-        <p class="text-slate-400 text-sm mt-1">Kelola antrean pesanan masuk, verifikasi DP, dan perbarui tahapan produksi.</p>
+  <!-- ==================== PAGE HEADER ==================== -->
+  <div class="border-b border-subtle bg-card/40 py-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+      <div class="inline-flex items-center gap-2 font-mono text-xs text-neon mb-2">
+        <span class="w-2 h-2 bg-neon"></span>
+        <span>ADMIN ERP // PRODUCTION, INVENTORY & INTEGRATION DASHBOARD</span>
       </div>
-      <div class="flex gap-2">
-        <button class="px-4 py-2 bg-slate-800 border border-slate-700 hover:bg-slate-700 text-xs rounded-lg font-medium transition">
-          Export CSV
-        </button>
-        <button class="px-4 py-2 bg-sky-500 hover:bg-sky-400 text-slate-950 text-xs rounded-lg font-semibold transition">
-          + Pesanan Baru
-        </button>
+      <h1 class="font-anton text-4xl sm:text-5xl text-white uppercase tracking-tight">ERP & SCM CONTROL CENTER</h1>
+      <p class="text-zinc-400 text-sm mt-1">Kelola seluruh pesanan, pipeline produksi, dan inventori bahan baku secara terintegrasi.</p>
+    </div>
+  </div>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full space-y-8">
+
+    <!-- ==================== KPI CARDS ==================== -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4" id="kpi-cards">
+      <div class="bg-card border border-subtle rounded-xl p-5 group hover:border-neon transition">
+        <span class="font-mono text-[10px] text-zinc-500 uppercase tracking-widest block">TOTAL PESANAN AKTIF</span>
+        <span id="kpi-total-orders" class="font-anton text-4xl text-white mt-1 block">0</span>
+        <span class="font-mono text-xs text-zinc-500">dalam sistem ERP</span>
+      </div>
+      <div class="bg-card border border-subtle rounded-xl p-5 group hover:border-neon transition">
+        <span class="font-mono text-[10px] text-zinc-500 uppercase tracking-widest block">TOTAL PCS PRODUKSI</span>
+        <span id="kpi-total-pcs" class="font-anton text-4xl text-neon mt-1 block">0</span>
+        <span class="font-mono text-xs text-zinc-500">pieces on order</span>
+      </div>
+      <div class="bg-card border border-subtle rounded-xl p-5 group hover:border-amber-500 transition">
+        <span class="font-mono text-[10px] text-zinc-500 uppercase tracking-widest block">MENUNGGU VERIFIKASI DP</span>
+        <span id="kpi-pending-dp" class="font-anton text-4xl text-amber-400 mt-1 block">0</span>
+        <span class="font-mono text-xs text-zinc-500">perlu tindakan admin</span>
+      </div>
+      <div class="bg-card border border-subtle rounded-xl p-5 group hover:border-red-500 transition">
+        <span class="font-mono text-[10px] text-zinc-500 uppercase tracking-widest block">PERINGATAN STOK SCM</span>
+        <span id="kpi-low-stock" class="font-anton text-4xl text-red-400 mt-1 block">0</span>
+        <span class="font-mono text-xs text-zinc-500">bahan baku menipis</span>
       </div>
     </div>
 
-    <!-- Quick Stats -->
-    <div class="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-8">
-      <div class="bg-slate-800/40 border border-slate-800 p-5 rounded-xl">
-        <span class="text-xs text-slate-400">Total Pesanan Aktif</span>
-        <p class="text-2xl font-bold text-white mt-1">12</p>
+    <!-- ==================== TAB NAVIGATION ==================== -->
+    <div class="flex flex-wrap gap-2 border-b border-subtle pb-0 -mb-px">
+      <button class="tab-btn active font-mono text-xs uppercase tracking-wider px-5 py-3 rounded-t-lg border border-subtle transition-all" data-tab="erp">
+        <span>01 // Order Management ERP</span>
+      </button>
+      <button class="tab-btn font-mono text-xs uppercase tracking-wider px-5 py-3 rounded-t-lg border border-subtle bg-card text-zinc-400 hover:text-white transition-all" data-tab="kanban">
+        <span>02 // Production Pipeline</span>
+      </button>
+      <button class="tab-btn font-mono text-xs uppercase tracking-wider px-5 py-3 rounded-t-lg border border-subtle bg-card text-zinc-400 hover:text-white transition-all" data-tab="scm">
+        <span>03 // Inventory & Vendor SCM</span>
+      </button>
+      <button class="tab-btn font-mono text-xs uppercase tracking-wider px-5 py-3 rounded-t-lg border border-subtle bg-card text-zinc-400 hover:text-white transition-all" data-tab="logs">
+        <span>04 // Log Uji Integrasi</span>
+      </button>
+    </div>
+
+    <!-- ==================== TAB 1: ORDER MANAGEMENT ERP ==================== -->
+    <div id="tab-erp" class="tab-content active">
+      <!-- Toolbar -->
+      <div class="flex flex-col sm:flex-row gap-3 mb-5">
+        <div class="flex-1 relative">
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input type="text" id="erp-search" placeholder="Cari kode pesanan atau nama pemesan..." class="w-full bg-card border border-subtle rounded-lg pl-10 pr-4 py-2.5 text-sm text-white placeholder-zinc-600 font-mono focus:outline-none focus:border-neon transition">
+        </div>
+        <select id="erp-filter" class="bg-card border border-subtle rounded-lg px-4 py-2.5 text-sm text-zinc-300 font-mono focus:outline-none focus:border-neon transition cursor-pointer">
+          <option value="all">Semua Status</option>
+          <option value="Pending">Pending</option>
+          <option value="In Production">In Production</option>
+          <option value="Completed">Completed</option>
+          <option value="Cancelled">Cancelled</option>
+        </select>
+        <button onclick="renderERPTable()" class="bg-neon text-black font-mono text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-lg hover:bg-white transition whitespace-nowrap">
+          ↻ REFRESH
+        </button>
       </div>
-      <div class="bg-slate-800/40 border border-slate-800 p-5 rounded-xl">
-        <span class="text-xs text-slate-400">Menunggu Verifikasi DP</span>
-        <p class="text-2xl font-bold text-amber-400 mt-1">3</p>
-      </div>
-      <div class="bg-slate-800/40 border border-slate-800 p-5 rounded-xl">
-        <span class="text-xs text-slate-400">Sedang Produksi</span>
-        <p class="text-2xl font-bold text-sky-400 mt-1">7</p>
-      </div>
-      <div class="bg-slate-800/40 border border-slate-800 p-5 rounded-xl">
-        <span class="text-xs text-slate-400">Siap Kirim</span>
-        <p class="text-2xl font-bold text-emerald-400 mt-1">2</p>
+
+      <!-- ERP Table -->
+      <div class="bg-card border border-subtle rounded-xl overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-zinc-900/60 text-zinc-400 uppercase tracking-wider text-[11px] font-mono border-b border-subtle">
+              <tr>
+                <th class="px-4 py-3">Kode</th>
+                <th class="px-4 py-3">Pemesan</th>
+                <th class="px-4 py-3">Produk</th>
+                <th class="px-4 py-3 text-center">Qty</th>
+                <th class="px-4 py-3">Status DP</th>
+                <th class="px-4 py-3">Status Pesanan</th>
+                <th class="px-4 py-3">Dibuat</th>
+                <th class="px-4 py-3 text-right pr-5">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="erp-table-body" class="divide-y divide-subtle text-zinc-300 font-space">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+        <div id="erp-empty" class="hidden text-center py-16 text-zinc-500 font-mono text-sm">
+          Tidak ada pesanan yang cocok dengan filter.
+        </div>
       </div>
     </div>
 
-    <!-- Orders Table -->
-    <div class="bg-slate-800/40 rounded-2xl border border-slate-800 overflow-hidden">
-      <div class="p-4 border-b border-slate-800 flex justify-between items-center">
-        <h2 class="text-base font-semibold text-slate-200">Daftar Antrean Pesanan</h2>
-        <input type="text" placeholder="Cari pesanan atau nama..." class="bg-slate-900 border border-slate-700 text-xs px-3 py-1.5 rounded-lg text-slate-300 focus:outline-none focus:border-sky-500">
-      </div>
-      <div class="overflow-x-auto">
-        <table class="w-full text-left text-xs text-slate-300">
-          <thead class="bg-slate-900/50 text-slate-400 uppercase tracking-wider text-[11px]">
-            <tr>
-              <th class="px-4 py-3">Kode Pesanan</th>
-              <th class="px-4 py-3">Pemesan</th>
-              <th class="px-4 py-3">Kategori</th>
-              <th class="px-4 py-3">Qty</th>
-              <th class="px-4 py-3">Status DP</th>
-              <th class="px-4 py-3">Tahapan Produksi</th>
-              <th class="px-4 py-3 text-right">Aksi</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-slate-800">
-            <tr>
-              <td class="px-4 py-3.5 font-mono font-bold text-sky-400">DRZ-2026-001</td>
-              <td class="px-4 py-3.5 text-white font-medium">BEM Fasilkom UI</td>
-              <td class="px-4 py-3.5">Varsity Jacket</td>
-              <td class="px-4 py-3.5">45 pcs</td>
-              <td class="px-4 py-3.5"><span class="px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Verified</span></td>
-              <td class="px-4 py-3.5">
-                <select class="bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-slate-200">
-                  <option>Design Approved</option>
-                  <option>DP Verified</option>
-                  <option selected>In Production</option>
-                  <option>Ready to Ship</option>
-                </select>
-              </td>
-              <td class="px-4 py-3.5 text-right">
-                <button class="text-sky-400 hover:text-sky-300 font-medium">Detail</button>
-              </td>
-            </tr>
-            <tr>
-              <td class="px-4 py-3.5 font-mono font-bold text-sky-400">DRZ-2026-002</td>
-              <td class="px-4 py-3.5 text-white font-medium">HIMASTA IPB</td>
-              <td class="px-4 py-3.5">PDH/Shirt</td>
-              <td class="px-4 py-3.5">60 pcs</td>
-              <td class="px-4 py-3.5"><span class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">Pending DP</span></td>
-              <td class="px-4 py-3.5">
-                <select class="bg-slate-900 border border-slate-700 rounded px-2 py-1 text-xs text-slate-200">
-                  <option selected>Design Approved</option>
-                  <option>DP Verified</option>
-                  <option>In Production</option>
-                  <option>Ready to Ship</option>
-                </select>
-              </td>
-              <td class="px-4 py-3.5 text-right">
-                <button class="text-sky-400 hover:text-sky-300 font-medium">Detail</button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+    <!-- ==================== TAB 2: KANBAN PRODUCTION PIPELINE ==================== -->
+    <div id="tab-kanban" class="tab-content">
+      <p class="font-mono text-xs text-zinc-500 mb-4">Drag & drop kartu pesanan antar kolom tahap produksi, atau gunakan tombol panah untuk pindah tahap cepat. Setiap perubahan sinkron otomatis ke tracking.html.</p>
+      <div class="flex gap-4 overflow-x-auto pb-4" id="kanban-board">
+        <!-- Rendered by JS -->
       </div>
     </div>
+
+    <!-- ==================== TAB 3: SCM INVENTORY ==================== -->
+    <div id="tab-scm" class="tab-content">
+      <div class="flex justify-between items-center mb-5">
+        <div>
+          <div class="font-mono text-xs text-neon">// MATERIALS_SCM TABLE</div>
+          <h3 class="font-anton text-2xl text-white uppercase mt-0.5">Manajemen Bahan Baku & Vendor</h3>
+        </div>
+        <button onclick="renderSCM()" class="bg-neon text-black font-mono text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-lg hover:bg-white transition">↻ REFRESH</button>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4" id="scm-materials-grid">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
+    <!-- ==================== TAB 4: INTEGRATION LOGS ==================== -->
+    <div id="tab-logs" class="tab-content">
+      <div class="flex justify-between items-center mb-5">
+        <div>
+          <div class="font-mono text-xs text-neon">// INTEGRATION EVENT LOG (CRM ↔ ERP ↔ SCM)</div>
+          <h3 class="font-anton text-2xl text-white uppercase mt-0.5">Log Uji Integrasi Sistem</h3>
+        </div>
+        <button onclick="clearOldLogs()" class="font-mono text-xs text-zinc-400 hover:text-red-400 border border-subtle px-4 py-2 rounded-lg hover:border-red-500 transition">Hapus Log Lama</button>
+      </div>
+      <div class="space-y-3" id="integration-log-list">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+
   </main>
 
-  <footer class="border-t border-slate-800 py-6 text-center text-xs text-slate-500">
-    <p>&copy; 2026 Drizzle Project ERP System.</p>
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="border-t border-subtle py-8 bg-carbon text-zinc-500 text-xs font-mono mt-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div>
+        <span class="text-white font-anton tracking-wider text-base">DRIZZLE PROJECT</span>
+        <p class="mt-1">&copy; 2026 Drizzle Project SaaS. All rights reserved.</p>
+      </div>
+      <div class="flex items-center space-x-6 text-[11px]">
+        <a href="index.html" class="hover:text-neon transition">Home</a>
+        <a href="order.html" class="hover:text-neon transition">Order Custom</a>
+        <a href="tracking.html" class="hover:text-neon transition">Order Tracking</a>
+        <a href="admin.html" class="text-neon font-bold">Admin Portal</a>
+      </div>
+    </div>
   </footer>
 
+  <!-- ==================== SPK PRINT MODAL ==================== -->
+  <div id="spk-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div class="bg-card border-2 border-neon rounded-2xl max-w-2xl w-full p-0 shadow-[0_0_60px_rgba(210,255,0,0.2)] overflow-hidden max-h-[90vh] flex flex-col">
+      <div class="flex items-center justify-between p-5 border-b border-subtle">
+        <div>
+          <h3 class="font-anton text-2xl text-white uppercase">CETAK WORK ORDER / SPK</h3>
+          <p class="font-mono text-xs text-zinc-400">Lembar Kerja Produksi — Siap Print</p>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="window.print()" class="bg-neon text-black font-mono text-xs font-bold uppercase tracking-wider px-4 py-2 rounded hover:bg-white transition flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+            PRINT / CETAK
+          </button>
+          <button onclick="document.getElementById('spk-modal').classList.add('hidden')" class="font-mono text-xs text-zinc-400 hover:text-white border border-subtle px-4 py-2 rounded hover:border-zinc-400 transition">TUTUP</button>
+        </div>
+      </div>
+      <div id="spk-modal-body" class="overflow-y-auto p-6 flex-1">
+        <!-- Rendered by JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden SPK area for window.print() -->
+  <div id="spk-print-area" class="hidden"></div>
+
+  <!-- ==================== RESTOCK MODAL ==================== -->
+  <div id="restock-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div class="bg-card border-2 border-neon rounded-2xl max-w-md w-full p-6 shadow-[0_0_40px_rgba(210,255,0,0.2)]">
+      <h3 class="font-anton text-2xl text-white uppercase mb-1">RESTOCK / PO VENDOR</h3>
+      <p id="restock-mat-name" class="font-mono text-xs text-neon mb-5">Kain Roll (meter)</p>
+      <div class="space-y-4">
+        <div>
+          <label class="block font-mono text-xs text-zinc-400 uppercase tracking-wider mb-2">Jumlah Restock</label>
+          <input type="number" id="restock-qty" min="1" value="10" class="w-full bg-carbon border border-subtle rounded-lg px-4 py-3 text-sm text-white font-mono focus:outline-none focus:border-neon transition">
+        </div>
+        <div>
+          <label class="block font-mono text-xs text-zinc-400 uppercase tracking-wider mb-2">Catatan PO (Opsional)</label>
+          <input type="text" id="restock-notes" placeholder="Nomor PO, tanggal kirim, dsb." class="w-full bg-carbon border border-subtle rounded-lg px-4 py-3 text-sm text-white placeholder-zinc-600 font-mono focus:outline-none focus:border-neon transition">
+        </div>
+      </div>
+      <div class="mt-6 flex gap-3">
+        <button onclick="submitRestock()" class="flex-1 bg-neon text-black font-anton tracking-wider text-sm py-3 rounded uppercase hover:bg-white transition">KONFIRMASI RESTOCK</button>
+        <button onclick="document.getElementById('restock-modal').classList.add('hidden')" class="font-mono text-xs text-zinc-400 hover:text-white border border-subtle px-4 py-3 rounded hover:border-zinc-400 transition">BATAL</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== TOAST NOTIFICATION ==================== -->
+  <div id="toast" class="fixed bottom-6 right-6 z-50 font-mono text-xs font-bold uppercase tracking-wider px-5 py-3.5 rounded-xl shadow-2xl transition-all duration-300 translate-y-16 opacity-0 pointer-events-none flex items-center gap-2 max-w-sm">
+    <span id="toast-icon"></span>
+    <span id="toast-msg"></span>
+  </div>
+
+  <!-- Scripts -->
   <script src="js/app.js"></script>
+  <script>
+  'use strict';
+
+  /* =============================================
+     GLOBALS
+  ============================================= */
+  const STAGES = [
+    'Design Approved',
+    'Down Payment (DP)',
+    'Bahan & Potong',
+    'Sablon/Bordir',
+    'Jahit & Finishing',
+    'Siap Kirim/Ambil'
+  ];
+
+  let restockTargetId = null;
+  let draggedOrderId = null;
+
+  /* =============================================
+     UTILS
+  ============================================= */
+  function nowTs() {
+    return new Date().toISOString().replace('T', ' ').substring(0, 19);
+  }
+
+  function showToast(msg, type = 'success') {
+    const t = document.getElementById('toast');
+    const icon = document.getElementById('toast-icon');
+    const msgEl = document.getElementById('toast-msg');
+    if (type === 'success') {
+      t.className = t.className.replace(/bg-\S+/g, '').trim();
+      t.classList.add('bg-neon', 'text-black', 'fixed', 'bottom-6', 'right-6', 'z-50', 'font-mono', 'text-xs', 'font-bold', 'uppercase', 'tracking-wider', 'px-5', 'py-3.5', 'rounded-xl', 'shadow-2xl', 'transition-all', 'duration-300', 'flex', 'items-center', 'gap-2', 'max-w-sm');
+      icon.textContent = '✓';
+    } else if (type === 'error') {
+      t.className = '';
+      t.classList.add('bg-red-500', 'text-white', 'fixed', 'bottom-6', 'right-6', 'z-50', 'font-mono', 'text-xs', 'font-bold', 'uppercase', 'tracking-wider', 'px-5', 'py-3.5', 'rounded-xl', 'shadow-2xl', 'transition-all', 'duration-300', 'flex', 'items-center', 'gap-2', 'max-w-sm');
+      icon.textContent = '!';
+    } else {
+      t.className = '';
+      t.classList.add('bg-amber-500', 'text-black', 'fixed', 'bottom-6', 'right-6', 'z-50', 'font-mono', 'text-xs', 'font-bold', 'uppercase', 'tracking-wider', 'px-5', 'py-3.5', 'rounded-xl', 'shadow-2xl', 'transition-all', 'duration-300', 'flex', 'items-center', 'gap-2', 'max-w-sm');
+      icon.textContent = '⚠';
+    }
+    msgEl.textContent = msg;
+    t.classList.remove('translate-y-16', 'opacity-0');
+    t.classList.add('translate-y-0', 'opacity-100');
+    setTimeout(() => {
+      t.classList.add('translate-y-16', 'opacity-0');
+      t.classList.remove('translate-y-0', 'opacity-100');
+    }, 3500);
+  }
+
+  function getOrderCurrentStage(orderId) {
+    const logs = window.Drizzle.getStorage('drizzle_production_logs');
+    const orderLogs = logs.filter(l => l.order_id === orderId);
+    if (!orderLogs.length) return 'Design Approved';
+    const stageOrders = STAGES;
+    let latestIdx = 0;
+    orderLogs.forEach(l => {
+      const idx = stageOrders.indexOf(l.stage_name);
+      if (idx > latestIdx) latestIdx = idx;
+    });
+    return stageOrders[latestIdx];
+  }
+
+  function pushStage(orderId, newStage) {
+    const logs = window.Drizzle.getStorage('drizzle_production_logs');
+    const nextId = logs.length ? (Math.max(...logs.map(l => l.log_id || 0)) + 1) : 1;
+    logs.push({ log_id: nextId, order_id: orderId, stage_name: newStage, updated_at: nowTs() });
+    window.Drizzle.setStorage('drizzle_production_logs', logs);
+
+    // Update order_status in orders table
+    const orders = window.Drizzle.getStorage('drizzle_orders');
+    const idx = orders.findIndex(o => o.order_id === orderId);
+    if (idx !== -1) {
+      if (newStage === 'Siap Kirim/Ambil') {
+        orders[idx].order_status = 'Completed';
+      } else {
+        orders[idx].order_status = 'In Production';
+      }
+      window.Drizzle.setStorage('drizzle_orders', orders);
+    }
+
+    window.Drizzle.addIntegrationLog('ERP -> SCM', `Pesanan ${getOrderCode(orderId)} dipindah ke tahap produksi "${newStage}" oleh Admin ERP.`);
+
+    // Auto deduct materials when moving to Bahan & Potong
+    if (newStage === 'Bahan & Potong') {
+      const result = window.Drizzle.deductMaterialsForOrder(orderId);
+      if (!result.success) {
+        showToast(result.reason, 'error');
+        return false;
+      }
+      showToast(`Stok bahan baku otomatis dipotong untuk ${getOrderCode(orderId)}.`, 'success');
+      renderSCM();
+    }
+    return true;
+  }
+
+  function getOrderCode(orderId) {
+    const orders = window.Drizzle.getStorage('drizzle_orders');
+    const o = orders.find(x => x.order_id === orderId);
+    return o ? o.tracking_code : `#${orderId}`;
+  }
+
+  /* =============================================
+     KPI CARDS
+  ============================================= */
+  function renderKPI() {
+    const orders = window.Drizzle.getStorage('drizzle_orders');
+    const materials = window.Drizzle.getStorage('drizzle_materials');
+
+    const totalOrders = orders.length;
+    const totalPcs = orders.reduce((s, o) => s + (o.total_pcs || 0), 0);
+    const pendingDP = orders.filter(o => o.status_payment === 'Menunggu DP').length;
+    const lowStock = materials.filter(m => m.stock_qty <= m.min_stock).length;
+
+    document.getElementById('kpi-total-orders').textContent = totalOrders;
+    document.getElementById('kpi-total-pcs').textContent = totalPcs;
+    document.getElementById('kpi-pending-dp').textContent = pendingDP;
+    document.getElementById('kpi-low-stock').textContent = lowStock;
+  }
+
+  /* =============================================
+     TAB 1: ERP ORDER TABLE
+  ============================================= */
+  function renderERPTable() {
+    const orders = window.Drizzle.getStorage('drizzle_orders');
+    const customers = window.Drizzle.getStorage('drizzle_customers');
+    const details = window.Drizzle.getStorage('drizzle_order_details');
+    const tbody = document.getElementById('erp-table-body');
+    const empty = document.getElementById('erp-empty');
+
+    const search = (document.getElementById('erp-search').value || '').toLowerCase().trim();
+    const filter = document.getElementById('erp-filter').value;
+
+    let filtered = orders.filter(o => {
+      const matchStatus = filter === 'all' || o.order_status === filter;
+      const cust = customers.find(c => c.customer_id === o.customer_id) || {};
+      const matchSearch = !search ||
+        (o.tracking_code || '').toLowerCase().includes(search) ||
+        (cust.name || '').toLowerCase().includes(search) ||
+        (cust.organization || '').toLowerCase().includes(search);
+      return matchStatus && matchSearch;
+    }).sort((a, b) => (b.order_id || 0) - (a.order_id || 0));
+
+    tbody.innerHTML = '';
+
+    if (!filtered.length) {
+      empty.classList.remove('hidden');
+      return;
+    }
+    empty.classList.add('hidden');
+
+    filtered.forEach(order => {
+      const cust = customers.find(c => c.customer_id === order.customer_id) || {};
+      const det = details.find(d => d.order_id === order.order_id) || {};
+      const currentStage = getOrderCurrentStage(order.order_id);
+
+      // Payment status badge
+      let payBadge = '';
+      if (order.status_payment === 'Lunas') {
+        payBadge = `<span class="font-mono text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">LUNAS</span>`;
+      } else if (order.status_payment === 'DP Verified') {
+        payBadge = `<span class="font-mono text-[10px] px-2 py-0.5 rounded bg-sky-500/10 text-sky-400 border border-sky-500/20">DP VERIFIED</span>`;
+      } else {
+        payBadge = `<span class="font-mono text-[10px] px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">MENUNGGU DP</span>`;
+      }
+
+      let orderBadge = '';
+      if (order.order_status === 'Completed') {
+        orderBadge = `<span class="font-mono text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">SELESAI</span>`;
+      } else if (order.order_status === 'In Production') {
+        orderBadge = `<span class="font-mono text-[10px] px-2 py-0.5 rounded bg-sky-500/10 text-sky-400 border border-sky-500/20">IN PRODUCTION</span>`;
+      } else if (order.order_status === 'Cancelled') {
+        orderBadge = `<span class="font-mono text-[10px] px-2 py-0.5 rounded bg-red-500/10 text-red-400 border border-red-500/20">CANCELLED</span>`;
+      } else {
+        orderBadge = `<span class="font-mono text-[10px] px-2 py-0.5 rounded bg-zinc-700/50 text-zinc-400 border border-zinc-600">PENDING</span>`;
+      }
+
+      // Action buttons
+      let verifyBtn = '';
+      if (order.status_payment === 'Menunggu DP') {
+        verifyBtn = `<button onclick="verifyDP(${order.order_id})" class="font-mono text-[10px] px-2.5 py-1 rounded bg-neon/10 text-neon border border-neon/30 hover:bg-neon hover:text-black transition whitespace-nowrap">VERIFIKASI DP</button>`;
+      } else if (order.status_payment === 'DP Verified') {
+        verifyBtn = `<button onclick="markLunas(${order.order_id})" class="font-mono text-[10px] px-2.5 py-1 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500 hover:text-black transition whitespace-nowrap">TANDAI LUNAS</button>`;
+      }
+
+      const tr = document.createElement('tr');
+      tr.className = 'hover:bg-zinc-900/40 transition group';
+      tr.innerHTML = `
+        <td class="px-4 py-3.5 font-mono font-bold text-neon whitespace-nowrap">
+          <a href="tracking.html?code=${order.tracking_code}" target="_blank" class="hover:underline">${order.tracking_code}</a>
+        </td>
+        <td class="px-4 py-3.5">
+          <div class="font-semibold text-white text-xs">${cust.name || '-'}</div>
+          <div class="text-zinc-500 text-[11px]">${cust.organization || '-'}</div>
+        </td>
+        <td class="px-4 py-3.5">
+          <div class="font-semibold text-white text-xs">${det.product_name || '-'}</div>
+          <div class="text-zinc-500 text-[11px]">${det.print_type || ''}</div>
+        </td>
+        <td class="px-4 py-3.5 text-center font-mono font-bold text-white">${order.total_pcs || 0}</td>
+        <td class="px-4 py-3.5">${payBadge}</td>
+        <td class="px-4 py-3.5">${orderBadge}</td>
+        <td class="px-4 py-3.5 text-zinc-500 font-mono text-[10px] whitespace-nowrap">${(order.created_at || '').substring(0, 10)}</td>
+        <td class="px-4 py-3.5">
+          <div class="flex gap-1.5 justify-end flex-wrap">
+            ${verifyBtn}
+            <button onclick="openSPK(${order.order_id})" class="font-mono text-[10px] px-2.5 py-1 rounded bg-card text-zinc-300 border border-subtle hover:border-zinc-400 hover:text-white transition whitespace-nowrap">CETAK SPK</button>
+            <button onclick="cancelOrder(${order.order_id})" class="font-mono text-[10px] px-2.5 py-1 rounded bg-card text-red-400 border border-red-900 hover:bg-red-900/30 transition whitespace-nowrap">CANCEL</button>
+          </div>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    renderKPI();
+  }
+
+  function verifyDP(orderId) {
+    const orders = window.Drizzle.getStorage('drizzle_orders');
+    const idx = orders.findIndex(o => o.order_id === orderId);
+    if (idx === -1) return;
+
+    orders[idx].status_payment = 'DP Verified';
+    if (orders[idx].order_status === 'Pending') {
+      orders[idx].order_status = 'In Production';
+    }
+    window.Drizzle.setStorage('drizzle_orders', orders);
+
+    // Push stage to Down Payment (DP)
+    pushStage(orderId, 'Down Payment (DP)');
+
+    window.Drizzle.addIntegrationLog('ERP -> SCM', `DP pesanan ${orders[idx].tracking_code} (${orders[idx].total_pcs} pcs) telah diverifikasi Admin. Order otomatis masuk pipeline In Production.`);
+
+    showToast(`DP ${orders[idx].tracking_code} berhasil diverifikasi!`, 'success');
+    renderAll();
+  }
+
+  function markLunas(orderId) {
+    const orders = window.Drizzle.getStorage('drizzle_orders');
+    const idx = orders.findIndex(o => o.order_id === orderId);
+    if (idx === -1) return;
+
+    orders[idx].status_payment = 'Lunas';
+    orders[idx].order_status = 'Completed';
+    window.Drizzle.setStorage('drizzle_orders', orders);
+
+    window.Drizzle.addIntegrationLog('CRM -> ERP', `Pesanan ${orders[idx].tracking_code} telah LUNAS. Order status diubah ke Completed.`);
+    showToast(`Pesanan ${orders[idx].tracking_code} ditandai LUNAS!`, 'success');
+    renderAll();
+  }
+
+  function cancelOrder(orderId) {
+    if (!confirm('Batalkan pesanan ini? Tindakan ini tidak dapat diurungkan.')) return;
+    const orders = window.Drizzle.getStorage('drizzle_orders');
+    const idx = orders.findIndex(o => o.order_id === orderId);
+    if (idx === -1) return;
+    orders[idx].order_status = 'Cancelled';
+    window.Drizzle.setStorage('drizzle_orders', orders);
+    window.Drizzle.addIntegrationLog('ERP -> SCM', `Pesanan ${orders[idx].tracking_code} dibatalkan (Cancelled) oleh Admin.`);
+    showToast(`Pesanan ${orders[idx].tracking_code} dibatalkan.`, 'warn');
+    renderAll();
+  }
+
+  /* =============================================
+     SPK MODAL
+  ============================================= */
+  function openSPK(orderId) {
+    const orders = window.Drizzle.getStorage('drizzle_orders');
+    const customers = window.Drizzle.getStorage('drizzle_customers');
+    const details = window.Drizzle.getStorage('drizzle_order_details');
+
+    const order = orders.find(o => o.order_id === orderId) || {};
+    const cust = customers.find(c => c.customer_id === order.customer_id) || {};
+    const det = details.find(d => d.order_id === orderId) || {};
+    const sb = det.size_breakdown || { S: 0, M: 0, L: 0, XL: 0, XXL: 0 };
+    const stage = getOrderCurrentStage(orderId);
+
+    const estimated = window.Drizzle.formatRupiah(det.estimated_total || 0);
+    const dp = window.Drizzle.formatRupiah((det.estimated_total || 0) * 0.5);
+
+    const spkHTML = `
+      <div class="space-y-5 font-space text-sm">
+        <!-- Header SPK -->
+        <div class="flex justify-between items-start border-b border-subtle pb-4">
+          <div>
+            <div class="font-anton text-2xl text-neon uppercase tracking-wide">DRIZZLE PROJECT</div>
+            <div class="font-mono text-xs text-zinc-400">SURAT PERINTAH KERJA (SPK) / WORK ORDER</div>
+          </div>
+          <div class="text-right font-mono text-xs text-zinc-400">
+            <div class="font-bold text-white text-base">${order.tracking_code || '-'}</div>
+            <div>Dicetak: ${nowTs().substring(0, 10)}</div>
+          </div>
+        </div>
+
+        <!-- Identity -->
+        <div class="grid grid-cols-2 gap-4">
+          <div class="bg-carbon border border-subtle p-4 rounded-lg">
+            <div class="font-mono text-[10px] text-zinc-500 uppercase tracking-wider mb-2">IDENTITAS PEMESAN</div>
+            <div class="space-y-1 text-xs">
+              <div><span class="text-zinc-500">Nama:</span> <span class="text-white font-semibold">${cust.name || '-'}</span></div>
+              <div><span class="text-zinc-500">Instansi:</span> <span class="text-white">${cust.organization || '-'}</span></div>
+              <div><span class="text-zinc-500">WA:</span> <span class="text-white font-mono">${cust.phone || '-'}</span></div>
+              <div><span class="text-zinc-500">Email:</span> <span class="text-zinc-300">${cust.email || '-'}</span></div>
+            </div>
+          </div>
+          <div class="bg-carbon border border-subtle p-4 rounded-lg">
+            <div class="font-mono text-[10px] text-zinc-500 uppercase tracking-wider mb-2">DETAIL PRODUKSI</div>
+            <div class="space-y-1 text-xs">
+              <div><span class="text-zinc-500">Produk:</span> <span class="text-white font-semibold">${det.product_name || '-'}</span></div>
+              <div><span class="text-zinc-500">Total Pcs:</span> <span class="text-neon font-bold font-mono">${order.total_pcs || 0} pcs</span></div>
+              <div><span class="text-zinc-500">Status:</span> <span class="text-white">${order.order_status || '-'}</span></div>
+              <div><span class="text-zinc-500">Tahap Aktif:</span> <span class="text-neon">${stage}</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Size Breakdown -->
+        <div class="bg-carbon border border-subtle p-4 rounded-lg">
+          <div class="font-mono text-[10px] text-zinc-500 uppercase tracking-wider mb-3">BREAKDOWN UKURAN (PCS)</div>
+          <div class="grid grid-cols-5 gap-2">
+            ${['S', 'M', 'L', 'XL', 'XXL'].map(size => `
+              <div class="text-center border border-subtle rounded-lg py-3">
+                <div class="font-mono text-[10px] text-zinc-500 uppercase">${size}</div>
+                <div class="font-anton text-2xl text-neon">${sb[size] || 0}</div>
+                <div class="font-mono text-[10px] text-zinc-500">pcs</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <!-- Specifications -->
+        <div class="bg-carbon border border-subtle p-4 rounded-lg">
+          <div class="font-mono text-[10px] text-zinc-500 uppercase tracking-wider mb-2">SPESIFIKASI SABLON & BORDIR</div>
+          <div class="space-y-1 text-xs">
+            <div><span class="text-zinc-500">Aplikasi:</span> <span class="text-white font-semibold">${det.print_type || '-'}</span></div>
+            <div><span class="text-zinc-500">Warna Kain:</span> <span class="text-white">${det.fabric_color || '-'}</span></div>
+            <div class="mt-2 p-3 bg-zinc-900 rounded text-zinc-300 text-[11px] font-light">${det.notes || 'Tidak ada catatan khusus.'}</div>
+          </div>
+        </div>
+
+        <!-- Mockup -->
+        ${det.mockup_url && det.mockup_url.length > 10 ? `
+          <div class="bg-carbon border border-subtle p-4 rounded-lg">
+            <div class="font-mono text-[10px] text-zinc-500 uppercase tracking-wider mb-2">LAMPIRAN MOCKUP DESAIN</div>
+            <img src="${det.mockup_url}" alt="Mockup" class="max-h-48 rounded border border-subtle object-contain bg-zinc-900">
+          </div>
+        ` : ''}
+
+        <!-- Cost -->
+        <div class="bg-carbon border border-neon/40 p-4 rounded-lg flex justify-between items-center">
+          <div>
+            <div class="font-mono text-[10px] text-zinc-500 uppercase tracking-wider">ESTIMASI TOTAL BIAYA</div>
+            <div class="font-mono font-bold text-neon text-xl mt-0.5">${estimated}</div>
+          </div>
+          <div class="text-right">
+            <div class="font-mono text-[10px] text-zinc-500 uppercase tracking-wider">DOWN PAYMENT (DP 50%)</div>
+            <div class="font-mono font-bold text-white text-xl mt-0.5">${dp}</div>
+          </div>
+        </div>
+
+        <!-- Signature Area -->
+        <div class="grid grid-cols-3 gap-4 border-t border-subtle pt-4">
+          ${['Admin / ERP', 'Kepala Produksi', 'QC / Finishing'].map(role => `
+            <div class="text-center">
+              <div class="font-mono text-[10px] text-zinc-500 uppercase mb-8">${role}</div>
+              <div class="border-b border-zinc-500 mx-4"></div>
+              <div class="font-mono text-[10px] text-zinc-500 mt-1">Tanda Tangan & Cap</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+    `;
+
+    document.getElementById('spk-modal-body').innerHTML = spkHTML;
+    document.getElementById('spk-print-area').innerHTML = `
+      <style>
+        #spk-print-area { background: white !important; color: black !important; padding: 2rem; font-family: 'Space Grotesk', monospace; }
+        #spk-print-area * { color: black !important; border-color: #ddd !important; background: white !important; }
+        #spk-print-area .text-neon { color: #000 !important; font-weight: bold; }
+        img { max-height: 160px; object-fit: contain; }
+      </style>
+      ${spkHTML}
+    `;
+    document.getElementById('spk-modal').classList.remove('hidden');
+  }
+
+  /* =============================================
+     TAB 2: KANBAN BOARD
+  ============================================= */
+  function renderKanban() {
+    const board = document.getElementById('kanban-board');
+    const orders = window.Drizzle.getStorage('drizzle_orders');
+    const customers = window.Drizzle.getStorage('drizzle_customers');
+    const details = window.Drizzle.getStorage('drizzle_order_details');
+    board.innerHTML = '';
+
+    STAGES.forEach((stage, stageIdx) => {
+      const colOrders = orders.filter(o => {
+        if (o.order_status === 'Cancelled' || o.order_status === 'Completed') return false;
+        const curStage = getOrderCurrentStage(o.order_id);
+        return curStage === stage;
+      });
+
+      const col = document.createElement('div');
+      col.className = 'kanban-col flex-shrink-0 w-56 bg-card border border-subtle rounded-xl p-3 transition-all duration-200';
+      col.dataset.stage = stage;
+
+      // Column Header
+      const isActive = colOrders.length > 0;
+      col.innerHTML = `
+        <div class="border-b border-subtle pb-2 mb-3">
+          <div class="font-mono text-[10px] text-zinc-500 uppercase">STAGE 0${stageIdx + 1}</div>
+          <div class="font-anton text-sm text-white uppercase leading-tight">${stage}</div>
+          <div class="font-mono text-[10px] ${isActive ? 'text-neon' : 'text-zinc-600'} mt-0.5">${colOrders.length} pesanan</div>
+        </div>
+        <div class="kanban-cards-container space-y-2 min-h-20" data-stage="${stage}"></div>
+      `;
+
+      // Render Cards
+      const cardsContainer = col.querySelector('.kanban-cards-container');
+      colOrders.forEach(order => {
+        const cust = customers.find(c => c.customer_id === order.customer_id) || {};
+        const det = details.find(d => d.order_id === order.order_id) || {};
+
+        const card = document.createElement('div');
+        card.className = 'kanban-card bg-carbon border border-subtle hover:border-neon rounded-lg p-3 text-xs transition group select-none';
+        card.draggable = true;
+        card.dataset.orderId = order.order_id;
+
+        const curIdx = STAGES.indexOf(stage);
+        const prevStage = curIdx > 0 ? STAGES[curIdx - 1] : null;
+        const nextStage = curIdx < STAGES.length - 1 ? STAGES[curIdx + 1] : null;
+
+        card.innerHTML = `
+          <div class="font-mono font-bold text-neon text-[11px] mb-1">${order.tracking_code}</div>
+          <div class="font-semibold text-white leading-tight">${cust.name || 'Pemesan'}</div>
+          <div class="text-zinc-500 text-[10px]">${det.product_name || 'Merchandise'} · ${order.total_pcs} pcs</div>
+          <div class="mt-2 flex gap-1 justify-between items-center">
+            <button onclick="moveKanban(${order.order_id}, '${prevStage}')" class="${prevStage ? 'text-zinc-400 hover:text-neon' : 'text-zinc-700 cursor-not-allowed'} font-bold text-sm transition" ${!prevStage ? 'disabled' : ''}>◀</button>
+            <span class="font-mono text-[9px] text-zinc-500">${order.status_payment === 'Menunggu DP' ? '⚠ DP PENDING' : '✓ DP OK'}</span>
+            <button onclick="moveKanban(${order.order_id}, '${nextStage}')" class="${nextStage ? 'text-zinc-400 hover:text-neon' : 'text-zinc-700 cursor-not-allowed'} font-bold text-sm transition" ${!nextStage ? 'disabled' : ''}>▶</button>
+          </div>
+        `;
+
+        // Drag events
+        card.addEventListener('dragstart', (e) => {
+          draggedOrderId = order.order_id;
+          e.dataTransfer.effectAllowed = 'move';
+          setTimeout(() => card.classList.add('opacity-50'), 0);
+        });
+        card.addEventListener('dragend', () => {
+          draggedOrderId = null;
+          card.classList.remove('opacity-50');
+        });
+
+        cardsContainer.appendChild(card);
+      });
+
+      // Drop zone events
+      col.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        col.classList.add('drag-over');
+      });
+      col.addEventListener('dragleave', () => col.classList.remove('drag-over'));
+      col.addEventListener('drop', (e) => {
+        e.preventDefault();
+        col.classList.remove('drag-over');
+        if (draggedOrderId) {
+          const success = pushStage(Number(draggedOrderId), stage);
+          if (success !== false) {
+            renderAll();
+            showToast(`Pesanan dipindah ke "${stage}"`, 'success');
+          }
+        }
+      });
+
+      board.appendChild(col);
+    });
+  }
+
+  function moveKanban(orderId, newStage) {
+    if (!newStage || newStage === 'null') return;
+    const success = pushStage(orderId, newStage);
+    if (success !== false) {
+      renderAll();
+      showToast(`Dipindah ke "${newStage}"`, 'success');
+    }
+  }
+
+  /* =============================================
+     TAB 3: SCM INVENTORY
+  ============================================= */
+  function renderSCM() {
+    const materials = window.Drizzle.getStorage('drizzle_materials');
+    const grid = document.getElementById('scm-materials-grid');
+    grid.innerHTML = '';
+
+    materials.forEach(mat => {
+      const isLow = mat.stock_qty <= mat.min_stock;
+      const pct = Math.min(100, Math.round((mat.stock_qty / Math.max(mat.min_stock * 2, 1)) * 100));
+      const barColor = isLow ? 'bg-red-500' : (pct < 60 ? 'bg-amber-500' : 'bg-neon');
+
+      const card = document.createElement('div');
+      card.className = `bg-card border ${isLow ? 'border-red-500/60 shadow-[0_0_20px_rgba(239,68,68,0.15)]' : 'border-subtle hover:border-neon'} rounded-xl p-5 transition space-y-3`;
+      card.innerHTML = `
+        <div class="flex justify-between items-start">
+          <div>
+            <div class="font-mono text-[10px] text-zinc-500 uppercase tracking-wider">BAHAN BAKU</div>
+            <div class="font-semibold text-white mt-0.5">${mat.material_name}</div>
+          </div>
+          ${isLow
+            ? `<span class="font-mono text-[10px] px-2 py-0.5 rounded bg-red-500/10 text-red-400 border border-red-500/30 font-bold flex items-center gap-1 whitespace-nowrap"><span>⚠</span> MENIPIS</span>`
+            : `<span class="font-mono text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">AMAN</span>`
+          }
+        </div>
+
+        <div>
+          <div class="flex justify-between font-mono text-xs mb-1">
+            <span class="text-zinc-500">Stok Tersedia</span>
+            <span class="${isLow ? 'text-red-400' : 'text-neon'} font-bold">${mat.stock_qty} ${mat.unit}</span>
+          </div>
+          <div class="w-full bg-zinc-800 rounded-full h-1.5">
+            <div class="h-1.5 rounded-full ${barColor} transition-all" style="width: ${pct}%"></div>
+          </div>
+          <div class="flex justify-between font-mono text-[10px] text-zinc-600 mt-1">
+            <span>Minimum: ${mat.min_stock} ${mat.unit}</span>
+            <span>${pct}% capacity</span>
+          </div>
+        </div>
+
+        <div class="pt-2 border-t border-subtle/60">
+          <div class="font-mono text-[10px] text-zinc-500 uppercase">Supplier</div>
+          <div class="text-xs text-zinc-300 mt-0.5">${mat.supplier_name}</div>
+        </div>
+
+        <button onclick="openRestockModal(${mat.material_id}, '${mat.material_name}')" class="w-full font-mono text-xs uppercase tracking-wider py-2 rounded-lg border ${isLow ? 'border-red-500/50 text-red-400 hover:bg-red-500 hover:text-white hover:border-red-500' : 'border-subtle text-zinc-400 hover:border-neon hover:text-neon'} transition">
+          + RESTOCK / PO VENDOR
+        </button>
+      `;
+      grid.appendChild(card);
+    });
+
+    renderKPI();
+  }
+
+  function openRestockModal(materialId, materialName) {
+    restockTargetId = materialId;
+    document.getElementById('restock-mat-name').textContent = materialName;
+    document.getElementById('restock-qty').value = 10;
+    document.getElementById('restock-notes').value = '';
+    document.getElementById('restock-modal').classList.remove('hidden');
+  }
+
+  function submitRestock() {
+    const qty = parseInt(document.getElementById('restock-qty').value, 10);
+    const notes = document.getElementById('restock-notes').value.trim();
+    if (!qty || qty <= 0 || !restockTargetId) {
+      showToast('Jumlah restock tidak valid!', 'error');
+      return;
+    }
+    const success = window.Drizzle.restockMaterial(restockTargetId, qty, notes);
+    if (success) {
+      document.getElementById('restock-modal').classList.add('hidden');
+      showToast(`Restock +${qty} berhasil. Stok bahan diperbarui.`, 'success');
+      renderSCM();
+      renderKPI();
+      renderIntegrationLog();
+    } else {
+      showToast('Restock gagal. Material tidak ditemukan.', 'error');
+    }
+  }
+
+  /* =============================================
+     TAB 4: INTEGRATION LOGS
+  ============================================= */
+  function renderIntegrationLog() {
+    const logs = window.Drizzle.getStorage('drizzle_integration_logs', []);
+    const container = document.getElementById('integration-log-list');
+    container.innerHTML = '';
+
+    if (!logs.length) {
+      container.innerHTML = `<div class="text-center py-16 text-zinc-500 font-mono text-sm">Belum ada log integrasi tercatat.</div>`;
+      return;
+    }
+
+    logs.forEach(log => {
+      const typeColors = {
+        'CRM -> ERP': { badge: 'bg-sky-500/10 text-sky-400 border-sky-500/30', dot: 'bg-sky-400' },
+        'ERP -> SCM': { badge: 'bg-neon/10 text-neon border-neon/30', dot: 'bg-neon' },
+        'SCM -> ERP': { badge: 'bg-purple-500/10 text-purple-400 border-purple-500/30', dot: 'bg-purple-400' },
+      };
+      const style = typeColors[log.type] || { badge: 'bg-zinc-700 text-zinc-400 border-zinc-600', dot: 'bg-zinc-500' };
+
+      const item = document.createElement('div');
+      item.className = 'bg-card border border-subtle rounded-xl p-4 flex items-start gap-4 hover:border-zinc-500 transition';
+      item.innerHTML = `
+        <div class="pt-0.5">
+          <div class="w-2.5 h-2.5 rounded-full ${style.dot} mt-0.5"></div>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex flex-wrap items-center gap-2 mb-1">
+            <span class="font-mono text-[10px] px-2 py-0.5 rounded border ${style.badge} font-bold whitespace-nowrap">${log.type}</span>
+            <span class="font-mono text-[10px] text-zinc-500">${log.timestamp || ''}</span>
+          </div>
+          <p class="text-xs text-zinc-300 leading-relaxed">${log.message}</p>
+        </div>
+      `;
+      container.appendChild(item);
+    });
+  }
+
+  function clearOldLogs() {
+    if (!confirm('Hapus log integrasi? Hanya 5 log terbaru yang akan dipertahankan.')) return;
+    const logs = window.Drizzle.getStorage('drizzle_integration_logs', []).slice(0, 5);
+    window.Drizzle.setStorage('drizzle_integration_logs', logs);
+    renderIntegrationLog();
+    showToast('Log lama berhasil dihapus.', 'success');
+  }
+
+  /* =============================================
+     TAB SWITCHING
+  ============================================= */
+  function switchTab(tabName) {
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      b.classList.remove('active');
+      b.classList.add('bg-card', 'text-zinc-400');
+    });
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+    const btn = document.querySelector(`[data-tab="${tabName}"]`);
+    const content = document.getElementById(`tab-${tabName}`);
+    if (btn) {
+      btn.classList.add('active');
+      btn.classList.remove('bg-card', 'text-zinc-400');
+    }
+    if (content) content.classList.add('active');
+
+    // Render on switch
+    if (tabName === 'erp') renderERPTable();
+    if (tabName === 'kanban') renderKanban();
+    if (tabName === 'scm') renderSCM();
+    if (tabName === 'logs') renderIntegrationLog();
+  }
+
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+  });
+
+  /* =============================================
+     SEARCH & FILTER LISTENERS
+  ============================================= */
+  document.getElementById('erp-search').addEventListener('input', renderERPTable);
+  document.getElementById('erp-filter').addEventListener('change', renderERPTable);
+
+  /* =============================================
+     RENDER ALL & INIT
+  ============================================= */
+  function renderAll() {
+    renderKPI();
+    renderERPTable();
+    renderKanban();
+    renderSCM();
+    renderIntegrationLog();
+  }
+
+  // Init
+  window.Drizzle.ensureSeedData();
+  renderAll();
+
+  </script>
 </body>
 </html>
