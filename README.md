@@ -22,6 +22,7 @@ drizzle-project/
 ├── js/
 │   ├── app.js          # Navigasi & interaksi UI
 │   └── tracking.js     # Logika pencarian status pesanan
+├── schema.sql          # Skema database SQL (5 tabel utama)
 ├── wrangler.json       # Konfigurasi deployment Cloudflare
 ├── PROMPT.md           # File konteks untuk AntiGravity + Z Code
 └── README.md

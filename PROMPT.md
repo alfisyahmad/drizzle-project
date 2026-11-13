@@ -21,3 +21,11 @@ Menggantikan proses pemesanan manual via chat grup WhatsApp dengan sistem terpus
 ## Tech Stack & Target Platform
 - **Frontend**: HTML5, Tailwind CSS, JavaScript (ES6)
 - **Deployment**: Cloudflare Pages via GitHub Repository
+
+## Database Schema Structure
+1. Customers: customer_id, name, organization, phone, email
+2. Products: product_id, category_name, base_price
+3. Orders: order_id, customer_id, total_pcs, status_payment, tracking_code, created_at
+4. Order_Details: detail_id, order_id, product_id, size_breakdown (JSON), mockup_url, notes
+5. Production_Logs: log_id, order_id, stage_name, updated_at
+
