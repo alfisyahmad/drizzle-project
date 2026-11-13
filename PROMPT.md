@@ -1,31 +1,37 @@
-# Project Context: Drizzle Project Order Management & Tracking System
+# Project Context: Drizzle Project SaaS (Integrasi CRM, ERP & SCM)
 
-## Overview
-Web-based Order Management & Tracking System untuk Drizzle Project (vendor custom merchandise: T-Shirt, PDH/Shirt, Hoodie, Coach, Vest, Varsity, Bomber, Lanyard, Tote Bag).
+## Overview & Mitra
+- Mitra: Drizzle Project (Custom Merchandise & Apparel)
+- Kontak Resmi: WhatsApp +62 882-0075-46920 | Email: drizzlethelabel@gmail.com | Instagram: @drizzleproject
+- Tujuan SIM: Sistem SaaS terintegrasi antara CRM (pelanggan), ERP (pesanan & produksi), dan SCM (bahan baku & vendor) sehingga setiap perubahan data saling terhubung secara real-time di localStorage.
 
-## Main Objectives
-Menggantikan proses pemesanan manual via chat grup WhatsApp dengan sistem terpusat.
+## 1. Komponen Front-End & CRM Portal (index.html, order.html, tracking.html)
+- Katalog Produk (11 Item): T-Shirt, Kemeja/PDH, Hoodie, Polo, Jacket, Coach, Vest, Varsity, Bomber, Lanyard, Tote Bag.
+- Layanan Pendukung: Design, Merchandising Consultant, Brand Identity.
+- Form Pemesanan Custom (order.html): Input identitas (Nama, Instansi/Komunitas, No. WA, Email), pilihan produk, breakdown ukuran (S, M, L, XL, XXL), upload file mockup/logo, spesifikasi sablon (DTF/Plastisol)/bordir komputer/warna kain. Generate kode unik (contoh: DRZ-2026-001).
+- Order Tracking (tracking.html): Lacak via kode pesanan dengan 6 tahap timeline visual:
+  1. Design Approved
+  2. Down Payment (DP)
+  3. Bahan & Potong
+  4. Sablon/Bordir
+  5. Jahit & Finishing
+  6. Siap Kirim/Ambil
+- Portal Contact & FAQ: Tombol cepat menuju WhatsApp (+62 882-0075-46920), Email (drizzlethelabel@gmail.com), dan Instagram (drizzleproject).
 
-## Core Modules & Features
-1. **Public Catalog & Custom Order Form**:
-   - Pemilihan kategori produk dan estimasi quantity.
-   - Input identitas pemesan & breakdown ukuran (S, M, L, XL, XXL).
-   - Form upload file mockup/logo dan spesifikasi sablon/bordir.
-2. **Customer Order Tracking**:
-   - Lacak status produksi menggunakan Kode Pesanan unik (contoh: `DRZ-2026-001`).
-   - Timeline status visual (Design Approved -> DP Verified -> In Production -> Ready to Ship).
-3. **Admin ERP & Production Dashboard**:
-   - Pengelolaan daftar pesanan masuk dan verifikasi pembayaran.
-   - Update tahapan produksi secara *real-time*.
+## 2. Komponen Back-End Admin: ERP & SCM (admin.html)
+- Order Management ERP: Tabel rekap pesanan masuk dengan filter status (Pending, In Production, Completed, Cancelled), tombol verifikasi pembayaran (DP & Pelunasan), serta fitur cetak/print lembar kerja produksi (Work Order / SPK) otomatis.
+- Production Pipeline (Kanban Board): Tampilan papan kanban interaktif (drag-and-drop atau pindah tahap cepat) antarseksi produksi untuk memantau bottleneck pengerjaan.
+- Manajemen Pasokan & Vendor (SCM / Inventory): Pencatatan stok bahan baku utama (Kain Roll, Benang, Kancing, Zipper, Kemasan/Packaging) dan daftar vendor/supplier beserta status pemesanan material (PO ke supplier).
 
-## Tech Stack & Target Platform
-- **Frontend**: HTML5, Tailwind CSS, JavaScript (ES6)
-- **Deployment**: Cloudflare Pages via GitHub Repository
+## 3. Aturan Uji Integrasi (CRM <-> ERP <-> SCM)
+- CRM -> ERP: Pesanan baru dari order.html otomatis masuk ke tabel ERP (admin.html) dan muncul di tracking.html.
+- ERP -> SCM: Saat admin memverifikasi DP atau memindahkan status pesanan ke tahap "Bahan & Potong" / "In Production", stok bahan baku di modul SCM otomatis berkurang sesuai jumlah pcs pesanan, dan log aktivitas integrasi tercatat.
+- SCM -> ERP: Restock material dari vendor di tab SCM langsung menambah ketersediaan stok bahan baku untuk produksi.
 
-## Database Schema Structure
+## 4. Database Schema Structure (localStorage & schema.sql)
 1. Customers: customer_id, name, organization, phone, email
 2. Products: product_id, category_name, base_price
-3. Orders: order_id, customer_id, total_pcs, status_payment, tracking_code, created_at
+3. Orders: order_id, customer_id, total_pcs, status_payment, order_status, tracking_code, created_at
 4. Order_Details: detail_id, order_id, product_id, size_breakdown (JSON), mockup_url, notes
 5. Production_Logs: log_id, order_id, stage_name, updated_at
-
+6. Materials_SCM: material_id, material_name, unit, stock_qty, min_stock, supplier_name, restock_status
