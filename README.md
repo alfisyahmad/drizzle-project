@@ -9,7 +9,9 @@ Web-based Order Management & Tracking System untuk **Drizzle Project** (Vendor c
 
 ## 🛠️ Tech Stack
 - **Frontend**: HTML5, Tailwind CSS, JavaScript (ES6)
-- **Deployment**: Cloudflare Pages via GitHub Repository
+- **Storage & Schema**: Browser localStorage (Integrasi CRM, ERP, & SCM)
+- **Development Tool**: Antigravity AI
+- **Deployment**: Cloudflare Workers & Pages via GitHub Repository
 
 ## 📁 Struktur Proyek
 ```plaintext
