@@ -302,6 +302,16 @@
         const specsText = order.specs ? `${order.specs.print_type || ''} | ${order.specs.fabric_color || ''} | ${order.specs.notes || ''}` : '-';
         document.getElementById('res-specs').textContent = specsText;
 
+        // Customer Address (CRM Pilar 1) & Reorder (CRM Pilar 5)
+        const addrEl = document.getElementById('res-cust-address');
+        if (addrEl) {
+          addrEl.textContent = (order.customer && order.customer.address) ? order.customer.address : 'Studio Drizzle Solo (Pick-up)';
+        }
+        const reorderBtn = document.getElementById('res-reorder-btn');
+        if (reorderBtn) {
+          reorderBtn.href = `order.html?reorder=${encodeURIComponent(order.tracking_code)}`;
+        }
+
         // Logistik & Distribusi (Outbound SCM Fulfillment)
         const shipBox = document.getElementById('res-shipping-box');
         if (order.shipping_carrier && order.shipping_resi) {
