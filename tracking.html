@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Tailwind CSS CDN -->
+  <!-- Tailwind CSS CDN with Warm Studio Palette -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -20,11 +20,13 @@
             brand: '#FF791D',
             brandDark: '#E06512',
             brandLight: '#FFF5ED',
-            dark: '#18181B',
-            muted: '#71717A',
-            surface: '#FFFFFF',
-            subtle: '#F8FAFC',
-            borderSubtle: '#E4E4E7'
+            secondary: '#CC783F',
+            secondaryLight: '#996C4E',
+            dark: '#33302D',
+            muted: '#7A7269',
+            card: '#FFFFFF',
+            canvas: '#FAF7F4',
+            borderCard: '#E6DDD6'
           },
           fontFamily: {
             sans: ['"Plus Jakarta Sans"', 'sans-serif'],
@@ -35,10 +37,10 @@
     }
   </script>
 </head>
-<body class="bg-subtle text-dark font-sans antialiased selection:bg-brand selection:text-white min-h-screen flex flex-col justify-between">
+<body class="bg-canvas text-dark font-sans antialiased selection:bg-brand selection:text-white min-h-screen flex flex-col justify-between">
 
   <!-- ==================== NAVBAR ==================== -->
-  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-borderSubtle">
+  <header class="sticky top-0 z-50 bg-card/90 backdrop-blur-md border-b border-borderCard">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3.5 flex items-center justify-between">
       <!-- Logo -->
       <a href="index.html" class="flex items-center gap-3 group">
@@ -59,157 +61,242 @@
           <span class="w-1.5 h-1.5 rounded-full bg-brand"></span>
           Lacak Pesanan
         </a>
-        <a href="admin.html" class="text-muted hover:text-dark transition px-3 py-1 rounded-md border border-borderSubtle bg-white hover:border-dark">Dashboard Admin</a>
+        <a href="admin.html" class="text-muted hover:text-dark transition px-3 py-1 rounded-md border border-borderCard bg-card hover:border-dark">Dashboard Admin</a>
       </nav>
 
       <!-- Badge -->
-      <div class="hidden sm:flex items-center gap-2 text-xs font-mono text-muted bg-white px-3 py-1.5 rounded-full border border-borderSubtle">
-        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+      <div class="hidden sm:flex items-center gap-2 text-xs font-mono text-muted bg-card px-3 py-1.5 rounded-full border border-borderCard">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
         <span>Live Production Tracking</span>
       </div>
     </div>
   </header>
 
-  <!-- ==================== SEARCH HERO ==================== -->
-  <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full space-y-8">
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full space-y-8">
+    
+    <!-- Hero / Search Section -->
     <div class="text-center max-w-xl mx-auto">
       <span class="text-xs font-mono font-bold text-brand uppercase tracking-wider block">Customer Tracking Portal</span>
       <h1 class="text-3xl sm:text-4xl font-extrabold text-dark mt-1">Lacak Status Pesanan</h1>
-      <p class="text-sm text-muted mt-2">Masukkan Kode Pesanan unik Anda untuk memantau tahapan verifikasi pembayaran, produksi garmen, hingga kesiapan pengiriman.</p>
+      <p class="text-sm text-muted mt-2">Masukkan Kode Pesanan unik Anda untuk memantau status pembayaran DP, progres produksi 5 tahap garmen, hingga nomor resi pengiriman.</p>
     </div>
 
     <!-- Search Box -->
-    <div class="bg-white border border-borderSubtle rounded-2xl p-4 sm:p-5 shadow-sm">
-      <form id="tracking-search-form" class="flex flex-col sm:flex-row gap-3">
+    <div class="bg-card border border-borderCard rounded-2xl p-4 sm:p-5 shadow-sm">
+      <form id="tracking-search-form" class="flex flex-col sm:flex-row gap-2.5">
         <div class="relative flex-1">
-          <input type="text" id="tracking-input" placeholder="Contoh: DRZ-2026-001" class="w-full bg-subtle border border-borderSubtle rounded-xl px-4 py-3.5 text-base font-mono uppercase text-dark focus:outline-none focus:border-brand focus:bg-white transition">
+          <input type="text" id="tracking-input" placeholder="Masukkan Kode: DRZ-2026-001..." class="w-full bg-canvas border border-borderCard rounded-xl px-4 py-3 text-sm text-dark font-mono font-bold uppercase placeholder:normal-case placeholder:font-normal focus:outline-none focus:border-brand">
         </div>
-        <button type="submit" class="bg-brand hover:bg-brandDark text-white font-semibold text-sm px-6 py-3.5 rounded-xl transition shadow-sm whitespace-nowrap">
-          Cari Pesanan &rarr;
+        <button type="submit" class="bg-brand hover:bg-brandDark text-white font-bold px-6 py-3 rounded-xl transition text-sm flex items-center justify-center gap-2 shadow-sm">
+          <span>Lacak Sekarang</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
         </button>
       </form>
 
-      <!-- Quick Test Chips -->
-      <div class="mt-4 pt-3.5 border-t border-borderSubtle flex flex-wrap items-center gap-2">
-        <span class="text-xs font-mono text-muted">Contoh Klik Cepat:</span>
+      <!-- Sample Chips for Testing -->
+      <div class="mt-4 pt-3.5 border-t border-borderCard flex flex-wrap items-center gap-2 text-xs">
+        <span class="text-muted font-medium">Contoh Kode Pesanan:</span>
         <div id="sample-chips" class="flex flex-wrap gap-1.5">
-          <!-- Populated from store.js -->
+          <!-- Populated via js/tracking.js -->
         </div>
       </div>
     </div>
 
-    <!-- NOT FOUND ALERT -->
-    <div id="tracking-not-found" class="hidden bg-red-50 border border-red-200 rounded-xl p-5 text-center text-red-700 text-sm">
-      <span class="font-bold">Kode pesanan tidak ditemukan.</span>
-      <p class="text-xs text-red-600 mt-1">Pastikan format penulisan benar (misal: DRZ-2026-001) atau pilih salah satu contoh kode di atas.</p>
+    <!-- NOT FOUND STATE -->
+    <div id="tracking-not-found" class="hidden bg-card border border-borderCard rounded-2xl p-8 text-center space-y-3">
+      <div class="w-12 h-12 mx-auto rounded-full bg-amber-50 text-amber-600 flex items-center justify-center text-xl font-bold">
+        ?
+      </div>
+      <h3 class="font-bold text-dark text-lg">Pesanan Tidak Ditemukan</h3>
+      <p class="text-xs text-muted max-w-md mx-auto">
+        Kode pesanan yang Anda masukkan tidak terdaftar di sistem. Mohon periksa kembali ejaan kode atau hubungi admin Drizzle Project via WhatsApp.
+      </p>
     </div>
 
-    <!-- RESULT SECTION -->
+    <!-- RESULT BOX -->
     <div id="tracking-result-box" class="hidden space-y-6">
       
-      <!-- Summary Card -->
-      <div class="bg-white border border-borderSubtle rounded-2xl p-6 sm:p-7 shadow-sm">
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-5 border-b border-borderSubtle gap-3">
+      <!-- Top Overview Card -->
+      <div class="bg-card border border-borderCard rounded-2xl p-6 sm:p-7 shadow-sm space-y-5">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 pb-4 border-b border-borderCard">
           <div>
-            <span class="text-xs font-mono text-muted uppercase">KODE PESANAN</span>
-            <div class="text-2xl sm:text-3xl font-extrabold font-mono text-brand mt-0.5" id="res-code">DRZ-2026-001</div>
+            <span class="text-[11px] font-mono text-muted uppercase block">Kode Pesanan (Order ID)</span>
+            <div class="flex items-center gap-3 mt-0.5">
+              <span class="text-2xl font-extrabold font-mono text-dark" id="res-code">DRZ-2026-001</span>
+              <span id="res-pay-badge" class="text-xs font-bold font-mono px-3 py-1 rounded-full bg-sky-50 text-sky-700 border border-sky-200">
+                DP 50% TERVERIFIKASI
+              </span>
+            </div>
           </div>
+          <div class="text-left sm:text-right">
+            <span class="text-[11px] font-mono text-muted block" id="res-created-at">Dipesan: 2026-02-10</span>
+            <span class="text-xs font-bold text-dark" id="res-cust-name">SMANKRAPFANS 1982</span>
+            <span class="text-[11px] text-muted block" id="res-cust-org">Komunitas Suporter SMA N Karangpandan</span>
+          </div>
+        </div>
+
+        <!-- 5-STAGE KANBAN PROGRESS STEPPER -->
+        <div class="py-2">
+          <span class="text-xs font-mono font-bold text-brand uppercase tracking-wider block mb-4">Progres Produksi 5 Tahap (DrizzleOS ERP)</span>
+          <div id="stepper-container" class="flex justify-between items-start relative">
+            <!-- Populated via js/tracking.js -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Outbound Shipping Box (SCM Fulfillment) -->
+      <div id="res-shipping-box" class="hidden bg-emerald-50/60 border border-emerald-200 rounded-2xl p-5 shadow-sm space-y-2">
+        <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
-            <span id="res-pay-badge" class="text-xs font-bold font-mono px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-              DP Verified
-            </span>
+            <span class="text-base">📦</span>
+            <strong class="text-xs font-bold text-emerald-800">Status Distribusi & Pengiriman (SCM Outbound)</strong>
           </div>
+          <span class="text-[10px] font-mono uppercase bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded">Fulfillment Verified</span>
         </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 pt-5 text-xs">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-1">
           <div>
-            <span class="text-muted block font-medium">Pemesan & Lembaga:</span>
-            <span class="font-bold text-dark text-sm block mt-0.5" id="res-cust-name">-</span>
-            <span class="text-muted text-xs block" id="res-cust-org">-</span>
+            <span class="text-muted block text-[11px]">Kurir / Ekspedisi:</span>
+            <span class="font-bold text-dark" id="res-shipping-carrier">-</span>
           </div>
           <div>
-            <span class="text-muted block font-medium">Produk / Layanan:</span>
-            <span class="font-bold text-dark text-sm block mt-0.5" id="res-prod-name">-</span>
-            <span class="text-brand font-mono font-bold block" id="res-total-pcs">0 Pcs</span>
+            <span class="text-muted block text-[11px]">Nomor Resi Pelacakan:</span>
+            <span class="font-mono font-bold text-emerald-700 text-sm" id="res-shipping-resi">-</span>
           </div>
-          <div>
-            <span class="text-muted block font-medium">Estimasi Biaya:</span>
-            <span class="font-bold text-dark font-mono text-sm block mt-0.5" id="res-total-price">Rp 0</span>
-            <span class="text-muted text-[11px] block" id="res-created-at">-</span>
-          </div>
-        </div>
-
-        <!-- Breakdown Ukuran if apparel -->
-        <div id="res-breakdown-box" class="mt-5 pt-4 border-t border-borderSubtle">
-          <span class="text-xs font-medium text-muted block mb-2">Rincian Ukuran Kuantitas:</span>
-          <div class="grid grid-cols-5 gap-2 text-center text-xs font-mono">
-            <div class="bg-subtle border border-borderSubtle rounded-lg py-1.5"><span class="text-muted">S:</span> <strong id="res-s" class="text-dark">0</strong></div>
-            <div class="bg-subtle border border-borderSubtle rounded-lg py-1.5"><span class="text-muted">M:</span> <strong id="res-m" class="text-dark">0</strong></div>
-            <div class="bg-subtle border border-borderSubtle rounded-lg py-1.5"><span class="text-muted">L:</span> <strong id="res-l" class="text-dark">0</strong></div>
-            <div class="bg-subtle border border-borderSubtle rounded-lg py-1.5"><span class="text-muted">XL:</span> <strong id="res-xl" class="text-dark">0</strong></div>
-            <div class="bg-subtle border border-borderSubtle rounded-lg py-1.5"><span class="text-muted">XXL:</span> <strong id="res-xxl" class="text-dark">0</strong></div>
-          </div>
-        </div>
-
-        <div class="mt-4 pt-4 border-t border-borderSubtle text-xs text-muted">
-          <p>Spesifikasi: <span id="res-specs" class="text-dark font-medium">-</span></p>
-        </div>
-
-        <!-- Ekspedisi & Nomor Resi SCM Fulfillment -->
-        <div id="res-shipping-box" class="hidden mt-4 pt-4 border-t border-borderSubtle bg-brandLight/60 p-3.5 rounded-xl border border-brand/20">
-          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-            <div>
-              <span class="text-[10px] font-mono text-brand font-bold uppercase tracking-wider block">Logistik & Distribusi (Outbound SCM)</span>
-              <div class="text-xs font-bold text-dark mt-0.5" id="res-shipping-carrier">-</div>
-            </div>
-            <div class="text-left sm:text-right">
-              <span class="text-[10px] font-mono text-muted uppercase block">Nomor Resi / AWB</span>
-              <div class="text-sm font-mono font-extrabold text-brand tracking-wider" id="res-shipping-resi">-</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- CRM Pilar 5: Alamat Kirim & Repeat Order 1-Klik -->
-        <div class="mt-4 pt-4 border-t border-borderSubtle flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-          <div class="text-xs text-muted">
-            <span>Alamat Pengiriman (CRM): </span>
-            <strong id="res-cust-address" class="text-dark font-medium">-</strong>
-          </div>
-          <a id="res-reorder-btn" href="#" class="px-4 py-2 bg-brand hover:bg-brandDark text-white text-xs font-semibold rounded-lg transition flex items-center gap-1.5 shadow-sm whitespace-nowrap">
-            <span>🔁</span> Buat Pesanan Ulang (Reorder 1-Klik)
-          </a>
         </div>
       </div>
 
-      <!-- 6-Stage Timeline -->
-      <div class="bg-white border border-borderSubtle rounded-2xl p-6 sm:p-7 shadow-sm">
-        <h3 class="text-base font-bold text-dark mb-6">Timeline 6 Tahap Pengerjaan</h3>
+      <!-- Order Details & Breakdown Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        
+        <!-- Left: Item Specifications & Breakdown -->
+        <div class="bg-card border border-borderCard rounded-2xl p-6 shadow-sm space-y-4">
+          <h3 class="font-bold text-sm text-dark uppercase tracking-wider font-mono pb-2 border-b border-borderCard">
+            Rincian Spesifikasi Produk
+          </h3>
+          <div class="space-y-3 text-xs">
+            <div class="flex justify-between items-center">
+              <span class="text-muted">Item Layanan:</span>
+              <span class="font-bold text-dark text-right" id="res-prod-name">-</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-muted">Total Jumlah:</span>
+              <span class="font-mono font-bold text-brand" id="res-total-pcs">0 Pcs</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-muted">Total Nilai Pesanan:</span>
+              <span class="font-mono font-bold text-dark" id="res-total-price">Rp 0</span>
+            </div>
+          </div>
 
-        <div class="space-y-6 relative before:absolute before:inset-0 before:left-3.5 before:w-0.5 before:bg-borderSubtle before:z-0" id="timeline-container">
-          <!-- Rendered via JS -->
-        </div>
-      </div>
+          <!-- Matrix Ukuran Box -->
+          <div id="res-breakdown-box" class="pt-3 border-t border-borderCard">
+            <span class="text-[11px] font-mono font-semibold text-muted block mb-2">Matrix Distribusi Ukuran (Pcs):</span>
+            <div class="grid grid-cols-5 gap-1.5 text-center text-xs">
+              <div class="bg-canvas border border-borderCard p-2 rounded-lg">
+                <span class="text-[10px] font-mono text-muted block">S</span>
+                <span class="font-mono font-bold text-dark" id="res-s">0</span>
+              </div>
+              <div class="bg-canvas border border-borderCard p-2 rounded-lg">
+                <span class="text-[10px] font-mono text-muted block">M</span>
+                <span class="font-mono font-bold text-dark" id="res-m">0</span>
+              </div>
+              <div class="bg-canvas border border-borderCard p-2 rounded-lg">
+                <span class="text-[10px] font-mono text-muted block">L</span>
+                <span class="font-mono font-bold text-dark" id="res-l">0</span>
+              </div>
+              <div class="bg-canvas border border-borderCard p-2 rounded-lg">
+                <span class="text-[10px] font-mono text-muted block">XL</span>
+                <span class="font-mono font-bold text-dark" id="res-xl">0</span>
+              </div>
+              <div class="bg-canvas border border-borderCard p-2 rounded-lg">
+                <span class="text-[10px] font-mono text-muted block">XXL</span>
+                <span class="font-mono font-bold text-dark" id="res-xxl">0</span>
+              </div>
+            </div>
+          </div>
 
-      <!-- Support card -->
-      <div class="bg-white border border-borderSubtle rounded-xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div>
-          <h4 class="font-bold text-dark text-sm">Ada pertanyaan mengenai pesanan Anda?</h4>
-          <p class="text-xs text-muted mt-0.5">Hubungi customer support Drizzle Project via WhatsApp dengan menyebutkan kode pesanan Anda.</p>
+          <!-- Specs details -->
+          <div class="pt-2 text-[11px] text-muted">
+            <strong class="text-dark block mb-0.5">Catatan Teknis / Brief:</strong>
+            <p id="res-specs" class="bg-canvas p-2.5 rounded-lg border border-borderCard font-mono leading-relaxed">-</p>
+          </div>
         </div>
-        <a href="https://wa.me/62882007546920" target="_blank" rel="noopener noreferrer" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-4 py-2.5 rounded-lg transition whitespace-nowrap">
-          Chat WhatsApp &rarr;
-        </a>
+
+        <!-- Right: Real-time Timeline Logs & Address -->
+        <div class="bg-card border border-borderCard rounded-2xl p-6 shadow-sm space-y-4 flex flex-col justify-between">
+          <div>
+            <h3 class="font-bold text-sm text-dark uppercase tracking-wider font-mono pb-2 border-b border-borderCard">
+              Catatan Progres Real-Time (Log ERP)
+            </h3>
+            <div id="timeline-logs-container" class="mt-4 space-y-4">
+              <!-- Populated via js/tracking.js -->
+            </div>
+          </div>
+
+          <!-- Shipping Address & 1-Click Reorder Action -->
+          <div class="pt-4 border-t border-borderCard space-y-3">
+            <div class="text-xs">
+              <span class="text-muted block text-[11px]">Tujuan Pengiriman:</span>
+              <p class="font-medium text-dark mt-0.5" id="res-cust-address">-</p>
+            </div>
+            
+            <a id="res-reorder-btn" href="order.html" class="w-full bg-brandLight hover:bg-brand/10 border border-brand/30 text-brand font-bold py-2.5 px-4 rounded-xl transition flex items-center justify-center gap-2 text-xs shadow-sm">
+              <span>🔁 Pesan Ulang Proyek Serupa (Reorder 1-Klik)</span>
+            </a>
+          </div>
+        </div>
+
       </div>
 
     </div>
+
   </main>
 
+  <!-- ==================== MULTI-TENANT SAAS BADGE & MODAL TRIGGER ==================== -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center">
+    <button type="button" onclick="openTenantModal()" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-card border border-borderCard text-xs font-mono text-muted hover:text-dark hover:border-brand transition shadow-sm">
+      <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+      <span>Powered by DrizzleOS &mdash; Multi-Tenant SaaS Architecture</span>
+    </button>
+  </div>
+
+  <!-- ==================== MULTI-TENANT MODAL ==================== -->
+  <div id="tenant-modal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-card border border-borderCard rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 text-left">
+      <div class="flex justify-between items-center pb-3 border-b border-borderCard">
+        <div>
+          <span class="text-[10px] font-mono text-brand font-bold uppercase tracking-wider block">System Architecture</span>
+          <h3 class="text-lg font-extrabold text-dark">DrizzleOS Multi-Tenant Architecture</h3>
+        </div>
+        <button type="button" onclick="closeTenantModal()" class="text-muted hover:text-dark text-lg font-bold">&times;</button>
+      </div>
+      
+      <div class="space-y-3 text-xs text-muted">
+        <p><strong class="text-dark">Tenant Aktif:</strong> <span class="font-mono text-brand">TNT-DRIZZLE-SOLO-01</span> (Drizzle Project Studio Solo HQ).</p>
+        <p><strong class="text-dark">Fitur Arsitektur Multi-Tenant:</strong></p>
+        <ul class="list-disc pl-5 space-y-1.5 text-[11px]">
+          <li><strong>Relational DB Sandbox:</strong> 6 koleksi relasional terisolasi (Services, Customers, Orders, Materials, PurchaseOrders, FinanceLedger).</li>
+          <li><strong>Mandatory 1:1 Packaging Engine:</strong> Alokasi kemasan otomatis 1:1 per unit apparel/merchandise di kalkulasi Material Requirements Planning (MRP).</li>
+          <li><strong>Integrated Production Workflow:</strong> State machine 5 tahap (DESIGN &rarr; PRINTING &rarr; SEWING &rarr; QC &rarr; SHIPPED).</li>
+          <li><strong>Finance & HPP Ledger:</strong> Pencatatan kas masuk termin DP 50%, pelunasan, pengeluaran vendor makloon, dan margin laba bersih otomatis.</li>
+        </ul>
+      </div>
+
+      <div class="pt-3 border-t border-borderCard flex justify-end">
+        <button type="button" onclick="closeTenantModal()" class="px-4 py-2 bg-dark text-white rounded-lg text-xs font-semibold">
+          Tutup
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- ==================== FOOTER ==================== -->
-  <footer class="bg-white border-t border-borderSubtle py-8 text-xs text-muted mt-12">
+  <footer class="bg-card border-t border-borderCard py-8 text-xs text-muted mt-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
       <div>
         <span class="font-bold text-dark text-sm">Drizzle Project</span>
-        <p class="mt-0.5">&copy; 2026 Drizzle Project. All Product Include Packaging.</p>
+        <p class="mt-0.5">&copy; 2026 Drizzle Project. All Product Include Packaging. Est. Late 2023.</p>
       </div>
       <div class="flex items-center gap-6 font-medium">
         <a href="index.html" class="hover:text-dark transition">Beranda</a>
@@ -220,169 +307,17 @@
     </div>
   </footer>
 
-  <!-- Central Store Script -->
-  <script src="js/store.js"></script>
+  <!-- Scripts -->
+  <script src="js/app.js"></script>
+  <script src="js/tracking.js"></script>
 
-  <!-- Tracking Controller Script -->
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const searchForm = document.getElementById('tracking-search-form');
-      const inputCode = document.getElementById('tracking-input');
-      const notFoundBox = document.getElementById('tracking-not-found');
-      const resultBox = document.getElementById('tracking-result-box');
-      const chipsContainer = document.getElementById('sample-chips');
-
-      // 1. Populate Sample Chips
-      const db = window.DrizzleStore.getDB();
-      const sampleOrders = db.orders || [];
-
-      sampleOrders.slice(0, 5).forEach(o => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'px-2.5 py-1 rounded-md bg-subtle hover:bg-borderSubtle text-xs font-mono text-dark border border-borderSubtle transition';
-        btn.textContent = o.tracking_code;
-        btn.addEventListener('click', () => {
-          inputCode.value = o.tracking_code;
-          lookupCode(o.tracking_code);
-        });
-        chipsContainer.appendChild(btn);
-      });
-
-      // 2. Perform Lookup
-      function lookupCode(rawCode) {
-        const code = (rawCode || '').trim().toUpperCase();
-        if (!code) return;
-
-        const currentDB = window.DrizzleStore.getDB();
-        const order = (currentDB.orders || []).find(o => o.tracking_code === code);
-
-        if (!order) {
-          resultBox.classList.add('hidden');
-          notFoundBox.classList.remove('hidden');
-          return;
-        }
-
-        notFoundBox.classList.add('hidden');
-        resultBox.classList.remove('hidden');
-
-        // Populate Summary
-        document.getElementById('res-code').textContent = order.tracking_code;
-        document.getElementById('res-cust-name').textContent = order.customer.name;
-        document.getElementById('res-cust-org').textContent = order.customer.organization;
-        document.getElementById('res-prod-name').textContent = order.product_name;
-        document.getElementById('res-total-pcs').textContent = `${order.total_pcs} Pcs`;
-        document.getElementById('res-total-price').textContent = window.DrizzleStore.formatRupiah(order.total_price);
-        document.getElementById('res-created-at').textContent = `Dipesan: ${order.created_at || 'Baru'}`;
-
-        // Payment status badge
-        const payBadge = document.getElementById('res-pay-badge');
-        payBadge.textContent = order.status_payment || 'Menunggu DP';
-        if (order.status_payment === 'Lunas') {
-          payBadge.className = 'text-xs font-bold font-mono px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200';
-        } else if (order.status_payment === 'DP Verified') {
-          payBadge.className = 'text-xs font-bold font-mono px-3 py-1 rounded-full bg-sky-50 text-sky-700 border border-sky-200';
-        } else {
-          payBadge.className = 'text-xs font-bold font-mono px-3 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200';
-        }
-
-        // Breakdown Ukuran
-        const bdBox = document.getElementById('res-breakdown-box');
-        if (order.size_breakdown) {
-          bdBox.classList.remove('hidden');
-          document.getElementById('res-s').textContent = order.size_breakdown.S || 0;
-          document.getElementById('res-m').textContent = order.size_breakdown.M || 0;
-          document.getElementById('res-l').textContent = order.size_breakdown.L || 0;
-          document.getElementById('res-xl').textContent = order.size_breakdown.XL || 0;
-          document.getElementById('res-xxl').textContent = order.size_breakdown.XXL || 0;
-        } else {
-          bdBox.classList.add('hidden');
-        }
-
-        // Specs
-        const specsText = order.specs ? `${order.specs.print_type || ''} | ${order.specs.fabric_color || ''} | ${order.specs.notes || ''}` : '-';
-        document.getElementById('res-specs').textContent = specsText;
-
-        // Customer Address (CRM Pilar 1) & Reorder (CRM Pilar 5)
-        const addrEl = document.getElementById('res-cust-address');
-        if (addrEl) {
-          addrEl.textContent = (order.customer && order.customer.address) ? order.customer.address : 'Studio Drizzle Solo (Pick-up)';
-        }
-        const reorderBtn = document.getElementById('res-reorder-btn');
-        if (reorderBtn) {
-          reorderBtn.href = `order.html?reorder=${encodeURIComponent(order.tracking_code)}`;
-        }
-
-        // Logistik & Distribusi (Outbound SCM Fulfillment)
-        const shipBox = document.getElementById('res-shipping-box');
-        if (order.shipping_carrier && order.shipping_resi) {
-          shipBox.classList.remove('hidden');
-          document.getElementById('res-shipping-carrier').textContent = `${order.shipping_carrier} (${order.shipping_status || 'Dalam Pengiriman'})`;
-          document.getElementById('res-shipping-resi').textContent = order.shipping_resi;
-        } else {
-          shipBox.classList.add('hidden');
-        }
-
-        // Render 6 Stages
-        renderTimeline(order.stage);
-      }
-
-      function renderTimeline(currentStageName) {
-        const container = document.getElementById('timeline-container');
-        container.innerHTML = '';
-
-        const stages = window.DrizzleStore.stages;
-        const currentStageIdx = stages.findIndex(s => s.name === currentStageName);
-        const activeIdx = currentStageIdx >= 0 ? currentStageIdx : 0;
-
-        stages.forEach((st, idx) => {
-          const isDone = idx < activeIdx;
-          const isActive = idx === activeIdx;
-          const isPending = idx > activeIdx;
-
-          const item = document.createElement('div');
-          item.className = 'relative flex items-start gap-4 z-10';
-
-          let iconHtml = '';
-          if (isDone) {
-            iconHtml = `<div class="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-bold shadow-sm">✓</div>`;
-          } else if (isActive) {
-            iconHtml = `<div class="w-7 h-7 rounded-full bg-brand text-white flex items-center justify-center text-xs font-bold ring-4 ring-brand/20 shadow-sm animate-pulse">${st.step}</div>`;
-          } else {
-            iconHtml = `<div class="w-7 h-7 rounded-full bg-subtle border border-borderSubtle text-muted flex items-center justify-center text-xs font-bold">${st.step}</div>`;
-          }
-
-          item.innerHTML = `
-            ${iconHtml}
-            <div class="flex-1 pb-2">
-              <div class="flex items-center gap-2">
-                <h4 class="font-bold text-sm ${isActive ? 'text-brand' : (isDone ? 'text-dark' : 'text-muted')}">${st.name}</h4>
-                ${isActive ? '<span class="text-[10px] font-mono px-2 py-0.5 rounded bg-brandLight text-brand font-bold">Sedang Dikerjakan</span>' : ''}
-                ${isDone ? '<span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-700">Selesai</span>' : ''}
-              </div>
-              <p class="text-xs text-muted mt-0.5">${st.desc}</p>
-            </div>
-          `;
-          container.appendChild(item);
-        });
-      }
-
-      searchForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        lookupCode(inputCode.value);
-      });
-
-      // Read ?code= URL Parameter
-      const urlParams = new URLSearchParams(window.location.search);
-      const codeQuery = urlParams.get('code');
-      if (codeQuery) {
-        inputCode.value = codeQuery;
-        lookupCode(codeQuery);
-      } else {
-        // Default demo: search DRZ-2026-001 so timeline is shown
-        inputCode.value = 'DRZ-2026-001';
-        lookupCode('DRZ-2026-001');
-      }
-    });
+    function openTenantModal() {
+      document.getElementById('tenant-modal').classList.remove('hidden');
+    }
+    function closeTenantModal() {
+      document.getElementById('tenant-modal').classList.add('hidden');
+    }
   </script>
 </body>
 </html>

@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Buat Pesanan & Konsultasi — Drizzle Project</title>
+  <title>Form Pemesanan & Konsultasi — Drizzle Project</title>
 
   <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Tailwind CSS CDN -->
+  <!-- Tailwind CSS CDN with Warm Studio Palette -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -20,11 +20,13 @@
             brand: '#FF791D',
             brandDark: '#E06512',
             brandLight: '#FFF5ED',
-            dark: '#18181B',
-            muted: '#71717A',
-            surface: '#FFFFFF',
-            subtle: '#F8FAFC',
-            borderSubtle: '#E4E4E7'
+            secondary: '#CC783F',
+            secondaryLight: '#996C4E',
+            dark: '#33302D',
+            muted: '#7A7269',
+            card: '#FFFFFF',
+            canvas: '#FAF7F4',
+            borderCard: '#E6DDD6'
           },
           fontFamily: {
             sans: ['"Plus Jakarta Sans"', 'sans-serif'],
@@ -35,10 +37,10 @@
     }
   </script>
 </head>
-<body class="bg-subtle text-dark font-sans antialiased selection:bg-brand selection:text-white min-h-screen flex flex-col justify-between">
+<body class="bg-canvas text-dark font-sans antialiased selection:bg-brand selection:text-white min-h-screen flex flex-col justify-between">
 
   <!-- ==================== NAVBAR ==================== -->
-  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-borderSubtle">
+  <header class="sticky top-0 z-50 bg-card/90 backdrop-blur-md border-b border-borderCard">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3.5 flex items-center justify-between">
       <!-- Logo -->
       <a href="index.html" class="flex items-center gap-3 group">
@@ -59,11 +61,11 @@
           Buat Pesanan
         </a>
         <a href="tracking.html" class="text-muted hover:text-dark transition">Lacak Pesanan</a>
-        <a href="admin.html" class="text-muted hover:text-dark transition px-3 py-1 rounded-md border border-borderSubtle bg-white hover:border-dark">Dashboard Admin</a>
+        <a href="admin.html" class="text-muted hover:text-dark transition px-3 py-1 rounded-md border border-borderCard bg-card hover:border-dark">Dashboard Admin</a>
       </nav>
 
       <!-- Badge -->
-      <div class="hidden sm:flex items-center gap-2 text-xs font-mono text-muted bg-white px-3 py-1.5 rounded-full border border-borderSubtle">
+      <div class="hidden sm:flex items-center gap-2 text-xs font-mono text-muted bg-card px-3 py-1.5 rounded-full border border-borderCard">
         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
         <span>Order Form Terintegrasi</span>
       </div>
@@ -71,16 +73,16 @@
   </header>
 
   <!-- ==================== MAIN CONTENT ==================== -->
-  <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full">
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full">
     <!-- Header Page -->
     <div class="mb-8">
       <span class="text-xs font-mono font-bold text-brand uppercase tracking-wider block">Formulir Terpadu // CRM Portal</span>
       <h1 class="text-3xl sm:text-4xl font-extrabold text-dark mt-1">Form Pemesanan & Konsultasi</h1>
-      <p class="text-sm text-muted mt-1">Pilih jenis layanan di bawah ini. Kode pelacakan unik akan otomatis diterbitkan setelah formulir dikirim.</p>
+      <p class="text-sm text-muted mt-1">Pilih kategori layanan di bawah ini. Kode tracking otomatis <span class="font-mono text-dark font-semibold">DRZ-2026-XXX</span> akan diterbitkan langsung setelah pengiriman formulir.</p>
     </div>
 
     <!-- Service Type Toggle Switcher -->
-    <div class="grid grid-cols-2 gap-3 mb-8 bg-white p-1.5 rounded-xl border border-borderSubtle shadow-sm">
+    <div class="grid grid-cols-2 gap-3 mb-8 bg-card p-1.5 rounded-xl border border-borderCard shadow-sm">
       <button type="button" id="tab-btn-apparel" class="py-3 px-4 rounded-lg font-semibold text-sm transition text-center flex items-center justify-center gap-2 bg-brand text-white shadow-sm">
         <span>👕 Konveksi & Merchandise Custom</span>
       </button>
@@ -90,7 +92,7 @@
     </div>
 
     <!-- Reorder Banner (Hidden by default, shown if ?reorder= exists) -->
-    <div id="reorder-banner" class="hidden mb-6 bg-brandLight border border-brand/30 rounded-2xl p-4 text-xs text-brandDark flex items-start justify-between gap-3 shadow-sm">
+    <div id="reorder-banner" class="hidden mb-6 bg-brandLight border border-brand/30 rounded-xl p-4 text-xs text-brandDark flex items-start justify-between gap-3 shadow-sm">
       <div class="flex items-start gap-2.5">
         <span class="text-base">🔁</span>
         <div>
@@ -98,223 +100,334 @@
           <p class="mt-0.5 text-dark" id="reorder-banner-text">Data dan spesifikasi berhasil disalin dari riwayat pesanan sebelumnya.</p>
         </div>
       </div>
-      <span class="px-2 py-0.5 rounded bg-brand text-white font-mono font-bold text-[10px]">REPEAT ORDER</span>
+      <a href="order.html" class="font-mono underline text-[11px] hover:text-brand">Reset Form</a>
     </div>
 
-    <!-- Form Container -->
-    <form id="unified-order-form" class="space-y-6" novalidate>
+    <!-- 2 Columns Grid: Form & Live Bill Summary -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
       
-      <!-- 1. IDENTITAS PEMESAN (COMMON TO BOTH) -->
-      <div class="bg-white border border-borderSubtle rounded-2xl p-6 sm:p-7 shadow-sm">
-        <h2 class="text-base font-bold text-dark mb-4 flex items-center gap-2">
-          <span class="w-6 h-6 rounded-full bg-brandLight text-brand text-xs flex items-center justify-center font-bold">1</span>
-          Identitas Pemesan / Klien
-        </h2>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-medium text-muted mb-1.5">Nama Lengkap *</label>
-            <input type="text" id="cust-name" required placeholder="Contoh: Muhammad Alfisyahmad" class="w-full bg-subtle border border-borderSubtle rounded-lg px-3.5 py-2.5 text-sm text-dark focus:outline-none focus:border-brand focus:bg-white transition">
-          </div>
-          <div>
-            <label class="block text-xs font-medium text-muted mb-1.5">Instansi / Komunitas / Brand *</label>
-            <input type="text" id="cust-org" required placeholder="Contoh: BEM Fasilkom / Apex Team" class="w-full bg-subtle border border-borderSubtle rounded-lg px-3.5 py-2.5 text-sm text-dark focus:outline-none focus:border-brand focus:bg-white transition">
-          </div>
-          <div>
-            <label class="block text-xs font-medium text-muted mb-1.5">Nomor WhatsApp Aktif *</label>
-            <input type="tel" id="cust-phone" required placeholder="08xxxxxxxxxx" class="w-full bg-subtle border border-borderSubtle rounded-lg px-3.5 py-2.5 text-sm text-dark focus:outline-none focus:border-brand focus:bg-white transition">
-          </div>
-          <div>
-            <label class="block text-xs font-medium text-muted mb-1.5">Alamat Email *</label>
-            <input type="email" id="cust-email" required placeholder="name@email.com" class="w-full bg-subtle border border-borderSubtle rounded-lg px-3.5 py-2.5 text-sm text-dark focus:outline-none focus:border-brand focus:bg-white transition">
-          </div>
-          <div class="sm:col-span-2">
-            <label class="block text-xs font-medium text-muted mb-1.5">Alamat Lengkap Pengiriman (Kota/Kecamatan/Kode Pos) *</label>
-            <input type="text" id="cust-address" required placeholder="Contoh: Jl. Slamet Riyadi No. 120, Laweyan, Surakarta (Kode Pos 57141)" class="w-full bg-subtle border border-borderSubtle rounded-lg px-3.5 py-2.5 text-sm text-dark focus:outline-none focus:border-brand focus:bg-white transition">
-          </div>
-        </div>
-      </div>
-
-      <!-- 2A. SECTION APPAREL (SHOWS IF APPAREL SELECTED) -->
-      <div id="section-apparel" class="space-y-6">
+      <!-- Left Column: Form Fields (8 Cols) -->
+      <form id="unified-order-form" class="lg:col-span-7 space-y-6">
         
-        <!-- Pilihan Produk Apparel -->
-        <div class="bg-white border border-borderSubtle rounded-2xl p-6 sm:p-7 shadow-sm">
-          <h2 class="text-base font-bold text-dark mb-4 flex items-center gap-2">
-            <span class="w-6 h-6 rounded-full bg-brandLight text-brand text-xs flex items-center justify-center font-bold">2</span>
-            Spesifikasi Produk Merchandise (12 Pilihan)
-          </h2>
+        <!-- SECTION 1: IDENTITAS PEMESAN -->
+        <div class="bg-card border border-borderCard rounded-xl p-6 shadow-sm space-y-4">
+          <div class="flex items-center gap-2 pb-3 border-b border-borderCard">
+            <span class="w-6 h-6 rounded-full bg-brandLight text-brand font-mono font-bold text-xs flex items-center justify-center">1</span>
+            <h2 class="font-bold text-base text-dark">Identitas Pemesan & Alamat (CRM)</h2>
+          </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-medium text-muted mb-1.5">Kategori Produk</label>
-              <select id="product-select" class="w-full bg-subtle border border-borderSubtle rounded-lg px-3.5 py-2.5 text-sm text-dark focus:outline-none focus:border-brand focus:bg-white transition">
-                <!-- Injected via store.js -->
-              </select>
+              <label class="block text-xs font-semibold text-dark mb-1">Nama Lengkap / PIC *</label>
+              <input type="text" id="cust-name" required placeholder="Contoh: Alfian Syahmad" class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand">
             </div>
             <div>
-              <label class="block text-xs font-medium text-muted mb-1.5">Harga Dasar Satuan</label>
-              <div class="bg-subtle border border-borderSubtle rounded-lg px-3.5 py-2.5 text-sm font-mono font-bold text-brand flex items-center justify-between">
-                <span id="product-base-price">Rp 65.000</span>
-                <span class="text-[11px] font-normal text-muted font-sans">Include Packaging</span>
-              </div>
+              <label class="block text-xs font-semibold text-dark mb-1">Nama Organisasi / Komunitas / Brand *</label>
+              <input type="text" id="cust-org" required placeholder="Contoh: MPD UNS / Bushwacker" class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand">
             </div>
           </div>
-        </div>
 
-        <!-- Breakdown Ukuran -->
-        <div class="bg-white border border-borderSubtle rounded-2xl p-6 sm:p-7 shadow-sm">
-          <div class="flex items-center justify-between mb-4">
-            <h2 class="text-base font-bold text-dark flex items-center gap-2">
-              <span class="w-6 h-6 rounded-full bg-brandLight text-brand text-xs flex items-center justify-center font-bold">3</span>
-              Breakdown Ukuran Kuantitas (Pcs)
-            </h2>
-            <span class="text-xs font-mono font-bold px-2.5 py-1 rounded-md bg-brandLight text-brand">
-              TOTAL: <span id="display-total-pcs">0 Pcs</span>
-            </span>
-          </div>
-
-          <div class="grid grid-cols-5 gap-3">
-            <div class="bg-subtle border border-borderSubtle rounded-lg p-2.5 text-center focus-within:border-brand">
-              <span class="text-xs font-bold text-muted block mb-1">S</span>
-              <input type="number" id="size-s" min="0" value="0" class="size-input w-full bg-transparent text-center font-mono font-bold text-dark text-base focus:outline-none">
-            </div>
-            <div class="bg-subtle border border-borderSubtle rounded-lg p-2.5 text-center focus-within:border-brand">
-              <span class="text-xs font-bold text-muted block mb-1">M</span>
-              <input type="number" id="size-m" min="0" value="0" class="size-input w-full bg-transparent text-center font-mono font-bold text-dark text-base focus:outline-none">
-            </div>
-            <div class="bg-subtle border border-borderSubtle rounded-lg p-2.5 text-center focus-within:border-brand">
-              <span class="text-xs font-bold text-muted block mb-1">L</span>
-              <input type="number" id="size-l" min="0" value="0" class="size-input w-full bg-transparent text-center font-mono font-bold text-dark text-base focus:outline-none">
-            </div>
-            <div class="bg-subtle border border-borderSubtle rounded-lg p-2.5 text-center focus-within:border-brand">
-              <span class="text-xs font-bold text-muted block mb-1">XL</span>
-              <input type="number" id="size-xl" min="0" value="0" class="size-input w-full bg-transparent text-center font-mono font-bold text-dark text-base focus:outline-none">
-            </div>
-            <div class="bg-subtle border border-borderSubtle rounded-lg p-2.5 text-center focus-within:border-brand">
-              <span class="text-xs font-bold text-muted block mb-1">XXL</span>
-              <input type="number" id="size-xxl" min="0" value="0" class="size-input w-full bg-transparent text-center font-mono font-bold text-dark text-base focus:outline-none">
-            </div>
-          </div>
-        </div>
-
-        <!-- Spesifikasi Sablon / Bordir -->
-        <div class="bg-white border border-borderSubtle rounded-2xl p-6 sm:p-7 shadow-sm">
-          <h2 class="text-base font-bold text-dark mb-4 flex items-center gap-2">
-            <span class="w-6 h-6 rounded-full bg-brandLight text-brand text-xs flex items-center justify-center font-bold">4</span>
-            Aplikasi Sablon, Bordir & Warna Kain
-          </h2>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-medium text-muted mb-1.5">Teknik Sablon / Bordir</label>
-              <select id="spec-print-type" class="w-full bg-subtle border border-borderSubtle rounded-lg px-3.5 py-2.5 text-sm text-dark focus:outline-none focus:border-brand focus:bg-white transition">
-                <option value="Sablon DTF High Density">Sablon DTF High Density (Full Color)</option>
-                <option value="Sablon Plastisol Doff/Glossy">Sablon Plastisol Doff/Glossy</option>
-                <option value="Bordir Komputer Presisi">Bordir Komputer Presisi</option>
-                <option value="Bordir Chenille Towel (Varsity)">Bordir Chenille Towel</option>
-                <option value="Sublimasi Full Color (Lanyard)">Sublimasi Full Color</option>
-                <option value="Polos Tanpa Sablon">Polos</option>
-              </select>
+              <label class="block text-xs font-semibold text-dark mb-1">Nomor WhatsApp Aktif *</label>
+              <input type="tel" id="cust-phone" required placeholder="Contoh: 0882007546920" class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand font-mono">
             </div>
             <div>
-              <label class="block text-xs font-medium text-muted mb-1.5">Pilihan Warna Bahan / Kain</label>
-              <input type="text" id="spec-fabric-color" placeholder="Contoh: Jet Black, Navy, Off-White, dsb." class="w-full bg-subtle border border-borderSubtle rounded-lg px-3.5 py-2.5 text-sm text-dark focus:outline-none focus:border-brand focus:bg-white transition">
+              <label class="block text-xs font-semibold text-dark mb-1">Alamat Email Aktif *</label>
+              <input type="email" id="cust-email" required placeholder="nama@domain.com" class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand">
             </div>
           </div>
 
           <div>
-            <label class="block text-xs font-medium text-muted mb-1.5">Catatan Khusus / Posisi Artwork</label>
-            <textarea id="spec-notes" rows="2" placeholder="Contoh: Sablon dada kiri 8cm & punggung A3 di tengah..." class="w-full bg-subtle border border-borderSubtle rounded-lg px-3.5 py-2.5 text-sm text-dark focus:outline-none focus:border-brand focus:bg-white transition"></textarea>
+            <label class="block text-xs font-semibold text-dark mb-1">Alamat Lengkap Pengiriman (SCM Outbound) *</label>
+            <textarea id="cust-address" required rows="2" placeholder="Jl. Ir. Sutami No. 36A, Kentingan, Jebres, Surakarta, Jawa Tengah 57126" class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand"></textarea>
           </div>
         </div>
 
-      </div>
+        <!-- SECTION 2A: KHUSUS APPAREL & MERCHANDISE -->
+        <div id="section-apparel" class="bg-card border border-borderCard rounded-xl p-6 shadow-sm space-y-5">
+          <div class="flex items-center gap-2 pb-3 border-b border-borderCard">
+            <span class="w-6 h-6 rounded-full bg-brandLight text-brand font-mono font-bold text-xs flex items-center justify-center">2</span>
+            <h2 class="font-bold text-base text-dark">Spesifikasi Apparel & Matrix Ukuran (ERP)</h2>
+          </div>
 
-      <!-- 2B. SECTION CREATIVE STUDIO (SHOWS IF CREATIVE SELECTED) -->
-      <div id="section-creative" class="hidden space-y-6">
-        <div class="bg-white border border-borderSubtle rounded-2xl p-6 sm:p-7 shadow-sm">
-          <h2 class="text-base font-bold text-dark mb-4 flex items-center gap-2">
-            <span class="w-6 h-6 rounded-full bg-brandLight text-brand text-xs flex items-center justify-center font-bold">2</span>
-            Pilihan Paket Jasa Desain & Konsultasi Brand
-          </h2>
+          <!-- Pilihan Produk -->
+          <div>
+            <label class="block text-xs font-semibold text-dark mb-1">Pilih Item Produk Apparel / Merchandise *</label>
+            <select id="apparel-product-select" class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark font-medium focus:outline-none focus:border-brand">
+              <!-- Populated via js/app.js -->
+            </select>
+            <p class="text-[11px] text-muted mt-1" id="apparel-product-desc"></p>
+          </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+          <!-- Matrix Ukuran -->
+          <div>
+            <label class="block text-xs font-semibold text-dark mb-1.5">Matrix Rincian Ukuran (Pcs) *</label>
+            <div class="grid grid-cols-5 gap-2">
+              <div class="text-center">
+                <span class="text-[11px] font-mono font-bold text-muted block mb-1">S</span>
+                <input type="number" id="size-s" min="0" value="0" class="w-full bg-canvas border border-borderCard rounded-lg py-1.5 text-center text-xs font-mono font-bold text-dark focus:outline-none focus:border-brand size-input">
+              </div>
+              <div class="text-center">
+                <span class="text-[11px] font-mono font-bold text-muted block mb-1">M</span>
+                <input type="number" id="size-m" min="0" value="0" class="w-full bg-canvas border border-borderCard rounded-lg py-1.5 text-center text-xs font-mono font-bold text-dark focus:outline-none focus:border-brand size-input">
+              </div>
+              <div class="text-center">
+                <span class="text-[11px] font-mono font-bold text-muted block mb-1">L</span>
+                <input type="number" id="size-l" min="0" value="0" class="w-full bg-canvas border border-borderCard rounded-lg py-1.5 text-center text-xs font-mono font-bold text-dark focus:outline-none focus:border-brand size-input">
+              </div>
+              <div class="text-center">
+                <span class="text-[11px] font-mono font-bold text-muted block mb-1">XL</span>
+                <input type="number" id="size-xl" min="0" value="0" class="w-full bg-canvas border border-borderCard rounded-lg py-1.5 text-center text-xs font-mono font-bold text-dark focus:outline-none focus:border-brand size-input">
+              </div>
+              <div class="text-center">
+                <span class="text-[11px] font-mono font-bold text-muted block mb-1">XXL</span>
+                <input type="number" id="size-xxl" min="0" value="0" class="w-full bg-canvas border border-borderCard rounded-lg py-1.5 text-center text-xs font-mono font-bold text-dark focus:outline-none focus:border-brand size-input">
+              </div>
+            </div>
+            <div class="flex justify-between items-center mt-2 px-1 text-xs">
+              <span class="text-muted">Total Kuantitas:</span>
+              <span class="font-mono font-bold text-brand text-sm" id="calc-total-qty">0 Pcs</span>
+            </div>
+          </div>
+
+          <!-- Spesifikasi Sablon/Bordir & Warna Bahan -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-medium text-muted mb-1.5">Pilih Layanan Kreatif</label>
-              <select id="creative-service-select" class="w-full bg-subtle border border-borderSubtle rounded-lg px-3.5 py-2.5 text-sm text-dark focus:outline-none focus:border-brand focus:bg-white transition">
-                <!-- Injected via store.js -->
+              <label class="block text-xs font-semibold text-dark mb-1">Aplikasi Desain / Cetak *</label>
+              <select id="spec-print-type" class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand">
+                <option value="Sablon Plastisol High Density">Sablon Plastisol High Density</option>
+                <option value="Sablon Discharge / Waterbased">Sablon Discharge / Waterbased</option>
+                <option value="Bordir Komputer Presisi Tinggi">Bordir Komputer Presisi Tinggi</option>
+                <option value="Bordir Woven Emblem Patch">Bordir Woven Emblem Patch</option>
+                <option value="Sublim Full Print Digital">Sublim Full Print Digital</option>
+                <option value="DTF (Direct to Film) HD">DTF (Direct to Film) HD</option>
+                <option value="Polosan / Tanpa Cetak">Polosan / Tanpa Cetak</option>
               </select>
             </div>
             <div>
-              <label class="block text-xs font-medium text-muted mb-1.5">Estimasi Biaya Jasa Mulai Dari</label>
-              <div class="bg-subtle border border-borderSubtle rounded-lg px-3.5 py-2.5 text-sm font-mono font-bold text-brand">
-                <span id="creative-base-price">Rp 500.000</span>
-              </div>
+              <label class="block text-xs font-semibold text-dark mb-1">Pilihan Warna Bahan Kain *</label>
+              <input type="text" id="spec-fabric-color" placeholder="Contoh: Hitam Reaktif / Navy / Broken White" class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand">
             </div>
           </div>
 
+          <!-- Daftar Nickname / Divisi (Khusus Kemeja/PDH) -->
           <div>
-            <label class="block text-xs font-medium text-muted mb-1.5">Deskripsi Singkat Kebutuhan / Brief Proyek *</label>
-            <textarea id="creative-notes" rows="3" placeholder="Ceritakan tujuan proyek, konsep visual yang diinginkan, atau referensi desain..." class="w-full bg-subtle border border-borderSubtle rounded-lg px-3.5 py-2.5 text-sm text-dark focus:outline-none focus:border-brand focus:bg-white transition"></textarea>
+            <label class="block text-xs font-semibold text-dark mb-1">Daftar Nickname / Bordir Nama Dada (Opsional untuk PDH)</label>
+            <textarea id="spec-nicknames" rows="2" placeholder="Contoh format: 1. ALFIAN (L) - KETUA, 2. FARHAN (M) - SEKRETARIS..." class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand font-mono text-[11px]"></textarea>
+          </div>
+
+          <!-- Link Google Drive Artwork -->
+          <div>
+            <label class="block text-xs font-semibold text-dark mb-1">Link Google Drive Desain / Mockup (Opsional)</label>
+            <input type="url" id="spec-artwork-url" placeholder="https://drive.google.com/..." class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand font-mono">
+            <span class="text-[10px] text-muted mt-1 block">Pastikan izin akses Google Drive diset ke 'Anyone with link can view'.</span>
+          </div>
+
+          <!-- Catatan Tambahan -->
+          <div>
+            <label class="block text-xs font-semibold text-dark mb-1">Catatan Khusus Pengerjaan</label>
+            <textarea id="spec-notes" rows="2" placeholder="Contoh: Label woven di leher, belah samping baju, jahitan rantai rapi..." class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand"></textarea>
           </div>
         </div>
-      </div>
 
-      <!-- ESTIMASI BIAYA & SUBMIT BUTTON -->
-      <div class="bg-white border border-borderSubtle rounded-2xl p-6 sm:p-7 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6">
-        <div>
-          <span class="text-xs font-mono text-muted uppercase block">Estimasi Total Biaya</span>
-          <div class="text-2xl sm:text-3xl font-bold font-mono text-dark mt-0.5" id="display-total-estimate">Rp 0</div>
-          <span class="text-xs text-muted mt-1 block">DP 50% untuk verifikasi antrean: <strong id="display-dp-estimate" class="text-brand">Rp 0</strong></span>
+        <!-- SECTION 2B: KHUSUS JASA DESAIN KREATIF -->
+        <div id="section-creative" class="hidden bg-card border border-borderCard rounded-xl p-6 shadow-sm space-y-5">
+          <div class="flex items-center gap-2 pb-3 border-b border-borderCard">
+            <span class="w-6 h-6 rounded-full bg-brandLight text-brand font-mono font-bold text-xs flex items-center justify-center">2</span>
+            <h2 class="font-bold text-base text-dark">Paket Jasa Desain & Konsultasi Brand</h2>
+          </div>
+
+          <!-- Pilihan Layanan Kreatif -->
+          <div>
+            <label class="block text-xs font-semibold text-dark mb-1">Pilih Paket Layanan Kreatif *</label>
+            <select id="creative-service-select" class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark font-medium focus:outline-none focus:border-brand">
+              <!-- Populated via js/app.js -->
+            </select>
+            <p class="text-[11px] text-muted mt-1" id="creative-service-desc"></p>
+          </div>
+
+          <!-- Brief Kebutuhan Desain -->
+          <div>
+            <label class="block text-xs font-semibold text-dark mb-1">Brief Kebutuhan & Ekspektasi Desain *</label>
+            <textarea id="creative-brief" rows="4" placeholder="Jelaskan konsep, target audiens, filosofi warna, atau referensi visual yang diinginkan..." class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand"></textarea>
+          </div>
+
+          <!-- Link Referensi -->
+          <div>
+            <label class="block text-xs font-semibold text-dark mb-1">Link Referensi Moodboard / Logo Lama (Opsional)</label>
+            <input type="url" id="creative-ref-url" placeholder="https://pin.it/... atau Google Drive" class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand font-mono">
+          </div>
         </div>
 
-        <button type="submit" class="w-full sm:w-auto bg-brand hover:bg-brandDark text-white font-semibold text-base px-8 py-4 rounded-xl transition shadow-sm flex items-center justify-center gap-2">
-          <span>Kirim Pesanan & Terbitkan Kode</span>
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        <!-- Submit Button -->
+        <button type="submit" id="btn-submit-order" class="w-full bg-brand hover:bg-brandDark text-white font-bold py-3.5 px-6 rounded-xl transition shadow-md flex items-center justify-center gap-2 text-sm">
+          <span>Kirim Pesanan & Terbitkan Kode Tracking &rarr;</span>
         </button>
+      </form>
+
+      <!-- Right Column: Ringkasan Tagihan Live & Aturan Kemasan 1:1 (5 Cols) -->
+      <div class="lg:col-span-5 sticky top-24 space-y-4">
+        
+        <!-- Live Bill Card -->
+        <div class="bg-card border border-borderCard rounded-xl p-6 shadow-sm">
+          <div class="flex items-center justify-between pb-3 border-b border-borderCard">
+            <h3 class="font-bold text-sm text-dark uppercase tracking-wider font-mono">Ringkasan Tagihan Live</h3>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-brandLight text-brand font-bold">Kalkulasi Otomatis</span>
+          </div>
+
+          <div class="py-4 space-y-3 border-b border-borderCard text-xs">
+            <div class="flex justify-between items-center">
+              <span class="text-muted">Item Layanan:</span>
+              <span class="font-semibold text-dark text-right" id="live-service-name">-</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-muted">Kuantitas Total:</span>
+              <span class="font-mono font-bold text-dark" id="live-qty">0 Pcs</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-muted">Harga Satuan (Tiering):</span>
+              <span class="font-mono text-dark" id="live-unit-price">Rp 0</span>
+            </div>
+            <div class="flex justify-between items-center pt-2 border-t border-borderCard/60">
+              <span class="font-semibold text-dark">Total Nilai Pesanan:</span>
+              <span class="font-mono font-extrabold text-base text-dark" id="live-total-price">Rp 0</span>
+            </div>
+          </div>
+
+          <!-- Termin Pembayaran 50% -->
+          <div class="py-4 space-y-2 border-b border-borderCard text-xs bg-canvas/60 -mx-6 px-6">
+            <span class="text-[11px] font-mono font-bold text-muted uppercase block">Termin Pembayaran Resmi</span>
+            <div class="flex justify-between items-center">
+              <span class="text-dark font-medium">Uang Muka (DP 50%):</span>
+              <span class="font-mono font-bold text-brand text-sm" id="live-dp-amount">Rp 0</span>
+            </div>
+            <div class="flex justify-between items-center text-muted">
+              <span>Pelunasan (50% Saat QC Selesai):</span>
+              <span class="font-mono" id="live-remaining-amount">Rp 0</span>
+            </div>
+          </div>
+
+          <!-- Wajib Kemasan 1:1 Rule Box -->
+          <div class="mt-4 p-3.5 rounded-lg bg-brandLight/60 border border-brand/20 text-xs space-y-2">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-brand"></span>
+              <strong class="font-bold text-brandDark">Standar Wajib Kemasan 1:1 Drizzle</strong>
+            </div>
+            <p class="text-[11px] text-muted leading-relaxed">
+              Setiap 1 pcs produk fisik otomatis dialokasikan kemasan eksklusif tanpa biaya tambahan:
+            </p>
+            <div class="grid grid-cols-2 gap-2 text-[11px] font-mono pt-1">
+              <div class="bg-card p-2 rounded border border-borderCard">
+                <span class="text-muted block text-[10px]">Polymailer/Box:</span>
+                <span class="font-bold text-dark" id="live-pack-poly">0 Pcs (1:1)</span>
+              </div>
+              <div class="bg-card p-2 rounded border border-borderCard">
+                <span class="text-muted block text-[10px]">Thank You Card:</span>
+                <span class="font-bold text-dark" id="live-pack-card">0 Pcs (1:1)</span>
+              </div>
+            </div>
+          </div>
+
+          <p class="text-[10px] text-muted mt-3 text-center">
+            Invoice resmi dan instruksi transfer DP 50% akan langsung diterbitkan setelah order terdaftar.
+          </p>
+        </div>
+
+        <!-- Help Info Box -->
+        <div class="bg-card border border-borderCard rounded-xl p-4 text-xs text-muted flex items-start gap-3">
+          <div class="text-lg">💬</div>
+          <div>
+            <strong class="font-semibold text-dark block mb-0.5">Butuh Konsultasi Bahan & Desain?</strong>
+            <span>Tim Drizzle siap membantu menentukan spesifikasi terbaik via WhatsApp di 0882-0075-46920.</span>
+          </div>
+        </div>
+
       </div>
 
-    </form>
+    </div>
   </main>
 
-  <!-- ==================== MODAL SUKSES ==================== -->
-  <div id="order-success-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 sm:p-8 shadow-xl text-center border border-borderSubtle animate-in fade-in zoom-in-95 duration-150">
-      <div class="w-14 h-14 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
+  <!-- ==================== MODAL SUKSES ORDER ==================== -->
+  <div id="order-success-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-card border border-borderCard rounded-2xl max-w-md w-full p-6 sm:p-8 shadow-2xl text-center space-y-5 animate-scale-up">
+      <div class="w-14 h-14 mx-auto rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl font-bold">
         ✓
       </div>
-      <h3 class="text-2xl font-bold text-dark">Pesanan Berhasil Masuk!</h3>
-      <p class="text-xs text-muted mt-1">Data telah tersimpan ke sistem ERP & CRM Drizzle Project. Gunakan kode unik berikut untuk melacak progres:</p>
-
-      <div class="my-5 p-4 rounded-xl bg-subtle border border-borderSubtle">
-        <span class="text-[11px] font-mono text-muted block mb-1">KODE TRACKING ANDA</span>
-        <div class="text-3xl font-mono font-extrabold text-brand tracking-wider" id="modal-tracking-code">
-          DRZ-2026-007
-        </div>
-        <button type="button" id="btn-copy-code" class="mt-2 text-xs font-medium text-muted hover:text-dark inline-flex items-center gap-1">
-          <span>Salin Kode</span>
-        </button>
-        <span id="copy-feedback" class="text-[11px] text-emerald-600 block h-3 mt-1 font-mono"></span>
+      <div>
+        <span class="text-xs font-mono font-bold text-brand uppercase tracking-wider block">Pesanan Berhasil Terdaftar</span>
+        <h3 class="text-2xl font-extrabold text-dark mt-1">Kode Tracking Diterbitkan!</h3>
+        <p class="text-xs text-muted mt-1">Simpan kode tracking unik di bawah ini untuk memantau status pembayaran dan tahapan produksi Anda secara real-time.</p>
       </div>
 
-      <div class="space-y-2">
-        <a id="modal-goto-tracking-btn" href="tracking.html" class="w-full bg-brand hover:bg-brandDark text-white font-semibold text-sm py-3 rounded-xl transition block text-center">
-          Lacak Status Pesanan &rarr;
+      <!-- Tracking Code Box -->
+      <div class="bg-canvas border border-borderCard rounded-xl p-4 flex items-center justify-between">
+        <div class="text-left">
+          <span class="text-[10px] font-mono text-muted block uppercase">Kode Pesanan (Order ID)</span>
+          <span class="font-mono font-extrabold text-xl sm:text-2xl text-brand" id="modal-tracking-code">DRZ-2026-000</span>
+        </div>
+        <button type="button" id="btn-copy-code" class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-card border border-borderCard hover:border-dark transition">
+          Salin
+        </button>
+      </div>
+      <div id="copy-feedback" class="text-[11px] font-mono text-emerald-600 h-4"></div>
+
+      <!-- Action Buttons -->
+      <div class="space-y-2 pt-2">
+        <a id="modal-goto-tracking-btn" href="tracking.html" class="w-full bg-brand hover:bg-brandDark text-white font-bold py-3 px-4 rounded-xl transition block text-sm shadow-sm">
+          Buka Halaman Pelacakan Real-Time &rarr;
         </a>
-        <button type="button" onclick="document.getElementById('order-success-modal').classList.add('hidden')" class="w-full bg-subtle hover:bg-borderSubtle text-dark text-xs py-2.5 rounded-xl transition">
-          Buat Pesanan Lainnya
+        <a href="order.html" class="w-full bg-canvas hover:bg-borderCard text-dark font-medium py-2.5 px-4 rounded-xl transition block text-xs border border-borderCard">
+          Buat Pesanan Baru Lainnya
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== MULTI-TENANT SAAS BADGE & MODAL TRIGGER ==================== -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center">
+    <button type="button" onclick="openTenantModal()" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-card border border-borderCard text-xs font-mono text-muted hover:text-dark hover:border-brand transition shadow-sm">
+      <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+      <span>Powered by DrizzleOS &mdash; Multi-Tenant SaaS Architecture</span>
+    </button>
+  </div>
+
+  <!-- ==================== MULTI-TENANT MODAL ==================== -->
+  <div id="tenant-modal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-card border border-borderCard rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 text-left">
+      <div class="flex justify-between items-center pb-3 border-b border-borderCard">
+        <div>
+          <span class="text-[10px] font-mono text-brand font-bold uppercase tracking-wider block">System Architecture</span>
+          <h3 class="text-lg font-extrabold text-dark">DrizzleOS Multi-Tenant Architecture</h3>
+        </div>
+        <button type="button" onclick="closeTenantModal()" class="text-muted hover:text-dark text-lg font-bold">&times;</button>
+      </div>
+      
+      <div class="space-y-3 text-xs text-muted">
+        <p><strong class="text-dark">Tenant Aktif:</strong> <span class="font-mono text-brand">TNT-DRIZZLE-SOLO-01</span> (Drizzle Project Studio Solo HQ).</p>
+        <p><strong class="text-dark">Fitur Arsitektur Multi-Tenant:</strong></p>
+        <ul class="list-disc pl-5 space-y-1.5 text-[11px]">
+          <li><strong>Relational DB Sandbox:</strong> 6 koleksi relasional terisolasi (Services, Customers, Orders, Materials, PurchaseOrders, FinanceLedger).</li>
+          <li><strong>Mandatory 1:1 Packaging Engine:</strong> Alokasi kemasan otomatis 1:1 per unit apparel/merchandise di kalkulasi Material Requirements Planning (MRP).</li>
+          <li><strong>Integrated Production Workflow:</strong> State machine 5 tahap (DESIGN &rarr; PRINTING &rarr; SEWING &rarr; QC &rarr; SHIPPED).</li>
+          <li><strong>Finance & HPP Ledger:</strong> Pencatatan kas masuk termin DP 50%, pelunasan, pengeluaran vendor makloon, dan margin laba bersih otomatis.</li>
+        </ul>
+      </div>
+
+      <div class="pt-3 border-t border-borderCard flex justify-end">
+        <button type="button" onclick="closeTenantModal()" class="px-4 py-2 bg-dark text-white rounded-lg text-xs font-semibold">
+          Tutup
         </button>
       </div>
     </div>
   </div>
 
   <!-- ==================== FOOTER ==================== -->
-  <footer class="bg-white border-t border-borderSubtle py-8 text-xs text-muted mt-12">
+  <footer class="bg-card border-t border-borderCard py-8 text-xs text-muted mt-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
       <div>
         <span class="font-bold text-dark text-sm">Drizzle Project</span>
-        <p class="mt-0.5">&copy; 2026 Drizzle Project. All Product Include Packaging.</p>
+        <p class="mt-0.5">&copy; 2026 Drizzle Project. All Product Include Packaging. Est. Late 2023.</p>
       </div>
       <div class="flex items-center gap-6 font-medium">
         <a href="index.html" class="hover:text-dark transition">Beranda</a>
@@ -325,266 +438,345 @@
     </div>
   </footer>
 
-  <!-- Central Store Script -->
-  <script src="js/store.js"></script>
+  <!-- Central App Script -->
+  <script src="js/app.js"></script>
 
-  <!-- Page Controller Script -->
+  <!-- Page Logic Script -->
   <script>
+    let currentServiceType = 'apparel'; // 'apparel' or 'creative'
+
+    function openTenantModal() {
+      document.getElementById('tenant-modal').classList.remove('hidden');
+    }
+    function closeTenantModal() {
+      document.getElementById('tenant-modal').classList.add('hidden');
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
-      let currentServiceType = 'apparel';
+      const tabBtnApparel = document.getElementById('tab-btn-apparel');
+      const tabBtnCreative = document.getElementById('tab-btn-creative');
+      const sectionApparel = document.getElementById('section-apparel');
+      const sectionCreative = document.getElementById('section-creative');
 
-      const tabApparel = document.getElementById('tab-btn-apparel');
-      const tabCreative = document.getElementById('tab-btn-creative');
-      const secApparel = document.getElementById('section-apparel');
-      const secCreative = document.getElementById('section-creative');
-
-      const productSelect = document.getElementById('product-select');
-      const productBasePrice = document.getElementById('product-base-price');
+      const apparelSelect = document.getElementById('apparel-product-select');
+      const apparelDesc = document.getElementById('apparel-product-desc');
       const creativeSelect = document.getElementById('creative-service-select');
-      const creativeBasePrice = document.getElementById('creative-base-price');
+      const creativeDesc = document.getElementById('creative-service-desc');
 
       const sizeInputs = document.querySelectorAll('.size-input');
-      const displayTotalPcs = document.getElementById('display-total-pcs');
-      const displayTotalEst = document.getElementById('display-total-estimate');
-      const displayDpEst = document.getElementById('display-dp-estimate');
 
-      // Populate Apparel Products
-      const products = window.DrizzleStore.products || [];
-      products.forEach(p => {
+      // Populate Services from DrizzleApp
+      const db = window.DrizzleApp.getDB();
+      const services = db.services || [];
+
+      // Apparel services (APPAREL & MERCH)
+      const apparelList = services.filter(s => s.category === 'APPAREL' || s.category === 'MERCH');
+      apparelSelect.innerHTML = '';
+      apparelList.forEach(s => {
         const opt = document.createElement('option');
-        opt.value = p.name;
-        opt.textContent = `${p.name} — ${window.DrizzleStore.formatRupiah(p.price)}`;
-        opt.dataset.price = p.price;
-        productSelect.appendChild(opt);
+        opt.value = s.serviceId;
+        opt.textContent = `${s.name} (Mulai ${window.DrizzleApp.formatRupiah(s.basePrice)} - Min ${s.minQty} pcs)`;
+        opt.dataset.basePrice = s.basePrice;
+        opt.dataset.minQty = s.minQty;
+        opt.dataset.desc = s.desc;
+        apparelSelect.appendChild(opt);
       });
 
-      // Populate Creative Services
-      const services = window.DrizzleStore.services || [];
-      services.forEach(s => {
+      // Creative services (DESIGN)
+      const creativeList = services.filter(s => s.category === 'DESIGN');
+      creativeSelect.innerHTML = '';
+      creativeList.forEach(s => {
         const opt = document.createElement('option');
-        opt.value = s.name;
-        opt.textContent = `${s.name} — Mulai ${window.DrizzleStore.formatRupiah(s.basePrice)}`;
-        opt.dataset.price = s.basePrice;
+        opt.value = s.serviceId;
+        opt.textContent = `${s.name} (${window.DrizzleApp.formatRupiah(s.basePrice)})`;
+        opt.dataset.basePrice = s.basePrice;
+        opt.dataset.desc = s.desc;
         creativeSelect.appendChild(opt);
       });
 
-      // Check URL Query Parameters (including CRM Pilar 5: Repeat Order 1-Klik)
+      // Check URL Query for Pre-selection
       const urlParams = new URLSearchParams(window.location.search);
-      const preProduct = urlParams.get('product');
-      const preService = urlParams.get('service');
-      const reorderCode = urlParams.get('reorder');
+      const preProduct = urlParams.get('product') || urlParams.get('service');
+      const reorderId = urlParams.get('reorder');
 
-      if (reorderCode) {
-        const db = window.DrizzleStore.getDB();
-        const prevOrder = (db.orders || []).find(o => o.tracking_code === reorderCode.toUpperCase().trim());
-        if (prevOrder) {
-          document.getElementById('reorder-banner').classList.remove('hidden');
-          document.getElementById('reorder-banner-text').textContent = `Menyalin data & spesifikasi dari riwayat pesanan #${prevOrder.tracking_code} (${prevOrder.customer.organization || prevOrder.customer.name}). Silakan sesuaikan jumlah atau langsung konfirmasi pesanan.`;
-
-          if (prevOrder.customer) {
-            document.getElementById('cust-name').value = prevOrder.customer.name || '';
-            document.getElementById('cust-org').value = prevOrder.customer.organization || '';
-            document.getElementById('cust-phone').value = prevOrder.customer.phone || '';
-            document.getElementById('cust-email').value = prevOrder.customer.email || '';
-            document.getElementById('cust-address').value = prevOrder.customer.address || '';
-          }
-
-          if (prevOrder.service_type === 'apparel') {
-            setServiceType('apparel');
-            for (let i = 0; i < productSelect.options.length; i++) {
-              if (productSelect.options[i].value.toLowerCase() === (prevOrder.product_name || '').toLowerCase()) {
-                productSelect.selectedIndex = i;
-                break;
-              }
-            }
-            if (prevOrder.size_breakdown) {
-              document.getElementById('size-s').value = prevOrder.size_breakdown.S || 0;
-              document.getElementById('size-m').value = prevOrder.size_breakdown.M || 0;
-              document.getElementById('size-l').value = prevOrder.size_breakdown.L || 0;
-              document.getElementById('size-xl').value = prevOrder.size_breakdown.XL || 0;
-              document.getElementById('size-xxl').value = prevOrder.size_breakdown.XXL || 0;
-            }
-            if (prevOrder.specs) {
-              document.getElementById('spec-print-type').value = prevOrder.specs.print_type || 'Sablon Plastisol';
-              document.getElementById('spec-fabric-color').value = prevOrder.specs.fabric_color || '';
-              document.getElementById('spec-notes').value = (prevOrder.specs.notes || '') + ' [Repeat Order dari #' + prevOrder.tracking_code + ']';
-            }
-          } else {
-            setServiceType('creative');
-            for (let i = 0; i < creativeSelect.options.length; i++) {
-              if (creativeSelect.options[i].value.toLowerCase() === (prevOrder.product_name || '').toLowerCase()) {
-                creativeSelect.selectedIndex = i;
-                break;
-              }
-            }
-            if (prevOrder.specs && prevOrder.specs.notes) {
-              document.getElementById('creative-notes').value = prevOrder.specs.notes + ' [Repeat Order dari #' + prevOrder.tracking_code + ']';
-            }
-          }
-        }
-      } else if (preService) {
-        setServiceType('creative');
-        for (let i = 0; i < creativeSelect.options.length; i++) {
-          if (creativeSelect.options[i].value.toLowerCase() === preService.toLowerCase()) {
-            creativeSelect.selectedIndex = i;
-            break;
-          }
-        }
-      } else if (preProduct) {
-        setServiceType('apparel');
-        for (let i = 0; i < productSelect.options.length; i++) {
-          if (productSelect.options[i].value.toLowerCase() === preProduct.toLowerCase()) {
-            productSelect.selectedIndex = i;
-            break;
+      if (preProduct) {
+        // Check if matches apparel
+        const matchedApp = apparelList.find(s => s.name.toLowerCase() === preProduct.toLowerCase() || s.serviceId === preProduct);
+        if (matchedApp) {
+          apparelSelect.value = matchedApp.serviceId;
+          setTab('apparel');
+        } else {
+          const matchedCreat = creativeList.find(s => s.name.toLowerCase() === preProduct.toLowerCase() || s.serviceId === preProduct);
+          if (matchedCreat) {
+            creativeSelect.value = matchedCreat.serviceId;
+            setTab('creative');
           }
         }
       }
 
-      function setServiceType(type) {
+      // Check Reorder Mode
+      if (reorderId) {
+        const pastOrder = (db.orders || []).find(o => o.orderId === reorderId);
+        if (pastOrder) {
+          const reorderBanner = document.getElementById('reorder-banner');
+          const reorderText = document.getElementById('reorder-banner-text');
+          reorderBanner.classList.remove('hidden');
+          reorderText.textContent = `Menyalin konfigurasi dari pesanan ${pastOrder.orderId} (${pastOrder.serviceName || pastOrder.serviceId}) kuantitas ${pastOrder.qty} pcs.`;
+
+          const pastCust = (db.customers || []).find(c => c.customerId === pastOrder.customerId);
+          if (pastCust) {
+            document.getElementById('cust-name').value = pastCust.name || '';
+            document.getElementById('cust-org').value = pastCust.organization || '';
+            document.getElementById('cust-phone').value = pastCust.whatsapp || '';
+            document.getElementById('cust-email').value = pastCust.email || '';
+            document.getElementById('cust-address').value = pastCust.address || '';
+          }
+
+          if (pastOrder.sizeBreakdown) {
+            setTab('apparel');
+            apparelSelect.value = pastOrder.serviceId;
+            document.getElementById('size-s').value = pastOrder.sizeBreakdown.S || 0;
+            document.getElementById('size-m').value = pastOrder.sizeBreakdown.M || 0;
+            document.getElementById('size-l').value = pastOrder.sizeBreakdown.L || 0;
+            document.getElementById('size-xl').value = pastOrder.sizeBreakdown.XL || 0;
+            document.getElementById('size-xxl').value = pastOrder.sizeBreakdown.XXL || 0;
+          }
+        }
+      }
+
+      function setTab(type) {
         currentServiceType = type;
         if (type === 'apparel') {
-          tabApparel.className = 'py-3 px-4 rounded-lg font-semibold text-sm transition text-center flex items-center justify-center gap-2 bg-brand text-white shadow-sm';
-          tabCreative.className = 'py-3 px-4 rounded-lg font-semibold text-sm transition text-center flex items-center justify-center gap-2 text-muted hover:text-dark';
-          secApparel.classList.remove('hidden');
-          secCreative.classList.add('hidden');
+          tabBtnApparel.className = 'py-3 px-4 rounded-lg font-semibold text-sm transition text-center flex items-center justify-center gap-2 bg-brand text-white shadow-sm';
+          tabBtnCreative.className = 'py-3 px-4 rounded-lg font-semibold text-sm transition text-center flex items-center justify-center gap-2 text-muted hover:text-dark';
+          sectionApparel.classList.remove('hidden');
+          sectionCreative.classList.add('hidden');
         } else {
-          tabCreative.className = 'py-3 px-4 rounded-lg font-semibold text-sm transition text-center flex items-center justify-center gap-2 bg-brand text-white shadow-sm';
-          tabApparel.className = 'py-3 px-4 rounded-lg font-semibold text-sm transition text-center flex items-center justify-center gap-2 text-muted hover:text-dark';
-          secCreative.classList.remove('hidden');
-          secApparel.classList.add('hidden');
+          tabBtnCreative.className = 'py-3 px-4 rounded-lg font-semibold text-sm transition text-center flex items-center justify-center gap-2 bg-brand text-white shadow-sm';
+          tabBtnApparel.className = 'py-3 px-4 rounded-lg font-semibold text-sm transition text-center flex items-center justify-center gap-2 text-muted hover:text-dark';
+          sectionCreative.classList.remove('hidden');
+          sectionApparel.classList.add('hidden');
         }
-        recalculate();
+        updateBillCalculation();
       }
 
-      tabApparel.addEventListener('click', () => setServiceType('apparel'));
-      tabCreative.addEventListener('click', () => setServiceType('creative'));
+      tabBtnApparel.addEventListener('click', () => setTab('apparel'));
+      tabBtnCreative.addEventListener('click', () => setTab('creative'));
 
-      productSelect.addEventListener('change', recalculate);
-      creativeSelect.addEventListener('change', recalculate);
-      sizeInputs.forEach(i => i.addEventListener('input', recalculate));
+      apparelSelect.addEventListener('change', updateBillCalculation);
+      creativeSelect.addEventListener('change', updateBillCalculation);
+      sizeInputs.forEach(inp => inp.addEventListener('input', updateBillCalculation));
 
-      function recalculate() {
+      function updateBillCalculation() {
         if (currentServiceType === 'apparel') {
-          const opt = productSelect.options[productSelect.selectedIndex];
-          const price = opt ? parseInt(opt.dataset.price, 10) : 0;
-          productBasePrice.textContent = window.DrizzleStore.formatRupiah(price);
+          const selectedOpt = apparelSelect.options[apparelSelect.selectedIndex];
+          if (!selectedOpt) return;
+          apparelDesc.textContent = selectedOpt.dataset.desc || '';
 
-          let s = Math.max(0, parseInt(document.getElementById('size-s').value, 10) || 0);
-          let m = Math.max(0, parseInt(document.getElementById('size-m').value, 10) || 0);
-          let l = Math.max(0, parseInt(document.getElementById('size-l').value, 10) || 0);
-          let xl = Math.max(0, parseInt(document.getElementById('size-xl').value, 10) || 0);
-          let xxl = Math.max(0, parseInt(document.getElementById('size-xxl').value, 10) || 0);
+          const s = parseInt(document.getElementById('size-s').value, 10) || 0;
+          const m = parseInt(document.getElementById('size-m').value, 10) || 0;
+          const l = parseInt(document.getElementById('size-l').value, 10) || 0;
+          const xl = parseInt(document.getElementById('size-xl').value, 10) || 0;
+          const xxl = parseInt(document.getElementById('size-xxl').value, 10) || 0;
+          const totalQty = s + m + l + xl + xxl;
 
-          const totalPcs = s + m + l + xl + xxl;
-          displayTotalPcs.textContent = `${totalPcs} Pcs`;
+          document.getElementById('calc-total-qty').textContent = `${totalQty} Pcs`;
 
-          const subtotal = totalPcs * price;
-          const dp = subtotal * 0.5;
+          const srvId = apparelSelect.value;
+          const tieredUnit = window.DrizzleApp.calculateTieredPrice(srvId, totalQty > 0 ? totalQty : 1);
+          const totalPrice = totalQty * tieredUnit;
+          const dpAmount = Math.round(totalPrice * 0.5);
+          const remainingAmount = totalPrice - dpAmount;
 
-          displayTotalEst.textContent = window.DrizzleStore.formatRupiah(subtotal);
-          displayDpEst.textContent = window.DrizzleStore.formatRupiah(dp);
-          return { totalPcs, subtotal, dp, s, m, l, xl, xxl, price };
+          document.getElementById('live-service-name').textContent = selectedOpt.text.split('(')[0].trim();
+          document.getElementById('live-qty').textContent = `${totalQty} Pcs`;
+          document.getElementById('live-unit-price').textContent = window.DrizzleApp.formatRupiah(tieredUnit);
+          document.getElementById('live-total-price').textContent = window.DrizzleApp.formatRupiah(totalPrice);
+          document.getElementById('live-dp-amount').textContent = window.DrizzleApp.formatRupiah(dpAmount);
+          document.getElementById('live-remaining-amount').textContent = window.DrizzleApp.formatRupiah(remainingAmount);
+
+          // 1:1 Packaging Rule
+          document.getElementById('live-pack-poly').textContent = `${totalQty} Pcs (1:1)`;
+          document.getElementById('live-pack-card').textContent = `${totalQty} Pcs (1:1)`;
         } else {
-          const opt = creativeSelect.options[creativeSelect.selectedIndex];
-          const price = opt ? parseInt(opt.dataset.price, 10) : 0;
-          creativeBasePrice.textContent = window.DrizzleStore.formatRupiah(price);
-          displayTotalEst.textContent = window.DrizzleStore.formatRupiah(price);
-          displayDpEst.textContent = window.DrizzleStore.formatRupiah(price * 0.5);
-          return { totalPcs: 1, subtotal: price, dp: price * 0.5 };
+          const selectedOpt = creativeSelect.options[creativeSelect.selectedIndex];
+          if (!selectedOpt) return;
+          creativeDesc.textContent = selectedOpt.dataset.desc || '';
+
+          const basePrice = parseInt(selectedOpt.dataset.basePrice, 10) || 0;
+          const dpAmount = Math.round(basePrice * 0.5);
+          const remainingAmount = basePrice - dpAmount;
+
+          document.getElementById('live-service-name').textContent = selectedOpt.text.split('(')[0].trim();
+          document.getElementById('live-qty').textContent = `1 Paket`;
+          document.getElementById('live-unit-price').textContent = window.DrizzleApp.formatRupiah(basePrice);
+          document.getElementById('live-total-price').textContent = window.DrizzleApp.formatRupiah(basePrice);
+          document.getElementById('live-dp-amount').textContent = window.DrizzleApp.formatRupiah(dpAmount);
+          document.getElementById('live-remaining-amount').textContent = window.DrizzleApp.formatRupiah(remainingAmount);
+
+          // Creative has no physical packaging
+          document.getElementById('live-pack-poly').textContent = `0 Pcs (Digital)`;
+          document.getElementById('live-pack-card').textContent = `0 Pcs (Digital)`;
         }
       }
 
-      recalculate();
+      // Initial calculation
+      updateBillCalculation();
 
-      // Submit Handler
-      const orderForm = document.getElementById('unified-order-form');
-      orderForm.addEventListener('submit', (e) => {
+      // Submit Form
+      const form = document.getElementById('unified-order-form');
+      form.addEventListener('submit', (e) => {
         e.preventDefault();
 
         const name = document.getElementById('cust-name').value.trim();
         const org = document.getElementById('cust-org').value.trim();
         const phone = document.getElementById('cust-phone').value.trim();
         const email = document.getElementById('cust-email').value.trim();
-        const address = document.getElementById('cust-address') ? document.getElementById('cust-address').value.trim() : '';
+        const address = document.getElementById('cust-address').value.trim();
 
         if (!name || !org || !phone || !email || !address) {
           alert('Mohon lengkapi seluruh kolom identitas pemesan & alamat pengiriman.');
           return;
         }
 
-        const calc = recalculate();
-        if (currentServiceType === 'apparel' && calc.totalPcs <= 0) {
-          alert('Mohon isi jumlah kuantitas ukuran minimal 1 pcs.');
-          return;
-        }
+        const freshDB = window.DrizzleApp.getDB();
+        let qty = 1;
+        let srvId = '';
+        let srvName = '';
+        let serviceMode = 'DESIGN_ONLY';
+        let sizeBreakdown = null;
+        let specsDesc = '';
+        let totalPrice = 0;
 
-        const trackingCode = window.DrizzleStore.generateNextCode();
-        const now = new Date().toISOString().replace('T', ' ').substring(0, 19);
-
-        let orderItem = null;
         if (currentServiceType === 'apparel') {
-          const prodName = productSelect.value;
+          const s = parseInt(document.getElementById('size-s').value, 10) || 0;
+          const m = parseInt(document.getElementById('size-m').value, 10) || 0;
+          const l = parseInt(document.getElementById('size-l').value, 10) || 0;
+          const xl = parseInt(document.getElementById('size-xl').value, 10) || 0;
+          const xxl = parseInt(document.getElementById('size-xxl').value, 10) || 0;
+          qty = s + m + l + xl + xxl;
+
+          if (qty <= 0) {
+            alert('Mohon isi kuantitas minimal 1 pcs pada matrix ukuran.');
+            return;
+          }
+
+          srvId = apparelSelect.value;
+          const matchedSrv = (freshDB.services || []).find(x => x.serviceId === srvId);
+          srvName = matchedSrv ? matchedSrv.name : 'Custom Apparel';
+          serviceMode = 'HYBRID';
+          sizeBreakdown = { S: s, M: m, L: l, XL: xl, XXL: xxl };
+
           const printType = document.getElementById('spec-print-type').value;
-          const fabricColor = document.getElementById('spec-fabric-color').value.trim() || 'Standar';
+          const fabricColor = document.getElementById('spec-fabric-color').value.trim() || 'Hitam';
+          const nicknames = document.getElementById('spec-nicknames').value.trim();
           const notes = document.getElementById('spec-notes').value.trim();
+          const driveUrl = document.getElementById('spec-artwork-url').value.trim();
 
-          orderItem = {
-            tracking_code: trackingCode,
-            service_type: 'apparel',
-            customer: { name, organization: org, phone, email, address },
-            product_name: prodName,
-            total_pcs: calc.totalPcs,
-            size_breakdown: { S: calc.s, M: calc.m, L: calc.l, XL: calc.xl, XXL: calc.xxl },
-            specs: { print_type: printType, fabric_color: fabricColor, notes },
-            total_price: calc.subtotal,
-            status_payment: 'Menunggu DP',
-            stage: 'Design Approved',
-            created_at: now,
-            materials_deducted: false
-          };
+          specsDesc = `Aplikasi: ${printType} | Warna: ${fabricColor}${nicknames ? ' | Nicknames: ' + nicknames : ''}${notes ? ' | Catatan: ' + notes : ''}${driveUrl ? ' | Artwork: ' + driveUrl : ''}`;
+          
+          const unitPrice = window.DrizzleApp.calculateTieredPrice(srvId, qty);
+          totalPrice = qty * unitPrice;
         } else {
-          const servName = creativeSelect.value;
-          const notes = document.getElementById('creative-notes').value.trim() || 'Brief via formulir online.';
+          srvId = creativeSelect.value;
+          const matchedSrv = (freshDB.services || []).find(x => x.serviceId === srvId);
+          srvName = matchedSrv ? matchedSrv.name : 'Creative Service';
+          serviceMode = 'DESIGN_ONLY';
+          qty = 1;
 
-          orderItem = {
-            tracking_code: trackingCode,
-            service_type: 'creative',
-            customer: { name, organization: org, phone, email, address },
-            product_name: servName,
-            total_pcs: 1,
-            size_breakdown: null,
-            specs: { print_type: 'Jasa Desain / Digital Media', fabric_color: '-', notes },
-            total_price: calc.subtotal,
-            status_payment: 'Menunggu DP',
-            stage: 'Design Approved',
-            created_at: now,
-            materials_deducted: true // Creative service does not deduct fabric
-          };
+          const brief = document.getElementById('creative-brief').value.trim();
+          const refUrl = document.getElementById('creative-ref-url').value.trim();
+          specsDesc = `Brief: ${brief}${refUrl ? ' | Ref: ' + refUrl : ''}`;
+
+          totalPrice = matchedSrv ? matchedSrv.basePrice : 500000;
         }
 
-        // Save to central DB
-        const db = window.DrizzleStore.getDB();
-        db.orders.unshift(orderItem);
-        window.DrizzleStore.saveDB(db);
+        const dpAmount = Math.round(totalPrice * 0.5);
 
-        // Integration Log CRM -> ERP
-        window.DrizzleStore.logIntegration(
-          'CRM -> ERP',
-          `Pesanan baru ${trackingCode} (${orderItem.product_name}) dari ${name} [${org}] berhasil masuk antrean ERP.`
-        );
+        // 1. Manage Customer
+        let customer = (freshDB.customers || []).find(c => c.whatsapp === phone || c.name.toLowerCase() === name.toLowerCase());
+        if (!customer) {
+          const nextCustNum = (freshDB.customers || []).length + 1;
+          const custId = `CUST-${String(nextCustNum).padStart(3, '0')}`;
+          customer = {
+            customerId: custId,
+            name: name,
+            organization: org,
+            whatsapp: phone,
+            email: email,
+            address: address,
+            segment: 'Baru',
+            totalOrders: 1,
+            totalSpent: totalPrice
+          };
+          freshDB.customers.push(customer);
+        } else {
+          customer.totalOrders += 1;
+          customer.totalSpent += totalPrice;
+          customer.segment = customer.totalOrders > 1 ? 'Repeat' : customer.segment;
+          customer.address = address; // update latest address
+        }
+
+        // 2. Generate Order ID
+        const orderId = window.DrizzleApp.generateNextOrderId();
+        const now = new Date();
+        const dateStr = now.toISOString().split('T')[0];
+        const timeStr = now.toTimeString().split(' ')[0].substring(0, 5);
+
+        const newOrder = {
+          orderId: orderId,
+          customerId: customer.customerId,
+          serviceId: srvId,
+          serviceName: srvName,
+          serviceMode: serviceMode,
+          qty: qty,
+          sizeBreakdown: sizeBreakdown,
+          briefUrl: specsDesc,
+          totalPrice: totalPrice,
+          dpAmount: dpAmount,
+          paidAmount: 0,
+          paymentStatus: 'UNPAID',
+          kanbanStage: 'DESIGN',
+          hppTotal: Math.round(totalPrice * 0.65),
+          trackingResi: '',
+          shippingCarrier: '',
+          createdAt: `${dateStr} ${timeStr}`,
+          historyLogs: [
+            {
+              stage: 'DESIGN',
+              note: `Pesanan terdaftar via web portal oleh ${name} [${org}]. Menunggu konfirmasi DP 50%.`,
+              timestamp: `${dateStr} ${timeStr}`,
+              author: 'Customer Portal'
+            }
+          ]
+        };
+
+        freshDB.orders.unshift(newOrder);
+
+        // 3. MRP & 1:1 Packaging Rule Check
+        if (serviceMode === 'HYBRID' || serviceMode === 'PRODUCTION') {
+          // Check Polymailer & Card
+          const poly = (freshDB.materials || []).find(m => m.materialId === 'MAT-05');
+          const card = (freshDB.materials || []).find(m => m.materialId === 'MAT-06');
+          if (poly) poly.currentStock = Math.max(0, poly.currentStock - qty);
+          if (card) card.currentStock = Math.max(0, card.currentStock - qty);
+        }
+
+        // Save DB
+        window.DrizzleApp.saveDB(freshDB);
 
         // Show Modal
-        document.getElementById('modal-tracking-code').textContent = trackingCode;
-        document.getElementById('modal-goto-tracking-btn').href = `tracking.html?code=${trackingCode}`;
+        document.getElementById('modal-tracking-code').textContent = orderId;
+        document.getElementById('modal-goto-tracking-btn').href = `tracking.html?code=${orderId}`;
         document.getElementById('order-success-modal').classList.remove('hidden');
       });
 
-      // Copy Code
+      // Copy Tracking Code
       document.getElementById('btn-copy-code').addEventListener('click', () => {
         const code = document.getElementById('modal-tracking-code').textContent.trim();
         navigator.clipboard.writeText(code).then(() => {
           const fb = document.getElementById('copy-feedback');
-          fb.textContent = 'Kode berhasil disalin!';
+          fb.textContent = 'Kode pesanan berhasil disalin ke clipboard!';
           setTimeout(() => fb.textContent = '', 2500);
         });
       });

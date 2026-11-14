@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Tailwind CSS CDN -->
+  <!-- Tailwind CSS CDN with Warm Studio Palette -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -20,11 +20,13 @@
             brand: '#FF791D',
             brandDark: '#E06512',
             brandLight: '#FFF5ED',
-            dark: '#18181B',
-            muted: '#71717A',
-            surface: '#FFFFFF',
-            subtle: '#F8FAFC',
-            borderSubtle: '#E4E4E7'
+            secondary: '#CC783F',
+            secondaryLight: '#996C4E',
+            dark: '#33302D',
+            muted: '#7A7269',
+            card: '#FFFFFF',
+            canvas: '#FAF7F4',
+            borderCard: '#E6DDD6'
           },
           fontFamily: {
             sans: ['"Plus Jakarta Sans"', 'sans-serif'],
@@ -35,10 +37,10 @@
     }
   </script>
 </head>
-<body class="bg-subtle text-dark font-sans antialiased selection:bg-brand selection:text-white min-h-screen flex flex-col justify-between">
+<body class="bg-canvas text-dark font-sans antialiased selection:bg-brand selection:text-white min-h-screen flex flex-col justify-between">
 
   <!-- ==================== NAVBAR ==================== -->
-  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-borderSubtle">
+  <header class="sticky top-0 z-50 bg-card/90 backdrop-blur-md border-b border-borderCard">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3.5 flex items-center justify-between">
       <!-- Logo -->
       <a href="index.html" class="flex items-center gap-3 group">
@@ -59,7 +61,7 @@
         </a>
         <a href="order.html" class="text-muted hover:text-dark transition">Buat Pesanan</a>
         <a href="tracking.html" class="text-muted hover:text-dark transition">Lacak Pesanan</a>
-        <a href="admin.html" class="text-muted hover:text-dark transition px-3 py-1 rounded-md border border-borderSubtle bg-white hover:border-dark">Dashboard Admin</a>
+        <a href="admin.html" class="text-muted hover:text-dark transition px-3 py-1 rounded-md border border-borderCard bg-card hover:border-dark">Dashboard Admin</a>
       </nav>
 
       <!-- CTA Nav -->
@@ -90,51 +92,56 @@
           <span>Pesan Custom / Konsultasi</span>
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
         </a>
-        <a href="tracking.html" class="bg-white hover:bg-subtle text-dark border border-borderSubtle font-medium text-sm sm:text-base px-6 py-3.5 rounded-xl transition flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+        <a href="tracking.html" class="bg-card hover:bg-canvas text-dark border border-borderCard font-medium text-sm sm:text-base px-6 py-3.5 rounded-xl transition flex items-center gap-2 shadow-sm">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
           <span>Lacak Pesanan</span>
         </a>
       </div>
 
       <!-- Trust Ribbon -->
-      <div class="mt-14 pt-8 border-t border-borderSubtle grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto text-left">
-        <div>
-          <span class="text-xs font-mono text-muted uppercase block">All Product</span>
+      <div class="mt-14 pt-8 border-t border-borderCard grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto text-left">
+        <div class="p-4 rounded-xl bg-card border border-borderCard shadow-sm">
+          <span class="text-xs font-mono text-brand font-bold uppercase block">All Product</span>
           <span class="font-bold text-dark text-base sm:text-lg">Include Packaging</span>
+          <p class="text-[11px] text-muted mt-0.5">Setiap pcs lengkap Polymailer & Thank You Card.</p>
         </div>
-        <div>
-          <span class="text-xs font-mono text-muted uppercase block">Apparel Katalog</span>
-          <span class="font-bold text-dark text-base sm:text-lg">12 Pilihan Produk</span>
+        <div class="p-4 rounded-xl bg-card border border-borderCard shadow-sm">
+          <span class="text-xs font-mono text-brand font-bold uppercase block">Apparel Katalog</span>
+          <span class="font-bold text-dark text-base sm:text-lg">12 Lini Produk</span>
+          <p class="text-[11px] text-muted mt-0.5">T-shirt, kemeja, jaket, polo, jersey, rompi.</p>
         </div>
-        <div>
-          <span class="text-xs font-mono text-muted uppercase block">Layanan Kreatif</span>
-          <span class="font-bold text-dark text-base sm:text-lg">Design & Brand Identity</span>
+        <div class="p-4 rounded-xl bg-card border border-borderCard shadow-sm">
+          <span class="text-xs font-mono text-brand font-bold uppercase block">Layanan Kreatif</span>
+          <span class="font-bold text-dark text-base sm:text-lg">7 Jasa Desain</span>
+          <p class="text-[11px] text-muted mt-0.5">Brand Identity, layout, editorial & social media.</p>
         </div>
-        <div>
-          <span class="text-xs font-mono text-muted uppercase block">Sistem Terintegrasi</span>
+        <div class="p-4 rounded-xl bg-card border border-borderCard shadow-sm">
+          <span class="text-xs font-mono text-brand font-bold uppercase block">DrizzleOS Suite</span>
           <span class="font-bold text-dark text-base sm:text-lg">CRM &bull; ERP &bull; SCM</span>
+          <p class="text-[11px] text-muted mt-0.5">Sistem terintegrasi penuh & pelacakan live.</p>
         </div>
       </div>
     </section>
 
     <!-- ==================== KATALOG A: APPAREL & MERCHANDISE (12 ITEMS) ==================== -->
-    <section class="bg-white border-y border-borderSubtle py-16">
+    <section class="bg-card border-y border-borderCard py-16">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 pb-4 border-b border-borderSubtle">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 pb-4 border-b border-borderCard">
           <div>
-            <span class="text-xs font-bold text-brand uppercase tracking-wider block font-mono">Bagian 01 // Konveksi & Merchandise</span>
+            <span class="text-xs font-bold text-brand uppercase tracking-wider block font-mono">Bagian 01 // Konveksi & Merchandise Custom</span>
             <h2 class="text-2xl sm:text-3xl font-extrabold text-dark mt-1">Katalog Produk Apparel Custom</h2>
+            <p class="text-xs sm:text-sm text-muted mt-1">Seluruh 12 lini produk di bawah diproduksi menggunakan bahan berkualitas tinggi dan bergaransi presisi.</p>
           </div>
-          <div class="text-xs text-muted mt-2 md:mt-0 font-medium">
-            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-brandLight text-brand rounded-md font-semibold">
-              ✓ Seluruh produk sudah termasuk kemasan / packaging premium
+          <div class="text-xs text-muted mt-3 md:mt-0 font-medium">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-brandLight text-brand rounded-lg font-semibold border border-brand/20">
+              ✓ Seluruh produk sudah termasuk kemasan / packaging eksklusif (Aturan 1:1)
             </span>
           </div>
         </div>
 
         <!-- 12 Product Cards Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5" id="product-list-container">
-          <!-- Populated from js/store.js or static clean cards -->
+          <!-- Populated from js/app.js -->
         </div>
       </div>
     </section>
@@ -142,115 +149,150 @@
     <!-- ==================== KATALOG B: JASA DESAIN KREATIF & BRANDING ==================== -->
     <section class="py-16">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="mb-10 pb-4 border-b border-borderSubtle">
-          <span class="text-xs font-bold text-brand uppercase tracking-wider block font-mono">Bagian 02 // Studio Kreatif & Konsultasi</span>
-          <h2 class="text-2xl sm:text-3xl font-extrabold text-dark mt-1">Layanan Jasa Desain & Brand Identity</h2>
-          <p class="text-sm text-muted mt-1">Drizzle siap mendampingi kebutuhan visual, content planning, dan strategi merchandise brand Anda.</p>
+        <div class="mb-10 pb-4 border-b border-borderCard flex flex-col md:flex-row md:items-end justify-between">
+          <div>
+            <span class="text-xs font-bold text-brand uppercase tracking-wider block font-mono">Bagian 02 // Studio Kreatif & Konsultasi Brand</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-dark mt-1">Layanan Jasa Desain & Brand Identity</h2>
+            <p class="text-sm text-muted mt-1">Drizzle siap mendampingi kebutuhan visual, content planning, dan strategi identitas brand Anda.</p>
+          </div>
+          <a href="order.html?service=Brand%20Identity" class="text-xs font-bold text-brand hover:underline mt-3 md:mt-0">
+            Mulai Konsultasi Desain &rarr;
+          </a>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" id="services-list-container">
-          <!-- Populated via script -->
+          <!-- Populated via js/app.js -->
         </div>
       </div>
     </section>
 
-    <!-- ==================== PORTOFOLIO & REKAP KLIEN RIIL ==================== -->
-    <section class="bg-white border-y border-borderSubtle py-16">
+    <!-- ==================== PORTOFOLIO & REKAP 17 KLIEN RIIL ==================== -->
+    <section class="bg-card border-y border-borderCard py-16">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-4 border-b border-borderSubtle">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-4 border-b border-borderCard">
           <div>
-            <span class="text-xs font-bold text-brand uppercase tracking-wider block font-mono">Track Record // Portofolio Riil</span>
-            <h2 class="text-2xl sm:text-3xl font-extrabold text-dark mt-1">Klien & Proyek Unggulan</h2>
+            <span class="text-xs font-bold text-brand uppercase tracking-wider block font-mono">Track Record // Portofolio Riil (17 Proyek Klien)</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-dark mt-1">Rekap Klien & Proyek Unggulan</h2>
+            <p class="text-xs sm:text-sm text-muted mt-1">Catatan nyata pemesanan apparel dari organisasi kampus, komunitas, dan korporasi ke Drizzle Project.</p>
           </div>
-          <p class="text-xs sm:text-sm text-muted mt-1">Rekap pengerjaan nyata yang telah dipercayakan ke Drizzle Project.</p>
+
+          <!-- Category Filter Buttons -->
+          <div class="flex flex-wrap gap-1.5 mt-4 md:mt-0" id="portfolio-filters">
+            <button onclick="filterPortfolio('ALL')" class="port-filter-btn px-3 py-1 rounded-lg text-xs font-semibold bg-brand text-white transition">Semua (17)</button>
+            <button onclick="filterPortfolio('TSHIRT')" class="port-filter-btn px-3 py-1 rounded-lg text-xs font-semibold bg-canvas text-muted hover:text-dark border border-borderCard transition">T-Shirt</button>
+            <button onclick="filterPortfolio('SHIRT')" class="port-filter-btn px-3 py-1 rounded-lg text-xs font-semibold bg-canvas text-muted hover:text-dark border border-borderCard transition">Kemeja/PDH</button>
+            <button onclick="filterPortfolio('OUTER')" class="port-filter-btn px-3 py-1 rounded-lg text-xs font-semibold bg-canvas text-muted hover:text-dark border border-borderCard transition">Jaket & Polo</button>
+          </div>
         </div>
 
-        <!-- Real Client Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div class="p-5 rounded-xl border border-borderSubtle bg-subtle hover:border-brand transition">
-            <div class="flex justify-between items-start">
-              <span class="font-bold text-dark text-base">SMANKRAPFANS 1982</span>
-              <span class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-brandLight text-brand">652 Pcs</span>
-            </div>
-            <p class="text-xs text-muted mt-2">T-Shirt Komunitas Ultras Sekolah — Sablon Plastisol High Density.</p>
-          </div>
-
-          <div class="p-5 rounded-xl border border-borderSubtle bg-subtle hover:border-brand transition">
-            <div class="flex justify-between items-start">
-              <span class="font-bold text-dark text-base">BUSHWACKER</span>
-              <span class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-brandLight text-brand">379 Pcs</span>
-            </div>
-            <p class="text-xs text-muted mt-2">T-Shirt Official "Eternal For Bushwacker Finest Badge" — Cotton Combed 24s.</p>
-          </div>
-
-          <div class="p-5 rounded-xl border border-borderSubtle bg-subtle hover:border-brand transition">
-            <div class="flex justify-between items-start">
-              <span class="font-bold text-dark text-base">Spartan Stately (SPRTN)</span>
-              <span class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-brandLight text-brand">190 Pcs</span>
-            </div>
-            <p class="text-xs text-muted mt-2">T-Shirt Angkatan "Natus Vincere" — Navy Blue Combed 30s & Sablon Plastisol.</p>
-          </div>
-
-          <div class="p-5 rounded-xl border border-borderSubtle bg-subtle hover:border-brand transition">
-            <div class="flex justify-between items-start">
-              <span class="font-bold text-dark text-base">MPD UNS</span>
-              <span class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-brandLight text-brand">75 Pcs</span>
-            </div>
-            <p class="text-xs text-muted mt-2">Kemeja / PDH Manajemen Perdagangan UNS — American Drill & Bordir Komputer.</p>
-          </div>
-
-          <div class="p-5 rounded-xl border border-borderSubtle bg-subtle hover:border-brand transition">
-            <div class="flex justify-between items-start">
-              <span class="font-bold text-dark text-base">IMAKA UNDIP</span>
-              <span class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-brandLight text-brand">32 Pcs</span>
-            </div>
-            <p class="text-xs text-muted mt-2">Kemeja / PDH Pengurus Ikatan Mahasiswa Karanganyar UNDIP — Japan Drill.</p>
-          </div>
-
-          <div class="p-5 rounded-xl border border-borderSubtle bg-subtle hover:border-brand transition">
-            <div class="flex justify-between items-start">
-              <span class="font-bold text-dark text-base">PT. Surya Nakula</span>
-              <span class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-brandLight text-brand">16 Pcs</span>
-            </div>
-            <p class="text-xs text-muted mt-2">Kemeja Seragam Teknisi Lapangan — Bordir Logo & Identitas Perusahaan.</p>
-          </div>
+        <!-- 17 Real Clients Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="portfolio-grid">
+          <!-- Populated dynamically via JS -->
         </div>
       </div>
     </section>
 
-    <!-- ==================== KONTAK & KONSULTASI CEPAT ==================== -->
+    <!-- ==================== TENTANG DRIZZLE PROJECT & NILAI KAMI ==================== -->
     <section class="py-16">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center bg-white border border-borderSubtle rounded-2xl p-8 sm:p-12 shadow-sm">
-        <span class="text-xs font-mono font-bold text-brand uppercase tracking-wider block">Official Contact</span>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-dark mt-2">Diskusikan Proyek Anda Bersama Kami</h2>
-        <p class="text-sm text-muted mt-2 max-w-xl mx-auto">
-          Tim Drizzle siap memberikan rekomendasi bahan, alternatif desain, estimasi HPP, dan sampel produksi.
-        </p>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-card border border-borderCard rounded-2xl p-8 sm:p-12 shadow-sm grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+          <div class="space-y-4">
+            <span class="text-xs font-mono font-bold text-brand uppercase tracking-wider block">Company Profile & Values</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-dark">Human Help Human — Solusi Konveksi & Kreatif Bernilai</h2>
+            <p class="text-xs sm:text-sm text-muted leading-relaxed">
+              Drizzle Project berdiri sejak akhir tahun 2023 di Surakarta, berakar dari semangat saling tolong-menolong antarmanusia (<em>Human Help Human</em>). Kami mendedikasikan diri untuk menyediakan seragam, merchandise, dan identitas visual berkualitas tinggi bagi institusi pendidikan, organisasi pemuda, hingga korporasi di seluruh Indonesia.
+            </p>
+            <div class="grid grid-cols-2 gap-3 pt-2 text-xs">
+              <div class="p-3 rounded-lg bg-canvas border border-borderCard">
+                <strong class="font-bold text-dark block">Kualitas Presisi</strong>
+                <span class="text-muted text-[11px]">Bahan kain pilihan dan sablon plastisol tahan lama.</span>
+              </div>
+              <div class="p-3 rounded-lg bg-canvas border border-borderCard">
+                <strong class="font-bold text-dark block">Kemasan Eksklusif 1:1</strong>
+                <span class="text-muted text-[11px]">Siap pakai & rapi dengan polymailer & thank you card.</span>
+              </div>
+            </div>
+          </div>
 
-        <div class="mt-8 flex flex-wrap justify-center gap-3">
-          <a href="https://wa.me/62882007546920" target="_blank" rel="noopener noreferrer" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold px-5 py-3 rounded-lg transition inline-flex items-center gap-2">
-            <span>WhatsApp (+62 882-0075-46920)</span>
-          </a>
-          <a href="mailto:drizzlethelabel@gmail.com" class="bg-subtle hover:bg-borderSubtle text-dark border border-borderSubtle text-xs sm:text-sm font-semibold px-5 py-3 rounded-lg transition inline-flex items-center gap-2">
-            <span>drizzlethelabel@gmail.com</span>
-          </a>
-          <a href="https://instagram.com/drizzleproject" target="_blank" rel="noopener noreferrer" class="bg-subtle hover:bg-borderSubtle text-dark border border-borderSubtle text-xs sm:text-sm font-semibold px-5 py-3 rounded-lg transition inline-flex items-center gap-2">
-            <span>@drizzleproject</span>
-          </a>
+          <div class="bg-canvas border border-borderCard rounded-xl p-6 space-y-4 text-xs">
+            <h3 class="font-bold text-dark font-mono uppercase text-sm">Hubungi Studio Drizzle Project</h3>
+            <p class="text-muted">Diskusikan kebutuhan konsep desain, sampel bahan kain, atau penawaran harga khusus instansi bersama tim kami.</p>
+            
+            <div class="space-y-2 pt-2 font-mono">
+              <div class="flex items-center gap-2 text-dark">
+                <span class="text-brand">📍</span>
+                <span>Surakarta (Solo), Jawa Tengah, Indonesia</span>
+              </div>
+              <div class="flex items-center gap-2 text-dark">
+                <span class="text-brand">📱</span>
+                <a href="https://wa.me/62882007546920" target="_blank" class="hover:underline text-brand font-bold">+62 882-0075-46920</a>
+              </div>
+              <div class="flex items-center gap-2 text-dark">
+                <span class="text-brand">✉️</span>
+                <a href="mailto:drizzlethelabel@gmail.com" class="hover:underline">drizzlethelabel@gmail.com</a>
+              </div>
+              <div class="flex items-center gap-2 text-dark">
+                <span class="text-brand">📸</span>
+                <a href="https://instagram.com/drizzleproject" target="_blank" class="hover:underline">@drizzleproject</a>
+              </div>
+            </div>
+
+            <a href="order.html" class="block text-center w-full bg-brand hover:bg-brandDark text-white font-bold py-3 rounded-lg transition mt-4 text-xs shadow-sm">
+              Mulai Konsultasi Gratis &rarr;
+            </a>
+          </div>
         </div>
       </div>
     </section>
   </main>
 
+  <!-- ==================== MULTI-TENANT SAAS BADGE & MODAL TRIGGER ==================== -->
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center">
+    <button type="button" onclick="openTenantModal()" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-card border border-borderCard text-xs font-mono text-muted hover:text-dark hover:border-brand transition shadow-sm">
+      <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+      <span>Powered by DrizzleOS &mdash; Multi-Tenant SaaS Architecture</span>
+    </button>
+  </div>
+
+  <!-- ==================== MULTI-TENANT MODAL ==================== -->
+  <div id="tenant-modal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-card border border-borderCard rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 text-left">
+      <div class="flex justify-between items-center pb-3 border-b border-borderCard">
+        <div>
+          <span class="text-[10px] font-mono text-brand font-bold uppercase tracking-wider block">System Architecture</span>
+          <h3 class="text-lg font-extrabold text-dark">DrizzleOS Multi-Tenant Architecture</h3>
+        </div>
+        <button type="button" onclick="closeTenantModal()" class="text-muted hover:text-dark text-lg font-bold">&times;</button>
+      </div>
+      
+      <div class="space-y-3 text-xs text-muted">
+        <p><strong class="text-dark">Tenant Aktif:</strong> <span class="font-mono text-brand">TNT-DRIZZLE-SOLO-01</span> (Drizzle Project Studio Solo HQ).</p>
+        <p><strong class="text-dark">Fitur Arsitektur Multi-Tenant:</strong></p>
+        <ul class="list-disc pl-5 space-y-1.5 text-[11px]">
+          <li><strong>Relational DB Sandbox:</strong> 6 koleksi relasional terisolasi (Services, Customers, Orders, Materials, PurchaseOrders, FinanceLedger).</li>
+          <li><strong>Mandatory 1:1 Packaging Engine:</strong> Alokasi kemasan otomatis 1:1 per unit apparel/merchandise di kalkulasi Material Requirements Planning (MRP).</li>
+          <li><strong>Integrated Production Workflow:</strong> State machine 5 tahap (DESIGN &rarr; PRINTING &rarr; SEWING &rarr; QC &rarr; SHIPPED).</li>
+          <li><strong>Finance & HPP Ledger:</strong> Pencatatan kas masuk termin DP 50%, pelunasan, pengeluaran vendor makloon, dan margin laba bersih otomatis.</li>
+        </ul>
+      </div>
+
+      <div class="pt-3 border-t border-borderCard flex justify-end">
+        <button type="button" onclick="closeTenantModal()" class="px-4 py-2 bg-dark text-white rounded-lg text-xs font-semibold">
+          Tutup
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- ==================== FOOTER ==================== -->
-  <footer class="bg-white border-t border-borderSubtle py-8 text-xs text-muted">
+  <footer class="bg-card border-t border-borderCard py-8 text-xs text-muted mt-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
       <div>
         <span class="font-bold text-dark text-sm">Drizzle Project</span>
-        <p class="mt-0.5">&copy; 2026 Drizzle Project. All Product Include Packaging.</p>
+        <p class="mt-0.5">&copy; 2026 Drizzle Project. All Product Include Packaging. Est. Late 2023.</p>
       </div>
       <div class="flex items-center gap-6 font-medium">
-        <a href="index.html" class="text-brand">Beranda</a>
+        <a href="index.html" class="text-brand font-semibold">Beranda</a>
         <a href="order.html" class="hover:text-dark transition">Buat Pesanan</a>
         <a href="tracking.html" class="hover:text-dark transition">Lacak Pesanan</a>
         <a href="admin.html" class="hover:text-dark transition">Dashboard Admin</a>
@@ -258,48 +300,116 @@
     </div>
   </footer>
 
-  <!-- Central Store Script -->
-  <script src="js/store.js"></script>
+  <!-- Scripts -->
+  <script src="js/app.js"></script>
 
-  <!-- Dynamic Population Script -->
+  <!-- Page Logic Script -->
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // 1. Render 12 Products
-      const productContainer = document.getElementById('product-list-container');
-      const products = window.DrizzleStore.products || [];
+    function openTenantModal() { document.getElementById('tenant-modal').classList.remove('hidden'); }
+    function closeTenantModal() { document.getElementById('tenant-modal').classList.add('hidden'); }
 
-      products.forEach(p => {
+    // 17 Real Client Projects Database List
+    const CLIENT_PROJECTS = [
+      { id: 'DRZ-2026-001', client: 'SMANKRAPFANS 1982', category: 'TSHIRT', item: 'T-Shirt Komunitas Ultras Sekolah', qty: 652, desc: 'Cotton Combed 24s dengan Sablon Plastisol High Density 4 Sisi.' },
+      { id: 'DRZ-2026-002', client: 'BUSHWACKER', category: 'TSHIRT', item: 'T-Shirt Official "Eternal Finest Badge"', qty: 379, desc: 'Cotton Combed 24s Black Reaktif & Sablon Plastisol Gold Accent.' },
+      { id: 'DRZ-2026-003', client: 'SMEA FAMS 1963', category: 'TSHIRT', item: 'T-Shirt Suporter Angkatan', qty: 200, desc: 'Cotton Combed 30s Hitam dengan sablon discharge ramah setrika.' },
+      { id: 'DRZ-2026-004', client: 'Spartan Stately (SPRTN)', category: 'TSHIRT', item: 'T-Shirt "Natus Vincere"', qty: 190, desc: 'Cotton Combed 30s Navy Blue dengan sablon plastisol halus.' },
+      { id: 'DRZ-2026-005', client: 'Emperor', category: 'TSHIRT', item: 'T-Shirt "Mesin Penebar Teror"', qty: 77, desc: 'Heavyweight Cotton Combed 20s dengan sablon artwork detail tinggi.' },
+      { id: 'DRZ-2026-006', client: 'MPD UNS', category: 'SHIRT', item: 'Kemeja PDH Manajemen Perdagangan UNS', qty: 75, desc: 'American Drill 1919 Navy & Bordir Komputer Logo Dada + Lengan.' },
+      { id: 'DRZ-2026-007', client: 'Assolous Class MMXXIII', category: 'TSHIRT', item: 'T-Shirt Kelas Angkatan', qty: 39, desc: 'Cotton Combed 30s Bottle Green & Sablon Plastisol Doff.' },
+      { id: 'DRZ-2026-008', client: 'Gengga "Genius"', category: 'TSHIRT', item: 'T-Shirt Komunitas Kreatif', qty: 36, desc: 'Cotton Combed 24s White dengan sablon warna vibrant tahan cuci.' },
+      { id: 'DRZ-2026-009', client: 'Rohis SMNSA', category: 'SHIRT', item: 'Kemeja PDH Pengurus Rohis', qty: 35, desc: 'American Drill Putih & Hijau Army dengan Bordir Nama Dada.' },
+      { id: 'DRZ-2026-010', client: 'Excellent', category: 'TSHIRT', item: 'T-Shirt Event Gathering', qty: 33, desc: 'Cotton Combed 30s Charcoal Grey & Sablon Rubber Premium.' },
+      { id: 'DRZ-2026-011', client: 'HSTRC', category: 'OUTER', item: 'Coach Jacket Streetwear', qty: 32, desc: 'Taslan Milky Waterproof dengan Furing Asahi & Sablon Reflektif.' },
+      { id: 'DRZ-2026-012', client: 'IMAKA UNDIP', category: 'SHIRT', item: 'Kemeja PDH Ikatan Mahasiswa Karanganyar', qty: 32, desc: 'Japan Drill Maroon dengan Bordir Komputer Presisi 3 Posisi.' },
+      { id: 'DRZ-2026-013', client: 'IATMI SM UPNVYK', category: 'OUTER', item: 'Jacket Semi-Parka Tambang', qty: 30, desc: 'Baby Canvas Khaki dengan Bordir Logo Ikatan Ahli Teknik Perminyakan.' },
+      { id: 'DRZ-2026-014', client: 'Adventure Team (ADVNTR)', category: 'OUTER', item: 'Polo Shirt Bordir Komunitas', qty: 30, desc: 'Lacoste Pique Cotton Hitam dengan Bordir Komputer Dada Kiri.' },
+      { id: 'DRZ-2026-015', client: 'PT. Surya Nakula', category: 'SHIRT', item: 'Kemeja Seragam Teknisi Lapangan', qty: 16, desc: 'American Drill Abu-abu dengan Scotchlite Safety & Bordir Perusahaan.' },
+      { id: 'DRZ-2026-016', client: 'Machine 1998', category: 'TSHIRT', item: 'T-Shirt "This Story Wont End"', qty: 24, desc: 'Cotton Combed 24s Jet Black dengan Plastisol Ink Raster HD.' },
+      { id: 'DRZ-2026-017', client: 'Propundt / Banana', category: 'OUTER', item: 'Bomber Jacket "Let\'s Riding Together"', qty: 20, desc: 'Taslan ZN Water Repellent dengan Dakron Quilting & Patch Woven.' }
+    ];
+
+    let currentFilter = 'ALL';
+
+    function filterPortfolio(filterKey) {
+      currentFilter = filterKey;
+      document.querySelectorAll('.port-filter-btn').forEach(btn => {
+        btn.className = 'port-filter-btn px-3 py-1 rounded-lg text-xs font-semibold bg-canvas text-muted hover:text-dark border border-borderCard transition';
+      });
+      event.target.className = 'port-filter-btn px-3 py-1 rounded-lg text-xs font-semibold bg-brand text-white transition';
+      renderPortfolio();
+    }
+
+    function renderPortfolio() {
+      const grid = document.getElementById('portfolio-grid');
+      grid.innerHTML = '';
+
+      const filtered = CLIENT_PROJECTS.filter(p => {
+        if (currentFilter === 'ALL') return true;
+        return p.category === currentFilter;
+      });
+
+      filtered.forEach(p => {
         const card = document.createElement('div');
-        card.className = 'bg-subtle border border-borderSubtle rounded-xl p-5 flex flex-col justify-between hover:border-brand transition group';
+        card.className = 'p-5 rounded-xl border border-borderCard bg-card hover:border-brand transition shadow-sm flex flex-col justify-between group';
+        card.innerHTML = `
+          <div>
+            <div class="flex justify-between items-start">
+              <span class="font-bold text-dark text-sm sm:text-base group-hover:text-brand transition-colors">${p.client}</span>
+              <span class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-brandLight text-brand border border-brand/20">${p.qty} Pcs</span>
+            </div>
+            <div class="text-xs font-semibold text-secondary mt-1">${p.item}</div>
+            <p class="text-xs text-muted mt-2 leading-relaxed">${p.desc}</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-borderCard flex items-center justify-between text-[11px] font-mono">
+            <span class="text-muted">${p.id}</span>
+            <a href="tracking.html?code=${p.id}" class="text-brand font-bold hover:underline">Lacak &rarr;</a>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const db = window.DrizzleApp.getDB();
+      const services = db.services || [];
+
+      // 1. Render 12 Apparel Products
+      const apparelContainer = document.getElementById('product-list-container');
+      const apparelItems = services.filter(s => s.category === 'APPAREL' || s.category === 'MERCH');
+
+      apparelItems.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'bg-card border border-borderCard rounded-xl p-5 flex flex-col justify-between hover:border-brand transition group shadow-sm';
         card.innerHTML = `
           <div>
             <div class="flex justify-between items-start mb-2">
-              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-white border border-borderSubtle text-muted font-bold">${p.badge}</span>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-brandLight text-brand border border-brand/20 font-bold">Include Packaging</span>
               <span class="text-[10px] font-mono text-muted">Min ${p.minQty} pcs</span>
             </div>
             <h3 class="font-bold text-dark text-base group-hover:text-brand transition-colors">${p.name}</h3>
             <p class="text-xs text-muted mt-1.5 leading-relaxed">${p.desc}</p>
           </div>
-          <div class="mt-5 pt-3.5 border-t border-borderSubtle flex items-center justify-between">
+          <div class="mt-5 pt-3.5 border-t border-borderCard flex items-center justify-between">
             <div>
               <span class="text-[10px] text-muted block font-mono">Mulai Dari</span>
-              <span class="font-bold text-dark font-mono text-sm">${window.DrizzleStore.formatRupiah(p.price)}</span>
+              <span class="font-bold text-dark font-mono text-sm">${window.DrizzleApp.formatRupiah(p.basePrice)}</span>
             </div>
             <a href="order.html?product=${encodeURIComponent(p.name)}" class="text-xs font-semibold text-brand hover:text-brandDark flex items-center gap-1">
               Pesan &rarr;
             </a>
           </div>
         `;
-        productContainer.appendChild(card);
+        apparelContainer.appendChild(card);
       });
 
-      // 2. Render Creative Services
-      const servicesContainer = document.getElementById('services-list-container');
-      const services = window.DrizzleStore.services || [];
+      // 2. Render 7 Creative Services
+      const creativeContainer = document.getElementById('services-list-container');
+      const creativeItems = services.filter(s => s.category === 'DESIGN');
 
-      services.forEach((s, idx) => {
+      creativeItems.forEach((s, idx) => {
         const item = document.createElement('div');
-        item.className = 'bg-white border border-borderSubtle rounded-xl p-6 flex flex-col justify-between hover:border-brand transition group';
+        item.className = 'bg-card border border-borderCard rounded-xl p-6 flex flex-col justify-between hover:border-brand transition group shadow-sm';
         item.innerHTML = `
           <div>
             <div class="w-8 h-8 rounded-lg bg-brandLight text-brand font-mono font-bold text-xs flex items-center justify-center mb-3">
@@ -308,15 +418,18 @@
             <h3 class="font-bold text-dark text-base group-hover:text-brand transition-colors">${s.name}</h3>
             <p class="text-xs text-muted mt-2 leading-relaxed">${s.desc}</p>
           </div>
-          <div class="mt-6 pt-4 border-t border-borderSubtle flex items-center justify-between">
-            <span class="text-xs font-mono font-semibold text-muted">Mulai ${window.DrizzleStore.formatRupiah(s.basePrice)}</span>
+          <div class="mt-6 pt-4 border-t border-borderCard flex items-center justify-between">
+            <span class="text-xs font-mono font-semibold text-muted">Mulai ${window.DrizzleApp.formatRupiah(s.basePrice)}</span>
             <a href="order.html?service=${encodeURIComponent(s.name)}" class="text-xs font-semibold text-brand hover:text-brandDark flex items-center gap-1">
               Konsultasi &rarr;
             </a>
           </div>
         `;
-        servicesContainer.appendChild(item);
+        creativeContainer.appendChild(item);
       });
+
+      // 3. Render Initial 17 Portfolio
+      renderPortfolio();
     });
   </script>
 </body>
