@@ -1,31 +1,30 @@
-# Drizzle Project - Order Management & Tracking System
+# Drizzle Project — Integrated Order & Studio Management System
 
-Web-based Order Management & Tracking System untuk **Drizzle Project** (Vendor custom merchandise: T-Shirt, PDH/Shirt, Hoodie, Coach, Vest, Varsity, Bomber, Lanyard, Tote Bag).
+Web-based Order & Studio Management System untuk **Drizzle Project** (Vendor merchandise, konveksi apparel custom, dan jasa desain kreatif & branding).
 
 ## 🚀 Fitur Utama
-- **Public Catalog & Custom Order Form**: Pemesanan custom merchandise lengkap dengan breakdown ukuran dan upload desain mockup.
-- **Customer Order Tracking**: Pelacakan status produksi menggunakan Kode Pesanan unik (e.g. `DRZ-2026-001`) dengan timeline visual.
-- **Admin ERP & Production Dashboard**: Pengelolaan pesanan masuk, verifikasi DP/pembayaran, dan update progres produksi secara *real-time*.
+- **Public Catalog & Unified Order Form**: Pemesanan konveksi apparel (12 item produk lengkap dengan rincian ukuran S–XXL) serta pemesanan jasa desain kreatif & konsultasi brand.
+- **Customer Order Tracking**: Pelacakan status pengerjaan secara real-time menggunakan Kode Tracking unik (`DRZ-2026-XXX`) dengan visual 6 tahapan progres.
+- **Admin ERP & SCM Dashboard**: Pengelolaan pesanan masuk, verifikasi status pembayaran (DP & Lunas), pencetakan Surat Perintah Kerja (SPK), serta pengurangan otomatis stok bahan baku & kemasan saat pesanan masuk produksi.
 
 ## 🛠️ Tech Stack
 - **Frontend**: HTML5, Tailwind CSS, JavaScript (ES6)
-- **Storage & Schema**: Browser localStorage (Integrasi CRM, ERP, & SCM)
+- **Storage & Schema**: Browser localStorage (`drizzle_integrated_db`)
 - **Development Tool**: Antigravity AI
 - **Deployment**: Cloudflare Workers & Pages via GitHub Repository
 
 ## 📁 Struktur Proyek
 ```plaintext
 drizzle-project/
-├── index.html          # Landing Page & Katalog Produk
-├── order.html          # Form Pemesanan Custom Merchandise
-├── tracking.html       # Portal Lacak Pesanan Pelanggan
-├── admin.html          # Dashboard ERP & Pipeline Produksi Internal
-├── assets/             # Gambar portofolio / logo Drizzle
+├── index.html          # Landing Page & Katalog Studio
+├── order.html          # Form Pemesanan Terpadu (Apparel & Desain)
+├── tracking.html       # Portal Lacak Status Pesanan Pelanggan
+├── admin.html          # Dashboard ERP & SCM Terintegrasi
+├── assets/             # Gambar portofolio & aset Drizzle
 ├── js/
-│   ├── app.js          # Navigasi & interaksi UI
-│   └── tracking.js     # Logika pencarian status pesanan
-├── schema.sql          # Skema database SQL (5 tabel utama)
+│   └── store.js        # Pusat Data Terintegrasi (drizzle_integrated_db)
+├── schema.sql          # Skema database relasional
 ├── wrangler.json       # Konfigurasi deployment Cloudflare
-├── PROMPT.md           # File konteks untuk AntiGravity + Z Code
+├── PROMPT.md           # Panduan konteks resmi Drizzle Project
 └── README.md
 ```

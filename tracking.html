@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth">
+<html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ORDER TRACKING // DRIZZLE PROJECT MOTORSPORT & STREETWEAR</title>
+  <title>Lacak Status Pesanan — Drizzle Project</title>
 
-  <!-- Google Fonts: Anton, Space Grotesk, JetBrains Mono -->
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -17,277 +17,327 @@
       theme: {
         extend: {
           colors: {
-            carbon: '#0A0A0A',
-            card: '#141414',
-            subtle: '#262626',
-            neon: '#D2FF00',
-            textLight: '#F5F5F5'
+            brand: '#FF791D',
+            brandDark: '#E06512',
+            brandLight: '#FFF5ED',
+            dark: '#18181B',
+            muted: '#71717A',
+            surface: '#FFFFFF',
+            subtle: '#F8FAFC',
+            borderSubtle: '#E4E4E7'
           },
           fontFamily: {
-            anton: ['Anton', 'sans-serif'],
-            space: ['Space Grotesk', 'sans-serif'],
-            mono: ['JetBrains Mono', 'monospace'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
           }
         }
       }
     }
   </script>
-
-  <style>
-    body {
-      background-color: #0A0A0A;
-      color: #F5F5F5;
-      font-family: 'Space Grotesk', sans-serif;
-    }
-    .bg-grid-pattern {
-      background-size: 40px 40px;
-      background-image: 
-        linear-gradient(to right, rgba(38, 38, 38, 0.4) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(38, 38, 38, 0.4) 1px, transparent 1px);
-    }
-  </style>
 </head>
-<body class="bg-carbon text-textLight antialiased selection:bg-neon selection:text-black min-h-screen flex flex-col justify-between">
+<body class="bg-subtle text-dark font-sans antialiased selection:bg-brand selection:text-white min-h-screen flex flex-col justify-between">
 
-  <!-- ================= NAVBAR ================= -->
-  <header class="sticky top-0 z-50 backdrop-blur-md bg-[#0A0A0A]/85 border-b border-subtle">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+  <!-- ==================== NAVBAR ==================== -->
+  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-borderSubtle">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3.5 flex items-center justify-between">
       <!-- Logo -->
-      <a href="index.html" class="flex items-center space-x-3 group">
-        <div class="w-9 h-9 bg-neon flex items-center justify-center font-anton text-black text-xl rounded tracking-tighter group-hover:scale-105 transition-transform">
+      <a href="index.html" class="flex items-center gap-3 group">
+        <div class="w-9 h-9 rounded-lg bg-brand flex items-center justify-center font-bold text-white text-lg group-hover:scale-105 transition-transform">
           D
         </div>
         <div>
-          <span class="font-anton text-2xl tracking-wider text-white group-hover:text-neon transition-colors">DRIZZLE</span>
-          <span class="block font-mono text-[10px] text-zinc-500 tracking-widest uppercase -mt-1">PROJECT // SAAS 2.0</span>
+          <span class="font-bold text-lg tracking-tight text-dark block leading-tight">Drizzle Project</span>
+          <span class="text-[11px] font-mono text-muted tracking-wider uppercase block">Merch & Creative Studio</span>
         </div>
       </a>
 
-      <!-- Navigation Links -->
-      <nav class="hidden md:flex items-center space-x-8 text-sm font-medium">
-        <a href="index.html" class="text-zinc-400 hover:text-white transition font-mono uppercase text-xs tracking-wider">
-          Katalog & Home
-        </a>
-        <a href="order.html" class="text-zinc-400 hover:text-white transition font-mono uppercase text-xs tracking-wider">
-          Order Custom
-        </a>
-        <a href="tracking.html" class="text-neon flex items-center gap-1.5 font-semibold">
-          <span class="w-1.5 h-1.5 rounded-full bg-neon"></span>
+      <!-- Navigation -->
+      <nav class="hidden md:flex items-center gap-7 text-sm font-medium">
+        <a href="index.html" class="text-muted hover:text-dark transition">Beranda & Katalog</a>
+        <a href="order.html" class="text-muted hover:text-dark transition">Buat Pesanan</a>
+        <a href="tracking.html" class="text-brand font-semibold flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-brand"></span>
           Lacak Pesanan
         </a>
-        <a href="admin.html" class="px-3.5 py-1.5 rounded-lg border border-subtle hover:border-zinc-500 text-zinc-300 hover:text-white text-xs font-mono tracking-wider transition bg-card">
-          Admin ERP
-        </a>
+        <a href="admin.html" class="text-muted hover:text-dark transition px-3 py-1 rounded-md border border-borderSubtle bg-white hover:border-dark">Dashboard Admin</a>
       </nav>
 
-      <!-- CTA Nav -->
-      <div class="flex items-center space-x-3">
-        <a href="order.html" class="bg-neon text-black font-anton tracking-wider uppercase px-4 py-2 rounded text-xs hover:bg-white transition shadow-[0_0_15px_rgba(210,255,0,0.25)]">
-          ORDER BARU &rarr;
-        </a>
+      <!-- Badge -->
+      <div class="hidden sm:flex items-center gap-2 text-xs font-mono text-muted bg-white px-3 py-1.5 rounded-full border border-borderSubtle">
+        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+        <span>Live Production Tracking</span>
       </div>
     </div>
   </header>
 
-  <!-- ================= HERO SEARCH SECTION ================= -->
-  <section class="relative bg-grid-pattern border-b border-subtle py-16 px-4 sm:px-6 lg:px-8 overflow-hidden">
-    <!-- Ambient Glow -->
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[300px] bg-neon/10 rounded-full blur-[120px] pointer-events-none"></div>
+  <!-- ==================== SEARCH HERO ==================== -->
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full space-y-8">
+    <div class="text-center max-w-xl mx-auto">
+      <span class="text-xs font-mono font-bold text-brand uppercase tracking-wider block">Customer Tracking Portal</span>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-dark mt-1">Lacak Status Pesanan</h1>
+      <p class="text-sm text-muted mt-2">Masukkan Kode Pesanan unik Anda untuk memantau tahapan verifikasi pembayaran, produksi garmen, hingga kesiapan pengiriman.</p>
+    </div>
 
-    <div class="relative z-10 max-w-4xl mx-auto text-center">
-      <div class="inline-flex items-center gap-2 font-mono text-xs text-neon mb-3">
-        <span class="w-2 h-2 bg-neon animate-pulse"></span>
-        <span>PRODUCTION TIMELINE // 6 REAL-TIME STAGES</span>
-      </div>
-      <h1 class="font-anton text-4xl sm:text-6xl text-white uppercase tracking-tight">
-        TRACK YOUR ORDER
-      </h1>
-      <p class="text-zinc-400 text-sm max-w-xl mx-auto mt-2 font-light">
-        Pantau setiap pergerakan produksi apparel Anda mulai dari approval desain, potong kain, sablon/bordir, hingga siap kirim.
-      </p>
-
-      <!-- Search Box Form -->
-      <form id="tracking-search-form" class="mt-8 max-w-2xl mx-auto flex flex-col sm:flex-row gap-3">
+    <!-- Search Box -->
+    <div class="bg-white border border-borderSubtle rounded-2xl p-4 sm:p-5 shadow-sm">
+      <form id="tracking-search-form" class="flex flex-col sm:flex-row gap-3">
         <div class="relative flex-1">
-          <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-zinc-500">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-          </div>
-          <input type="text" id="search-order-code" placeholder="Masukkan Kode Pesanan (Contoh: DRZ-2026-001)" class="w-full bg-card border-2 border-subtle focus:border-neon rounded-xl pl-12 pr-4 py-4 text-base font-mono uppercase text-white placeholder-zinc-600 focus:outline-none transition shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+          <input type="text" id="tracking-input" placeholder="Contoh: DRZ-2026-001" class="w-full bg-subtle border border-borderSubtle rounded-xl px-4 py-3.5 text-base font-mono uppercase text-dark focus:outline-none focus:border-brand focus:bg-white transition">
         </div>
-        <button type="submit" class="bg-neon text-black font-anton tracking-wider text-base px-8 py-4 rounded-xl uppercase hover:bg-white transition shadow-[0_0_25px_rgba(210,255,0,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] whitespace-nowrap flex items-center justify-center gap-2">
-          <span>LACAK SEKARANG</span>
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        <button type="submit" class="bg-brand hover:bg-brandDark text-white font-semibold text-sm px-6 py-3.5 rounded-xl transition shadow-sm whitespace-nowrap">
+          Cari Pesanan &rarr;
         </button>
       </form>
 
-      <!-- Quick-Test Sample Chips -->
-      <div class="mt-6 flex flex-wrap items-center justify-center gap-2 max-w-xl mx-auto">
-        <span class="font-mono text-xs text-zinc-500 mr-1">Uji Coba Cepat:</span>
-        <div id="sample-chips-container" class="flex flex-wrap gap-2">
-          <!-- Dynamically populated sample chips -->
+      <!-- Quick Test Chips -->
+      <div class="mt-4 pt-3.5 border-t border-borderSubtle flex flex-wrap items-center gap-2">
+        <span class="text-xs font-mono text-muted">Contoh Klik Cepat:</span>
+        <div id="sample-chips" class="flex flex-wrap gap-1.5">
+          <!-- Populated from store.js -->
         </div>
       </div>
     </div>
-  </section>
 
-  <!-- ================= ERROR NOT FOUND ALERT ================= -->
-  <div id="tracking-error" class="hidden max-w-4xl mx-auto px-4 py-8 w-full">
-    <div class="bg-card border-2 border-red-500/40 rounded-xl p-6 text-center shadow-[0_0_30px_rgba(239,68,68,0.15)]">
-      <div class="w-12 h-12 rounded-full bg-red-500/10 text-red-400 flex items-center justify-center mx-auto mb-3 font-mono font-bold text-lg">
-        !
-      </div>
-      <h3 class="font-anton text-2xl text-white uppercase">KODE PESANAN TIDAK DITEMUKAN</h3>
-      <p class="text-zinc-400 text-xs mt-1 font-light">
-        Kode <code id="error-searched-code" class="text-red-400 font-mono font-bold">DRZ-XXXX</code> belum terdaftar di sistem ERP lokal. Pastikan format penulisan benar atau klik salah satu chip sampel di atas.
-      </p>
+    <!-- NOT FOUND ALERT -->
+    <div id="tracking-not-found" class="hidden bg-red-50 border border-red-200 rounded-xl p-5 text-center text-red-700 text-sm">
+      <span class="font-bold">Kode pesanan tidak ditemukan.</span>
+      <p class="text-xs text-red-600 mt-1">Pastikan format penulisan benar (misal: DRZ-2026-001) atau pilih salah satu contoh kode di atas.</p>
     </div>
-  </div>
 
-  <!-- ================= RESULT SECTION (ORDER DETAILS & 6-STAGE TIMELINE) ================= -->
-  <main id="tracking-result-section" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full space-y-12">
-    
-    <!-- 1. ORDER SUMMARY BENTO HEADER -->
-    <div class="bg-card border border-subtle rounded-2xl p-6 sm:p-8 relative overflow-hidden">
-      <!-- Glow Corner -->
-      <div class="absolute -right-16 -top-16 w-64 h-64 bg-neon/10 rounded-full blur-[80px] pointer-events-none"></div>
-
-      <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center pb-6 border-b border-subtle gap-4">
-        <div>
-          <div class="flex items-center gap-3">
-            <span class="font-mono text-xs text-zinc-500 uppercase tracking-widest">KODE PELACAKAN</span>
-            <span id="display-payment-status" class="font-mono text-xs px-2.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-bold">
+    <!-- RESULT SECTION -->
+    <div id="tracking-result-box" class="hidden space-y-6">
+      
+      <!-- Summary Card -->
+      <div class="bg-white border border-borderSubtle rounded-2xl p-6 sm:p-7 shadow-sm">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-5 border-b border-borderSubtle gap-3">
+          <div>
+            <span class="text-xs font-mono text-muted uppercase">KODE PESANAN</span>
+            <div class="text-2xl sm:text-3xl font-extrabold font-mono text-brand mt-0.5" id="res-code">DRZ-2026-001</div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span id="res-pay-badge" class="text-xs font-bold font-mono px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
               DP Verified
             </span>
           </div>
-          <h2 id="display-tracking-code" class="font-mono font-extrabold text-4xl sm:text-5xl text-neon tracking-wider mt-1">
-            DRZ-2026-001
-          </h2>
         </div>
 
-        <div class="text-left lg:text-right">
-          <span class="font-mono text-xs text-zinc-500 uppercase block">TAHAPAN PRODUKSI AKTIF</span>
-          <div class="inline-flex items-center gap-2 mt-1">
-            <span class="w-2.5 h-2.5 rounded-full bg-neon animate-ping"></span>
-            <span id="display-current-stage" class="font-anton text-2xl sm:text-3xl text-white uppercase tracking-wide">
-              SABLON/BORDIR
-            </span>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 pt-5 text-xs">
+          <div>
+            <span class="text-muted block font-medium">Pemesan & Lembaga:</span>
+            <span class="font-bold text-dark text-sm block mt-0.5" id="res-cust-name">-</span>
+            <span class="text-muted text-xs block" id="res-cust-org">-</span>
           </div>
-          <span id="display-created-at" class="block font-mono text-xs text-zinc-500 mt-1">Order Date: 2026-11-10</span>
+          <div>
+            <span class="text-muted block font-medium">Produk / Layanan:</span>
+            <span class="font-bold text-dark text-sm block mt-0.5" id="res-prod-name">-</span>
+            <span class="text-brand font-mono font-bold block" id="res-total-pcs">0 Pcs</span>
+          </div>
+          <div>
+            <span class="text-muted block font-medium">Estimasi Biaya:</span>
+            <span class="font-bold text-dark font-mono text-sm block mt-0.5" id="res-total-price">Rp 0</span>
+            <span class="text-muted text-[11px] block" id="res-created-at">-</span>
+          </div>
+        </div>
+
+        <!-- Breakdown Ukuran if apparel -->
+        <div id="res-breakdown-box" class="mt-5 pt-4 border-t border-borderSubtle">
+          <span class="text-xs font-medium text-muted block mb-2">Rincian Ukuran Kuantitas:</span>
+          <div class="grid grid-cols-5 gap-2 text-center text-xs font-mono">
+            <div class="bg-subtle border border-borderSubtle rounded-lg py-1.5"><span class="text-muted">S:</span> <strong id="res-s" class="text-dark">0</strong></div>
+            <div class="bg-subtle border border-borderSubtle rounded-lg py-1.5"><span class="text-muted">M:</span> <strong id="res-m" class="text-dark">0</strong></div>
+            <div class="bg-subtle border border-borderSubtle rounded-lg py-1.5"><span class="text-muted">L:</span> <strong id="res-l" class="text-dark">0</strong></div>
+            <div class="bg-subtle border border-borderSubtle rounded-lg py-1.5"><span class="text-muted">XL:</span> <strong id="res-xl" class="text-dark">0</strong></div>
+            <div class="bg-subtle border border-borderSubtle rounded-lg py-1.5"><span class="text-muted">XXL:</span> <strong id="res-xxl" class="text-dark">0</strong></div>
+          </div>
+        </div>
+
+        <div class="mt-4 pt-4 border-t border-borderSubtle text-xs text-muted">
+          <p>Spesifikasi: <span id="res-specs" class="text-dark font-medium">-</span></p>
         </div>
       </div>
 
-      <!-- Bento Info Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-6">
-        
-        <!-- Pemesan (CRM Info) -->
-        <div class="bg-carbon border border-subtle p-5 rounded-xl space-y-2">
-          <span class="font-mono text-[10px] text-zinc-500 uppercase tracking-wider block">IDENTITAS PEMESAN (CRM)</span>
-          <h4 id="display-cust-name" class="font-anton text-xl text-white uppercase">Dimas Wicaksono</h4>
-          <p id="display-cust-org" class="font-mono text-xs text-neon">Himpunan Mahasiswa Informatika</p>
-          <div class="pt-2 border-t border-subtle/50 text-xs font-mono text-zinc-400 space-y-1">
-            <p>WA: <span id="display-cust-phone" class="text-zinc-200">081234567890</span></p>
-            <p>Email: <span id="display-cust-email" class="text-zinc-200">dimas@hmif.org</span></p>
-          </div>
+      <!-- 6-Stage Timeline -->
+      <div class="bg-white border border-borderSubtle rounded-2xl p-6 sm:p-7 shadow-sm">
+        <h3 class="text-base font-bold text-dark mb-6">Timeline 6 Tahap Pengerjaan</h3>
+
+        <div class="space-y-6 relative before:absolute before:inset-0 before:left-3.5 before:w-0.5 before:bg-borderSubtle before:z-0" id="timeline-container">
+          <!-- Rendered via JS -->
         </div>
-
-        <!-- Spesifikasi Produk & Kuantitas -->
-        <div class="bg-carbon border border-subtle p-5 rounded-xl space-y-2">
-          <div class="flex justify-between items-start">
-            <span class="font-mono text-[10px] text-zinc-500 uppercase tracking-wider block">ITEM & KUANTITAS</span>
-            <span id="display-total-pcs" class="font-mono text-xs font-bold text-neon bg-neon/10 px-2 py-0.5 rounded border border-neon/30">36 PCS</span>
-          </div>
-          <h4 id="display-product-name" class="font-anton text-xl text-white uppercase">VARSITY JACKET</h4>
-          
-          <!-- Size Breakdown Pills -->
-          <div class="pt-2">
-            <span class="font-mono text-[10px] text-zinc-500 block mb-1">BREAKDOWN UKURAN:</span>
-            <div class="grid grid-cols-5 gap-1 text-center font-mono text-xs">
-              <div class="bg-card p-1 rounded border border-subtle text-zinc-300">S: <span id="display-size-s" class="text-neon font-bold">5</span></div>
-              <div class="bg-card p-1 rounded border border-subtle text-zinc-300">M: <span id="display-size-m" class="text-neon font-bold">12</span></div>
-              <div class="bg-card p-1 rounded border border-subtle text-zinc-300">L: <span id="display-size-l" class="text-neon font-bold">14</span></div>
-              <div class="bg-card p-1 rounded border border-subtle text-zinc-300">XL: <span id="display-size-xl" class="text-neon font-bold">4</span></div>
-              <div class="bg-card p-1 rounded border border-subtle text-zinc-300">XXL: <span id="display-size-xxl" class="text-neon font-bold">1</span></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Spesifikasi Sablon & Mockup -->
-        <div class="bg-carbon border border-subtle p-5 rounded-xl space-y-2">
-          <span class="font-mono text-[10px] text-zinc-500 uppercase tracking-wider block">SPESIFIKASI & MOCKUP</span>
-          <div class="text-xs font-mono text-zinc-300 space-y-1">
-            <p>Aplikasi: <span id="display-print-type" class="text-white font-semibold">Bordir Komputer</span></p>
-            <p>Warna Kain: <span id="display-fabric-color" class="text-white font-semibold">Forest Green</span></p>
-            <p class="text-[11px] text-zinc-400 line-clamp-2">Catatan: <span id="display-notes">-</span></p>
-          </div>
-
-          <!-- Mockup Preview Box -->
-          <div id="display-mockup-container" class="hidden pt-2 border-t border-subtle/50">
-            <span class="font-mono text-[10px] text-neon block mb-1">MOCKUP DESAIN TERLAMPIR:</span>
-            <img id="display-mockup-img" src="" alt="Mockup" class="h-20 w-auto rounded border border-subtle bg-zinc-900 object-contain">
-          </div>
-          <div id="display-mockup-empty" class="pt-2 border-t border-subtle/50 text-[11px] font-mono text-zinc-500">
-            Mockup fisik / sampel disetujui via WA mitra.
-          </div>
-        </div>
-
       </div>
-    </div>
 
-    <!-- 2. VISUAL 6-STAGE PRODUCTION TIMELINE -->
-    <div>
-      <div class="border-b border-subtle pb-4 mb-8 flex items-center justify-between">
+      <!-- Support card -->
+      <div class="bg-white border border-borderSubtle rounded-xl p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
-          <span class="font-mono text-xs text-neon uppercase tracking-widest">// ERP PRODUCTION PROGRESS</span>
-          <h3 class="font-anton text-3xl sm:text-4xl text-white uppercase mt-1">
-            TIMELINE 6 TAHAP PRODUKSI
-          </h3>
+          <h4 class="font-bold text-dark text-sm">Ada pertanyaan mengenai pesanan Anda?</h4>
+          <p class="text-xs text-muted mt-0.5">Hubungi customer support Drizzle Project via WhatsApp dengan menyebutkan kode pesanan Anda.</p>
         </div>
-        <div class="hidden sm:flex items-center gap-2 font-mono text-xs text-zinc-400">
-          <span class="w-2 h-2 rounded-full bg-neon"></span>
-          <span>LIVE TRACKING AKTIF</span>
-        </div>
+        <a href="https://wa.me/62882007546920" target="_blank" rel="noopener noreferrer" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold px-4 py-2.5 rounded-lg transition whitespace-nowrap">
+          Chat WhatsApp &rarr;
+        </a>
       </div>
 
-      <!-- Timeline Container Rendered by JS -->
-      <div id="timeline-stages-container" class="space-y-0">
-        <!-- Injected via js/tracking.js -->
-      </div>
     </div>
-
-    <!-- 3. ASSISTANCE & FAST CONTACT -->
-    <div class="bg-card border border-subtle rounded-xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
-      <div>
-        <h4 class="font-anton text-2xl text-white uppercase">ADA PERUBAHAN ATAU KENDALA PESANAN?</h4>
-        <p class="text-zinc-400 text-xs sm:text-sm font-light mt-1">
-          Hubungi Customer Relations Drizzle Project langsung via WhatsApp dengan menyebutkan kode pesanan Anda.
-        </p>
-      </div>
-      <a href="https://wa.me/62882007546920" target="_blank" rel="noopener noreferrer" class="bg-neon text-black font-anton tracking-wider text-xs sm:text-sm px-6 py-3 rounded uppercase hover:bg-white transition whitespace-nowrap shadow-[0_0_20px_rgba(210,255,0,0.25)] flex items-center gap-2">
-        <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.086.275.072.376-.043.101-.116.433-.506.549-.68.116-.173.231-.145.39-.086s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824z"/></svg>
-        <span>HUBUNGI ADMIN VIA WHATSAPP</span>
-      </a>
-    </div>
-
   </main>
 
-  <!-- ================= FOOTER ================= -->
-  <footer class="border-t border-subtle py-8 bg-carbon text-zinc-500 text-xs font-mono">
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="bg-white border-t border-borderSubtle py-8 text-xs text-muted mt-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
       <div>
-        <span class="text-white font-anton tracking-wider text-base">DRIZZLE PROJECT</span>
-        <p class="text-zinc-500 mt-1">&copy; 2026 Drizzle Project SaaS. All rights reserved.</p>
+        <span class="font-bold text-dark text-sm">Drizzle Project</span>
+        <p class="mt-0.5">&copy; 2026 Drizzle Project. All Product Include Packaging.</p>
       </div>
-      <div class="flex items-center space-x-6 text-[11px]">
-        <a href="index.html" class="hover:text-neon transition">Home</a>
-        <a href="order.html" class="hover:text-neon transition">Order Custom</a>
-        <a href="tracking.html" class="hover:text-neon transition text-neon font-bold">Order Tracking</a>
-        <a href="admin.html" class="hover:text-neon transition">Admin Portal</a>
+      <div class="flex items-center gap-6 font-medium">
+        <a href="index.html" class="hover:text-dark transition">Beranda</a>
+        <a href="order.html" class="hover:text-dark transition">Buat Pesanan</a>
+        <a href="tracking.html" class="text-brand font-semibold">Lacak Pesanan</a>
+        <a href="admin.html" class="hover:text-dark transition">Dashboard Admin</a>
       </div>
     </div>
   </footer>
 
-  <!-- Scripts -->
-  <script src="js/app.js"></script>
-  <script src="js/tracking.js"></script>
+  <!-- Central Store Script -->
+  <script src="js/store.js"></script>
+
+  <!-- Tracking Controller Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const searchForm = document.getElementById('tracking-search-form');
+      const inputCode = document.getElementById('tracking-input');
+      const notFoundBox = document.getElementById('tracking-not-found');
+      const resultBox = document.getElementById('tracking-result-box');
+      const chipsContainer = document.getElementById('sample-chips');
+
+      // 1. Populate Sample Chips
+      const db = window.DrizzleStore.getDB();
+      const sampleOrders = db.orders || [];
+
+      sampleOrders.slice(0, 5).forEach(o => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'px-2.5 py-1 rounded-md bg-subtle hover:bg-borderSubtle text-xs font-mono text-dark border border-borderSubtle transition';
+        btn.textContent = o.tracking_code;
+        btn.addEventListener('click', () => {
+          inputCode.value = o.tracking_code;
+          lookupCode(o.tracking_code);
+        });
+        chipsContainer.appendChild(btn);
+      });
+
+      // 2. Perform Lookup
+      function lookupCode(rawCode) {
+        const code = (rawCode || '').trim().toUpperCase();
+        if (!code) return;
+
+        const currentDB = window.DrizzleStore.getDB();
+        const order = (currentDB.orders || []).find(o => o.tracking_code === code);
+
+        if (!order) {
+          resultBox.classList.add('hidden');
+          notFoundBox.classList.remove('hidden');
+          return;
+        }
+
+        notFoundBox.classList.add('hidden');
+        resultBox.classList.remove('hidden');
+
+        // Populate Summary
+        document.getElementById('res-code').textContent = order.tracking_code;
+        document.getElementById('res-cust-name').textContent = order.customer.name;
+        document.getElementById('res-cust-org').textContent = order.customer.organization;
+        document.getElementById('res-prod-name').textContent = order.product_name;
+        document.getElementById('res-total-pcs').textContent = `${order.total_pcs} Pcs`;
+        document.getElementById('res-total-price').textContent = window.DrizzleStore.formatRupiah(order.total_price);
+        document.getElementById('res-created-at').textContent = `Dipesan: ${order.created_at || 'Baru'}`;
+
+        // Payment status badge
+        const payBadge = document.getElementById('res-pay-badge');
+        payBadge.textContent = order.status_payment || 'Menunggu DP';
+        if (order.status_payment === 'Lunas') {
+          payBadge.className = 'text-xs font-bold font-mono px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200';
+        } else if (order.status_payment === 'DP Verified') {
+          payBadge.className = 'text-xs font-bold font-mono px-3 py-1 rounded-full bg-sky-50 text-sky-700 border border-sky-200';
+        } else {
+          payBadge.className = 'text-xs font-bold font-mono px-3 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200';
+        }
+
+        // Breakdown Ukuran
+        const bdBox = document.getElementById('res-breakdown-box');
+        if (order.size_breakdown) {
+          bdBox.classList.remove('hidden');
+          document.getElementById('res-s').textContent = order.size_breakdown.S || 0;
+          document.getElementById('res-m').textContent = order.size_breakdown.M || 0;
+          document.getElementById('res-l').textContent = order.size_breakdown.L || 0;
+          document.getElementById('res-xl').textContent = order.size_breakdown.XL || 0;
+          document.getElementById('res-xxl').textContent = order.size_breakdown.XXL || 0;
+        } else {
+          bdBox.classList.add('hidden');
+        }
+
+        // Specs
+        const specsText = order.specs ? `${order.specs.print_type || ''} | ${order.specs.fabric_color || ''} | ${order.specs.notes || ''}` : '-';
+        document.getElementById('res-specs').textContent = specsText;
+
+        // Render 6 Stages
+        renderTimeline(order.stage);
+      }
+
+      function renderTimeline(currentStageName) {
+        const container = document.getElementById('timeline-container');
+        container.innerHTML = '';
+
+        const stages = window.DrizzleStore.stages;
+        const currentStageIdx = stages.findIndex(s => s.name === currentStageName);
+        const activeIdx = currentStageIdx >= 0 ? currentStageIdx : 0;
+
+        stages.forEach((st, idx) => {
+          const isDone = idx < activeIdx;
+          const isActive = idx === activeIdx;
+          const isPending = idx > activeIdx;
+
+          const item = document.createElement('div');
+          item.className = 'relative flex items-start gap-4 z-10';
+
+          let iconHtml = '';
+          if (isDone) {
+            iconHtml = `<div class="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs font-bold shadow-sm">✓</div>`;
+          } else if (isActive) {
+            iconHtml = `<div class="w-7 h-7 rounded-full bg-brand text-white flex items-center justify-center text-xs font-bold ring-4 ring-brand/20 shadow-sm animate-pulse">${st.step}</div>`;
+          } else {
+            iconHtml = `<div class="w-7 h-7 rounded-full bg-subtle border border-borderSubtle text-muted flex items-center justify-center text-xs font-bold">${st.step}</div>`;
+          }
+
+          item.innerHTML = `
+            ${iconHtml}
+            <div class="flex-1 pb-2">
+              <div class="flex items-center gap-2">
+                <h4 class="font-bold text-sm ${isActive ? 'text-brand' : (isDone ? 'text-dark' : 'text-muted')}">${st.name}</h4>
+                ${isActive ? '<span class="text-[10px] font-mono px-2 py-0.5 rounded bg-brandLight text-brand font-bold">Sedang Dikerjakan</span>' : ''}
+                ${isDone ? '<span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-700">Selesai</span>' : ''}
+              </div>
+              <p class="text-xs text-muted mt-0.5">${st.desc}</p>
+            </div>
+          `;
+          container.appendChild(item);
+        });
+      }
+
+      searchForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        lookupCode(inputCode.value);
+      });
+
+      // Read ?code= URL Parameter
+      const urlParams = new URLSearchParams(window.location.search);
+      const codeQuery = urlParams.get('code');
+      if (codeQuery) {
+        inputCode.value = codeQuery;
+        lookupCode(codeQuery);
+      } else {
+        // Default demo: search DRZ-2026-001 so timeline is shown
+        inputCode.value = 'DRZ-2026-001';
+        lookupCode('DRZ-2026-001');
+      }
+    });
+  </script>
 </body>
 </html>

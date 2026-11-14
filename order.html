@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CUSTOM ORDER // DRIZZLE PROJECT MOTORSPORT & STREETWEAR</title>
+  <title>Buat Pesanan & Konsultasi — Drizzle Project</title>
 
-  <!-- Google Fonts: Anton, Space Grotesk, JetBrains Mono -->
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -17,549 +17,422 @@
       theme: {
         extend: {
           colors: {
-            carbon: '#0A0A0A',
-            card: '#141414',
-            subtle: '#262626',
-            neon: '#D2FF00',
-            textLight: '#F5F5F5'
+            brand: '#FF791D',
+            brandDark: '#E06512',
+            brandLight: '#FFF5ED',
+            dark: '#18181B',
+            muted: '#71717A',
+            surface: '#FFFFFF',
+            subtle: '#F8FAFC',
+            borderSubtle: '#E4E4E7'
           },
           fontFamily: {
-            anton: ['Anton', 'sans-serif'],
-            space: ['Space Grotesk', 'sans-serif'],
-            mono: ['JetBrains Mono', 'monospace'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
           }
         }
       }
     }
   </script>
-
-  <style>
-    body {
-      background-color: #0A0A0A;
-      color: #F5F5F5;
-      font-family: 'Space Grotesk', sans-serif;
-    }
-    input[type=number]::-webkit-inner-spin-button, 
-    input[type=number]::-webkit-outer-spin-button { 
-      -webkit-appearance: none; 
-      margin: 0; 
-    }
-    input[type=number] {
-      -moz-appearance: textfield;
-    }
-  </style>
 </head>
-<body class="bg-carbon text-textLight antialiased selection:bg-neon selection:text-black min-h-screen flex flex-col justify-between">
+<body class="bg-subtle text-dark font-sans antialiased selection:bg-brand selection:text-white min-h-screen flex flex-col justify-between">
 
-  <!-- ================= NAVBAR ================= -->
-  <header class="sticky top-0 z-50 backdrop-blur-md bg-[#0A0A0A]/85 border-b border-subtle">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+  <!-- ==================== NAVBAR ==================== -->
+  <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-borderSubtle">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3.5 flex items-center justify-between">
       <!-- Logo -->
-      <a href="index.html" class="flex items-center space-x-3 group">
-        <div class="w-9 h-9 bg-neon flex items-center justify-center font-anton text-black text-xl rounded tracking-tighter group-hover:scale-105 transition-transform">
+      <a href="index.html" class="flex items-center gap-3 group">
+        <div class="w-9 h-9 rounded-lg bg-brand flex items-center justify-center font-bold text-white text-lg group-hover:scale-105 transition-transform">
           D
         </div>
         <div>
-          <span class="font-anton text-2xl tracking-wider text-white group-hover:text-neon transition-colors">DRIZZLE</span>
-          <span class="block font-mono text-[10px] text-zinc-500 tracking-widest uppercase -mt-1">PROJECT // SAAS 2.0</span>
+          <span class="font-bold text-lg tracking-tight text-dark block leading-tight">Drizzle Project</span>
+          <span class="text-[11px] font-mono text-muted tracking-wider uppercase block">Merch & Creative Studio</span>
         </div>
       </a>
 
-      <!-- Navigation Links -->
-      <nav class="hidden md:flex items-center space-x-8 text-sm font-medium">
-        <a href="index.html" class="text-zinc-400 hover:text-white transition font-mono uppercase text-xs tracking-wider">
-          Katalog & Home
+      <!-- Navigation -->
+      <nav class="hidden md:flex items-center gap-7 text-sm font-medium">
+        <a href="index.html" class="text-muted hover:text-dark transition">Beranda & Katalog</a>
+        <a href="order.html" class="text-brand font-semibold flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-brand"></span>
+          Buat Pesanan
         </a>
-        <a href="order.html" class="text-neon flex items-center gap-1.5 font-semibold">
-          <span class="w-1.5 h-1.5 rounded-full bg-neon"></span>
-          Order Custom
-        </a>
-        <a href="tracking.html" class="text-zinc-400 hover:text-white transition font-mono uppercase text-xs tracking-wider">
-          Lacak Pesanan
-        </a>
-        <a href="admin.html" class="px-3.5 py-1.5 rounded-lg border border-subtle hover:border-zinc-500 text-zinc-300 hover:text-white text-xs font-mono tracking-wider transition bg-card">
-          Admin ERP
-        </a>
+        <a href="tracking.html" class="text-muted hover:text-dark transition">Lacak Pesanan</a>
+        <a href="admin.html" class="text-muted hover:text-dark transition px-3 py-1 rounded-md border border-borderSubtle bg-white hover:border-dark">Dashboard Admin</a>
       </nav>
 
-      <!-- Status Pill -->
-      <div class="flex items-center space-x-2 font-mono text-xs text-zinc-400 bg-card px-3.5 py-1.5 rounded-full border border-subtle">
-        <span class="w-2 h-2 rounded-full bg-neon animate-pulse"></span>
-        <span class="hidden sm:inline">ORDER FORM ACTIVE</span>
+      <!-- Badge -->
+      <div class="hidden sm:flex items-center gap-2 text-xs font-mono text-muted bg-white px-3 py-1.5 rounded-full border border-borderSubtle">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span>Order Form Terintegrasi</span>
       </div>
     </div>
   </header>
 
-  <!-- ================= MAIN CONTENT ================= -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full">
+  <!-- ==================== MAIN CONTENT ==================== -->
+  <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full">
     <!-- Header Page -->
-    <div class="border-b border-subtle pb-8 mb-10">
-      <div class="inline-flex items-center gap-2 font-mono text-xs text-neon mb-2">
-        <span class="w-2 h-2 bg-neon"></span>
-        <span>CRM PORTAL // SPECIFICATION & SIZE BREAKDOWN</span>
-      </div>
-      <h1 class="font-anton text-4xl sm:text-6xl text-white uppercase tracking-tight">
-        CUSTOM ORDER SPECIFICATION
-      </h1>
-      <p class="text-zinc-400 text-sm max-w-2xl mt-2 font-light">
-        Kalkulasi kuantitas ukuran secara otomatis dan peroleh kode pelacakan unik berurutan (<code class="text-neon font-mono">DRZ-2026-XXX</code>) untuk memantau tahap produksi secara real-time.
-      </p>
+    <div class="mb-8">
+      <span class="text-xs font-mono font-bold text-brand uppercase tracking-wider block">Formulir Terpadu // CRM Portal</span>
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-dark mt-1">Form Pemesanan & Konsultasi</h1>
+      <p class="text-sm text-muted mt-1">Pilih jenis layanan di bawah ini. Kode pelacakan unik akan otomatis diterbitkan setelah formulir dikirim.</p>
     </div>
 
-    <!-- Form Grid -->
-    <form id="order-custom-form" class="grid grid-cols-1 lg:grid-cols-12 gap-8" novalidate>
+    <!-- Service Type Toggle Switcher -->
+    <div class="grid grid-cols-2 gap-3 mb-8 bg-white p-1.5 rounded-xl border border-borderSubtle shadow-sm">
+      <button type="button" id="tab-btn-apparel" class="py-3 px-4 rounded-lg font-semibold text-sm transition text-center flex items-center justify-center gap-2 bg-brand text-white shadow-sm">
+        <span>👕 Konveksi & Merchandise Custom</span>
+      </button>
+      <button type="button" id="tab-btn-creative" class="py-3 px-4 rounded-lg font-semibold text-sm transition text-center flex items-center justify-center gap-2 text-muted hover:text-dark">
+        <span>🎨 Jasa Desain & Konsultasi Brand</span>
+      </button>
+    </div>
+
+    <!-- Form Container -->
+    <form id="unified-order-form" class="space-y-6" novalidate>
       
-      <!-- LEFT COLUMN: INPUT FIELDS (8 cols) -->
-      <div class="lg:col-span-8 space-y-8">
-        
-        <!-- STEP 1: PILIH PRODUK KATALOG -->
-        <div class="bg-card border border-subtle rounded-xl p-6 sm:p-8">
-          <div class="flex items-center gap-3 mb-6">
-            <span class="w-7 h-7 rounded bg-neon font-anton text-black text-sm flex items-center justify-center">01</span>
-            <h2 class="font-anton text-2xl text-white uppercase tracking-wide">PILIH ITEM PRODUK</h2>
+      <!-- 1. IDENTITAS PEMESAN (COMMON TO BOTH) -->
+      <div class="bg-white border border-borderSubtle rounded-2xl p-6 sm:p-7 shadow-sm">
+        <h2 class="text-base font-bold text-dark mb-4 flex items-center gap-2">
+          <span class="w-6 h-6 rounded-full bg-brandLight text-brand text-xs flex items-center justify-center font-bold">1</span>
+          Identitas Pemesan / Klien
+        </h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-medium text-muted mb-1.5">Nama Lengkap *</label>
+            <input type="text" id="cust-name" required placeholder="Contoh: Muhammad Alfisyahmad" class="w-full bg-subtle border border-borderSubtle rounded-lg px-3.5 py-2.5 text-sm text-dark focus:outline-none focus:border-brand focus:bg-white transition">
           </div>
+          <div>
+            <label class="block text-xs font-medium text-muted mb-1.5">Instansi / Komunitas / Brand *</label>
+            <input type="text" id="cust-org" required placeholder="Contoh: BEM Fasilkom / Apex Team" class="w-full bg-subtle border border-borderSubtle rounded-lg px-3.5 py-2.5 text-sm text-dark focus:outline-none focus:border-brand focus:bg-white transition">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-muted mb-1.5">Nomor WhatsApp Aktif *</label>
+            <input type="tel" id="cust-phone" required placeholder="08xxxxxxxxxx" class="w-full bg-subtle border border-borderSubtle rounded-lg px-3.5 py-2.5 text-sm text-dark focus:outline-none focus:border-brand focus:bg-white transition">
+          </div>
+          <div>
+            <label class="block text-xs font-medium text-muted mb-1.5">Alamat Email *</label>
+            <input type="email" id="cust-email" required placeholder="name@email.com" class="w-full bg-subtle border border-borderSubtle rounded-lg px-3.5 py-2.5 text-sm text-dark focus:outline-none focus:border-brand focus:bg-white transition">
+          </div>
+        </div>
+      </div>
+
+      <!-- 2A. SECTION APPAREL (SHOWS IF APPAREL SELECTED) -->
+      <div id="section-apparel" class="space-y-6">
+        
+        <!-- Pilihan Produk Apparel -->
+        <div class="bg-white border border-borderSubtle rounded-2xl p-6 sm:p-7 shadow-sm">
+          <h2 class="text-base font-bold text-dark mb-4 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-brandLight text-brand text-xs flex items-center justify-center font-bold">2</span>
+            Spesifikasi Produk Merchandise (12 Pilihan)
+          </h2>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block font-mono text-xs text-zinc-400 uppercase tracking-wider mb-2">Kategori Produk</label>
-              <select id="product-select" class="w-full bg-carbon border border-subtle rounded-lg px-4 py-3 text-sm text-white font-medium focus:outline-none focus:border-neon transition cursor-pointer">
-                <!-- Dynamically populated from DRIZZLE_PRODUCTS -->
+              <label class="block text-xs font-medium text-muted mb-1.5">Kategori Produk</label>
+              <select id="product-select" class="w-full bg-subtle border border-borderSubtle rounded-lg px-3.5 py-2.5 text-sm text-dark focus:outline-none focus:border-brand focus:bg-white transition">
+                <!-- Injected via store.js -->
               </select>
             </div>
             <div>
-              <label class="block font-mono text-xs text-zinc-400 uppercase tracking-wider mb-2">Harga Dasar Satuan</label>
-              <div class="bg-carbon border border-subtle rounded-lg px-4 py-3 text-sm font-mono font-bold text-neon flex items-center justify-between">
-                <span id="product-base-price-display">Rp 65.000</span>
-                <span id="product-moq-display" class="text-xs text-zinc-500 font-normal">MIN 24 PCS</span>
+              <label class="block text-xs font-medium text-muted mb-1.5">Harga Dasar Satuan</label>
+              <div class="bg-subtle border border-borderSubtle rounded-lg px-3.5 py-2.5 text-sm font-mono font-bold text-brand flex items-center justify-between">
+                <span id="product-base-price">Rp 65.000</span>
+                <span class="text-[11px] font-normal text-muted font-sans">Include Packaging</span>
               </div>
             </div>
           </div>
-          <p id="product-desc-display" class="mt-3 font-mono text-xs text-zinc-500"></p>
         </div>
 
-        <!-- STEP 2: IDENTITAS PEMESAN (CRM) -->
-        <div class="bg-card border border-subtle rounded-xl p-6 sm:p-8">
-          <div class="flex items-center gap-3 mb-6">
-            <span class="w-7 h-7 rounded bg-neon font-anton text-black text-sm flex items-center justify-center">02</span>
-            <h2 class="font-anton text-2xl text-white uppercase tracking-wide">IDENTITAS PEMESAN (CRM)</h2>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label class="block font-mono text-xs text-zinc-400 uppercase tracking-wider mb-2">Nama Lengkap Pemesan *</label>
-              <input type="text" id="cust-name" required placeholder="Contoh: Muhammad Alfisyahmad" class="w-full bg-carbon border border-subtle rounded-lg px-4 py-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-neon transition">
-            </div>
-            <div>
-              <label class="block font-mono text-xs text-zinc-400 uppercase tracking-wider mb-2">Instansi / Komunitas / Brand *</label>
-              <input type="text" id="cust-org" required placeholder="Contoh: Himpunan Mahasiswa / Apex Team" class="w-full bg-carbon border border-subtle rounded-lg px-4 py-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-neon transition">
-            </div>
-            <div>
-              <label class="block font-mono text-xs text-zinc-400 uppercase tracking-wider mb-2">Nomor WhatsApp Aktif *</label>
-              <input type="tel" id="cust-phone" required placeholder="08xxxxxxxxxx" class="w-full bg-carbon border border-subtle rounded-lg px-4 py-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-neon transition">
-            </div>
-            <div>
-              <label class="block font-mono text-xs text-zinc-400 uppercase tracking-wider mb-2">Alamat Email *</label>
-              <input type="email" id="cust-email" required placeholder="name@email.com" class="w-full bg-carbon border border-subtle rounded-lg px-4 py-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-neon transition">
-            </div>
-          </div>
-        </div>
-
-        <!-- STEP 3: BREAKDOWN UKURAN (REAL-TIME CALCULATION) -->
-        <div class="bg-card border border-subtle rounded-xl p-6 sm:p-8">
-          <div class="flex items-center justify-between mb-6 flex-wrap gap-2">
-            <div class="flex items-center gap-3">
-              <span class="w-7 h-7 rounded bg-neon font-anton text-black text-sm flex items-center justify-center">03</span>
-              <h2 class="font-anton text-2xl text-white uppercase tracking-wide">BREAKDOWN UKURAN (PCS)</h2>
-            </div>
-            <span class="font-mono text-xs text-neon bg-neon/10 border border-neon/30 px-2.5 py-1 rounded">
-              TOTAL: <span id="size-total-badge">0 PCS</span>
+        <!-- Breakdown Ukuran -->
+        <div class="bg-white border border-borderSubtle rounded-2xl p-6 sm:p-7 shadow-sm">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-base font-bold text-dark flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-brandLight text-brand text-xs flex items-center justify-center font-bold">3</span>
+              Breakdown Ukuran Kuantitas (Pcs)
+            </h2>
+            <span class="text-xs font-mono font-bold px-2.5 py-1 rounded-md bg-brandLight text-brand">
+              TOTAL: <span id="display-total-pcs">0 Pcs</span>
             </span>
           </div>
 
-          <div class="grid grid-cols-5 gap-3 sm:gap-4">
-            <!-- Size S -->
-            <div class="bg-carbon border border-subtle rounded-lg p-3 text-center focus-within:border-neon transition">
-              <span class="font-anton text-xl text-white block mb-1">S</span>
-              <input type="number" id="size-s" min="0" value="0" class="size-input w-full bg-transparent text-center font-mono font-bold text-neon text-lg focus:outline-none">
+          <div class="grid grid-cols-5 gap-3">
+            <div class="bg-subtle border border-borderSubtle rounded-lg p-2.5 text-center focus-within:border-brand">
+              <span class="text-xs font-bold text-muted block mb-1">S</span>
+              <input type="number" id="size-s" min="0" value="0" class="size-input w-full bg-transparent text-center font-mono font-bold text-dark text-base focus:outline-none">
             </div>
-            <!-- Size M -->
-            <div class="bg-carbon border border-subtle rounded-lg p-3 text-center focus-within:border-neon transition">
-              <span class="font-anton text-xl text-white block mb-1">M</span>
-              <input type="number" id="size-m" min="0" value="0" class="size-input w-full bg-transparent text-center font-mono font-bold text-neon text-lg focus:outline-none">
+            <div class="bg-subtle border border-borderSubtle rounded-lg p-2.5 text-center focus-within:border-brand">
+              <span class="text-xs font-bold text-muted block mb-1">M</span>
+              <input type="number" id="size-m" min="0" value="0" class="size-input w-full bg-transparent text-center font-mono font-bold text-dark text-base focus:outline-none">
             </div>
-            <!-- Size L -->
-            <div class="bg-carbon border border-subtle rounded-lg p-3 text-center focus-within:border-neon transition">
-              <span class="font-anton text-xl text-white block mb-1">L</span>
-              <input type="number" id="size-l" min="0" value="0" class="size-input w-full bg-transparent text-center font-mono font-bold text-neon text-lg focus:outline-none">
+            <div class="bg-subtle border border-borderSubtle rounded-lg p-2.5 text-center focus-within:border-brand">
+              <span class="text-xs font-bold text-muted block mb-1">L</span>
+              <input type="number" id="size-l" min="0" value="0" class="size-input w-full bg-transparent text-center font-mono font-bold text-dark text-base focus:outline-none">
             </div>
-            <!-- Size XL -->
-            <div class="bg-carbon border border-subtle rounded-lg p-3 text-center focus-within:border-neon transition">
-              <span class="font-anton text-xl text-white block mb-1">XL</span>
-              <input type="number" id="size-xl" min="0" value="0" class="size-input w-full bg-transparent text-center font-mono font-bold text-neon text-lg focus:outline-none">
+            <div class="bg-subtle border border-borderSubtle rounded-lg p-2.5 text-center focus-within:border-brand">
+              <span class="text-xs font-bold text-muted block mb-1">XL</span>
+              <input type="number" id="size-xl" min="0" value="0" class="size-input w-full bg-transparent text-center font-mono font-bold text-dark text-base focus:outline-none">
             </div>
-            <!-- Size XXL -->
-            <div class="bg-carbon border border-subtle rounded-lg p-3 text-center focus-within:border-neon transition">
-              <span class="font-anton text-xl text-white block mb-1">XXL</span>
-              <input type="number" id="size-xxl" min="0" value="0" class="size-input w-full bg-transparent text-center font-mono font-bold text-neon text-lg focus:outline-none">
+            <div class="bg-subtle border border-borderSubtle rounded-lg p-2.5 text-center focus-within:border-brand">
+              <span class="text-xs font-bold text-muted block mb-1">XXL</span>
+              <input type="number" id="size-xxl" min="0" value="0" class="size-input w-full bg-transparent text-center font-mono font-bold text-dark text-base focus:outline-none">
             </div>
           </div>
-          <p class="font-mono text-[11px] text-zinc-500 mt-3 text-center sm:text-left">
-            *Masukkan jumlah kuantitas masing-masing ukuran. Estimasi total biaya akan dihitung secara real-time.
-          </p>
         </div>
 
-        <!-- STEP 4: SPESIFIKASI PRODUKSI & SABLON / BORDIR -->
-        <div class="bg-card border border-subtle rounded-xl p-6 sm:p-8">
-          <div class="flex items-center gap-3 mb-6">
-            <span class="w-7 h-7 rounded bg-neon font-anton text-black text-sm flex items-center justify-center">04</span>
-            <h2 class="font-anton text-2xl text-white uppercase tracking-wide">SPESIFIKASI SABLON, BORDIR & KAIN</h2>
-          </div>
+        <!-- Spesifikasi Sablon / Bordir -->
+        <div class="bg-white border border-borderSubtle rounded-2xl p-6 sm:p-7 shadow-sm">
+          <h2 class="text-base font-bold text-dark mb-4 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-brandLight text-brand text-xs flex items-center justify-center font-bold">4</span>
+            Aplikasi Sablon, Bordir & Warna Kain
+          </h2>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
             <div>
-              <label class="block font-mono text-xs text-zinc-400 uppercase tracking-wider mb-2">Aplikasi Sablon / Bordir</label>
-              <select id="spec-print-type" class="w-full bg-carbon border border-subtle rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-neon transition">
-                <option value="Sablon DTF High Density">Sablon DTF High Density (Full Color Tajam)</option>
-                <option value="Sablon Plastisol Premium">Sablon Plastisol Premium (Tekstur Tebal & Kuat)</option>
-                <option value="Bordir Komputer Presisi">Bordir Komputer Presisi (Timbul & Rapi)</option>
-                <option value="Bordir Chenille Towel (Varsity)">Bordir Chenille Towel (Varsity Patch)</option>
-                <option value="Sublimasi Full Color (Lanyard)">Sublimasi Full Color (Lanyard/Jersey)</option>
-                <option value="Polos Tanpa Sablon/Bordir">Polos Tanpa Sablon/Bordir</option>
+              <label class="block text-xs font-medium text-muted mb-1.5">Teknik Sablon / Bordir</label>
+              <select id="spec-print-type" class="w-full bg-subtle border border-borderSubtle rounded-lg px-3.5 py-2.5 text-sm text-dark focus:outline-none focus:border-brand focus:bg-white transition">
+                <option value="Sablon DTF High Density">Sablon DTF High Density (Full Color)</option>
+                <option value="Sablon Plastisol Doff/Glossy">Sablon Plastisol Doff/Glossy</option>
+                <option value="Bordir Komputer Presisi">Bordir Komputer Presisi</option>
+                <option value="Bordir Chenille Towel (Varsity)">Bordir Chenille Towel</option>
+                <option value="Sublimasi Full Color (Lanyard)">Sublimasi Full Color</option>
+                <option value="Polos Tanpa Sablon">Polos</option>
               </select>
             </div>
             <div>
-              <label class="block font-mono text-xs text-zinc-400 uppercase tracking-wider mb-2">Pilihan Warna Kain / Bahan</label>
-              <input type="text" id="spec-fabric-color" placeholder="Contoh: Jet Black, Navy, Off-White, Sage Green" class="w-full bg-carbon border border-subtle rounded-lg px-4 py-3 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-neon transition">
+              <label class="block text-xs font-medium text-muted mb-1.5">Pilihan Warna Bahan / Kain</label>
+              <input type="text" id="spec-fabric-color" placeholder="Contoh: Jet Black, Navy, Off-White, dsb." class="w-full bg-subtle border border-borderSubtle rounded-lg px-3.5 py-2.5 text-sm text-dark focus:outline-none focus:border-brand focus:bg-white transition">
             </div>
           </div>
 
           <div>
-            <label class="block font-mono text-xs text-zinc-400 uppercase tracking-wider mb-2">Catatan Khusus & Posisi Desain</label>
-            <textarea id="spec-notes" rows="3" placeholder="Contoh: Sablon dada kiri diameter 8cm, sablon punggung A3 di tengah, label woven leher custom..." class="w-full bg-carbon border border-subtle rounded-lg p-4 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-neon transition"></textarea>
-          </div>
-        </div>
-
-        <!-- STEP 5: UPLOAD MOCKUP / LOGO -->
-        <div class="bg-card border border-subtle rounded-xl p-6 sm:p-8">
-          <div class="flex items-center gap-3 mb-6">
-            <span class="w-7 h-7 rounded bg-neon font-anton text-black text-sm flex items-center justify-center">05</span>
-            <h2 class="font-anton text-2xl text-white uppercase tracking-wide">UPLOAD MOCKUP / DESAIN LOGO</h2>
-          </div>
-
-          <div class="border-2 border-dashed border-subtle hover:border-neon rounded-xl p-6 text-center transition cursor-pointer relative bg-carbon group">
-            <input type="file" id="mockup-file-input" accept="image/*" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
-            <div id="upload-placeholder" class="space-y-2">
-              <svg class="w-10 h-10 text-zinc-500 group-hover:text-neon mx-auto transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-              <p class="font-mono text-xs text-zinc-300">Klik atau geser file gambar mockup (PNG, JPG, PDF) ke sini</p>
-              <p class="font-mono text-[10px] text-zinc-500">Maksimal 5MB. Preview visual akan muncul otomatis di bawah.</p>
-            </div>
-            <!-- Image Preview Box -->
-            <div id="mockup-preview-container" class="hidden mt-4 pt-4 border-t border-subtle">
-              <img id="mockup-preview-img" src="" alt="Mockup Preview" class="max-h-48 mx-auto rounded border border-subtle object-contain bg-zinc-900">
-              <span id="mockup-filename" class="font-mono text-xs text-neon mt-2 block"></span>
-            </div>
+            <label class="block text-xs font-medium text-muted mb-1.5">Catatan Khusus / Posisi Artwork</label>
+            <textarea id="spec-notes" rows="2" placeholder="Contoh: Sablon dada kiri 8cm & punggung A3 di tengah..." class="w-full bg-subtle border border-borderSubtle rounded-lg px-3.5 py-2.5 text-sm text-dark focus:outline-none focus:border-brand focus:bg-white transition"></textarea>
           </div>
         </div>
 
       </div>
 
-      <!-- RIGHT COLUMN: STICKY ORDER SUMMARY (4 cols) -->
-      <div class="lg:col-span-4">
-        <div class="sticky top-28 bg-card border border-subtle rounded-xl p-6 sm:p-8 space-y-6">
-          <div class="border-b border-subtle pb-4">
-            <span class="font-mono text-[11px] text-zinc-500 uppercase tracking-widest block">REAL-TIME ERP SUMMARY</span>
-            <h3 class="font-anton text-2xl text-white uppercase mt-1">RINGKASAN PESANAN</h3>
+      <!-- 2B. SECTION CREATIVE STUDIO (SHOWS IF CREATIVE SELECTED) -->
+      <div id="section-creative" class="hidden space-y-6">
+        <div class="bg-white border border-borderSubtle rounded-2xl p-6 sm:p-7 shadow-sm">
+          <h2 class="text-base font-bold text-dark mb-4 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-brandLight text-brand text-xs flex items-center justify-center font-bold">2</span>
+            Pilihan Paket Jasa Desain & Konsultasi Brand
+          </h2>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="block text-xs font-medium text-muted mb-1.5">Pilih Layanan Kreatif</label>
+              <select id="creative-service-select" class="w-full bg-subtle border border-borderSubtle rounded-lg px-3.5 py-2.5 text-sm text-dark focus:outline-none focus:border-brand focus:bg-white transition">
+                <!-- Injected via store.js -->
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-muted mb-1.5">Estimasi Biaya Jasa Mulai Dari</label>
+              <div class="bg-subtle border border-borderSubtle rounded-lg px-3.5 py-2.5 text-sm font-mono font-bold text-brand">
+                <span id="creative-base-price">Rp 500.000</span>
+              </div>
+            </div>
           </div>
 
-          <!-- Product Selected Info -->
           <div>
-            <span class="font-mono text-xs text-zinc-400 block mb-1">PRODUK TERPILIH</span>
-            <div class="flex justify-between items-center">
-              <span id="summary-product-name" class="font-anton text-xl text-white">T-SHIRT</span>
-              <span id="summary-unit-price" class="font-mono font-bold text-neon text-sm">Rp 65.000 / pcs</span>
-            </div>
+            <label class="block text-xs font-medium text-muted mb-1.5">Deskripsi Singkat Kebutuhan / Brief Proyek *</label>
+            <textarea id="creative-notes" rows="3" placeholder="Ceritakan tujuan proyek, konsep visual yang diinginkan, atau referensi desain..." class="w-full bg-subtle border border-borderSubtle rounded-lg px-3.5 py-2.5 text-sm text-dark focus:outline-none focus:border-brand focus:bg-white transition"></textarea>
           </div>
-
-          <!-- Quantity Breakdown Summary -->
-          <div class="bg-carbon rounded-lg p-3 border border-subtle text-xs font-mono">
-            <span class="text-zinc-500 uppercase block mb-1 text-[10px]">BREAKDOWN UKURAN</span>
-            <div class="grid grid-cols-5 gap-1 text-center font-bold text-white">
-              <div>S: <span id="sum-s" class="text-neon">0</span></div>
-              <div>M: <span id="sum-m" class="text-neon">0</span></div>
-              <div>L: <span id="sum-l" class="text-neon">0</span></div>
-              <div>XL: <span id="sum-xl" class="text-neon">0</span></div>
-              <div>XXL: <span id="sum-xxl" class="text-neon">0</span></div>
-            </div>
-          </div>
-
-          <!-- Total Quantity -->
-          <div class="flex justify-between items-center py-2 border-y border-subtle font-mono text-sm">
-            <span class="text-zinc-400">Total Kuantitas:</span>
-            <span id="summary-total-qty" class="font-bold text-white text-base">0 PCS</span>
-          </div>
-
-          <!-- Cost Calculations -->
-          <div class="space-y-2 font-mono">
-            <div class="flex justify-between items-center text-xs text-zinc-400">
-              <span>Estimasi Subtotal:</span>
-              <span id="summary-subtotal" class="font-semibold text-white">Rp 0</span>
-            </div>
-            <div class="flex justify-between items-center text-xs text-neon">
-              <span>Down Payment (DP 50%):</span>
-              <span id="summary-dp" class="font-bold">Rp 0</span>
-            </div>
-          </div>
-
-          <!-- Stage Preview -->
-          <div class="bg-carbon p-3 rounded-lg border border-subtle text-[11px] font-mono text-zinc-400">
-            <span class="text-zinc-500 uppercase block text-[9px] mb-1">TAHAP AWAL SISTEM</span>
-            <div class="flex items-center gap-2 text-neon">
-              <span class="w-2 h-2 rounded-full bg-neon animate-pulse"></span>
-              <span class="font-bold">Tahap 1: Design Approved</span>
-            </div>
-          </div>
-
-          <!-- Submit Button -->
-          <button type="submit" id="btn-submit-order" class="w-full bg-neon text-black font-anton tracking-wider text-base py-4 rounded uppercase hover:bg-white transition-all shadow-[0_0_25px_rgba(210,255,0,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)] flex items-center justify-center gap-2">
-            <span>SUBMIT ORDER & GENERATE CODE</span>
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-          </button>
-          
-          <p class="font-mono text-[10px] text-zinc-500 text-center">
-            *Dengan menekan submit, pesanan akan diteruskan ke tabel ERP Admin dan siap untuk diverifikasi.
-          </p>
         </div>
+      </div>
+
+      <!-- ESTIMASI BIAYA & SUBMIT BUTTON -->
+      <div class="bg-white border border-borderSubtle rounded-2xl p-6 sm:p-7 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div>
+          <span class="text-xs font-mono text-muted uppercase block">Estimasi Total Biaya</span>
+          <div class="text-2xl sm:text-3xl font-bold font-mono text-dark mt-0.5" id="display-total-estimate">Rp 0</div>
+          <span class="text-xs text-muted mt-1 block">DP 50% untuk verifikasi antrean: <strong id="display-dp-estimate" class="text-brand">Rp 0</strong></span>
+        </div>
+
+        <button type="submit" class="w-full sm:w-auto bg-brand hover:bg-brandDark text-white font-semibold text-base px-8 py-4 rounded-xl transition shadow-sm flex items-center justify-center gap-2">
+          <span>Kirim Pesanan & Terbitkan Kode</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </button>
       </div>
 
     </form>
   </main>
 
-  <!-- ================= SUCCESS MODAL POP-UP ================= -->
-  <div id="success-modal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4 hidden">
-    <div class="bg-card border-2 border-neon rounded-2xl max-w-lg w-full p-6 sm:p-8 relative shadow-[0_0_60px_rgba(210,255,0,0.25)] animate-in fade-in zoom-in-95 duration-200">
-      
-      <!-- Icon Check -->
-      <div class="w-16 h-16 rounded-full bg-neon/10 border-2 border-neon text-neon flex items-center justify-center mx-auto mb-6">
-        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+  <!-- ==================== MODAL SUKSES ==================== -->
+  <div id="order-success-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 sm:p-8 shadow-xl text-center border border-borderSubtle animate-in fade-in zoom-in-95 duration-150">
+      <div class="w-14 h-14 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
+        ✓
+      </div>
+      <h3 class="text-2xl font-bold text-dark">Pesanan Berhasil Masuk!</h3>
+      <p class="text-xs text-muted mt-1">Data telah tersimpan ke sistem ERP & CRM Drizzle Project. Gunakan kode unik berikut untuk melacak progres:</p>
+
+      <div class="my-5 p-4 rounded-xl bg-subtle border border-borderSubtle">
+        <span class="text-[11px] font-mono text-muted block mb-1">KODE TRACKING ANDA</span>
+        <div class="text-3xl font-mono font-extrabold text-brand tracking-wider" id="modal-tracking-code">
+          DRZ-2026-007
+        </div>
+        <button type="button" id="btn-copy-code" class="mt-2 text-xs font-medium text-muted hover:text-dark inline-flex items-center gap-1">
+          <span>Salin Kode</span>
+        </button>
+        <span id="copy-feedback" class="text-[11px] text-emerald-600 block h-3 mt-1 font-mono"></span>
       </div>
 
-      <!-- Title in Anton -->
-      <h2 class="font-anton text-3xl sm:text-4xl text-white text-center uppercase tracking-wide">
-        ORDER CREATED SUCCESSFULLY!
-      </h2>
-      <p class="text-zinc-400 text-xs text-center font-light mt-2">
-        Pesanan Anda telah tercatat ke dalam sistem ERP & CRM Drizzle Project. Simpan Kode Pesanan di bawah ini untuk melacak status pengerjaan:
-      </p>
-
-      <!-- Tracking Code Box -->
-      <div class="my-6 p-4 rounded-xl bg-carbon border border-neon/50 text-center">
-        <span class="font-mono text-[10px] text-zinc-500 uppercase tracking-widest block mb-1">KODE PESANAN UNIK ANDA</span>
-        <div class="flex items-center justify-center gap-3">
-          <span id="modal-order-code" class="font-mono text-3xl font-extrabold text-neon tracking-wider">DRZ-2026-001</span>
-          <button type="button" id="btn-copy-code" class="bg-card hover:bg-zinc-800 text-zinc-300 hover:text-white p-2 rounded border border-subtle transition" title="Salin Kode">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-          </button>
-        </div>
-        <span id="copy-status" class="font-mono text-[10px] text-neon mt-1 block h-3"></span>
-      </div>
-
-      <!-- Order Summary Recap -->
-      <div class="bg-carbon/50 rounded-lg p-3 border border-subtle text-xs font-mono space-y-1.5 mb-6 text-zinc-300">
-        <div class="flex justify-between">
-          <span class="text-zinc-500">Produk:</span>
-          <span id="modal-product" class="text-white font-bold">T-Shirt</span>
-        </div>
-        <div class="flex justify-between">
-          <span class="text-zinc-500">Total Kuantitas:</span>
-          <span id="modal-qty" class="text-white">36 Pcs</span>
-        </div>
-        <div class="flex justify-between">
-          <span class="text-zinc-500">Estimasi Total Biaya:</span>
-          <span id="modal-total-price" class="text-neon font-bold">Rp 2.340.000</span>
-        </div>
-        <div class="flex justify-between">
-          <span class="text-zinc-500">Down Payment (DP 50%):</span>
-          <span id="modal-dp-price" class="text-white">Rp 1.170.000</span>
-        </div>
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="space-y-3">
-        <a id="btn-goto-tracking" href="tracking.html" class="w-full bg-neon text-black font-anton tracking-wider text-sm py-3.5 rounded uppercase hover:bg-white transition flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(210,255,0,0.3)]">
-          <span>LANJUT KE ORDER TRACKING</span>
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+      <div class="space-y-2">
+        <a id="modal-goto-tracking-btn" href="tracking.html" class="w-full bg-brand hover:bg-brandDark text-white font-semibold text-sm py-3 rounded-xl transition block text-center">
+          Lacak Status Pesanan &rarr;
         </a>
-        <button type="button" id="btn-close-modal" class="w-full bg-card hover:bg-zinc-900 text-zinc-400 hover:text-white font-mono text-xs py-3 rounded border border-subtle transition">
-          Tutup & Buat Pesanan Lain
+        <button type="button" onclick="document.getElementById('order-success-modal').classList.add('hidden')" class="w-full bg-subtle hover:bg-borderSubtle text-dark text-xs py-2.5 rounded-xl transition">
+          Buat Pesanan Lainnya
         </button>
       </div>
-
     </div>
   </div>
 
-  <!-- ================= FOOTER ================= -->
-  <footer class="border-t border-subtle py-8 bg-carbon text-zinc-500 text-xs font-mono mt-16">
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="bg-white border-t border-borderSubtle py-8 text-xs text-muted mt-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
       <div>
-        <span class="text-white font-anton tracking-wider text-base">DRIZZLE PROJECT</span>
-        <p class="text-zinc-500 mt-1">&copy; 2026 Drizzle Project SaaS. All rights reserved.</p>
+        <span class="font-bold text-dark text-sm">Drizzle Project</span>
+        <p class="mt-0.5">&copy; 2026 Drizzle Project. All Product Include Packaging.</p>
       </div>
-      <div class="flex items-center space-x-6 text-[11px]">
-        <a href="index.html" class="hover:text-neon transition">Home</a>
-        <a href="order.html" class="hover:text-neon transition text-neon font-bold">Order Custom</a>
-        <a href="tracking.html" class="hover:text-neon transition">Order Tracking</a>
-        <a href="admin.html" class="hover:text-neon transition">Admin Portal</a>
+      <div class="flex items-center gap-6 font-medium">
+        <a href="index.html" class="hover:text-dark transition">Beranda</a>
+        <a href="order.html" class="text-brand font-semibold">Buat Pesanan</a>
+        <a href="tracking.html" class="hover:text-dark transition">Lacak Pesanan</a>
+        <a href="admin.html" class="hover:text-dark transition">Dashboard Admin</a>
       </div>
     </div>
   </footer>
 
-  <!-- Core Script -->
-  <script src="js/app.js"></script>
+  <!-- Central Store Script -->
+  <script src="js/store.js"></script>
 
-  <!-- Page Logic Script -->
+  <!-- Page Controller Script -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      let currentServiceType = 'apparel';
+
+      const tabApparel = document.getElementById('tab-btn-apparel');
+      const tabCreative = document.getElementById('tab-btn-creative');
+      const secApparel = document.getElementById('section-apparel');
+      const secCreative = document.getElementById('section-creative');
+
       const productSelect = document.getElementById('product-select');
-      const basePriceDisplay = document.getElementById('product-base-price-display');
-      const moqDisplay = document.getElementById('product-moq-display');
-      const descDisplay = document.getElementById('product-desc-display');
-      
+      const productBasePrice = document.getElementById('product-base-price');
+      const creativeSelect = document.getElementById('creative-service-select');
+      const creativeBasePrice = document.getElementById('creative-base-price');
+
       const sizeInputs = document.querySelectorAll('.size-input');
-      const sizeTotalBadge = document.getElementById('size-total-badge');
-      
-      const summaryProductName = document.getElementById('summary-product-name');
-      const summaryUnitPrice = document.getElementById('summary-unit-price');
-      const summaryTotalQty = document.getElementById('summary-total-qty');
-      const summarySubtotal = document.getElementById('summary-subtotal');
-      const summaryDp = document.getElementById('summary-dp');
-      
-      const sumS = document.getElementById('sum-s');
-      const sumM = document.getElementById('sum-m');
-      const sumL = document.getElementById('sum-l');
-      const sumXl = document.getElementById('sum-xl');
-      const sumXxl = document.getElementById('sum-xxl');
+      const displayTotalPcs = document.getElementById('display-total-pcs');
+      const displayTotalEst = document.getElementById('display-total-estimate');
+      const displayDpEst = document.getElementById('display-dp-estimate');
 
-      const mockupFileInput = document.getElementById('mockup-file-input');
-      const mockupPreviewContainer = document.getElementById('mockup-preview-container');
-      const mockupPreviewImg = document.getElementById('mockup-preview-img');
-      const mockupFilename = document.getElementById('mockup-filename');
-      const uploadPlaceholder = document.getElementById('upload-placeholder');
-
-      const orderForm = document.getElementById('order-custom-form');
-      const successModal = document.getElementById('success-modal');
-      const modalOrderCode = document.getElementById('modal-order-code');
-      const btnCopyCode = document.getElementById('btn-copy-code');
-      const copyStatus = document.getElementById('copy-status');
-      const btnGotoTracking = document.getElementById('btn-goto-tracking');
-      const btnCloseModal = document.getElementById('btn-close-modal');
-
-      let uploadedMockupDataUrl = '';
-
-      // 1. Populate Product Dropdown
-      const products = window.Drizzle.products || [];
+      // Populate Apparel Products
+      const products = window.DrizzleStore.products || [];
       products.forEach(p => {
         const opt = document.createElement('option');
         opt.value = p.name;
-        opt.textContent = `${p.name} - ${window.Drizzle.formatRupiah(p.price)}`;
+        opt.textContent = `${p.name} — ${window.DrizzleStore.formatRupiah(p.price)}`;
         opt.dataset.price = p.price;
-        opt.dataset.moq = p.minQty;
-        opt.dataset.desc = p.desc;
-        opt.dataset.id = p.id;
         productSelect.appendChild(opt);
       });
 
-      // 2. Read ?product= URL Parameter
+      // Populate Creative Services
+      const services = window.DrizzleStore.services || [];
+      services.forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s.name;
+        opt.textContent = `${s.name} — Mulai ${window.DrizzleStore.formatRupiah(s.basePrice)}`;
+        opt.dataset.price = s.basePrice;
+        creativeSelect.appendChild(opt);
+      });
+
+      // Check URL Query Parameters
       const urlParams = new URLSearchParams(window.location.search);
-      const preselectedProduct = urlParams.get('product');
-      if (preselectedProduct) {
+      const preProduct = urlParams.get('product');
+      const preService = urlParams.get('service');
+
+      if (preService) {
+        setServiceType('creative');
+        for (let i = 0; i < creativeSelect.options.length; i++) {
+          if (creativeSelect.options[i].value.toLowerCase() === preService.toLowerCase()) {
+            creativeSelect.selectedIndex = i;
+            break;
+          }
+        }
+      } else if (preProduct) {
+        setServiceType('apparel');
         for (let i = 0; i < productSelect.options.length; i++) {
-          if (productSelect.options[i].value.toLowerCase() === preselectedProduct.toLowerCase()) {
+          if (productSelect.options[i].value.toLowerCase() === preProduct.toLowerCase()) {
             productSelect.selectedIndex = i;
             break;
           }
         }
       }
 
-      // Update product info display
-      function updateProductInfo() {
-        const selectedOpt = productSelect.options[productSelect.selectedIndex];
-        if (!selectedOpt) return;
-        const price = parseInt(selectedOpt.dataset.price, 10);
-        const moq = selectedOpt.dataset.moq;
-        const desc = selectedOpt.dataset.desc;
-        const name = selectedOpt.value;
-
-        basePriceDisplay.textContent = window.Drizzle.formatRupiah(price);
-        moqDisplay.textContent = `MIN ${moq} PCS`;
-        descDisplay.textContent = desc;
-        summaryProductName.textContent = name.toUpperCase();
-        summaryUnitPrice.textContent = `${window.Drizzle.formatRupiah(price)} / pcs`;
-
-        recalcTotal();
-      }
-
-      productSelect.addEventListener('change', updateProductInfo);
-
-      // 3. Recalculate Size Breakdown & Totals
-      function recalcTotal() {
-        let s = parseInt(document.getElementById('size-s').value, 10) || 0;
-        let m = parseInt(document.getElementById('size-m').value, 10) || 0;
-        let l = parseInt(document.getElementById('size-l').value, 10) || 0;
-        let xl = parseInt(document.getElementById('size-xl').value, 10) || 0;
-        let xxl = parseInt(document.getElementById('size-xxl').value, 10) || 0;
-
-        // Ensure non-negative
-        s = Math.max(0, s);
-        m = Math.max(0, m);
-        l = Math.max(0, l);
-        xl = Math.max(0, xl);
-        xxl = Math.max(0, xxl);
-
-        const totalPcs = s + m + l + xl + xxl;
-
-        sizeTotalBadge.textContent = `${totalPcs} PCS`;
-        summaryTotalQty.textContent = `${totalPcs} PCS`;
-
-        sumS.textContent = s;
-        sumM.textContent = m;
-        sumL.textContent = l;
-        sumXl.textContent = xl;
-        sumXxl.textContent = xxl;
-
-        const selectedOpt = productSelect.options[productSelect.selectedIndex];
-        const unitPrice = selectedOpt ? parseInt(selectedOpt.dataset.price, 10) : 0;
-        const subtotal = totalPcs * unitPrice;
-        const dp = subtotal * 0.5;
-
-        summarySubtotal.textContent = window.Drizzle.formatRupiah(subtotal);
-        summaryDp.textContent = window.Drizzle.formatRupiah(dp);
-
-        return { s, m, l, xl, xxl, totalPcs, unitPrice, subtotal, dp };
-      }
-
-      sizeInputs.forEach(input => {
-        input.addEventListener('input', recalcTotal);
-      });
-
-      // Initial trigger
-      updateProductInfo();
-
-      // 4. Mockup File Upload Preview
-      mockupFileInput.addEventListener('change', (e) => {
-        const file = e.target.files[0];
-        if (file) {
-          mockupFilename.textContent = file.name;
-          const reader = new FileReader();
-          reader.onload = function(evt) {
-            uploadedMockupDataUrl = evt.target.result;
-            mockupPreviewImg.src = uploadedMockupDataUrl;
-            mockupPreviewContainer.classList.remove('hidden');
-          };
-          reader.readAsDataURL(file);
+      function setServiceType(type) {
+        currentServiceType = type;
+        if (type === 'apparel') {
+          tabApparel.className = 'py-3 px-4 rounded-lg font-semibold text-sm transition text-center flex items-center justify-center gap-2 bg-brand text-white shadow-sm';
+          tabCreative.className = 'py-3 px-4 rounded-lg font-semibold text-sm transition text-center flex items-center justify-center gap-2 text-muted hover:text-dark';
+          secApparel.classList.remove('hidden');
+          secCreative.classList.add('hidden');
+        } else {
+          tabCreative.className = 'py-3 px-4 rounded-lg font-semibold text-sm transition text-center flex items-center justify-center gap-2 bg-brand text-white shadow-sm';
+          tabApparel.className = 'py-3 px-4 rounded-lg font-semibold text-sm transition text-center flex items-center justify-center gap-2 text-muted hover:text-dark';
+          secCreative.classList.remove('hidden');
+          secApparel.classList.add('hidden');
         }
-      });
+        recalculate();
+      }
 
-      // 5. Form Submit -> Save to localStorage according to schema in PROMPT.md
+      tabApparel.addEventListener('click', () => setServiceType('apparel'));
+      tabCreative.addEventListener('click', () => setServiceType('creative'));
+
+      productSelect.addEventListener('change', recalculate);
+      creativeSelect.addEventListener('change', recalculate);
+      sizeInputs.forEach(i => i.addEventListener('input', recalculate));
+
+      function recalculate() {
+        if (currentServiceType === 'apparel') {
+          const opt = productSelect.options[productSelect.selectedIndex];
+          const price = opt ? parseInt(opt.dataset.price, 10) : 0;
+          productBasePrice.textContent = window.DrizzleStore.formatRupiah(price);
+
+          let s = Math.max(0, parseInt(document.getElementById('size-s').value, 10) || 0);
+          let m = Math.max(0, parseInt(document.getElementById('size-m').value, 10) || 0);
+          let l = Math.max(0, parseInt(document.getElementById('size-l').value, 10) || 0);
+          let xl = Math.max(0, parseInt(document.getElementById('size-xl').value, 10) || 0);
+          let xxl = Math.max(0, parseInt(document.getElementById('size-xxl').value, 10) || 0);
+
+          const totalPcs = s + m + l + xl + xxl;
+          displayTotalPcs.textContent = `${totalPcs} Pcs`;
+
+          const subtotal = totalPcs * price;
+          const dp = subtotal * 0.5;
+
+          displayTotalEst.textContent = window.DrizzleStore.formatRupiah(subtotal);
+          displayDpEst.textContent = window.DrizzleStore.formatRupiah(dp);
+          return { totalPcs, subtotal, dp, s, m, l, xl, xxl, price };
+        } else {
+          const opt = creativeSelect.options[creativeSelect.selectedIndex];
+          const price = opt ? parseInt(opt.dataset.price, 10) : 0;
+          creativeBasePrice.textContent = window.DrizzleStore.formatRupiah(price);
+          displayTotalEst.textContent = window.DrizzleStore.formatRupiah(price);
+          displayDpEst.textContent = window.DrizzleStore.formatRupiah(price * 0.5);
+          return { totalPcs: 1, subtotal: price, dp: price * 0.5 };
+        }
+      }
+
+      recalculate();
+
+      // Submit Handler
+      const orderForm = document.getElementById('unified-order-form');
       orderForm.addEventListener('submit', (e) => {
         e.preventDefault();
 
@@ -569,131 +442,86 @@
         const email = document.getElementById('cust-email').value.trim();
 
         if (!name || !org || !phone || !email) {
-          alert('Mohon lengkapi seluruh data identitas pemesan.');
+          alert('Mohon lengkapi seluruh kolom identitas pemesan.');
           return;
         }
 
-        const calc = recalcTotal();
-        if (calc.totalPcs <= 0) {
-          alert('Mohon isi kuantitas ukuran minimal 1 pcs pada breakdown ukuran.');
+        const calc = recalculate();
+        if (currentServiceType === 'apparel' && calc.totalPcs <= 0) {
+          alert('Mohon isi jumlah kuantitas ukuran minimal 1 pcs.');
           return;
         }
 
-        const selectedOpt = productSelect.options[productSelect.selectedIndex];
-        const productId = parseInt(selectedOpt.dataset.id, 10);
-        const productName = selectedOpt.value;
-        const printType = document.getElementById('spec-print-type').value;
-        const fabricColor = document.getElementById('spec-fabric-color').value.trim() || 'Standar Vendor';
-        const notes = document.getElementById('spec-notes').value.trim();
+        const trackingCode = window.DrizzleStore.generateNextCode();
+        const now = new Date().toISOString().replace('T', ' ').substring(0, 19);
 
-        // Generate Unique Code DRZ-2026-XXX
-        const trackingCode = window.Drizzle.generateNextOrderCode();
+        let orderItem = null;
+        if (currentServiceType === 'apparel') {
+          const prodName = productSelect.value;
+          const printType = document.getElementById('spec-print-type').value;
+          const fabricColor = document.getElementById('spec-fabric-color').value.trim() || 'Standar';
+          const notes = document.getElementById('spec-notes').value.trim();
 
-        // Timestamps
-        const now = new Date();
-        const timestampStr = now.toISOString().replace('T', ' ').substring(0, 19);
+          orderItem = {
+            tracking_code: trackingCode,
+            service_type: 'apparel',
+            customer: { name, organization: org, phone, email },
+            product_name: prodName,
+            total_pcs: calc.totalPcs,
+            size_breakdown: { S: calc.s, M: calc.m, L: calc.l, XL: calc.xl, XXL: calc.xxl },
+            specs: { print_type: printType, fabric_color: fabricColor, notes },
+            total_price: calc.subtotal,
+            status_payment: 'Menunggu DP',
+            stage: 'Design Approved',
+            created_at: now,
+            materials_deducted: false
+          };
+        } else {
+          const servName = creativeSelect.value;
+          const notes = document.getElementById('creative-notes').value.trim() || 'Brief via formulir online.';
 
-        // Retrieve existing datasets
-        const customers = window.Drizzle.getStorage('drizzle_customers');
-        const orders = window.Drizzle.getStorage('drizzle_orders');
-        const orderDetails = window.Drizzle.getStorage('drizzle_order_details');
-        const prodLogs = window.Drizzle.getStorage('drizzle_production_logs');
+          orderItem = {
+            tracking_code: trackingCode,
+            service_type: 'creative',
+            customer: { name, organization: org, phone, email },
+            product_name: servName,
+            total_pcs: 1,
+            size_breakdown: null,
+            specs: { print_type: 'Jasa Desain / Digital Media', fabric_color: '-', notes },
+            total_price: calc.subtotal,
+            status_payment: 'Menunggu DP',
+            stage: 'Design Approved',
+            created_at: now,
+            materials_deducted: true // Creative service does not deduct fabric
+          };
+        }
 
-        // New IDs
-        const newCustomerId = customers.length ? (Math.max(...customers.map(c => c.customer_id || 0)) + 1) : 1;
-        const newOrderId = orders.length ? (Math.max(...orders.map(o => o.order_id || 0)) + 1) : 1;
-        const newDetailId = orderDetails.length ? (Math.max(...orderDetails.map(d => d.detail_id || 0)) + 1) : 1;
-        const newLogId = prodLogs.length ? (Math.max(...prodLogs.map(l => l.log_id || 0)) + 1) : 1;
+        // Save to central DB
+        const db = window.DrizzleStore.getDB();
+        db.orders.unshift(orderItem);
+        window.DrizzleStore.saveDB(db);
 
-        // 1. Customers Table Record
-        const customerRecord = {
-          customer_id: newCustomerId,
-          name: name,
-          organization: org,
-          phone: phone,
-          email: email
-        };
-        customers.push(customerRecord);
-        window.Drizzle.setStorage('drizzle_customers', customers);
-
-        // 2. Orders Table Record
-        const orderRecord = {
-          order_id: newOrderId,
-          customer_id: newCustomerId,
-          total_pcs: calc.totalPcs,
-          status_payment: 'Menunggu DP',
-          order_status: 'Pending',
-          tracking_code: trackingCode,
-          created_at: timestampStr
-        };
-        orders.push(orderRecord);
-        window.Drizzle.setStorage('drizzle_orders', orders);
-
-        // 3. Order_Details Table Record
-        const detailRecord = {
-          detail_id: newDetailId,
-          order_id: newOrderId,
-          product_id: productId,
-          product_name: productName,
-          size_breakdown: {
-            S: calc.s,
-            M: calc.m,
-            L: calc.l,
-            XL: calc.xl,
-            XXL: calc.xxl
-          },
-          mockup_url: uploadedMockupDataUrl || '',
-          print_type: printType,
-          fabric_color: fabricColor,
-          notes: notes,
-          estimated_total: calc.subtotal
-        };
-        orderDetails.push(detailRecord);
-        window.Drizzle.setStorage('drizzle_order_details', orderDetails);
-
-        // 4. Production_Logs Table Record (Tahap 1: Design Approved)
-        const logRecord = {
-          log_id: newLogId,
-          order_id: newOrderId,
-          stage_name: 'Design Approved',
-          updated_at: timestampStr
-        };
-        prodLogs.push(logRecord);
-        window.Drizzle.setStorage('drizzle_production_logs', prodLogs);
-
-        // Populate Success Modal
-        modalOrderCode.textContent = trackingCode;
-        document.getElementById('modal-product').textContent = productName;
-        document.getElementById('modal-qty').textContent = `${calc.totalPcs} Pcs`;
-        document.getElementById('modal-total-price').textContent = window.Drizzle.formatRupiah(calc.subtotal);
-        document.getElementById('modal-dp-price').textContent = window.Drizzle.formatRupiah(calc.dp);
-        btnGotoTracking.href = `tracking.html?code=${trackingCode}`;
+        // Integration Log CRM -> ERP
+        window.DrizzleStore.logIntegration(
+          'CRM -> ERP',
+          `Pesanan baru ${trackingCode} (${orderItem.product_name}) dari ${name} [${org}] berhasil masuk antrean ERP.`
+        );
 
         // Show Modal
-        successModal.classList.remove('hidden');
+        document.getElementById('modal-tracking-code').textContent = trackingCode;
+        document.getElementById('modal-goto-tracking-btn').href = `tracking.html?code=${trackingCode}`;
+        document.getElementById('order-success-modal').classList.remove('hidden');
       });
 
-      // Copy Code Functionality
-      btnCopyCode.addEventListener('click', () => {
-        const code = modalOrderCode.textContent;
+      // Copy Code
+      document.getElementById('btn-copy-code').addEventListener('click', () => {
+        const code = document.getElementById('modal-tracking-code').textContent.trim();
         navigator.clipboard.writeText(code).then(() => {
-          copyStatus.textContent = 'Kode berhasil disalin ke clipboard!';
-          setTimeout(() => { copyStatus.textContent = ''; }, 3000);
-        }).catch(() => {
-          copyStatus.textContent = 'Gagal menyalin.';
+          const fb = document.getElementById('copy-feedback');
+          fb.textContent = 'Kode berhasil disalin!';
+          setTimeout(() => fb.textContent = '', 2500);
         });
       });
-
-      // Close Modal
-      btnCloseModal.addEventListener('click', () => {
-        successModal.classList.add('hidden');
-        orderForm.reset();
-        mockupPreviewContainer.classList.add('hidden');
-        mockupPreviewImg.src = '';
-        uploadedMockupDataUrl = '';
-        updateProductInfo();
-      });
-
     });
   </script>
 </body>
