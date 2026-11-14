@@ -3,9 +3,9 @@
 Web-based Order & Studio Management System untuk **Drizzle Project** (Vendor merchandise, konveksi apparel custom, dan jasa desain kreatif & branding).
 
 ## 🚀 Fitur Utama
-- **Public Catalog & Unified Order Form**: Pemesanan konveksi apparel (12 item produk lengkap dengan rincian ukuran S–XXL) serta pemesanan jasa desain kreatif & konsultasi brand.
-- **Customer Order Tracking**: Pelacakan status pengerjaan secara real-time menggunakan Kode Tracking unik (`DRZ-2026-XXX`) dengan visual 6 tahapan progres.
-- **Admin ERP & SCM Dashboard**: Pengelolaan pesanan masuk, verifikasi status pembayaran (DP & Lunas), pencetakan Surat Perintah Kerja (SPK), serta pengurangan otomatis stok bahan baku & kemasan saat pesanan masuk produksi.
+- **Modul CRM (*Customer Relationship Management*)**: Digitalisasi interaksi klien organisasi/komunitas, form pemesanan mandiri (12 kategori apparel & 7 layanan desain kreatif/branding), pelacakan progres real-time, dan fitur *Repeat Order* 1-klik.
+- **Modul ERP (*Enterprise Resource Planning*)**: Pengelolaan pesanan terpadu, matrix ukuran S–XXL, kontrol kuota revisi pra-produksi (maks. 3x), alur 6 tahap produksi makloon & QC, pencetakan lembar kerja SPK, serta kalkulasi termin pembayaran & HPP.
+- **Modul SCM (*Supply Chain Management*)**: Direktori pemasok & mitra makloon, kalkulasi kebutuhan material otomatis (*MRP* dengan *buffer* 3% & *packaging* 1:1), draf *Purchase Order (PO)*, kontrol gudang (*Inbound QC* & *Goods Issue*), serta integrasi nomor resi kargo *outbound*.
 
 ## 🤝 Rancangan Modul CRM (Drizzle Project)
 Modul CRM mendigitalisasi alur interaksi klien (organisasi kampus, komunitas, dan perusahaan) untuk menggantikan pendataan pesanan melalui chat grup WhatsApp:
