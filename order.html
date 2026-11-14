@@ -81,14 +81,39 @@
       <p class="text-sm text-muted mt-1">Pilih kategori layanan di bawah ini. Kode tracking otomatis <span class="font-mono text-dark font-semibold">DRZ-2026-XXX</span> akan diterbitkan langsung setelah pengiriman formulir.</p>
     </div>
 
-    <!-- Service Type Toggle Switcher -->
-    <div class="grid grid-cols-2 gap-3 mb-8 bg-card p-1.5 rounded-xl border border-borderCard shadow-sm">
-      <button type="button" id="tab-btn-apparel" class="py-3 px-4 rounded-lg font-semibold text-sm transition text-center flex items-center justify-center gap-2 bg-brand text-white shadow-sm">
-        <span>👕 Konveksi & Merchandise Custom</span>
+    <!-- Service Type Toggle Switcher (3 Categories) -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 mb-6 bg-card p-1.5 rounded-xl border border-borderCard shadow-sm">
+      <button type="button" id="tab-btn-apparel" class="py-2.5 px-3 rounded-lg font-semibold text-xs sm:text-sm transition text-center flex items-center justify-center gap-1.5 bg-brand text-white shadow-sm">
+        <span>👕 Apparel Custom</span>
       </button>
-      <button type="button" id="tab-btn-creative" class="py-3 px-4 rounded-lg font-semibold text-sm transition text-center flex items-center justify-center gap-2 text-muted hover:text-dark">
-        <span>🎨 Jasa Desain & Konsultasi Brand</span>
+      <button type="button" id="tab-btn-merch" class="py-2.5 px-3 rounded-lg font-semibold text-xs sm:text-sm transition text-center flex items-center justify-center gap-1.5 text-muted hover:text-dark">
+        <span>🎁 Merchandise</span>
       </button>
+      <button type="button" id="tab-btn-creative" class="py-2.5 px-3 rounded-lg font-semibold text-xs sm:text-sm transition text-center flex items-center justify-center gap-1.5 text-muted hover:text-dark">
+        <span>🎨 Creative & Hybrid</span>
+      </button>
+    </div>
+
+    <!-- Toggle Drawer: 17 Portofolio Klien Drizzle -->
+    <div class="mb-6">
+      <button type="button" id="btn-toggle-portfolio-ref" class="w-full bg-card hover:bg-canvas border border-borderCard rounded-xl p-3 text-xs text-muted flex items-center justify-between transition shadow-sm">
+        <span class="flex items-center gap-2">
+          <span class="text-brand font-bold font-mono">📁 Rekap 17 Proyek Klien Drizzle Project:</span>
+          <span>Klik untuk melihat referensi atau salin format proyek yang sudah pernah kami produksi.</span>
+        </span>
+        <span class="text-brand font-bold" id="portfolio-toggle-indicator">Buka Referensi &darr;</span>
+      </button>
+
+      <!-- Collapsible Grid of 17 Projects -->
+      <div id="portfolio-ref-drawer" class="hidden mt-3 bg-card border border-borderCard rounded-2xl p-4 sm:p-5 shadow-sm space-y-3">
+        <div class="flex justify-between items-center text-xs pb-2 border-b border-borderCard">
+          <strong class="font-bold text-dark">Pilih salah satu portofolio riil untuk auto-fill spesifikasi:</strong>
+          <span class="text-muted text-[11px]">17 Proyek Terverifikasi</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="portfolio-ref-list">
+          <!-- Populated via JS -->
+        </div>
+      </div>
     </div>
 
     <!-- Reorder Banner (Hidden by default, shown if ?reorder= exists) -->
@@ -106,7 +131,7 @@
     <!-- 2 Columns Grid: Form & Live Bill Summary -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
       
-      <!-- Left Column: Form Fields (8 Cols) -->
+      <!-- Left Column: Form Fields (7 Cols) -->
       <form id="unified-order-form" class="lg:col-span-7 space-y-6">
         
         <!-- SECTION 1: IDENTITAS PEMESAN -->
@@ -131,6 +156,7 @@
             <div>
               <label class="block text-xs font-semibold text-dark mb-1">Nomor WhatsApp Aktif *</label>
               <input type="tel" id="cust-phone" required placeholder="Contoh: 0882007546920" class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand font-mono">
+              <span class="text-[10px] text-muted mt-0.5 block">Sistem CRM otomatis mendeteksi riwayat belanja & segmen pelanggan dari WhatsApp.</span>
             </div>
             <div>
               <label class="block text-xs font-semibold text-dark mb-1">Alamat Email Aktif *</label>
@@ -148,12 +174,12 @@
         <div id="section-apparel" class="bg-card border border-borderCard rounded-xl p-6 shadow-sm space-y-5">
           <div class="flex items-center gap-2 pb-3 border-b border-borderCard">
             <span class="w-6 h-6 rounded-full bg-brandLight text-brand font-mono font-bold text-xs flex items-center justify-center">2</span>
-            <h2 class="font-bold text-base text-dark">Spesifikasi Apparel & Matrix Ukuran (ERP)</h2>
+            <h2 class="font-bold text-base text-dark" id="section-apparel-title">Spesifikasi Apparel & Matrix Ukuran (ERP)</h2>
           </div>
 
           <!-- Pilihan Produk -->
           <div>
-            <label class="block text-xs font-semibold text-dark mb-1">Pilih Item Produk Apparel / Merchandise *</label>
+            <label class="block text-xs font-semibold text-dark mb-1" id="product-select-label">Pilih Item Produk *</label>
             <select id="apparel-product-select" class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark font-medium focus:outline-none focus:border-brand">
               <!-- Populated via js/app.js -->
             </select>
@@ -161,7 +187,7 @@
           </div>
 
           <!-- Matrix Ukuran -->
-          <div>
+          <div id="matrix-size-container">
             <label class="block text-xs font-semibold text-dark mb-1.5">Matrix Rincian Ukuran (Pcs) *</label>
             <div class="grid grid-cols-5 gap-2">
               <div class="text-center">
@@ -235,7 +261,7 @@
         <div id="section-creative" class="hidden bg-card border border-borderCard rounded-xl p-6 shadow-sm space-y-5">
           <div class="flex items-center gap-2 pb-3 border-b border-borderCard">
             <span class="w-6 h-6 rounded-full bg-brandLight text-brand font-mono font-bold text-xs flex items-center justify-center">2</span>
-            <h2 class="font-bold text-base text-dark">Paket Jasa Desain & Konsultasi Brand</h2>
+            <h2 class="font-bold text-base text-dark">Paket Jasa Desain & Konsultasi Brand (Hybrid)</h2>
           </div>
 
           <!-- Pilihan Layanan Kreatif -->
@@ -297,7 +323,7 @@
 
           <!-- Termin Pembayaran 50% -->
           <div class="py-4 space-y-2 border-b border-borderCard text-xs bg-canvas/60 -mx-6 px-6">
-            <span class="text-[11px] font-mono font-bold text-muted uppercase block">Termin Pembayaran Resmi</span>
+            <span class="text-[11px] font-mono font-bold text-muted uppercase block">Termin Pembayaran Resmi (DP 50%)</span>
             <div class="flex justify-between items-center">
               <span class="text-dark font-medium">Uang Muka (DP 50%):</span>
               <span class="font-mono font-bold text-brand text-sm" id="live-dp-amount">Rp 0</span>
@@ -350,14 +376,14 @@
 
   <!-- ==================== MODAL SUKSES ORDER ==================== -->
   <div id="order-success-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-card border border-borderCard rounded-2xl max-w-md w-full p-6 sm:p-8 shadow-2xl text-center space-y-5 animate-scale-up">
+    <div class="bg-card border border-borderCard rounded-2xl max-w-md w-full p-6 sm:p-8 shadow-2xl text-center space-y-4 animate-scale-up">
       <div class="w-14 h-14 mx-auto rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl font-bold">
         ✓
       </div>
       <div>
-        <span class="text-xs font-mono font-bold text-brand uppercase tracking-wider block">Pesanan Berhasil Terdaftar</span>
+        <span class="text-xs font-mono font-bold text-brand uppercase tracking-wider block">Pesanan Berhasil Terdaftar (CRM & ERP)</span>
         <h3 class="text-2xl font-extrabold text-dark mt-1">Kode Tracking Diterbitkan!</h3>
-        <p class="text-xs text-muted mt-1">Simpan kode tracking unik di bawah ini untuk memantau status pembayaran dan tahapan produksi Anda secara real-time.</p>
+        <p class="text-xs text-muted mt-1">Simpan kode tracking unik di bawah ini untuk memantau status verifikasi DP dan tahapan produksi secara real-time.</p>
       </div>
 
       <!-- Tracking Code Box -->
@@ -371,6 +397,26 @@
         </button>
       </div>
       <div id="copy-feedback" class="text-[11px] font-mono text-emerald-600 h-4"></div>
+
+      <!-- CRM Detection & Bill Breakdown Card -->
+      <div class="bg-card border border-borderCard rounded-xl p-3.5 text-left text-xs space-y-2">
+        <div class="flex justify-between items-center pb-2 border-b border-borderCard">
+          <span class="text-muted">Status Pelanggan (CRM):</span>
+          <span id="modal-cust-segment" class="font-mono font-bold px-2 py-0.5 rounded bg-brandLight text-brand border border-brand/20 text-[10px]">Baru</span>
+        </div>
+        <div class="text-dark">
+          <span class="text-muted block text-[11px]">Nama Klien:</span>
+          <strong id="modal-cust-name">-</strong>
+        </div>
+        <div class="flex justify-between items-center pt-2 border-t border-borderCard">
+          <span class="text-muted">Total Tagihan:</span>
+          <strong class="font-mono text-dark" id="modal-total-bill">Rp 0</strong>
+        </div>
+        <div class="flex justify-between items-center bg-brandLight/50 p-2 rounded border border-brand/20">
+          <span class="font-semibold text-brandDark">Tagihan Uang Muka (DP 50%):</span>
+          <strong class="font-mono font-bold text-brand" id="modal-dp-bill">Rp 0</strong>
+        </div>
+      </div>
 
       <!-- Action Buttons -->
       <div class="space-y-2 pt-2">
@@ -443,7 +489,7 @@
 
   <!-- Page Logic Script -->
   <script>
-    let currentServiceType = 'apparel'; // 'apparel' or 'creative'
+    let currentCategory = 'APPAREL'; // 'APPAREL', 'MERCH', or 'DESIGN'
 
     function openTenantModal() {
       document.getElementById('tenant-modal').classList.remove('hidden');
@@ -452,11 +498,35 @@
       document.getElementById('tenant-modal').classList.add('hidden');
     }
 
+    // 17 Real Client Projects for CRM Reference
+    const PORTFOLIO_RECAPS = [
+      { client: 'SMANKRAPFANS 1982', category: 'APPAREL', srvId: 'SRV-01', item: 'T-Shirt', qty: 652, print: 'Sablon Plastisol High Density', fabric: 'Cotton Combed 24s Hitam Reaktif', notes: 'Suporter Sekolah SMANKRAP' },
+      { client: 'BUSHWACKER', category: 'APPAREL', srvId: 'SRV-01', item: 'T-Shirt', qty: 379, print: 'Sablon Plastisol High Density', fabric: 'Cotton Combed 24s Black Reaktif', notes: 'Official Eternal Finest Badge' },
+      { client: 'SMEA FAMS 1963', category: 'APPAREL', srvId: 'SRV-01', item: 'T-Shirt', qty: 200, print: 'Sablon Discharge / Waterbased', fabric: 'Cotton Combed 30s Hitam', notes: 'Suporter Angkatan SMEA' },
+      { client: 'Spartan Stately (SPRTN)', category: 'APPAREL', srvId: 'SRV-01', item: 'T-Shirt', qty: 190, print: 'Sablon Plastisol High Density', fabric: 'Cotton Combed 30s Navy Blue', notes: 'Tema Natus Vincere' },
+      { client: 'Emperor', category: 'APPAREL', srvId: 'SRV-01', item: 'T-Shirt', qty: 77, print: 'Sablon Plastisol High Density', fabric: 'Cotton Combed 20s Heavyweight', notes: 'Tema Mesin Penebar Teror' },
+      { client: 'MPD UNS', category: 'APPAREL', srvId: 'SRV-02', item: 'Shirt / PDH', qty: 75, print: 'Bordir Komputer Presisi Tinggi', fabric: 'American Drill 1919 Navy', notes: 'PDH Pengurus Manajemen Perdagangan UNS' },
+      { client: 'Assolous Class MMXXIII', category: 'APPAREL', srvId: 'SRV-01', item: 'T-Shirt', qty: 39, print: 'Sablon Plastisol High Density', fabric: 'Cotton Combed 30s Bottle Green', notes: 'T-Shirt Kelas Angkatan' },
+      { client: 'Gengga "Genius"', category: 'APPAREL', srvId: 'SRV-01', item: 'T-Shirt', qty: 36, print: 'Sablon Plastisol High Density', fabric: 'Cotton Combed 24s White', notes: 'Komunitas Genius' },
+      { client: 'Rohis SMNSA', category: 'APPAREL', srvId: 'SRV-02', item: 'Shirt / PDH', qty: 35, print: 'Bordir Komputer Presisi Tinggi', fabric: 'American Drill Putih & Army', notes: 'PDH Pengurus Rohis' },
+      { client: 'Excellent', category: 'APPAREL', srvId: 'SRV-01', item: 'T-Shirt', qty: 33, print: 'Sablon Plastisol High Density', fabric: 'Cotton Combed 30s Charcoal', notes: 'Event Gathering' },
+      { client: 'HSTRC', category: 'APPAREL', srvId: 'SRV-03', item: 'Coach Jacket', qty: 32, print: 'Sablon Plastisol High Density', fabric: 'Taslan Milky Waterproof', notes: 'Streetwear Label' },
+      { client: 'IMAKA UNDIP', category: 'APPAREL', srvId: 'SRV-02', item: 'Shirt / PDH', qty: 32, print: 'Bordir Komputer Presisi Tinggi', fabric: 'Japan Drill Maroon', notes: 'Ikatan Mahasiswa Karanganyar UNDIP' },
+      { client: 'IATMI SM UPNVYK', category: 'APPAREL', srvId: 'SRV-03', item: 'Coach Jacket', qty: 30, print: 'Bordir Komputer Presisi Tinggi', fabric: 'Baby Canvas Khaki', notes: 'Teknik Perminyakan UPNVYK' },
+      { client: 'Adventure Team (ADVNTR)', category: 'APPAREL', srvId: 'SRV-06', item: 'Polo Shirt', qty: 30, print: 'Bordir Komputer Presisi Tinggi', fabric: 'Lacoste Pique Cotton Hitam', notes: 'Komunitas Petualang' },
+      { client: 'PT. Surya Nakula', category: 'APPAREL', srvId: 'SRV-02', item: 'Shirt / PDH', qty: 16, print: 'Bordir Komputer Presisi Tinggi', fabric: 'American Drill Abu & Scotchlite', notes: 'Seragam Teknisi Lapangan' },
+      { client: 'Machine 1998', category: 'APPAREL', srvId: 'SRV-01', item: 'T-Shirt', qty: 24, print: 'Sablon Plastisol High Density', fabric: 'Cotton Combed 24s Jet Black', notes: 'This Story Wont End' },
+      { client: 'Propundt / Banana', category: 'APPAREL', srvId: 'SRV-07', item: 'Bomber Jacket', qty: 20, print: 'Bordir Woven Emblem Patch', fabric: 'Taslan ZN Water Repellent', notes: 'Riding Jacket' }
+    ];
+
     document.addEventListener('DOMContentLoaded', () => {
       const tabBtnApparel = document.getElementById('tab-btn-apparel');
+      const tabBtnMerch = document.getElementById('tab-btn-merch');
       const tabBtnCreative = document.getElementById('tab-btn-creative');
+
       const sectionApparel = document.getElementById('section-apparel');
       const sectionCreative = document.getElementById('section-creative');
+      const sectionApparelTitle = document.getElementById('section-apparel-title');
 
       const apparelSelect = document.getElementById('apparel-product-select');
       const apparelDesc = document.getElementById('apparel-product-desc');
@@ -469,47 +539,148 @@
       const db = window.DrizzleApp.getDB();
       const services = db.services || [];
 
-      // Apparel services (APPAREL & MERCH)
-      const apparelList = services.filter(s => s.category === 'APPAREL' || s.category === 'MERCH');
-      apparelSelect.innerHTML = '';
-      apparelList.forEach(s => {
-        const opt = document.createElement('option');
-        opt.value = s.serviceId;
-        opt.textContent = `${s.name} (Mulai ${window.DrizzleApp.formatRupiah(s.basePrice)} - Min ${s.minQty} pcs)`;
-        opt.dataset.basePrice = s.basePrice;
-        opt.dataset.minQty = s.minQty;
-        opt.dataset.desc = s.desc;
-        apparelSelect.appendChild(opt);
+      // Render 17 Portfolio Reference List
+      const refList = document.getElementById('portfolio-ref-list');
+      PORTFOLIO_RECAPS.forEach(p => {
+        const item = document.createElement('div');
+        item.className = 'p-3 bg-canvas border border-borderCard rounded-xl hover:border-brand transition text-xs flex flex-col justify-between';
+        item.innerHTML = `
+          <div>
+            <div class="flex justify-between items-start">
+              <strong class="font-bold text-dark text-xs">${p.client}</strong>
+              <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-brandLight text-brand font-bold">${p.qty} Pcs</span>
+            </div>
+            <div class="text-[11px] text-brandDark font-medium mt-0.5">${p.item} &bull; ${p.fabric}</div>
+            <p class="text-[10px] text-muted mt-1">${p.notes}</p>
+          </div>
+          <button type="button" class="mt-2.5 w-full py-1.5 bg-card hover:bg-brand hover:text-white border border-borderCard text-dark font-semibold rounded-lg text-[10px] transition text-center btn-apply-ref">
+            Gunakan Format Ini &rarr;
+          </button>
+        `;
+        item.querySelector('.btn-apply-ref').addEventListener('click', () => {
+          applyPortfolioReference(p);
+        });
+        refList.appendChild(item);
       });
 
-      // Creative services (DESIGN)
-      const creativeList = services.filter(s => s.category === 'DESIGN');
-      creativeSelect.innerHTML = '';
-      creativeList.forEach(s => {
-        const opt = document.createElement('option');
-        opt.value = s.serviceId;
-        opt.textContent = `${s.name} (${window.DrizzleApp.formatRupiah(s.basePrice)})`;
-        opt.dataset.basePrice = s.basePrice;
-        opt.dataset.desc = s.desc;
-        creativeSelect.appendChild(opt);
+      // Toggle Drawer
+      const toggleDrawerBtn = document.getElementById('btn-toggle-portfolio-ref');
+      const drawer = document.getElementById('portfolio-ref-drawer');
+      const drawerIndicator = document.getElementById('portfolio-toggle-indicator');
+      toggleDrawerBtn.addEventListener('click', () => {
+        const isHidden = drawer.classList.contains('hidden');
+        if (isHidden) {
+          drawer.classList.remove('hidden');
+          drawerIndicator.textContent = 'Tutup Referensi ↑';
+        } else {
+          drawer.classList.add('hidden');
+          drawerIndicator.textContent = 'Buka Referensi ↓';
+        }
       });
+
+      function applyPortfolioReference(p) {
+        document.getElementById('cust-org').value = p.client;
+        document.getElementById('spec-fabric-color').value = p.fabric;
+        document.getElementById('spec-notes').value = `Referensi Proyek ${p.client}: ${p.notes}`;
+        if (p.print) document.getElementById('spec-print-type').value = p.print;
+
+        // Switch to correct category
+        setCategory(p.category || 'APPAREL');
+        if (p.srvId) apparelSelect.value = p.srvId;
+
+        // Auto distribute size
+        const each = Math.floor(p.qty / 5);
+        const rem = p.qty % 5;
+        document.getElementById('size-s').value = each;
+        document.getElementById('size-m').value = each;
+        document.getElementById('size-l').value = each;
+        document.getElementById('size-xl').value = each;
+        document.getElementById('size-xxl').value = each + rem;
+
+        updateBillCalculation();
+        drawer.classList.add('hidden');
+        drawerIndicator.textContent = 'Buka Referensi ↓';
+        document.getElementById('cust-name').focus();
+      }
+
+      function populateSelectOptions(category) {
+        if (category === 'APPAREL' || category === 'MERCH') {
+          const list = services.filter(s => s.category === category);
+          apparelSelect.innerHTML = '';
+          list.forEach(s => {
+            const opt = document.createElement('option');
+            opt.value = s.serviceId;
+            opt.textContent = `${s.name} (Mulai ${window.DrizzleApp.formatRupiah(s.basePrice)} - Min ${s.minQty} pcs)`;
+            opt.dataset.basePrice = s.basePrice;
+            opt.dataset.minQty = s.minQty;
+            opt.dataset.desc = s.desc;
+            apparelSelect.appendChild(opt);
+          });
+        } else {
+          const list = services.filter(s => s.category === 'DESIGN');
+          creativeSelect.innerHTML = '';
+          list.forEach(s => {
+            const opt = document.createElement('option');
+            opt.value = s.serviceId;
+            opt.textContent = `${s.name} (${window.DrizzleApp.formatRupiah(s.basePrice)})`;
+            opt.dataset.basePrice = s.basePrice;
+            opt.dataset.desc = s.desc;
+            creativeSelect.appendChild(opt);
+          });
+        }
+      }
+
+      function setCategory(cat) {
+        currentCategory = cat;
+        // Tab buttons styling
+        const activeClass = 'py-2.5 px-3 rounded-lg font-semibold text-xs sm:text-sm transition text-center flex items-center justify-center gap-1.5 bg-brand text-white shadow-sm';
+        const inactiveClass = 'py-2.5 px-3 rounded-lg font-semibold text-xs sm:text-sm transition text-center flex items-center justify-center gap-1.5 text-muted hover:text-dark';
+
+        tabBtnApparel.className = cat === 'APPAREL' ? activeClass : inactiveClass;
+        tabBtnMerch.className = cat === 'MERCH' ? activeClass : inactiveClass;
+        tabBtnCreative.className = cat === 'DESIGN' ? activeClass : inactiveClass;
+
+        if (cat === 'APPAREL' || cat === 'MERCH') {
+          populateSelectOptions(cat);
+          sectionApparel.classList.remove('hidden');
+          sectionCreative.classList.add('hidden');
+          sectionApparelTitle.textContent = cat === 'APPAREL' 
+            ? 'Spesifikasi Apparel & Matrix Ukuran (ERP)' 
+            : 'Spesifikasi Merchandise & Aksesoris (ERP)';
+          document.getElementById('product-select-label').textContent = cat === 'APPAREL' ? 'Pilih Item Produk Apparel *' : 'Pilih Item Merchandise *';
+        } else {
+          populateSelectOptions('DESIGN');
+          sectionCreative.classList.remove('hidden');
+          sectionApparel.classList.add('hidden');
+        }
+        updateBillCalculation();
+      }
+
+      tabBtnApparel.addEventListener('click', () => setCategory('APPAREL'));
+      tabBtnMerch.addEventListener('click', () => setCategory('MERCH'));
+      tabBtnCreative.addEventListener('click', () => setCategory('DESIGN'));
 
       // Check URL Query for Pre-selection
       const urlParams = new URLSearchParams(window.location.search);
       const preProduct = urlParams.get('product') || urlParams.get('service');
       const reorderId = urlParams.get('reorder');
 
+      // Initialize
+      populateSelectOptions('APPAREL');
+      setCategory('APPAREL');
+
       if (preProduct) {
-        // Check if matches apparel
-        const matchedApp = apparelList.find(s => s.name.toLowerCase() === preProduct.toLowerCase() || s.serviceId === preProduct);
-        if (matchedApp) {
-          apparelSelect.value = matchedApp.serviceId;
-          setTab('apparel');
-        } else {
-          const matchedCreat = creativeList.find(s => s.name.toLowerCase() === preProduct.toLowerCase() || s.serviceId === preProduct);
-          if (matchedCreat) {
-            creativeSelect.value = matchedCreat.serviceId;
-            setTab('creative');
+        const matchedSrv = services.find(s => s.name.toLowerCase() === preProduct.toLowerCase() || s.serviceId === preProduct);
+        if (matchedSrv) {
+          if (matchedSrv.category === 'MERCH') {
+            setCategory('MERCH');
+            apparelSelect.value = matchedSrv.serviceId;
+          } else if (matchedSrv.category === 'DESIGN') {
+            setCategory('DESIGN');
+            creativeSelect.value = matchedSrv.serviceId;
+          } else {
+            setCategory('APPAREL');
+            apparelSelect.value = matchedSrv.serviceId;
           }
         }
       }
@@ -533,7 +704,7 @@
           }
 
           if (pastOrder.sizeBreakdown) {
-            setTab('apparel');
+            setCategory('APPAREL');
             apparelSelect.value = pastOrder.serviceId;
             document.getElementById('size-s').value = pastOrder.sizeBreakdown.S || 0;
             document.getElementById('size-m').value = pastOrder.sizeBreakdown.M || 0;
@@ -544,31 +715,12 @@
         }
       }
 
-      function setTab(type) {
-        currentServiceType = type;
-        if (type === 'apparel') {
-          tabBtnApparel.className = 'py-3 px-4 rounded-lg font-semibold text-sm transition text-center flex items-center justify-center gap-2 bg-brand text-white shadow-sm';
-          tabBtnCreative.className = 'py-3 px-4 rounded-lg font-semibold text-sm transition text-center flex items-center justify-center gap-2 text-muted hover:text-dark';
-          sectionApparel.classList.remove('hidden');
-          sectionCreative.classList.add('hidden');
-        } else {
-          tabBtnCreative.className = 'py-3 px-4 rounded-lg font-semibold text-sm transition text-center flex items-center justify-center gap-2 bg-brand text-white shadow-sm';
-          tabBtnApparel.className = 'py-3 px-4 rounded-lg font-semibold text-sm transition text-center flex items-center justify-center gap-2 text-muted hover:text-dark';
-          sectionCreative.classList.remove('hidden');
-          sectionApparel.classList.add('hidden');
-        }
-        updateBillCalculation();
-      }
-
-      tabBtnApparel.addEventListener('click', () => setTab('apparel'));
-      tabBtnCreative.addEventListener('click', () => setTab('creative'));
-
       apparelSelect.addEventListener('change', updateBillCalculation);
       creativeSelect.addEventListener('change', updateBillCalculation);
       sizeInputs.forEach(inp => inp.addEventListener('input', updateBillCalculation));
 
       function updateBillCalculation() {
-        if (currentServiceType === 'apparel') {
+        if (currentCategory === 'APPAREL' || currentCategory === 'MERCH') {
           const selectedOpt = apparelSelect.options[apparelSelect.selectedIndex];
           if (!selectedOpt) return;
           apparelDesc.textContent = selectedOpt.dataset.desc || '';
@@ -648,7 +800,7 @@
         let specsDesc = '';
         let totalPrice = 0;
 
-        if (currentServiceType === 'apparel') {
+        if (currentCategory === 'APPAREL' || currentCategory === 'MERCH') {
           const s = parseInt(document.getElementById('size-s').value, 10) || 0;
           const m = parseInt(document.getElementById('size-m').value, 10) || 0;
           const l = parseInt(document.getElementById('size-l').value, 10) || 0;
@@ -663,7 +815,7 @@
 
           srvId = apparelSelect.value;
           const matchedSrv = (freshDB.services || []).find(x => x.serviceId === srvId);
-          srvName = matchedSrv ? matchedSrv.name : 'Custom Apparel';
+          srvName = matchedSrv ? matchedSrv.name : (currentCategory === 'APPAREL' ? 'Custom Apparel' : 'Custom Merchandise');
           serviceMode = 'HYBRID';
           sizeBreakdown = { S: s, M: m, L: l, XL: xl, XXL: xxl };
 
@@ -693,29 +845,14 @@
 
         const dpAmount = Math.round(totalPrice * 0.5);
 
-        // 1. Manage Customer
-        let customer = (freshDB.customers || []).find(c => c.whatsapp === phone || c.name.toLowerCase() === name.toLowerCase());
-        if (!customer) {
-          const nextCustNum = (freshDB.customers || []).length + 1;
-          const custId = `CUST-${String(nextCustNum).padStart(3, '0')}`;
-          customer = {
-            customerId: custId,
-            name: name,
-            organization: org,
-            whatsapp: phone,
-            email: email,
-            address: address,
-            segment: 'Baru',
-            totalOrders: 1,
-            totalSpent: totalPrice
-          };
-          freshDB.customers.push(customer);
-        } else {
-          customer.totalOrders += 1;
-          customer.totalSpent += totalPrice;
-          customer.segment = customer.totalOrders > 1 ? 'Repeat' : customer.segment;
-          customer.address = address; // update latest address
-        }
+        // 1. CRM Module: Auto Customer Detection by WhatsApp & Segment Upgrade
+        const customer = window.DrizzleApp.registerOrUpdateCustomer({
+          name: name,
+          organization: org,
+          whatsapp: phone,
+          email: email,
+          address: address
+        }, totalPrice);
 
         // 2. Generate Order ID
         const orderId = window.DrizzleApp.generateNextOrderId();
@@ -744,29 +881,44 @@
           historyLogs: [
             {
               stage: 'DESIGN',
-              note: `Pesanan terdaftar via web portal oleh ${name} [${org}]. Menunggu konfirmasi DP 50%.`,
+              note: `Pesanan terdaftar via web portal oleh ${name} [${org}]. Tagihan DP 50% (${window.DrizzleApp.formatRupiah(dpAmount)}) diterbitkan.`,
               timestamp: `${dateStr} ${timeStr}`,
               author: 'Customer Portal'
             }
           ]
         };
 
-        freshDB.orders.unshift(newOrder);
+        const dbNow = window.DrizzleApp.getDB();
+        dbNow.orders.unshift(newOrder);
 
         // 3. MRP & 1:1 Packaging Rule Check
         if (serviceMode === 'HYBRID' || serviceMode === 'PRODUCTION') {
           // Check Polymailer & Card
-          const poly = (freshDB.materials || []).find(m => m.materialId === 'MAT-05');
-          const card = (freshDB.materials || []).find(m => m.materialId === 'MAT-06');
+          const poly = (dbNow.materials || []).find(m => m.materialId === 'MAT-05');
+          const card = (dbNow.materials || []).find(m => m.materialId === 'MAT-06');
           if (poly) poly.currentStock = Math.max(0, poly.currentStock - qty);
           if (card) card.currentStock = Math.max(0, card.currentStock - qty);
         }
 
         // Save DB
-        window.DrizzleApp.saveDB(freshDB);
+        window.DrizzleApp.saveDB(dbNow);
 
-        // Show Modal
+        // Show Modal with CRM & Billing Details
         document.getElementById('modal-tracking-code').textContent = orderId;
+        document.getElementById('modal-cust-name').textContent = `${customer.name} [${customer.organization || 'Umum'}] • WA: ${customer.whatsapp}`;
+        
+        const segBadge = document.getElementById('modal-cust-segment');
+        segBadge.textContent = `${customer.segment} (${customer.totalOrders}x Order)`;
+        if (customer.segment === 'Instansi') {
+          segBadge.className = 'font-mono font-bold px-2 py-0.5 rounded bg-purple-50 text-purple-700 border border-purple-200 text-[10px]';
+        } else if (customer.segment === 'Repeat') {
+          segBadge.className = 'font-mono font-bold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px]';
+        } else {
+          segBadge.className = 'font-mono font-bold px-2 py-0.5 rounded bg-brandLight text-brand border border-brand/20 text-[10px]';
+        }
+
+        document.getElementById('modal-total-bill').textContent = window.DrizzleApp.formatRupiah(totalPrice);
+        document.getElementById('modal-dp-bill').textContent = window.DrizzleApp.formatRupiah(dpAmount);
         document.getElementById('modal-goto-tracking-btn').href = `tracking.html?code=${orderId}`;
         document.getElementById('order-success-modal').classList.remove('hidden');
       });

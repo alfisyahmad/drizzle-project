@@ -260,9 +260,20 @@
 
     <!-- ==================== TAB 2: DIREKTORI PELANGGAN (CRM) ==================== -->
     <div id="tab-crm" class="hidden space-y-4">
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-        <input type="text" id="crm-search" oninput="renderCRMTable()" placeholder="Cari nama pelanggan, WhatsApp, atau segmentasi..." class="w-full sm:w-80 bg-card border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand">
-        <span class="text-xs text-muted font-medium" id="crm-count-badge">Menampilkan 0 Pelanggan</span>
+      <!-- CRM Header & Segment Filter -->
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 bg-card border border-borderCard p-3.5 rounded-xl shadow-sm">
+        <div class="flex flex-wrap items-center gap-1.5">
+          <span class="text-xs font-mono font-bold text-muted uppercase mr-1">Filter Segmen:</span>
+          <button onclick="setCRMSegmentFilter('ALL')" id="crm-filter-all" class="px-3 py-1 rounded-lg text-xs font-semibold bg-brand text-white transition shadow-sm">Semua</button>
+          <button onclick="setCRMSegmentFilter('Baru')" id="crm-filter-baru" class="px-3 py-1 rounded-lg text-xs font-semibold bg-canvas text-muted hover:text-dark border border-borderCard transition">Baru</button>
+          <button onclick="setCRMSegmentFilter('Repeat')" id="crm-filter-repeat" class="px-3 py-1 rounded-lg text-xs font-semibold bg-canvas text-muted hover:text-dark border border-borderCard transition">Repeat</button>
+          <button onclick="setCRMSegmentFilter('Instansi')" id="crm-filter-instansi" class="px-3 py-1 rounded-lg text-xs font-semibold bg-canvas text-muted hover:text-dark border border-borderCard transition">Instansi</button>
+        </div>
+
+        <div class="flex items-center gap-2 w-full md:w-auto">
+          <input type="text" id="crm-search" oninput="renderCRMTable()" placeholder="Cari nama, WhatsApp, atau instansi..." class="w-full sm:w-72 bg-canvas border border-borderCard rounded-lg px-3.5 py-1.5 text-xs text-dark focus:outline-none focus:border-brand">
+          <span class="text-xs text-muted font-medium whitespace-nowrap" id="crm-count-badge">0 Pelanggan</span>
+        </div>
       </div>
 
       <div class="bg-card border border-borderCard rounded-xl shadow-sm overflow-hidden">
@@ -277,7 +288,7 @@
                 <th class="px-4 py-3 text-center">Total Order</th>
                 <th class="px-4 py-3">Total Belanja (LTV)</th>
                 <th class="px-4 py-3">Alamat Pengiriman Utama</th>
-                <th class="px-4 py-3 text-right">Aksi</th>
+                <th class="px-4 py-3 text-right">Riwayat & Aksi</th>
               </tr>
             </thead>
             <tbody id="crm-table-body" class="divide-y divide-borderCard">
@@ -485,6 +496,75 @@
           <button type="submit" class="px-4 py-2 bg-brand text-white font-bold rounded-lg text-xs hover:bg-brandDark transition">Simpan Resi</button>
         </div>
       </form>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL RIWAYAT ORDER PELANGGAN (CRM) ==================== -->
+  <div id="customer-orders-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-card border border-borderCard rounded-2xl max-w-3xl w-full p-6 sm:p-7 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-start pb-3 border-b border-borderCard">
+        <div>
+          <span class="text-[10px] font-mono text-brand font-bold uppercase tracking-wider block">CRM Order History Record</span>
+          <h3 class="text-lg font-extrabold text-dark" id="cust-modal-title">Riwayat Order Klien</h3>
+        </div>
+        <button onclick="closeCustomerOrdersModal()" class="text-muted hover:text-dark text-xl font-bold px-2">&times;</button>
+      </div>
+
+      <!-- Customer Profile Header Card -->
+      <div class="bg-canvas border border-borderCard rounded-xl p-4 grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+        <div>
+          <span class="text-muted block text-[10px] uppercase font-mono">PIC / Nama Klien:</span>
+          <strong class="font-bold text-dark block" id="cust-modal-name">-</strong>
+        </div>
+        <div>
+          <span class="text-muted block text-[10px] uppercase font-mono">Lembaga / Organisasi:</span>
+          <strong class="font-bold text-dark block" id="cust-modal-org">-</strong>
+        </div>
+        <div>
+          <span class="text-muted block text-[10px] uppercase font-mono">WhatsApp:</span>
+          <a id="cust-modal-wa" href="#" target="_blank" class="font-mono font-bold text-brand hover:underline block">-</a>
+        </div>
+        <div>
+          <span class="text-muted block text-[10px] uppercase font-mono">Segmen & LTV:</span>
+          <div class="flex items-center gap-1.5 mt-0.5">
+            <span id="cust-modal-seg" class="px-1.5 py-0.5 rounded text-[10px] font-mono font-bold border">-</span>
+            <strong class="font-mono text-dark" id="cust-modal-spent">Rp 0</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Orders List Table -->
+      <div class="space-y-2">
+        <h4 class="text-xs font-bold text-dark uppercase font-mono">Daftar Transaksi Pesanan:</h4>
+        <div class="border border-borderCard rounded-xl overflow-hidden shadow-sm">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-canvas text-muted font-mono uppercase text-[10px] border-b border-borderCard">
+                <tr>
+                  <th class="px-3.5 py-2.5">No. Order</th>
+                  <th class="px-3.5 py-2.5">Tanggal</th>
+                  <th class="px-3.5 py-2.5">Item Layanan</th>
+                  <th class="px-3.5 py-2.5 text-center">Qty</th>
+                  <th class="px-3.5 py-2.5">Total Harga</th>
+                  <th class="px-3.5 py-2.5">Status Bayar</th>
+                  <th class="px-3.5 py-2.5">Tahap Produksi</th>
+                  <th class="px-3.5 py-2.5 text-right">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="cust-orders-modal-body" class="divide-y divide-borderCard font-sans">
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-3 border-t border-borderCard flex justify-between items-center text-xs">
+        <span class="text-muted">Data CRM tersinkronisasi penuh dengan ERP & SCM.</span>
+        <button type="button" onclick="closeCustomerOrdersModal()" class="px-4 py-2 bg-canvas border border-borderCard hover:border-dark text-dark rounded-lg font-semibold text-xs transition">
+          Tutup
+        </button>
+      </div>
     </div>
   </div>
 
@@ -742,24 +822,45 @@
       renderAll();
     });
 
-    // 3. CRM TABLE RENDERER
+    // 3. CRM TABLE & ORDER HISTORY RENDERER
+    let crmSegmentFilter = 'ALL';
+
+    function setCRMSegmentFilter(segment) {
+      crmSegmentFilter = segment;
+      const filters = ['ALL', 'Baru', 'Repeat', 'Instansi'];
+      filters.forEach(f => {
+        const btn = document.getElementById(`crm-filter-${f.toLowerCase()}`);
+        if (!btn) return;
+        if (f === segment) {
+          btn.className = 'px-3 py-1 rounded-lg text-xs font-semibold bg-brand text-white transition shadow-sm';
+        } else {
+          btn.className = 'px-3 py-1 rounded-lg text-xs font-semibold bg-canvas text-muted hover:text-dark border border-borderCard transition';
+        }
+      });
+      renderCRMTable();
+    }
+
     function renderCRMTable() {
       const db = window.DrizzleApp.getDB();
       const customers = db.customers || [];
+      const orders = db.orders || [];
       const tbody = document.getElementById('crm-table-body');
       tbody.innerHTML = '';
 
       const search = (document.getElementById('crm-search').value || '').toLowerCase();
-      const filtered = customers.filter(c => 
-        (c.name || '').toLowerCase().includes(search) || 
-        (c.organization || '').toLowerCase().includes(search) || 
-        (c.whatsapp || '').includes(search) || 
-        (c.segment || '').toLowerCase().includes(search)
-      );
+      const filtered = customers.filter(c => {
+        const matchSearch = (c.name || '').toLowerCase().includes(search) || 
+                            (c.organization || '').toLowerCase().includes(search) || 
+                            (c.whatsapp || '').includes(search) || 
+                            (c.segment || '').toLowerCase().includes(search);
+        const matchSegment = (crmSegmentFilter === 'ALL') || (c.segment === crmSegmentFilter);
+        return matchSearch && matchSegment;
+      });
 
       document.getElementById('crm-count-badge').textContent = `Menampilkan ${filtered.length} Pelanggan`;
 
       filtered.forEach(c => {
+        const cOrders = orders.filter(o => o.customerId === c.customerId);
         const tr = document.createElement('tr');
         tr.className = 'hover:bg-canvas/50 transition';
 
@@ -774,22 +875,98 @@
             <span class="text-[11px] text-muted">${c.organization || 'Umum'}</span>
           </td>
           <td class="px-4 py-3 font-mono">
-            <a href="https://wa.me/${c.whatsapp.replace(/^0/, '62')}" target="_blank" class="text-brand hover:underline flex items-center gap-1">
+            <a href="https://wa.me/${c.whatsapp.replace(/[^\d]/g, '').replace(/^0/, '62')}" target="_blank" class="text-brand hover:underline flex items-center gap-1">
               <span>💬 ${c.whatsapp}</span>
             </a>
           </td>
           <td class="px-4 py-3">
             <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${segBadge}">${c.segment}</span>
           </td>
-          <td class="px-4 py-3 text-center font-mono font-bold">${c.totalOrders || 1}</td>
-          <td class="px-4 py-3 font-mono font-bold text-dark">${window.DrizzleApp.formatRupiah(c.totalSpent || 0)}</td>
+          <td class="px-4 py-3 text-center font-mono font-bold tabular-nums">${c.totalOrders || cOrders.length || 1}</td>
+          <td class="px-4 py-3 font-mono font-bold text-dark tabular-nums">${window.DrizzleApp.formatRupiah(c.totalSpent || 0)}</td>
           <td class="px-4 py-3 text-muted max-w-xs truncate">${c.address || '-'}</td>
-          <td class="px-4 py-3 text-right">
-            <a href="order.html?reorder" class="px-2.5 py-1 rounded bg-canvas border border-borderCard hover:border-dark text-[11px] font-medium">Buat Order</a>
+          <td class="px-4 py-3 text-right whitespace-nowrap">
+            <button onclick="openCustomerOrdersModal('${c.customerId}')" class="px-2.5 py-1 rounded bg-brandLight text-brand hover:bg-brand hover:text-white transition font-mono font-bold text-[10px] mr-1 shadow-sm">
+              Riwayat (${cOrders.length})
+            </button>
+            <a href="order.html?reorder" class="px-2 py-1 rounded bg-canvas border border-borderCard hover:border-dark text-[10px] text-muted">
+              + Order
+            </a>
           </td>
         `;
         tbody.appendChild(tr);
       });
+    }
+
+    function openCustomerOrdersModal(customerId) {
+      const db = window.DrizzleApp.getDB();
+      const cust = (db.customers || []).find(c => c.customerId === customerId);
+      if (!cust) return;
+
+      const custOrders = (db.orders || []).filter(o => o.customerId === customerId);
+
+      document.getElementById('cust-modal-title').textContent = `Riwayat Order — ${cust.name}`;
+      document.getElementById('cust-modal-name').textContent = cust.name;
+      document.getElementById('cust-modal-org').textContent = cust.organization || 'Umum';
+
+      const waLink = document.getElementById('cust-modal-wa');
+      waLink.textContent = cust.whatsapp;
+      waLink.href = `https://wa.me/${cust.whatsapp.replace(/[^\d]/g, '').replace(/^0/, '62')}`;
+
+      const segBadge = document.getElementById('cust-modal-seg');
+      segBadge.textContent = cust.segment;
+      if (cust.segment === 'Instansi') {
+        segBadge.className = 'px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-50 text-purple-700 border border-purple-200';
+      } else if (cust.segment === 'Repeat') {
+        segBadge.className = 'px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-50 text-emerald-700 border border-emerald-200';
+      } else {
+        segBadge.className = 'px-1.5 py-0.5 rounded text-[10px] font-mono font-bold bg-brandLight text-brand border border-brand/20';
+      }
+
+      document.getElementById('cust-modal-spent').textContent = window.DrizzleApp.formatRupiah(cust.totalSpent || 0);
+
+      // Render Orders Table
+      const modalBody = document.getElementById('cust-orders-modal-body');
+      modalBody.innerHTML = '';
+
+      if (custOrders.length === 0) {
+        modalBody.innerHTML = '<tr><td colspan="8" class="text-center py-4 text-muted text-xs">Belum ada riwayat pesanan untuk pelanggan ini.</td></tr>';
+      } else {
+        custOrders.forEach(ord => {
+          const row = document.createElement('tr');
+          row.className = 'hover:bg-canvas/50 transition';
+
+          let payBadge = 'bg-amber-50 text-amber-700 border-amber-200';
+          if (ord.paymentStatus === 'LUNAS') payBadge = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+          else if (ord.paymentStatus === 'DP_50_PAID') payBadge = 'bg-sky-50 text-sky-700 border-sky-200';
+
+          row.innerHTML = `
+            <td class="px-3.5 py-2.5 font-mono font-bold text-dark">${ord.orderId}</td>
+            <td class="px-3.5 py-2.5 font-mono text-muted text-[11px]">${ord.createdAt ? ord.createdAt.split(' ')[0] : '-'}</td>
+            <td class="px-3.5 py-2.5 font-medium text-dark">${ord.serviceName || ord.serviceId}</td>
+            <td class="px-3.5 py-2.5 text-center font-mono font-bold">${ord.qty} pcs</td>
+            <td class="px-3.5 py-2.5 font-mono font-bold text-dark tabular-nums">${window.DrizzleApp.formatRupiah(ord.totalPrice)}</td>
+            <td class="px-3.5 py-2.5">
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${payBadge}">${ord.paymentStatus}</span>
+            </td>
+            <td class="px-3.5 py-2.5">
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-card border border-borderCard text-dark">${ord.kanbanStage}</span>
+            </td>
+            <td class="px-3.5 py-2.5 text-right font-mono text-[11px]">
+              <a href="tracking.html?code=${ord.orderId}" target="_blank" class="text-brand font-bold hover:underline">
+                Lacak &rarr;
+              </a>
+            </td>
+          `;
+          modalBody.appendChild(row);
+        });
+      }
+
+      document.getElementById('customer-orders-modal').classList.remove('hidden');
+    }
+
+    function closeCustomerOrdersModal() {
+      document.getElementById('customer-orders-modal').classList.add('hidden');
     }
 
     // 4. SCM MATERIALS & PO RENDERER

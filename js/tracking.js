@@ -1,6 +1,7 @@
 /**
  * DrizzleOS — Tracking Engine & 5-Stage Stepper
  * Relies on window.DrizzleApp (drizzle_sim_db)
+ * Supports searching by: Order ID (DRZ-2026-XXX) or WhatsApp Number
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -9,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const resultBox = document.getElementById('tracking-result-box');
   const notFoundBox = document.getElementById('tracking-not-found');
   const chipsContainer = document.getElementById('sample-chips');
+  const multiOrdersNav = document.getElementById('multi-orders-nav');
 
   const KANBAN_STAGES = [
     { key: 'DESIGN', label: '1. Design & Approval', desc: 'Mockup disetujui & verifikasi DP.' },
@@ -18,19 +20,38 @@ document.addEventListener('DOMContentLoaded', () => {
     { key: 'SHIPPED', label: '5. Shipped & Completed', desc: 'Serah terima / kurir kargo.' }
   ];
 
-  // 1. Populate Sample Chips
+  // 1. Populate Sample Chips (Orders + WhatsApp Numbers)
   if (chipsContainer && window.DrizzleApp) {
     const db = window.DrizzleApp.getDB();
     const orders = db.orders || [];
+    const customers = db.customers || [];
     chipsContainer.innerHTML = '';
-    orders.slice(0, 6).forEach(o => {
+
+    // Sample Order Chips
+    orders.slice(0, 4).forEach(o => {
       const btn = document.createElement('button');
       btn.type = 'button';
-      btn.className = 'px-3 py-1 rounded-lg bg-card hover:bg-subtle text-xs font-mono font-bold text-dark border border-borderCard transition shadow-sm';
+      btn.className = 'px-2.5 py-1 rounded-lg bg-card hover:bg-canvas text-xs font-mono font-bold text-dark border border-borderCard transition shadow-sm';
       btn.textContent = o.orderId;
+      btn.title = `Lacak Order ${o.orderId}`;
       btn.addEventListener('click', () => {
         if (inputCode) inputCode.value = o.orderId;
         lookupTracking(o.orderId);
+      });
+      chipsContainer.appendChild(btn);
+    });
+
+    // Sample WhatsApp Chips
+    const phoneChips = customers.filter(c => c.whatsapp).slice(0, 2);
+    phoneChips.forEach(c => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'px-2.5 py-1 rounded-lg bg-brandLight text-brand hover:bg-brand hover:text-white text-xs font-mono font-bold border border-brand/20 transition shadow-sm flex items-center gap-1';
+      btn.innerHTML = `<span>WA: ${c.whatsapp}</span>`;
+      btn.title = `Lacak via WhatsApp (${c.name})`;
+      btn.addEventListener('click', () => {
+        if (inputCode) inputCode.value = c.whatsapp;
+        lookupTracking(c.whatsapp);
       });
       chipsContainer.appendChild(btn);
     });
@@ -40,38 +61,83 @@ document.addEventListener('DOMContentLoaded', () => {
   if (searchForm) {
     searchForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const code = inputCode ? inputCode.value.trim().toUpperCase() : '';
+      const code = inputCode ? inputCode.value.trim() : '';
       lookupTracking(code);
     });
   }
 
   // 3. Check Query URL
   const urlParams = new URLSearchParams(window.location.search);
-  const paramCode = urlParams.get('code') || urlParams.get('orderId');
+  const paramCode = urlParams.get('code') || urlParams.get('orderId') || urlParams.get('wa') || urlParams.get('phone');
   if (paramCode && inputCode) {
     inputCode.value = paramCode;
     lookupTracking(paramCode);
   }
 
-  // Main Lookup Function
-  window.lookupTracking = function(rawCode) {
-    const code = (rawCode || '').trim().toUpperCase();
-    if (!code || !window.DrizzleApp) return;
+  // Main Lookup Function (Order ID or WhatsApp Number)
+  window.lookupTracking = function(rawQuery) {
+    const query = (rawQuery || '').trim();
+    if (!query || !window.DrizzleApp) return;
 
-    const db = window.DrizzleApp.getDB();
-    const order = (db.orders || []).find(o => o.orderId === code || o.tracking_code === code);
+    const result = window.DrizzleApp.searchOrdersOrCustomer ? window.DrizzleApp.searchOrdersOrCustomer(query) : null;
 
-    if (!order) {
+    if (!result || !result.activeOrder) {
       if (resultBox) resultBox.classList.add('hidden');
       if (notFoundBox) notFoundBox.classList.remove('hidden');
+      if (multiOrdersNav) multiOrdersNav.classList.add('hidden');
       return;
     }
 
     if (notFoundBox) notFoundBox.classList.add('hidden');
     if (resultBox) resultBox.classList.remove('hidden');
 
-    const customer = (db.customers || []).find(c => c.customerId === order.customerId) || {};
+    const customer = result.customer || {};
+    const allOrders = result.allOrders || [result.activeOrder];
 
+    // Render Multi-Orders Navigation if client has more than 1 order
+    renderMultiOrdersNav(allOrders, result.activeOrder.orderId, customer);
+
+    // Render the active order details
+    renderOrderView(result.activeOrder, customer);
+  };
+
+  function renderMultiOrdersNav(orders, activeOrderId, customer) {
+    if (!multiOrdersNav) return;
+    if (!orders || orders.length <= 1) {
+      multiOrdersNav.classList.add('hidden');
+      multiOrdersNav.innerHTML = '';
+      return;
+    }
+
+    multiOrdersNav.classList.remove('hidden');
+    multiOrdersNav.innerHTML = `
+      <div class="p-3.5 bg-brandLight/70 border border-brand/20 rounded-xl space-y-2">
+        <div class="flex items-center justify-between text-xs">
+          <span class="font-bold text-dark">Ditemukan ${orders.length} Pesanan untuk: <strong>${customer.name || 'Pelanggan'}</strong> (${customer.whatsapp || '-'})</span>
+          <span class="text-[10px] font-mono font-bold text-brand uppercase bg-card px-2 py-0.5 rounded border border-brand/20">CRM WhatsApp Filter</span>
+        </div>
+        <div class="flex flex-wrap gap-2 pt-1" id="multi-orders-btn-list"></div>
+      </div>
+    `;
+
+    const btnList = multiOrdersNav.querySelector('#multi-orders-btn-list');
+    orders.forEach(ord => {
+      const isSelected = ord.orderId === activeOrderId;
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = isSelected 
+        ? 'px-3 py-1.5 rounded-lg text-xs font-mono font-bold bg-brand text-white shadow-sm transition'
+        : 'px-3 py-1.5 rounded-lg text-xs font-mono font-bold bg-card text-dark border border-borderCard hover:border-brand transition shadow-sm';
+      btn.textContent = `${ord.orderId} (${ord.serviceName || ord.serviceId})`;
+      btn.addEventListener('click', () => {
+        renderMultiOrdersNav(orders, ord.orderId, customer);
+        renderOrderView(ord, customer);
+      });
+      btnList.appendChild(btn);
+    });
+  }
+
+  function renderOrderView(order, customer) {
     // Fill Summary Cards
     const codeEl = document.getElementById('res-code');
     if (codeEl) codeEl.textContent = order.orderId;
@@ -94,17 +160,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const createdAtEl = document.getElementById('res-created-at');
     if (createdAtEl) createdAtEl.textContent = `Dipesan: ${order.createdAt || '-'}`;
 
-    // Payment Badge
+    // Payment Badge (Belum Bayar / DP 50% Lunas / Lunas)
     const payBadge = document.getElementById('res-pay-badge');
     if (payBadge) {
       if (order.paymentStatus === 'LUNAS') {
-        payBadge.textContent = 'LUNAS (100%)';
+        payBadge.textContent = 'Lunas';
         payBadge.className = 'text-xs font-bold font-mono px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200';
       } else if (order.paymentStatus === 'DP_50_PAID') {
-        payBadge.textContent = 'DP 50% TERVERIFIKASI';
+        payBadge.textContent = 'DP 50% Lunas';
         payBadge.className = 'text-xs font-bold font-mono px-3 py-1 rounded-full bg-sky-50 text-sky-700 border border-sky-200';
       } else {
-        payBadge.textContent = 'MENUNGGU DP';
+        payBadge.textContent = 'Belum Bayar';
         payBadge.className = 'text-xs font-bold font-mono px-3 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200';
       }
     }
@@ -157,7 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Render History Logs Timeline
     renderHistoryTimeline(order.historyLogs || []);
-  };
+  }
 
   function renderStepper(currentStageKey) {
     const container = document.getElementById('stepper-container');
@@ -221,7 +287,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="flex items-center gap-2">
             <span class="text-xs font-bold text-dark font-mono">[${log.stage}]</span>
             <span class="text-[10px] text-muted font-mono">${log.timestamp}</span>
-            <span class="text-[10px] px-1.5 py-0.5 rounded bg-subtle text-muted">${log.author || 'Sistem'}</span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-canvas text-muted">${log.author || 'Sistem'}</span>
           </div>
           <p class="text-xs text-dark mt-1">${log.note}</p>
         </div>

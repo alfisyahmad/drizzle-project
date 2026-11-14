@@ -79,14 +79,14 @@
     <div class="text-center max-w-xl mx-auto">
       <span class="text-xs font-mono font-bold text-brand uppercase tracking-wider block">Customer Tracking Portal</span>
       <h1 class="text-3xl sm:text-4xl font-extrabold text-dark mt-1">Lacak Status Pesanan</h1>
-      <p class="text-sm text-muted mt-2">Masukkan Kode Pesanan unik Anda untuk memantau status pembayaran DP, progres produksi 5 tahap garmen, hingga nomor resi pengiriman.</p>
+      <p class="text-sm text-muted mt-2">Masukkan Kode Pesanan unik Anda (<span class="font-mono text-dark font-semibold">DRZ-2026-XXX</span>) atau Nomor WhatsApp untuk memantau status verifikasi pembayaran DP, progres 5 tahap produksi, hingga nomor resi kargo.</p>
     </div>
 
     <!-- Search Box -->
-    <div class="bg-card border border-borderCard rounded-2xl p-4 sm:p-5 shadow-sm">
+    <div class="bg-card border border-borderCard rounded-2xl p-4 sm:p-5 shadow-sm space-y-4">
       <form id="tracking-search-form" class="flex flex-col sm:flex-row gap-2.5">
         <div class="relative flex-1">
-          <input type="text" id="tracking-input" placeholder="Masukkan Kode: DRZ-2026-001..." class="w-full bg-canvas border border-borderCard rounded-xl px-4 py-3 text-sm text-dark font-mono font-bold uppercase placeholder:normal-case placeholder:font-normal focus:outline-none focus:border-brand">
+          <input type="text" id="tracking-input" placeholder="Masukkan Kode Order (DRZ-2026-001) atau Nomor WhatsApp (08xxx)..." class="w-full bg-canvas border border-borderCard rounded-xl px-4 py-3 text-sm text-dark font-mono font-bold placeholder:normal-case placeholder:font-normal focus:outline-none focus:border-brand">
         </div>
         <button type="submit" class="bg-brand hover:bg-brandDark text-white font-bold px-6 py-3 rounded-xl transition text-sm flex items-center justify-center gap-2 shadow-sm">
           <span>Lacak Sekarang</span>
@@ -94,14 +94,17 @@
         </button>
       </form>
 
-      <!-- Sample Chips for Testing -->
-      <div class="mt-4 pt-3.5 border-t border-borderCard flex flex-wrap items-center gap-2 text-xs">
-        <span class="text-muted font-medium">Contoh Kode Pesanan:</span>
+      <!-- Sample Chips for Testing (Order IDs & WhatsApp) -->
+      <div class="pt-3 border-t border-borderCard flex flex-wrap items-center gap-2 text-xs">
+        <span class="text-muted font-medium">Contoh Kode / WhatsApp:</span>
         <div id="sample-chips" class="flex flex-wrap gap-1.5">
           <!-- Populated via js/tracking.js -->
         </div>
       </div>
     </div>
+
+    <!-- MULTI-ORDERS CONTAINER (Shown if searched by WhatsApp with multiple orders) -->
+    <div id="multi-orders-nav" class="hidden"></div>
 
     <!-- NOT FOUND STATE -->
     <div id="tracking-not-found" class="hidden bg-card border border-borderCard rounded-2xl p-8 text-center space-y-3">
@@ -110,7 +113,7 @@
       </div>
       <h3 class="font-bold text-dark text-lg">Pesanan Tidak Ditemukan</h3>
       <p class="text-xs text-muted max-w-md mx-auto">
-        Kode pesanan yang Anda masukkan tidak terdaftar di sistem. Mohon periksa kembali ejaan kode atau hubungi admin Drizzle Project via WhatsApp.
+        Kode pesanan atau nomor WhatsApp yang Anda masukkan tidak terdaftar di sistem. Mohon periksa kembali ejaan kode atau nomor WhatsApp Anda.
       </p>
     </div>
 

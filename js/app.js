@@ -1392,12 +1392,149 @@ function updateShippingInfo(orderId, carrier, resi) {
   return { success: true, order };
 }
 
+// Helper: Clean & Normalize Phone Numbers for CRM Matching
+function cleanPhoneNumber(phone) {
+  if (!phone) return '';
+  let cleaned = String(phone).replace(/[^\d+]/g, '').trim();
+  if (cleaned.startsWith('+62')) {
+    cleaned = '0' + cleaned.substring(3);
+  } else if (cleaned.startsWith('62')) {
+    cleaned = '0' + cleaned.substring(2);
+  }
+  return cleaned;
+}
+
+// CRM Module: Register or Detect Customer by WhatsApp & Update Segment Automatically
+function registerOrUpdateCustomer(custData, orderTotalPrice = 0) {
+  const db = getDB();
+  if (!db.customers) db.customers = [];
+
+  const rawPhone = custData.whatsapp || '';
+  const cleanPhone = cleanPhoneNumber(rawPhone);
+  const name = (custData.name || '').trim();
+  const org = (custData.organization || '').trim();
+  const email = (custData.email || '').trim();
+  const address = (custData.address || '').trim();
+
+  // Search existing customer by clean phone or exact name
+  let customer = db.customers.find(c => {
+    const cPhoneClean = cleanPhoneNumber(c.whatsapp);
+    return (cleanPhone && cPhoneClean && cleanPhone === cPhoneClean) ||
+           (name && c.name && c.name.toLowerCase() === name.toLowerCase());
+  });
+
+  const now = new Date().toISOString().split('T')[0];
+
+  if (!customer) {
+    // NEW CUSTOMER: Segment = "Instansi" (if has org) or "Baru"
+    const nextNum = db.customers.length + 1;
+    const custId = `CUST-${String(nextNum).padStart(3, '0')}`;
+    const initialSegment = (org && org.length > 0) ? 'Instansi' : 'Baru';
+
+    customer = {
+      customerId: custId,
+      name: name || 'Pelanggan Baru',
+      organization: org || '',
+      whatsapp: rawPhone,
+      email: email || '',
+      address: address || '',
+      segment: initialSegment,
+      totalOrders: 1,
+      totalSpent: orderTotalPrice,
+      joinedAt: now,
+      lastOrderAt: now
+    };
+    db.customers.push(customer);
+  } else {
+    // EXISTING CUSTOMER: Increment orders & spent, auto-upgrade segment to "Repeat" (or "Instansi" if org provided)
+    customer.totalOrders = (customer.totalOrders || 0) + 1;
+    customer.totalSpent = (customer.totalSpent || 0) + orderTotalPrice;
+    customer.lastOrderAt = now;
+
+    if (org && org.length > 0) {
+      customer.organization = org;
+      customer.segment = 'Instansi';
+    } else if (customer.segment !== 'Instansi') {
+      customer.segment = 'Repeat';
+    }
+
+    if (name) customer.name = name;
+    if (email) customer.email = email;
+    if (address) customer.address = address;
+    if (rawPhone) customer.whatsapp = rawPhone;
+  }
+
+  saveDB(db);
+  return customer;
+}
+
+// CRM Module: Search Orders by Order ID or WhatsApp Number
+function searchOrdersOrCustomer(rawQuery) {
+  const db = getDB();
+  const query = (rawQuery || '').trim();
+  if (!query) return null;
+
+  const orders = db.orders || [];
+  const customers = db.customers || [];
+  const cleanQ = cleanPhoneNumber(query);
+  const upperQ = query.toUpperCase();
+
+  // 1. Direct Order ID match
+  const directOrder = orders.find(o => 
+    (o.orderId && o.orderId.toUpperCase() === upperQ) ||
+    (o.tracking_code && o.tracking_code.toUpperCase() === upperQ)
+  );
+
+  if (directOrder) {
+    const cust = customers.find(c => c.customerId === directOrder.customerId) || {};
+    // Also find any other orders from the same customer
+    const siblingOrders = orders.filter(o => o.customerId === directOrder.customerId);
+    return {
+      matchType: 'ORDER',
+      activeOrder: directOrder,
+      customer: cust,
+      allOrders: siblingOrders.length > 0 ? siblingOrders : [directOrder]
+    };
+  }
+
+  // 2. WhatsApp Number match or Customer Name match
+  const matchedCustomer = customers.find(c => {
+    const cPhoneClean = cleanPhoneNumber(c.whatsapp);
+    return (cleanQ.length >= 4 && cPhoneClean && (cPhoneClean.includes(cleanQ) || cleanQ.includes(cPhoneClean))) ||
+           (c.name && c.name.toLowerCase().includes(query.toLowerCase()));
+  });
+
+  if (matchedCustomer) {
+    const custOrders = orders.filter(o => o.customerId === matchedCustomer.customerId);
+    if (custOrders.length > 0) {
+      return {
+        matchType: 'CUSTOMER',
+        customer: matchedCustomer,
+        activeOrder: custOrders[0], // Most recent order
+        allOrders: custOrders
+      };
+    } else {
+      return {
+        matchType: 'CUSTOMER_NO_ORDERS',
+        customer: matchedCustomer,
+        activeOrder: null,
+        allOrders: []
+      };
+    }
+  }
+
+  return null;
+}
+
 // Global Export to Window
 window.DrizzleApp = {
   getDB,
   saveDB,
   resetDB,
   formatRupiah,
+  cleanPhoneNumber,
+  registerOrUpdateCustomer,
+  searchOrdersOrCustomer,
   calculateTieredPrice,
   generateNextOrderId,
   generateNextPOId,
