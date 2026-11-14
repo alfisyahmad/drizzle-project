@@ -44,11 +44,31 @@ const PRODUCTION_STAGES = [
 
 // Initial SCM Raw Materials
 const INITIAL_MATERIALS = [
-  { id: 1, name: 'Kain Cotton Combed (Roll)', unit: 'Roll', stock: 45, minStock: 10, supplier: 'CV Tekstil Mandiri Bandung' },
-  { id: 2, name: 'Kain American Drill (Roll)', unit: 'Roll', stock: 28, minStock: 8, supplier: 'PT Sinar Sandang Utama' },
-  { id: 3, name: 'Kain Cotton Fleece (Roll)', unit: 'Roll', stock: 18, minStock: 5, supplier: 'PT Dunia Tekstil Bandung' },
-  { id: 4, name: 'Tinta Sablon (Plastisol/DTF)', unit: 'Kg', stock: 60, minStock: 15, supplier: 'Mitra Kimia Sablon Grafika' },
-  { id: 5, name: 'Kemasan / Packaging Drizzle', unit: 'Pcs', stock: 850, minStock: 200, supplier: 'CV Packindo Solusindo' }
+  { id: 1, name: 'Kain Cotton Combed (Roll)', unit: 'Roll', stock: 45, minStock: 10, unitCost: 1250000, supplier: 'CV Tekstil Mandiri Bandung' },
+  { id: 2, name: 'Kain American Drill (Roll)', unit: 'Roll', stock: 28, minStock: 8, unitCost: 1450000, supplier: 'PT Sinar Sandang Utama' },
+  { id: 3, name: 'Kain Cotton Fleece (Roll)', unit: 'Roll', stock: 18, minStock: 5, unitCost: 1650000, supplier: 'PT Dunia Tekstil Bandung' },
+  { id: 4, name: 'Tinta Sablon (Plastisol/DTF)', unit: 'Kg', stock: 60, minStock: 15, unitCost: 180000, supplier: 'Mitra Kimia Sablon Grafika' },
+  { id: 5, name: 'Kemasan / Packaging Drizzle', unit: 'Pcs', stock: 850, minStock: 200, unitCost: 2500, supplier: 'CV Packindo Solusindo' }
+];
+
+// Initial SCM Suppliers & Makloon Partners (SCM Pilar 1: Supplier & Vendor Directory)
+const INITIAL_SUPPLIERS = [
+  { id: 1, name: 'CV Tekstil Mandiri Bandung', type: 'Pemasok Bahan', category: 'Kain Cotton Combed 24s/30s Reactive', leadTime: '2-3 Hari', contact: '+62 812-9988-7711', status: 'Active' },
+  { id: 2, name: 'PT Sinar Sandang Utama', type: 'Pemasok Bahan', category: 'Kain American & Japan Drill', leadTime: '3-4 Hari', contact: '+62 813-2233-4455', status: 'Active' },
+  { id: 3, name: 'PT Dunia Tekstil Bandung', type: 'Pemasok Bahan', category: 'Kain Cotton Fleece 330gsm & Taslan', leadTime: '2-3 Hari', contact: '+62 818-4455-6677', status: 'Active' },
+  { id: 4, name: 'Mitra Kimia Sablon Grafika', type: 'Pemasok Aksesoris', category: 'Tinta Plastisol & Pet Film DTF', leadTime: '1-2 Hari', contact: '+62 856-7788-9900', status: 'Active' },
+  { id: 5, name: 'CV Packindo Solusindo', type: 'Pemasok Kemasan', category: 'Drizzle Packaging Zipper (1:1 Ratio)', leadTime: '3 Hari', contact: '+62 877-3344-5566', status: 'Active' },
+  { id: 6, name: 'CV Grafika Sablonindo', type: 'Mitra Makloon', category: 'Makloon Sablon DTF & Plastisol HD', leadTime: 'Kapasitas 1.000 pcs/mgg', contact: '+62 899-1234-5678', status: 'Active Partner' },
+  { id: 7, name: 'Bordir Komputer Makmur', type: 'Mitra Makloon', category: 'Makloon Bordir Komputer Tajima (PDH)', leadTime: 'Kapasitas 500 pcs/mgg', contact: '+62 822-4567-8901', status: 'Active Partner' },
+  { id: 8, name: 'CV Makloon Jahit Sejahtera', type: 'Mitra Makloon', category: 'Makloon Jahit & Assembling Garmen', leadTime: 'Kapasitas 800 pcs/mgg', contact: '+62 852-9876-5432', status: 'Active Partner' },
+  { id: 9, name: 'Solo Cutting Specialist', type: 'Mitra Makloon', category: 'Makloon Pemotongan Pola Presisi', leadTime: 'Kapasitas 1.500 pcs/mgg', contact: '+62 815-6789-0123', status: 'Active Partner' }
+];
+
+// Initial Inbound QC Logs (SCM Pilar 4: Warehouse Control)
+const INITIAL_INBOUND_QC = [
+  { id: 'QC-INB-01', date: '2026-11-01', supplier: 'CV Tekstil Mandiri Bandung', material: 'Kain Cotton Combed 30s Black (25 Roll)', passed: '25 Roll', reject: '0 Roll', status: 'PASSED', notes: 'Gramasi & setting warna reaktif seragam.' },
+  { id: 'QC-INB-02', date: '2026-11-04', supplier: 'PT Sinar Sandang Utama', material: 'Kain American Drill Khaki (15 Roll)', passed: '15 Roll', reject: '0 Roll', status: 'PASSED', notes: 'Anyaman rapat, serat drill presisi.' },
+  { id: 'QC-INB-03', date: '2026-11-09', supplier: 'CV Packindo Solusindo', material: 'Drizzle Packaging Bag Zipper (500 Pcs)', passed: '500 Pcs', reject: '0 Pcs', status: 'PASSED', notes: 'Sablon logo packaging jelas, ziplock berfungsi baik.' }
 ];
 
 // Seed Real Client Orders with ERP Attributes
@@ -140,7 +160,10 @@ const INITIAL_ORDERS = [
     makloon_vendor: 'Bordir Komputer Makmur',
     qc_passed: 75,
     qc_reject: 0,
-    paid_amount: 75 * 110000
+    paid_amount: 75 * 110000,
+    shipping_carrier: 'Baraka Sarana Tama Cargo',
+    shipping_resi: 'BST-2026-881920',
+    shipping_status: 'Dalam Pengiriman'
   },
   {
     tracking_code: 'DRZ-2026-005',
@@ -163,7 +186,10 @@ const INITIAL_ORDERS = [
     makloon_vendor: 'Bordir Komputer Makmur',
     qc_passed: 32,
     qc_reject: 0,
-    paid_amount: 32 * 110000
+    paid_amount: 32 * 110000,
+    shipping_carrier: 'Pick-Up Studio Solo',
+    shipping_resi: 'PICKUP-IMAKA-01',
+    shipping_status: 'Telah Diterima Klien'
   },
   {
     tracking_code: 'DRZ-2026-006',
@@ -207,21 +233,42 @@ function getDrizzleDB() {
     const initData = {
       orders: INITIAL_ORDERS,
       materials: INITIAL_MATERIALS,
+      suppliers: INITIAL_SUPPLIERS,
+      inbound_qc: INITIAL_INBOUND_QC,
       logs: [
         { id: 1, type: 'CRM -> ERP', message: 'Pesanan SMANKRAPFANS (652 pcs T-Shirt) berhasil masuk sistem.', time: '2026-11-02 10:15:00' },
         { id: 2, type: 'ERP -> SCM', message: 'Alokasi bahan baku SMANKRAPFANS: Kain Roll -22 roll (Buffer 3%), Kemasan -652 pcs.', time: '2026-11-03 08:30:00' },
         { id: 3, type: 'CRM -> ERP', message: 'Pesanan BUSHWACKER (379 pcs T-Shirt) masuk ke antrean potong & bahan.', time: '2026-11-05 14:20:00' },
-        { id: 4, type: 'SCM -> ERP', message: 'Restock bahan baku: Kemasan Drizzle +500 pcs dari CV Packindo.', time: '2026-11-09 11:00:00' }
+        { id: 4, type: 'SCM -> ERP', message: 'Restock bahan baku: Kemasan Drizzle +500 pcs dari CV Packindo.', time: '2026-11-09 11:00:00' },
+        { id: 5, type: 'SCM -> Outbound', message: 'Pesanan MPD UNS (75 pcs PDH) dikirim via Baraka Sarana Tama Cargo (Resi: BST-2026-881920).', time: '2026-11-10 14:00:00' }
       ]
     };
     localStorage.setItem(DRIZZLE_DB_KEY, JSON.stringify(initData));
     return initData;
   }
   try {
-    return JSON.parse(raw);
+    const data = JSON.parse(raw);
+    if (!data.suppliers) data.suppliers = INITIAL_SUPPLIERS;
+    if (!data.inbound_qc) data.inbound_qc = INITIAL_INBOUND_QC;
+
+    // Ensure sample orders have shipping info if missing
+    const o4 = (data.orders || []).find(o => o.tracking_code === 'DRZ-2026-004');
+    if (o4 && !o4.shipping_carrier) {
+      o4.shipping_carrier = 'Baraka Sarana Tama Cargo';
+      o4.shipping_resi = 'BST-2026-881920';
+      o4.shipping_status = 'Dalam Pengiriman';
+    }
+    const o5 = (data.orders || []).find(o => o.tracking_code === 'DRZ-2026-005');
+    if (o5 && !o5.shipping_carrier) {
+      o5.shipping_carrier = 'Pick-Up Studio Solo';
+      o5.shipping_resi = 'PICKUP-IMAKA-01';
+      o5.shipping_status = 'Telah Diterima Klien';
+    }
+
+    return data;
   } catch (e) {
     console.error('Error parsing central DB:', e);
-    return { orders: INITIAL_ORDERS, materials: INITIAL_MATERIALS, logs: [] };
+    return { orders: INITIAL_ORDERS, materials: INITIAL_MATERIALS, suppliers: INITIAL_SUPPLIERS, inbound_qc: INITIAL_INBOUND_QC, logs: [] };
   }
 }
 
@@ -316,16 +363,34 @@ function deductOrderMaterials(orderCode) {
   return { success: true };
 }
 
+// Update Outbound Shipping Details (SCM Pilar 5: Logistik & Distribusi)
+function updateOrderShipping(orderCode, carrier, resi, status) {
+  const db = getDrizzleDB();
+  const order = (db.orders || []).find(o => o.tracking_code === orderCode);
+  if (!order) return { success: false, reason: 'Pesanan tidak ditemukan' };
+
+  order.shipping_carrier = carrier;
+  order.shipping_resi = resi;
+  order.shipping_status = status || 'Dalam Pengiriman';
+
+  saveDrizzleDB(db);
+  logIntegration('SCM -> Outbound', `Pembaruan logistik pengiriman ${orderCode}: ${carrier} - No. Resi: ${resi} (${order.shipping_status}). Sinkron ke Order Tracking.`);
+  return { success: true };
+}
+
 // Global Export
 window.DrizzleStore = {
   products: DRIZZLE_PRODUCTS,
   services: DRIZZLE_CREATIVE_SERVICES,
   stages: PRODUCTION_STAGES,
+  suppliers: INITIAL_SUPPLIERS,
+  inboundQC: INITIAL_INBOUND_QC,
   getDB: getDrizzleDB,
   saveDB: saveDrizzleDB,
   formatRupiah: formatRupiah,
   calculateTieredPrice: calculateTieredPrice,
   generateNextCode: generateNextTrackingCode,
   logIntegration: logIntegration,
-  deductMaterials: deductOrderMaterials
+  deductMaterials: deductOrderMaterials,
+  updateShipping: updateOrderShipping
 };

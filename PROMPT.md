@@ -50,6 +50,21 @@ Modul ERP mengintegrasikan lima sub-modul operasional internal untuk mengelola l
    - Perhitungan Harga Pokok Produksi (HPP) per proyek (bahan + makloon + packaging + operasional).
    - Rekap kas masuk, piutang klien, dan margin laba bersih.
 
+## Rancangan Modul SCM (Drizzle Project)
+
+Modul SCM mengelola aliran material dan distribusi dari pemasok hingga ke tangan klien untuk mendukung produksi 12 lini apparel custom Drizzle Project:
+
+1. **Manajemen Pemasok & Mitra Makloon (*Supplier & Vendor*):**
+   - Mengelola database pemasok kain (*Combed, Drill, Fleece, Taslan*), aksesoris, *Drizzle Packaging*, serta mitra *makloon* (sablon, bordir, jahit) untuk menopang pesanan skala kecil maupun massal (16 hingga 650+ pcs).
+2. **Perencanaan Material (*MRP*):**
+   - Menghitung otomatis kebutuhan bahan baku dari setiap SPK ERP lengkap dengan *buffer* toleransi cacat 3% dan rasio wajib kemasan 1:1 (*all product include packaging*).
+3. **Pengadaan (*Procurement & PO*):**
+   - Menerbitkan draf *Purchase Order (PO)* otomatis saat stok menyentuh batas minimum dan menghubungkan biaya pembelian ke pencatatan HPP modul Keuangan ERP.
+4. **Manajemen Gudang (*Warehouse Control*):**
+   - Mencatat pemeriksaan kualitas bahan masuk (*Inbound QC*) dan alokasi pengeluaran bahan per kode pesanan (`Goods Issue`).
+5. **Logistik & Distribusi (*Outbound Fulfillment*):**
+   - Mengatur serah terima atau pengiriman kargo setelah status pembayaran lunas serta menyinkronkan nomor resi langsung ke halaman *Order Tracking* pelanggan.
+
 ## Arsitektur Integrasi Terpusat (CRM + ERP + SCM)
 - State terpusat tunggal di `localStorage`: `drizzle_integrated_db`
 - Data Rekap Klien Riil Awal Drizzle Project:

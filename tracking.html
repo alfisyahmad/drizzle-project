@@ -154,6 +154,20 @@
         <div class="mt-4 pt-4 border-t border-borderSubtle text-xs text-muted">
           <p>Spesifikasi: <span id="res-specs" class="text-dark font-medium">-</span></p>
         </div>
+
+        <!-- Ekspedisi & Nomor Resi SCM Fulfillment -->
+        <div id="res-shipping-box" class="hidden mt-4 pt-4 border-t border-borderSubtle bg-brandLight/60 p-3.5 rounded-xl border border-brand/20">
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+            <div>
+              <span class="text-[10px] font-mono text-brand font-bold uppercase tracking-wider block">Logistik & Distribusi (Outbound SCM)</span>
+              <div class="text-xs font-bold text-dark mt-0.5" id="res-shipping-carrier">-</div>
+            </div>
+            <div class="text-left sm:text-right">
+              <span class="text-[10px] font-mono text-muted uppercase block">Nomor Resi / AWB</span>
+              <div class="text-sm font-mono font-extrabold text-brand tracking-wider" id="res-shipping-resi">-</div>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- 6-Stage Timeline -->
@@ -276,6 +290,16 @@
         // Specs
         const specsText = order.specs ? `${order.specs.print_type || ''} | ${order.specs.fabric_color || ''} | ${order.specs.notes || ''}` : '-';
         document.getElementById('res-specs').textContent = specsText;
+
+        // Logistik & Distribusi (Outbound SCM Fulfillment)
+        const shipBox = document.getElementById('res-shipping-box');
+        if (order.shipping_carrier && order.shipping_resi) {
+          shipBox.classList.remove('hidden');
+          document.getElementById('res-shipping-carrier').textContent = `${order.shipping_carrier} (${order.shipping_status || 'Dalam Pengiriman'})`;
+          document.getElementById('res-shipping-resi').textContent = order.shipping_resi;
+        } else {
+          shipBox.classList.add('hidden');
+        }
 
         // Render 6 Stages
         renderTimeline(order.stage);

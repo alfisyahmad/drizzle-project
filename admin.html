@@ -142,7 +142,7 @@
         3. Produksi & QC (*Makloon Pipeline*)
       </button>
       <button id="tab-btn-scm" onclick="switchERPModule('scm')" class="px-4 py-2.5 text-xs sm:text-sm font-semibold border-b-2 border-transparent text-muted hover:text-dark">
-        4. Persediaan (*Inventory & SCM*)
+        4. Persediaan & SCM (5 Pilar Terpadu)
       </button>
       <button id="tab-btn-finance" onclick="switchERPModule('finance')" class="px-4 py-2.5 text-xs sm:text-sm font-semibold border-b-2 border-transparent text-muted hover:text-dark">
         5. Keuangan (*Finance & HPP*)
@@ -238,18 +238,219 @@
       </div>
     </div>
 
-    <!-- ==================== SUB-MODUL 4: PERSEDIAAN & SCM (INVENTORY & PACKAGING) ==================== -->
-    <div id="module-scm" class="hidden space-y-4">
-      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-        <p class="text-xs text-muted">Stok kain roll memperhitungkan <strong>buffer bahan 3%</strong> dan <strong>stok packaging rasio 1:1</strong> per produk jadi.</p>
-        <button onclick="openRestockModal()" class="text-xs font-semibold px-4 py-2 bg-brand text-white rounded-lg hover:bg-brandDark transition">
-          + Restock Bahan Supplier
-        </button>
+    <!-- ==================== SUB-MODUL 4: PERSEDIAAN & SCM (5 PILAR TERPADU) ==================== -->
+    <div id="module-scm" class="hidden space-y-6">
+      
+      <!-- SCM Header Banner & Actions -->
+      <div class="bg-white border border-borderSubtle rounded-2xl p-5 shadow-sm flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full bg-brandLight text-brand font-mono font-bold text-xs border border-brand/20">Supply Chain Management</span>
+            <span class="text-xs text-muted">12 Lini Produk & Packaging 1:1</span>
+          </div>
+          <h2 class="text-lg font-extrabold text-dark mt-1">Arsitektur Terpadu 5 Pilar SCM Drizzle Project</h2>
+          <p class="text-xs text-muted mt-0.5">Mengontrol alur pasokan dari supplier hulu, perencanaan material (MRP), pengadaan (PO), kontrol gudang, hingga distribusi kargo (Outbound).</p>
+        </div>
+        <div class="flex items-center gap-2.5">
+          <button onclick="openRestockModal()" class="text-xs font-semibold px-3.5 py-2 bg-brand text-white rounded-lg hover:bg-brandDark transition flex items-center gap-1.5 shadow-sm">
+            <span>+</span> Restock Gudang
+          </button>
+        </div>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="scm-materials-grid">
-        <!-- Rendered via JS -->
+      <!-- SCM 5 Sub-Pillars Navigation (Tabs inside SCM) -->
+      <div class="flex flex-wrap gap-2 border-b border-borderSubtle pb-2 text-xs font-semibold">
+        <button id="scm-tab-p1" onclick="switchSCMPillar('p1')" class="px-3.5 py-2 rounded-lg bg-dark text-white shadow-sm transition">1. Direktori Supplier & Makloon</button>
+        <button id="scm-tab-p2" onclick="switchSCMPillar('p2')" class="px-3.5 py-2 rounded-lg bg-white border border-borderSubtle text-muted hover:text-dark transition">2. Perencanaan Material (MRP)</button>
+        <button id="scm-tab-p3" onclick="switchSCMPillar('p3')" class="px-3.5 py-2 rounded-lg bg-white border border-borderSubtle text-muted hover:text-dark transition">3. Pengadaan & Draf PO</button>
+        <button id="scm-tab-p4" onclick="switchSCMPillar('p4')" class="px-3.5 py-2 rounded-lg bg-white border border-borderSubtle text-muted hover:text-dark transition">4. Gudang & Inbound QC</button>
+        <button id="scm-tab-p5" onclick="switchSCMPillar('p5')" class="px-3.5 py-2 rounded-lg bg-white border border-borderSubtle text-muted hover:text-dark transition">5. Logistik & Distribusi (Outbound)</button>
       </div>
+
+      <!-- PILAR 1: DIREKTORI SUPPLIER & MITRA MAKLOON -->
+      <div id="scm-panel-p1" class="space-y-5">
+        <!-- Raw Materials Cards -->
+        <div>
+          <div class="flex justify-between items-center mb-2.5">
+            <h3 class="text-xs font-mono font-bold text-muted uppercase tracking-wider">Stok Bahan Baku & Packaging Gudang (Buffer 3% & Kemasan 1:1)</h3>
+            <span class="text-xs text-muted">5 Komoditas Utama</span>
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3" id="scm-materials-grid">
+            <!-- Rendered via JS -->
+          </div>
+        </div>
+
+        <!-- Directory Table -->
+        <div class="bg-white border border-borderSubtle rounded-2xl shadow-sm overflow-hidden">
+          <div class="p-4 border-b border-borderSubtle flex justify-between items-center">
+            <div>
+              <h3 class="font-bold text-dark text-sm">Direktori Pemasok Bahan Baku & Mitra Makloon Produksi</h3>
+              <p class="text-xs text-muted mt-0.5">Jaringan vendor hulu kain, aksesoris, packaging, serta vendor sablon, bordir, jahit & cutting.</p>
+            </div>
+            <span class="text-xs font-mono text-muted bg-subtle px-2.5 py-1 rounded-md border border-borderSubtle">9 Mitra Terdaftar</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-subtle text-muted font-mono uppercase text-[11px] border-b border-borderSubtle">
+                <tr>
+                  <th class="px-4 py-3">Nama Mitra / Supplier</th>
+                  <th class="px-4 py-3">Kategori Peran</th>
+                  <th class="px-4 py-3">Spesialisasi Bahan / Jasa</th>
+                  <th class="px-4 py-3">Lead Time / Kapasitas</th>
+                  <th class="px-4 py-3">Kontak Resmi</th>
+                  <th class="px-4 py-3 text-right">Status Kemitraan</th>
+                </tr>
+              </thead>
+              <tbody id="scm-suppliers-table-body" class="divide-y divide-borderSubtle">
+                <!-- Rendered via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PILAR 2: PERENCANAAN MATERIAL (MRP) -->
+      <div id="scm-panel-p2" class="hidden space-y-4">
+        <div class="bg-amber-50/70 border border-amber-200 p-4 rounded-xl text-xs text-amber-900 flex items-start gap-3">
+          <span class="font-mono text-base font-bold text-amber-600">ℹ</span>
+          <div>
+            <strong>Kalkulasi Otomatis MRP Berdasarkan SPK ERP Aktif:</strong>
+            Setiap SPK otomatis menghitung kebutuhan kain roll dengan <em>buffer toleransi cacat 3%</em> (1 Roll = ~30 pcs kaos/kemeja) dan <em>rasio wajib packaging 1:1</em> (semua produk sudah termasuk kemasan individual Drizzle).
+          </div>
+        </div>
+
+        <div class="bg-white border border-borderSubtle rounded-2xl shadow-sm overflow-hidden">
+          <div class="p-4 border-b border-borderSubtle flex justify-between items-center">
+            <div>
+              <h3 class="font-bold text-dark text-sm">Matriks Alokasi Material per SPK (MRP Table)</h3>
+              <p class="text-xs text-muted mt-0.5">Analisis kebutuhan bahan baku riil vs ketersediaan fisik stok gudang Drizzle.</p>
+            </div>
+            <span class="text-xs text-muted font-mono">Buffer Margin: 3%</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-subtle text-muted font-mono uppercase text-[11px] border-b border-borderSubtle">
+                <tr>
+                  <th class="px-4 py-3">Kode SPK</th>
+                  <th class="px-4 py-3">Klien & Produk</th>
+                  <th class="px-4 py-3 text-center">Qty Bersih</th>
+                  <th class="px-4 py-3 text-center">Kebutuhan Kain (+3% Buffer)</th>
+                  <th class="px-4 py-3 text-center">Packaging 1:1</th>
+                  <th class="px-4 py-3 text-center">Status Alokasi Stok</th>
+                  <th class="px-4 py-3 text-right">Tahap Produksi</th>
+                </tr>
+              </thead>
+              <tbody id="scm-mrp-table-body" class="divide-y divide-borderSubtle">
+                <!-- Rendered via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PILAR 3: PENGADAAN & DRAFT PURCHASE ORDER (PO) -->
+      <div id="scm-panel-p3" class="hidden space-y-4">
+        <div class="bg-white border border-borderSubtle rounded-2xl shadow-sm overflow-hidden">
+          <div class="p-4 border-b border-borderSubtle flex justify-between items-center">
+            <div>
+              <h3 class="font-bold text-dark text-sm">Draf Purchase Order (PO) Pengadaan Otomatis</h3>
+              <p class="text-xs text-muted mt-0.5">Draf diterbitkan otomatis saat stok menyentuh batas minimum. Biaya langsung terhubung ke estimasi HPP di Keuangan ERP.</p>
+            </div>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-subtle text-muted font-mono uppercase text-[11px] border-b border-borderSubtle">
+                <tr>
+                  <th class="px-4 py-3">No. Draf PO</th>
+                  <th class="px-4 py-3">Item Pengadaan</th>
+                  <th class="px-4 py-3">Pemasok Ditunjuk</th>
+                  <th class="px-4 py-3 text-center">Volume Restock</th>
+                  <th class="px-4 py-3 font-mono">Estimasi Biaya (HPP)</th>
+                  <th class="px-4 py-3 text-center">Status PO</th>
+                  <th class="px-4 py-3 text-right">Aksi Eksekusi</th>
+                </tr>
+              </thead>
+              <tbody id="scm-po-table-body" class="divide-y divide-borderSubtle">
+                <!-- Rendered via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PILAR 4: KONTROL GUDANG & INBOUND QC -->
+      <div id="scm-panel-p4" class="hidden space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <!-- Inbound QC Records -->
+          <div class="bg-white border border-borderSubtle rounded-2xl p-5 shadow-sm space-y-3">
+            <div class="flex justify-between items-center border-b border-borderSubtle pb-3">
+              <div>
+                <h3 class="font-bold text-dark text-sm">Pemeriksaan Kualitas Bahan Masuk (Inbound QC)</h3>
+                <p class="text-xs text-muted">Inspeksi fisik kain roll, cat sablon, dan zipper packaging dari supplier.</p>
+              </div>
+              <span class="text-[10px] font-mono text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded font-bold border border-emerald-200">QC Passed</span>
+            </div>
+            <div class="space-y-3 text-xs" id="scm-inbound-qc-list">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- Goods Issue Records -->
+          <div class="bg-white border border-borderSubtle rounded-2xl p-5 shadow-sm space-y-3">
+            <div class="flex justify-between items-center border-b border-borderSubtle pb-3">
+              <div>
+                <h3 class="font-bold text-dark text-sm">Pengeluaran Bahan Baku SPK (Goods Issue)</h3>
+                <p class="text-xs text-muted">Pencatatan alokasi material keluar dari gudang ke vendor cutting/jahit.</p>
+              </div>
+              <span class="text-[10px] font-mono text-brand bg-brandLight px-2.5 py-1 rounded font-bold border border-brand/20">Alokasi SPK</span>
+            </div>
+            <div class="space-y-3 text-xs" id="scm-goods-issue-list">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PILAR 5: LOGISTIK & DISTRIBUSI (OUTBOUND FULFILLMENT) -->
+      <div id="scm-panel-p5" class="hidden space-y-4">
+        <div class="bg-emerald-50/60 border border-emerald-200 p-4 rounded-xl text-xs text-emerald-900 flex items-start gap-3">
+          <span class="font-mono text-base font-bold text-emerald-600">✓</span>
+          <div>
+            <strong>Sinkronisasi Outbound Real-Time ke Tracking Pelanggan:</strong>
+            Pesanan yang telah <em>Lunas</em> dan memasuki tahap <em>Packaging & Siap Kirim</em> siap dialokasikan ke kargo/ekspedisi (Baraka Sarana Tama, J&T Cargo, Pick-up Studio). Nomor resi/AWB yang diinput di sini langsung tampil secara <em>live</em> pada halaman <code>tracking.html</code> pelanggan.
+          </div>
+        </div>
+
+        <div class="bg-white border border-borderSubtle rounded-2xl shadow-sm overflow-hidden">
+          <div class="p-4 border-b border-borderSubtle flex justify-between items-center">
+            <div>
+              <h3 class="font-bold text-dark text-sm">Manajemen Pengiriman Kargo & Resi (Outbound Fulfillment)</h3>
+              <p class="text-xs text-muted mt-0.5">Kelola nomor AWB, jasa ekspedisi kargo, dan serah terima pesanan selesai.</p>
+            </div>
+            <span class="text-xs text-muted font-mono">Terkoneksi ke tracking.html</span>
+          </div>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-subtle text-muted font-mono uppercase text-[11px] border-b border-borderSubtle">
+                <tr>
+                  <th class="px-4 py-3">Kode Order</th>
+                  <th class="px-4 py-3">Klien & Instansi</th>
+                  <th class="px-4 py-3">Item & Qty</th>
+                  <th class="px-4 py-3">Status Pembayaran</th>
+                  <th class="px-4 py-3">Ekspedisi / Metode Kirim</th>
+                  <th class="px-4 py-3 font-mono">Nomor Resi / AWB</th>
+                  <th class="px-4 py-3">Status Pengiriman</th>
+                  <th class="px-4 py-3 text-right">Kelola Resi</th>
+                </tr>
+              </thead>
+              <tbody id="scm-outbound-table-body" class="divide-y divide-borderSubtle">
+                <!-- Rendered via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <!-- ==================== SUB-MODUL 5: KEUANGAN & HPP (FINANCE) ==================== -->
@@ -352,6 +553,55 @@
     </div>
   </div>
 
+  <!-- ==================== SHIPPING / OUTBOUND RESI MODAL ==================== -->
+  <div id="shipping-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-borderSubtle">
+      <div class="flex justify-between items-start mb-4">
+        <div>
+          <h3 class="text-base font-bold text-dark">Alokasi Logistik & Resi (Outbound SCM)</h3>
+          <p class="text-xs text-muted mt-0.5" id="ship-modal-order-title">Pesanan: DRZ-2026-XXX</p>
+        </div>
+        <button onclick="document.getElementById('shipping-modal').classList.add('hidden')" class="text-muted hover:text-dark font-bold text-lg leading-none">&times;</button>
+      </div>
+      <div class="space-y-3.5 text-xs">
+        <input type="hidden" id="ship-order-code">
+        <div>
+          <label class="block text-muted mb-1 font-medium">Jasa Ekspedisi / Kargo / Metode Serah Terima</label>
+          <select id="ship-carrier-select" class="w-full bg-subtle border border-borderSubtle rounded-lg px-3 py-2 text-dark font-medium">
+            <option value="Baraka Sarana Tama Cargo">Baraka Sarana Tama Cargo (Kargo Massal)</option>
+            <option value="J&T Cargo">J&T Cargo</option>
+            <option value="Indah Logistik Cargo">Indah Logistik Cargo</option>
+            <option value="Dakota Cargo">Dakota Cargo</option>
+            <option value="JNE Trucking (JTR)">JNE Trucking (JTR)</option>
+            <option value="Pick-Up Studio Solo">Pick-Up Langsung di Studio Solo</option>
+            <option value="Kurir Internal Drizzle">Kurir Internal Drizzle (Area Solo Raya)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-muted mb-1 font-medium">Nomor Resi / AWB / No. Surat Jalan</label>
+          <input type="text" id="ship-resi-input" placeholder="Contoh: BST-2026-881920 atau PICKUP-01" class="w-full bg-subtle border border-borderSubtle rounded-lg px-3 py-2 text-dark font-mono font-bold tracking-wide">
+          <p class="text-[10px] text-muted mt-1">Nomor ini langsung tampil secara real-time pada halaman Lacak Pesanan pemesan.</p>
+        </div>
+        <div>
+          <label class="block text-muted mb-1 font-medium">Status Pengiriman</label>
+          <select id="ship-status-select" class="w-full bg-subtle border border-borderSubtle rounded-lg px-3 py-2 text-dark">
+            <option value="Dalam Pengiriman">Dalam Pengiriman</option>
+            <option value="Siap Diserahkan / Menunggu Kurir">Siap Diserahkan / Menunggu Kurir</option>
+            <option value="Telah Diterima Klien">Telah Diterima Klien (Selesai)</option>
+          </select>
+        </div>
+      </div>
+      <div class="mt-6 flex justify-end gap-2 border-t border-borderSubtle pt-4">
+        <button onclick="saveShippingModal()" class="px-4 py-2 bg-brand text-white font-semibold text-xs rounded-lg hover:bg-brandDark transition shadow-sm">
+          Simpan & Sinkronkan ke Tracking
+        </button>
+        <button onclick="document.getElementById('shipping-modal').classList.add('hidden')" class="px-3 py-2 bg-subtle text-dark border border-borderSubtle text-xs rounded-lg hover:bg-borderSubtle">
+          Batal
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- ==================== FOOTER ==================== -->
   <footer class="bg-white border-t border-borderSubtle py-8 text-xs text-muted mt-12">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -392,7 +642,7 @@
       if (mod === 'sales') renderSalesTable();
       if (mod === 'preprod') renderPreprodTable();
       if (mod === 'prod') renderProdTable();
-      if (mod === 'scm') renderSCMGrid();
+      if (mod === 'scm') renderSCMModule();
       if (mod === 'finance') renderFinanceTable();
       if (mod === 'logs') renderIntegrationLogs();
     }
@@ -452,7 +702,7 @@
       renderSalesTable();
       renderPreprodTable();
       renderProdTable();
-      renderSCMGrid();
+      renderSCMModule();
       renderFinanceTable();
       renderIntegrationLogs();
     }
@@ -669,37 +919,332 @@
       renderDashboard();
     }
 
-    /* SUB-MODUL 4: PERSEDIAAN & SCM */
+    /* SUB-MODUL 4: PERSEDIAAN & SCM (5 PILAR INTEGRASI) */
+    let activeSCMPillar = 'p1';
+
+    function switchSCMPillar(pId) {
+      activeSCMPillar = pId;
+      ['p1', 'p2', 'p3', 'p4', 'p5'].forEach(p => {
+        const panel = document.getElementById(`scm-panel-${p}`);
+        const btn = document.getElementById(`scm-tab-${p}`);
+        if (panel) panel.classList.add('hidden');
+        if (btn) {
+          btn.className = 'px-3.5 py-2 rounded-lg bg-white border border-borderSubtle text-muted hover:text-dark transition';
+        }
+      });
+
+      const activePanel = document.getElementById(`scm-panel-${pId}`);
+      const activeBtn = document.getElementById(`scm-tab-${pId}`);
+      if (activePanel) activePanel.classList.remove('hidden');
+      if (activeBtn) {
+        activeBtn.className = 'px-3.5 py-2 rounded-lg bg-dark text-white shadow-sm transition';
+      }
+
+      renderSCMModule();
+    }
+
+    function renderSCMModule() {
+      renderSCMGrid();
+      renderSCMSuppliers();
+      renderSCMMRP();
+      renderSCMPODrafts();
+      renderSCMWarehouse();
+      renderSCMOutbound();
+    }
+
+    /* PILAR 1: INVENTORY CARDS & DIRECTORY SUPPLIER/MAKLOON */
     function renderSCMGrid() {
       const db = window.DrizzleStore.getDB();
       const grid = document.getElementById('scm-materials-grid');
+      if (!grid) return;
       grid.innerHTML = '';
 
       (db.materials || []).forEach(m => {
         const isLow = m.stock <= m.minStock;
         const card = document.createElement('div');
-        card.className = `bg-white border rounded-xl p-5 shadow-sm space-y-3 ${isLow ? 'border-red-400 bg-red-50/20' : 'border-borderSubtle'}`;
+        card.className = `bg-white border rounded-xl p-4 shadow-sm space-y-2.5 ${isLow ? 'border-red-400 bg-red-50/20' : 'border-borderSubtle'}`;
         card.innerHTML = `
           <div class="flex justify-between items-start">
-            <div>
-              <span class="text-[10px] font-mono text-muted uppercase">Bahan Baku & Packaging</span>
-              <h4 class="font-bold text-dark text-sm mt-0.5">${m.name}</h4>
-            </div>
-            ${isLow ? '<span class="text-[10px] font-bold px-2 py-0.5 rounded bg-red-100 text-red-700">Stok Menipis</span>' : '<span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700">Stok Aman</span>'}
+            <span class="text-[9px] font-mono text-muted uppercase tracking-wider">Komoditas Gudang</span>
+            ${isLow ? '<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-red-100 text-red-700">Stok Menipis</span>' : '<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700">Stok Aman</span>'}
           </div>
-
-          <div class="flex justify-between items-baseline font-mono">
-            <span class="text-xs text-muted">Sisa Stok:</span>
-            <span class="text-lg font-bold ${isLow ? 'text-red-600' : 'text-dark'}">${m.stock} ${m.unit}</span>
+          <div>
+            <h4 class="font-bold text-dark text-xs leading-snug">${m.name}</h4>
           </div>
-
-          <div class="pt-2 border-t border-borderSubtle text-[11px] text-muted">
-            <p>Supplier: <span class="text-dark font-medium">${m.supplier}</span></p>
-            <p>Batas Minimum: ${m.minStock} ${m.unit} (termasuk buffer 3%)</p>
+          <div class="flex justify-between items-baseline font-mono pt-1 border-t border-borderSubtle/60">
+            <span class="text-[10px] text-muted">Tersedia:</span>
+            <span class="text-base font-bold ${isLow ? 'text-red-600' : 'text-dark'}">${m.stock} <span class="text-xs font-normal text-muted">${m.unit}</span></span>
+          </div>
+          <div class="text-[10px] text-muted space-y-0.5">
+            <p class="truncate" title="${m.supplier}">Supplier: <strong class="text-dark">${m.supplier}</strong></p>
+            <p>Batas Min: ${m.minStock} ${m.unit} (Buffer 3%)</p>
           </div>
         `;
         grid.appendChild(card);
       });
+    }
+
+    function renderSCMSuppliers() {
+      const db = window.DrizzleStore.getDB();
+      const tbody = document.getElementById('scm-suppliers-table-body');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      const suppliers = db.suppliers || window.DrizzleStore.suppliers || [];
+      suppliers.forEach(s => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-subtle/80 transition';
+
+        let typeBadge = '';
+        if (s.type === 'Pemasok Bahan') {
+          typeBadge = '<span class="px-2 py-0.5 rounded bg-blue-50 text-blue-700 font-mono text-[10px] font-bold">Pemasok Kain</span>';
+        } else if (s.type === 'Pemasok Kemasan') {
+          typeBadge = '<span class="px-2 py-0.5 rounded bg-amber-50 text-amber-700 font-mono text-[10px] font-bold">Drizzle Packaging</span>';
+        } else if (s.type === 'Pemasok Aksesoris') {
+          typeBadge = '<span class="px-2 py-0.5 rounded bg-purple-50 text-purple-700 font-mono text-[10px] font-bold">Aksesoris & Tinta</span>';
+        } else {
+          typeBadge = '<span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-mono text-[10px] font-bold">Mitra Makloon</span>';
+        }
+
+        tr.innerHTML = `
+          <td class="px-4 py-3 font-bold text-dark whitespace-nowrap">${s.name}</td>
+          <td class="px-4 py-3">${typeBadge}</td>
+          <td class="px-4 py-3 text-muted">${s.category}</td>
+          <td class="px-4 py-3 font-mono text-dark">${s.leadTime}</td>
+          <td class="px-4 py-3 font-mono text-brand font-semibold whitespace-nowrap">
+            <a href="https://wa.me/${(s.contact || '').replace(/[^0-9]/g, '')}" target="_blank" class="hover:underline flex items-center gap-1">
+              <span>💬</span> ${s.contact}
+            </a>
+          </td>
+          <td class="px-4 py-3 text-right">
+            <span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-mono font-bold text-[10px]">${s.status || 'Active'}</span>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    /* PILAR 2: PERENCANAAN MATERIAL (MRP) */
+    function renderSCMMRP() {
+      const db = window.DrizzleStore.getDB();
+      const tbody = document.getElementById('scm-mrp-table-body');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      (db.orders || []).forEach(order => {
+        if (order.service_type !== 'apparel') return;
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-subtle/80 transition';
+
+        const qty = order.total_pcs || 0;
+        const qtyWithBuffer = Math.ceil(qty * 1.03);
+        const rollsNeeded = Math.max(1, Math.ceil(qtyWithBuffer / 30));
+        const pkgNeeded = qty;
+
+        const isDeducted = order.materials_deducted;
+        const statusBadge = isDeducted
+          ? '<span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-bold text-[10px]">✓ Bahan Teralokasi</span>'
+          : '<span class="px-2 py-0.5 rounded bg-amber-50 text-amber-700 font-bold text-[10px]">Antrean Alokasi</span>';
+
+        tr.innerHTML = `
+          <td class="px-4 py-3 font-mono font-bold text-brand whitespace-nowrap">
+            <a href="tracking.html?code=${order.tracking_code}" target="_blank" class="hover:underline">${order.tracking_code}</a>
+          </td>
+          <td class="px-4 py-3">
+            <div class="font-bold text-dark">${order.customer.organization || order.customer.name}</div>
+            <div class="text-[11px] text-muted">${order.product_name} (${order.specs ? order.specs.fabric_color : 'Kain Standar'})</div>
+          </td>
+          <td class="px-4 py-3 text-center font-mono font-bold text-dark">${qty} Pcs</td>
+          <td class="px-4 py-3 text-center font-mono text-dark font-medium">
+            <span class="text-brand font-bold">${rollsNeeded} Roll</span>
+            <span class="text-[10px] text-muted block">(${qtyWithBuffer} pcs inc. buffer 3%)</span>
+          </td>
+          <td class="px-4 py-3 text-center font-mono font-bold text-emerald-600">${pkgNeeded} Pcs</td>
+          <td class="px-4 py-3 text-center">${statusBadge}</td>
+          <td class="px-4 py-3 text-right">
+            <span class="px-2 py-0.5 rounded bg-subtle border border-borderSubtle text-[10px] font-mono">${order.stage}</span>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    /* PILAR 3: PENGADAAN & DRAFT PO */
+    function renderSCMPODrafts() {
+      const db = window.DrizzleStore.getDB();
+      const tbody = document.getElementById('scm-po-table-body');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      const materials = db.materials || [];
+      let poSeq = 1;
+
+      materials.forEach(m => {
+        const isLow = m.stock <= m.minStock;
+        const orderQty = isLow ? Math.max(15, m.minStock * 2) : 10;
+        const estCost = orderQty * (m.unitCost || (m.unit === 'Roll' ? 1250000 : 3000));
+        const poNumber = `PO-2026-${String(poSeq++).padStart(3, '0')}`;
+
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-subtle/80 transition';
+        tr.innerHTML = `
+          <td class="px-4 py-3 font-mono font-bold text-brand whitespace-nowrap">${poNumber}</td>
+          <td class="px-4 py-3 font-medium text-dark">${m.name}</td>
+          <td class="px-4 py-3 text-muted">${m.supplier}</td>
+          <td class="px-4 py-3 text-center font-mono font-bold text-dark">+${orderQty} ${m.unit}</td>
+          <td class="px-4 py-3 font-mono font-bold text-emerald-700">${window.DrizzleStore.formatRupiah(estCost)}</td>
+          <td class="px-4 py-3 text-center">
+            ${isLow ? '<span class="px-2 py-0.5 rounded bg-red-100 text-red-700 font-bold text-[10px] font-mono animate-pulse">Perlu Segera</span>' : '<span class="px-2 py-0.5 rounded bg-subtle text-muted text-[10px] font-mono">Draf Siap</span>'}
+          </td>
+          <td class="px-4 py-3 text-right whitespace-nowrap">
+            <button onclick="executePO(${m.id}, ${orderQty})" class="px-3 py-1 bg-brand text-white font-semibold rounded text-[11px] hover:bg-brandDark transition shadow-sm">
+              Eksekusi PO (+${orderQty})
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function executePO(matId, qty) {
+      const db = window.DrizzleStore.getDB();
+      const mat = (db.materials || []).find(m => m.id === matId);
+      if (!mat) return;
+
+      const unitCost = mat.unitCost || (mat.unit === 'Roll' ? 1250000 : 3000);
+      const totalCost = qty * unitCost;
+      mat.stock += qty;
+
+      window.DrizzleStore.saveDB(db);
+      window.DrizzleStore.logIntegration('SCM -> PO', `PO Selesai: Pengadaan ${qty} ${mat.unit} ${mat.name} dari ${mat.supplier} berhasil masuk gudang. HPP tercatat ${window.DrizzleStore.formatRupiah(totalCost)}.`);
+      renderDashboard();
+      alert(`PO Berhasil Dieksekusi!\n\nMaterial: ${mat.name}\nJumlah: +${qty} ${mat.unit}\nPemasok: ${mat.supplier}\nEstimasi HPP: ${window.DrizzleStore.formatRupiah(totalCost)}\nStok sekarang: ${mat.stock} ${mat.unit}`);
+    }
+
+    /* PILAR 4: KONTROL GUDANG & INBOUND QC */
+    function renderSCMWarehouse() {
+      const db = window.DrizzleStore.getDB();
+      const qcList = document.getElementById('scm-inbound-qc-list');
+      const giList = document.getElementById('scm-goods-issue-list');
+      if (!qcList || !giList) return;
+
+      qcList.innerHTML = '';
+      const inbRecords = db.inbound_qc || window.DrizzleStore.inboundQC || [];
+      inbRecords.forEach(r => {
+        const item = document.createElement('div');
+        item.className = 'p-3 bg-subtle border border-borderSubtle rounded-xl space-y-1';
+        item.innerHTML = `
+          <div class="flex justify-between items-center">
+            <span class="font-mono font-bold text-dark text-xs">${r.id} • ${r.date}</span>
+            <span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-mono font-bold text-[10px]">${r.status}</span>
+          </div>
+          <p class="font-medium text-dark">${r.material}</p>
+          <div class="flex justify-between text-[11px] text-muted">
+            <span>Supplier: <strong>${r.supplier}</strong></span>
+            <span>Lolos: <strong class="text-emerald-600">${r.passed}</strong> / Reject: ${r.reject}</span>
+          </div>
+          <p class="text-[10px] text-muted bg-white p-1.5 rounded border border-borderSubtle/60 mt-1">Catatan QC: ${r.notes}</p>
+        `;
+        qcList.appendChild(item);
+      });
+
+      giList.innerHTML = '';
+      const deductedOrders = (db.orders || []).filter(o => o.materials_deducted);
+      deductedOrders.forEach(o => {
+        const qty = o.total_pcs || 0;
+        const rolls = Math.max(1, Math.ceil(qty * 1.03 / 30));
+        const item = document.createElement('div');
+        item.className = 'p-3 bg-subtle border border-borderSubtle rounded-xl space-y-1';
+        item.innerHTML = `
+          <div class="flex justify-between items-center">
+            <span class="font-mono font-bold text-brand text-xs">${o.tracking_code}</span>
+            <span class="text-[10px] font-mono text-muted">${o.created_at || 'Baru'}</span>
+          </div>
+          <p class="font-medium text-dark">${o.customer.organization || o.customer.name} — ${qty} Pcs ${o.product_name}</p>
+          <div class="text-[11px] text-muted">
+            Alokasi Keluar: <strong class="text-dark">Kain ~${rolls} Roll (+3% Buffer)</strong> & <strong class="text-emerald-600">${qty} Pcs Drizzle Packaging</strong>
+          </div>
+        `;
+        giList.appendChild(item);
+      });
+    }
+
+    /* PILAR 5: LOGISTIK & DISTRIBUSI (OUTBOUND) */
+    function renderSCMOutbound() {
+      const db = window.DrizzleStore.getDB();
+      const tbody = document.getElementById('scm-outbound-table-body');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      (db.orders || []).forEach(order => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-subtle/80 transition';
+
+        const isPaid = order.status_payment === 'Lunas';
+        const hasShipping = order.shipping_carrier && order.shipping_resi;
+
+        tr.innerHTML = `
+          <td class="px-4 py-3 font-mono font-bold text-brand whitespace-nowrap">
+            <a href="tracking.html?code=${order.tracking_code}" target="_blank" class="hover:underline">${order.tracking_code}</a>
+          </td>
+          <td class="px-4 py-3">
+            <div class="font-bold text-dark">${order.customer.organization || order.customer.name}</div>
+            <div class="text-[11px] text-muted">${order.customer.phone || '-'}</div>
+          </td>
+          <td class="px-4 py-3 font-medium text-dark">${order.product_name} (${order.total_pcs || 1} Pcs)</td>
+          <td class="px-4 py-3">
+            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold ${isPaid ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}">${order.status_payment || 'Menunggu DP'}</span>
+          </td>
+          <td class="px-4 py-3 text-dark font-medium">${order.shipping_carrier || '<span class="text-muted italic">Belum ditentukan</span>'}</td>
+          <td class="px-4 py-3 font-mono font-bold text-brand whitespace-nowrap">${order.shipping_resi || '<span class="text-muted">-</span>'}</td>
+          <td class="px-4 py-3">
+            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold ${hasShipping ? 'bg-sky-50 text-sky-700' : 'bg-gray-100 text-muted'}">${order.shipping_status || 'Belum Dikirim'}</span>
+          </td>
+          <td class="px-4 py-3 text-right whitespace-nowrap">
+            <button onclick="openShippingModal('${order.tracking_code}')" class="px-2.5 py-1 bg-subtle border border-borderSubtle rounded text-[11px] font-semibold hover:border-dark transition">
+              ${hasShipping ? 'Ubah Resi' : '+ Input Resi / Kargo'}
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function openShippingModal(code) {
+      const db = window.DrizzleStore.getDB();
+      const order = (db.orders || []).find(o => o.tracking_code === code);
+      if (!order) return;
+
+      document.getElementById('ship-order-code').value = order.tracking_code;
+      document.getElementById('ship-modal-order-title').textContent = `Pesanan: ${order.tracking_code} (${order.customer.organization || order.customer.name}) — ${order.total_pcs || 1} Pcs ${order.product_name}`;
+
+      const carrierSelect = document.getElementById('ship-carrier-select');
+      if (order.shipping_carrier) {
+        carrierSelect.value = order.shipping_carrier;
+      } else {
+        carrierSelect.value = 'Baraka Sarana Tama Cargo';
+      }
+
+      document.getElementById('ship-resi-input').value = order.shipping_resi || '';
+      document.getElementById('ship-status-select').value = order.shipping_status || 'Dalam Pengiriman';
+
+      document.getElementById('shipping-modal').classList.remove('hidden');
+    }
+
+    function saveShippingModal() {
+      const code = document.getElementById('ship-order-code').value;
+      const carrier = document.getElementById('ship-carrier-select').value;
+      const resi = document.getElementById('ship-resi-input').value.trim();
+      const status = document.getElementById('ship-status-select').value;
+
+      if (!resi) {
+        alert('Harap masukkan nomor resi atau nomor surat jalan kargo!');
+        return;
+      }
+
+      window.DrizzleStore.updateShipping(code, carrier, resi, status);
+      document.getElementById('shipping-modal').classList.add('hidden');
+      renderDashboard();
     }
 
     /* SUB-MODUL 5: KEUANGAN & HPP */

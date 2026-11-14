@@ -14,6 +14,13 @@ Web-based Order & Studio Management System untuk **Drizzle Project** (Vendor mer
 4. **Persediaan (*Inventory & Packaging - SCM*):** Mengontrol stok kain roll, perlengkapan sablon/bordir, *buffer* bahan 3%, serta stok wajib *packaging* (rasio 1:1 per produk) yang otomatis terpotong saat pesanan masuk produksi.
 5. **Keuangan (*Finance & HPP*):** Mengelola termin pembayaran klien (DP 50% dan pelunasan), menghitung Harga Pokok Produksi (HPP) per proyek, serta menyajikan rekapitulasi kas masuk, piutang, dan laba bersih.
 
+## 📦 Rancangan Modul SCM (5 Pilar Pengelolaan Rantai Pasok)
+1. **Manajemen Pemasok & Mitra Makloon (*Supplier & Vendor*):** Database pemasok kain (*Combed, Drill, Fleece, Taslan*), aksesoris, kemasan Drizzle, serta mitra makloon sablon, bordir, dan jahit.
+2. **Perencanaan Material (*MRP*):** Perhitungan otomatis kebutuhan bahan baku dari setiap SPK ERP lengkap dengan *buffer* toleransi cacat 3% dan rasio wajib kemasan 1:1 (*all product include packaging*).
+3. **Pengadaan (*Procurement & PO*):** Penerbitan draf *Purchase Order (PO)* otomatis saat stok menyentuh batas minimum, terhubung langsung ke pencatatan HPP modul Keuangan ERP.
+4. **Manajemen Gudang (*Warehouse Control*):** Pemeriksaan kualitas bahan baku masuk (*Inbound QC*) dan alokasi pengeluaran bahan per kode pesanan (*Goods Issue*).
+5. **Logistik & Distribusi (*Outbound Fulfillment*):** Pengaturan serah terima langsung atau pengiriman kargo/ekspedisi setelah pelunasan serta sinkronisasi nomor resi ke portal *Order Tracking* pelanggan.
+
 ## 🛠️ Tech Stack
 - **Frontend**: HTML5, Tailwind CSS, JavaScript (ES6)
 - **Storage & Schema**: Browser localStorage (`drizzle_integrated_db`)
