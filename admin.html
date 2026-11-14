@@ -306,11 +306,15 @@
       <div class="bg-card border border-borderCard rounded-xl shadow-sm overflow-hidden">
         <div class="p-4 border-b border-borderCard flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
           <div>
-            <h3 class="font-bold text-sm text-dark font-mono uppercase">Inventory & MRP Bahan Baku (Aturan Kemasan 1:1)</h3>
-            <p class="text-xs text-muted mt-0.5">Stok kain, tinta, aksesoris, dan kemasan wajib. Stok berkurang otomatis seiring berjalannya SPK.</p>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-mono font-bold text-brand uppercase tracking-wider">Pilar 1: Gudang & MRP</span>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-brandLight text-brand font-bold">Aturan Kemasan Wajib 1:1</span>
+            </div>
+            <h3 class="font-bold text-sm text-dark font-mono uppercase mt-0.5">Inventaris Bahan Baku & Kemasan Gudang</h3>
+            <p class="text-xs text-muted mt-0.5">Stok kain, tinta, dan kemasan berkurang otomatis saat SPK/produksi berjalan. Status otomatis menjadi "Stok Kritis" jika stok berada di bawah batas minimum.</p>
           </div>
-          <button onclick="triggerAutoPOAll()" class="bg-brand hover:bg-brandDark text-white text-xs font-semibold px-4 py-2 rounded-lg transition shadow-sm flex items-center gap-1.5">
-            <span>+ Auto-PO Seluruh Bahan Kurang</span>
+          <button onclick="triggerAutoPOAll()" class="bg-brand hover:bg-brandDark text-white text-xs font-semibold px-4 py-2 rounded-lg transition shadow-sm flex items-center gap-1.5 whitespace-nowrap">
+            <span>+ Auto-Procurement Seluruh Bahan Kurang</span>
           </button>
         </div>
 
@@ -320,8 +324,8 @@
               <tr>
                 <th class="px-4 py-3">Kode Mat</th>
                 <th class="px-4 py-3">Nama Bahan Baku</th>
-                <th class="px-4 py-3">Kategori</th>
-                <th class="px-4 py-3 text-center">Stok Saat Ini</th>
+                <th class="px-4 py-3">Vendor Rekanan</th>
+                <th class="px-4 py-3 text-center">Stok Gudang</th>
                 <th class="px-4 py-3 text-center">Batas Minimum</th>
                 <th class="px-4 py-3">Harga Satuan</th>
                 <th class="px-4 py-3">Aturan Kemasan 1:1</th>
@@ -336,11 +340,20 @@
         </div>
       </div>
 
-      <!-- Purchase Orders Table -->
+      <!-- Purchase Orders Table (Procurement Pipeline) -->
       <div class="bg-card border border-borderCard rounded-xl shadow-sm overflow-hidden">
-        <div class="p-4 border-b border-borderCard">
-          <h3 class="font-bold text-sm text-dark font-mono uppercase">Daftar Purchase Order (PO) ke Vendor Supplier</h3>
-          <p class="text-xs text-muted mt-0.5">Riwayat pengadaan bahan baku kain, tinta, dan kemasan yang diterbitkan secara otomatis oleh modul SCM.</p>
+        <div class="p-4 border-b border-borderCard flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-mono font-bold text-brand uppercase tracking-wider">Pilar 2: Pengadaan Vendor</span>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-50 text-amber-700 font-bold border border-amber-200">Auto-Procurement PO</span>
+            </div>
+            <h3 class="font-bold text-sm text-dark font-mono uppercase mt-0.5">Daftar Purchase Order (PO) ke Vendor Supplier</h3>
+            <p class="text-xs text-muted mt-0.5">PO berstatus "ORDERED" menunggu pengiriman dari pemasok. Saat diklik "Terima Barang", stok gudang otomatis bertambah dan biaya dicatat sebagai pengeluaran (EXPENSE) di Buku Kas.</p>
+          </div>
+          <button onclick="openPOModal()" class="bg-canvas border border-borderCard hover:border-dark text-dark text-xs font-semibold px-3.5 py-2 rounded-lg transition shadow-sm flex items-center gap-1.5 whitespace-nowrap">
+            <span>+ Buat PO Manual</span>
+          </button>
         </div>
 
         <div class="overflow-x-auto">
@@ -348,15 +361,47 @@
             <thead class="bg-canvas text-muted font-mono uppercase text-[11px] border-b border-borderCard">
               <tr>
                 <th class="px-4 py-3">No. PO</th>
-                <th class="px-4 py-3">Vendor / Supplier</th>
+                <th class="px-4 py-3">Tanggal PO</th>
+                <th class="px-4 py-3">Vendor Supplier</th>
                 <th class="px-4 py-3">Item Bahan</th>
-                <th class="px-4 py-3 text-center">Jumlah Dipesan</th>
+                <th class="px-4 py-3 text-center">Qty Pesanan</th>
                 <th class="px-4 py-3">Total Biaya PO</th>
                 <th class="px-4 py-3">Status PO</th>
                 <th class="px-4 py-3 text-right">Aksi Penerimaan</th>
               </tr>
             </thead>
             <tbody id="po-table-body" class="divide-y divide-borderCard">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Outbound Logistics & Fulfillment Table -->
+      <div class="bg-card border border-borderCard rounded-xl shadow-sm overflow-hidden">
+        <div class="p-4 border-b border-borderCard">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-mono font-bold text-brand uppercase tracking-wider">Pilar 3: Outbound Logistics</span>
+            <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-bold border border-emerald-200">SCM Distribution Hub</span>
+          </div>
+          <h3 class="font-bold text-sm text-dark font-mono uppercase mt-0.5">Kesiapan Pengiriman & Input Resi Kurir Kargo</h3>
+          <p class="text-xs text-muted mt-0.5">Khusus pesanan yang telah lolos QC dan berstatus LUNAS. Masukkan nomor resi ekspedisi untuk meresmikan status pengiriman (SHIPPED) dan otomatis menyinkronkan pelacakan ke portal klien.</p>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-canvas text-muted font-mono uppercase text-[11px] border-b border-borderCard">
+              <tr>
+                <th class="px-4 py-3">No. Order</th>
+                <th class="px-4 py-3">Klien & Lembaga</th>
+                <th class="px-4 py-3">Item & Kuantitas</th>
+                <th class="px-4 py-3">Status Pembayaran</th>
+                <th class="px-4 py-3">Tahap Produksi</th>
+                <th class="px-4 py-3">Kurir & No. Resi</th>
+                <th class="px-4 py-3 text-right">Aksi Outbound</th>
+              </tr>
+            </thead>
+            <tbody id="outbound-table-body" class="divide-y divide-borderCard">
               <!-- Rendered via JS -->
             </tbody>
           </table>
@@ -565,6 +610,51 @@
           Tutup
         </button>
       </div>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL TERBITKAN PURCHASE ORDER (PO) ==================== -->
+  <div id="po-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-card border border-borderCard rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div class="flex justify-between items-center pb-3 border-b border-borderCard">
+        <div>
+          <span class="text-[10px] font-mono text-brand font-bold uppercase tracking-wider block">Procurement Module</span>
+          <h3 class="font-bold text-sm text-dark font-mono uppercase">Terbitkan PO ke Vendor Supplier</h3>
+        </div>
+        <button onclick="closePOModal()" class="text-muted hover:text-dark text-lg font-bold">&times;</button>
+      </div>
+      <form id="po-form" class="space-y-3.5 text-xs">
+        <div>
+          <label class="block font-semibold text-dark mb-1">Pilih Item Bahan Baku / Kemasan *</label>
+          <select id="po-mat-select" onchange="updatePOCostPreview()" class="w-full bg-canvas border border-borderCard rounded-lg px-3 py-2 text-xs text-dark focus:outline-none focus:border-brand">
+            <!-- Populated via JS -->
+          </select>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-dark mb-1">Jumlah Pemesanan *</label>
+            <input type="number" id="po-qty" min="1" value="50" oninput="updatePOCostPreview()" required class="w-full bg-canvas border border-borderCard rounded-lg px-3 py-2 text-xs font-mono font-bold text-dark focus:outline-none focus:border-brand">
+          </div>
+          <div>
+            <label class="block font-semibold text-dark mb-1">Satuan</label>
+            <input type="text" id="po-unit" readonly class="w-full bg-canvas border border-borderCard rounded-lg px-3 py-2 text-xs font-mono text-muted">
+          </div>
+        </div>
+        <div>
+          <label class="block font-semibold text-dark mb-1">Vendor / Mitra Supplier *</label>
+          <input type="text" id="po-vendor" required placeholder="Nama vendor supplier..." class="w-full bg-canvas border border-borderCard rounded-lg px-3 py-2 text-xs text-dark focus:outline-none focus:border-brand">
+        </div>
+        <div class="p-3 bg-canvas border border-borderCard rounded-xl flex justify-between items-center">
+          <span class="text-muted">Estimasi Biaya PO:</span>
+          <strong class="font-mono text-brand text-sm font-bold" id="po-cost-preview">Rp 0</strong>
+        </div>
+        <div class="pt-2 flex justify-end gap-2">
+          <button type="button" onclick="closePOModal()" class="px-3.5 py-2 bg-canvas border border-borderCard rounded-lg text-xs hover:border-dark">Batal</button>
+          <button type="submit" class="px-4 py-2 bg-brand text-white font-bold rounded-lg text-xs hover:bg-brandDark transition shadow-sm">
+            Kirim PO (Status: ORDERED)
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 
@@ -969,13 +1059,15 @@
       document.getElementById('customer-orders-modal').classList.add('hidden');
     }
 
-    // 4. SCM MATERIALS & PO RENDERER
+    // 4. SCM MATERIALS, PO & OUTBOUND LOGISTICS RENDERER
     function renderSCMTables() {
       const db = window.DrizzleApp.getDB();
       const materials = db.materials || [];
       const poList = db.purchaseOrders || [];
+      const orders = db.orders || [];
+      const customers = db.customers || [];
 
-      // Materials Table
+      // A. Materials Inventory Table
       const matBody = document.getElementById('materials-table-body');
       matBody.innerHTML = '';
       materials.forEach(m => {
@@ -984,8 +1076,8 @@
 
         const isLow = m.currentStock <= m.minThreshold;
         const statusBadge = isLow 
-          ? `<span class="px-2 py-0.5 rounded bg-rose-50 text-rose-700 font-mono font-bold border border-rose-200 text-[10px]">Stok Menipis</span>`
-          : `<span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-mono font-bold border border-emerald-200 text-[10px]">Stok Aman</span>`;
+          ? `<span class="px-2 py-0.5 rounded bg-rose-50 text-rose-700 font-mono font-bold border border-rose-200 text-[10px]">Stok Kritis</span>`
+          : `<span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-mono font-bold border border-emerald-200 text-[10px]">Aman</span>`;
 
         const packBadge = m.isMandatoryPack1to1 
           ? `<span class="px-2 py-0.5 rounded bg-brandLight text-brand font-mono font-bold border border-brand/20 text-[10px]">Wajib 1:1 Pack</span>`
@@ -993,23 +1085,23 @@
 
         tr.innerHTML = `
           <td class="px-4 py-3 font-mono font-bold text-dark">${m.materialId}</td>
-          <td class="px-4 py-3 font-bold text-dark">${m.name}</td>
-          <td class="px-4 py-3 text-muted text-[11px]">${m.category}</td>
-          <td class="px-4 py-3 text-center font-mono font-bold ${isLow ? 'text-rose-600' : 'text-dark'}">${m.currentStock} ${m.unit}</td>
-          <td class="px-4 py-3 text-center font-mono text-muted">${m.minThreshold} ${m.unit}</td>
-          <td class="px-4 py-3 font-mono">${window.DrizzleApp.formatRupiah(m.unitCost)}</td>
+          <td class="px-4 py-3 font-bold text-dark">${m.materialName || m.name}</td>
+          <td class="px-4 py-3 text-muted text-[11px]">${m.supplierName || 'Vendor Rekanan'}</td>
+          <td class="px-4 py-3 text-center font-mono font-bold tabular-nums ${isLow ? 'text-rose-600' : 'text-dark'}">${m.currentStock} ${m.unit}</td>
+          <td class="px-4 py-3 text-center font-mono text-muted tabular-nums">${m.minThreshold} ${m.unit}</td>
+          <td class="px-4 py-3 font-mono tabular-nums">${window.DrizzleApp.formatRupiah(m.unitCost)}</td>
           <td class="px-4 py-3">${packBadge}</td>
           <td class="px-4 py-3">${statusBadge}</td>
           <td class="px-4 py-3 text-right">
-            <button onclick="createSinglePO('${m.materialId}')" class="px-2.5 py-1 rounded bg-brandLight text-brand hover:bg-brand hover:text-white transition font-mono font-bold text-[10px]">
-              + PO Vendor
+            <button onclick="openPOModal('${m.materialId}')" class="px-2.5 py-1 rounded bg-brandLight text-brand hover:bg-brand hover:text-white transition font-mono font-bold text-[10px] shadow-sm">
+              Terbitkan PO ke Vendor
             </button>
           </td>
         `;
         matBody.appendChild(tr);
       });
 
-      // PO Table
+      // B. Purchase Orders Table (Procurement)
       const poBody = document.getElementById('po-table-body');
       poBody.innerHTML = '';
       poList.forEach(p => {
@@ -1017,35 +1109,140 @@
         tr.className = 'hover:bg-canvas/50 transition';
 
         const mat = materials.find(m => m.materialId === p.materialId) || {};
+        const isReceived = p.poStatus === 'RECEIVED';
 
-        let poBadge = 'bg-amber-50 text-amber-700 border-amber-200';
-        if (p.poStatus === 'RECEIVED') poBadge = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+        const poBadge = isReceived
+          ? `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">RECEIVED (Stok Masuk)</span>`
+          : `<span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-50 text-amber-700 border border-amber-200">ORDERED (Menunggu Vendor)</span>`;
+
+        const actionCell = isReceived
+          ? `<span class="text-muted text-[10px] font-mono">✓ Masuk Gudang & Kas</span>`
+          : `<button onclick="receivePO('${p.poId}')" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition font-mono font-bold text-[10px] shadow-sm flex items-center gap-1 ml-auto">
+               <span>Terima Barang (Receive PO) &rarr;</span>
+             </button>`;
 
         tr.innerHTML = `
           <td class="px-4 py-3 font-mono font-bold text-dark">${p.poId}</td>
+          <td class="px-4 py-3 font-mono text-muted text-[11px]">${p.createdAt ? p.createdAt.split(' ')[0] : '-'}</td>
           <td class="px-4 py-3 font-bold text-dark">${p.vendorName}</td>
-          <td class="px-4 py-3">${mat.name || p.materialId}</td>
-          <td class="px-4 py-3 text-center font-mono font-bold">${p.qtyOrdered} ${mat.unit || 'unit'}</td>
-          <td class="px-4 py-3 font-mono font-bold text-dark">${window.DrizzleApp.formatRupiah(p.totalCost)}</td>
-          <td class="px-4 py-3">
-            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${poBadge}">${p.poStatus}</span>
-          </td>
-          <td class="px-4 py-3 text-right">
-            ${p.poStatus !== 'RECEIVED' ? `<button onclick="receivePO('${p.poId}')" class="px-2.5 py-1 rounded bg-emerald-600 text-white hover:bg-emerald-700 transition font-mono font-bold text-[10px]">Terima Barang</button>` : '<span class="text-muted text-[10px]">Selesai</span>'}
-          </td>
+          <td class="px-4 py-3">${mat.materialName || mat.name || p.materialName || p.materialId}</td>
+          <td class="px-4 py-3 text-center font-mono font-bold tabular-nums">${p.qtyOrdered} ${p.unit || mat.unit || 'unit'}</td>
+          <td class="px-4 py-3 font-mono font-bold text-dark tabular-nums">${window.DrizzleApp.formatRupiah(p.totalCost)}</td>
+          <td class="px-4 py-3">${poBadge}</td>
+          <td class="px-4 py-3 text-right whitespace-nowrap">${actionCell}</td>
         `;
         poBody.appendChild(tr);
       });
+
+      // C. Outbound Logistics & Fulfillment Table
+      const outBody = document.getElementById('outbound-table-body');
+      if (outBody) {
+        outBody.innerHTML = '';
+        orders.forEach(o => {
+          const cust = customers.find(c => c.customerId === o.customerId) || {};
+          const tr = document.createElement('tr');
+          tr.className = 'hover:bg-canvas/50 transition';
+
+          const isLunas = o.paymentStatus === 'LUNAS';
+          const isQC = o.kanbanStage === 'QC';
+          const isShipped = o.kanbanStage === 'SHIPPED';
+
+          let payBadge = 'bg-amber-50 text-amber-700 border-amber-200';
+          if (isLunas) payBadge = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+          else if (o.paymentStatus === 'DP_50_PAID') payBadge = 'bg-sky-50 text-sky-700 border-sky-200';
+
+          let actionBtn = '';
+          if (isShipped) {
+            actionBtn = `<div class="flex items-center justify-end gap-1.5">
+                           <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">Terkirim</span>
+                           <button onclick="openResiModal('${o.orderId}')" class="text-[10px] font-mono underline text-muted hover:text-dark">Edit Resi</button>
+                         </div>`;
+          } else if (isQC && isLunas) {
+            actionBtn = `<button onclick="openResiModal('${o.orderId}')" class="px-3 py-1.5 rounded-lg bg-brand text-white font-bold text-[11px] hover:bg-brandDark transition shadow-sm flex items-center gap-1 ml-auto">
+                           <span>🚚 Input Resi Kurir (Kirim)</span>
+                         </button>`;
+          } else if (isQC && !isLunas) {
+            actionBtn = `<div class="flex items-center justify-end gap-1.5">
+                           <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-50 text-amber-700 border border-amber-200">Menunggu Pelunasan</span>
+                           <button onclick="promptPayment('${o.orderId}')" class="text-[10px] font-mono underline text-emerald-700 hover:text-emerald-800 font-bold">Verifikasi Lunas</button>
+                         </div>`;
+          } else {
+            actionBtn = `<span class="text-muted text-[10px] font-mono">Dalam Produksi (${o.kanbanStage})</span>`;
+          }
+
+          const resiDisplay = o.trackingResi 
+            ? `<span class="font-mono font-bold text-dark block text-[11px]">${o.shippingCarrier || 'Ekspedisi'}: <span class="text-emerald-700">${o.trackingResi}</span></span>` 
+            : `<span class="text-muted text-[10px] font-mono">Belum Ada Resi</span>`;
+
+          tr.innerHTML = `
+            <td class="px-4 py-3 font-mono font-bold text-dark">${o.orderId}</td>
+            <td class="px-4 py-3">
+              <span class="font-bold text-dark block">${cust.name || 'Klien'}</span>
+              <span class="text-[11px] text-muted">${cust.organization || 'Umum'} &bull; ${cust.address || '-'}</span>
+            </td>
+            <td class="px-4 py-3">
+              <span class="font-medium text-dark">${o.serviceName || o.serviceId}</span>
+              <span class="text-[11px] font-mono font-bold text-brand block">${o.qty} Pcs (Include Packaging 1:1)</span>
+            </td>
+            <td class="px-4 py-3">
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${payBadge}">${o.paymentStatus}</span>
+            </td>
+            <td class="px-4 py-3">
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-card border border-borderCard text-dark">${o.kanbanStage}</span>
+            </td>
+            <td class="px-4 py-3">${resiDisplay}</td>
+            <td class="px-4 py-3 text-right whitespace-nowrap">${actionBtn}</td>
+          `;
+          outBody.appendChild(tr);
+        });
+      }
     }
 
-    function createSinglePO(matId) {
+    // Modal PO Helpers
+    function openPOModal(preSelectMatId = null) {
       const db = window.DrizzleApp.getDB();
-      const mat = db.materials.find(m => m.materialId === matId);
-      if (!mat) return;
-      const orderQty = Math.max(100, (mat.minThreshold * 2) - mat.currentStock);
-      window.DrizzleApp.createAutoPO(matId, orderQty, 'SCM Manual PO');
-      renderAll();
+      const materials = db.materials || [];
+      const sel = document.getElementById('po-mat-select');
+      sel.innerHTML = '';
+      materials.forEach(m => {
+        const opt = document.createElement('option');
+        opt.value = m.materialId;
+        opt.textContent = `${m.materialId} — ${m.materialName || m.name} (Stok: ${m.currentStock} ${m.unit})`;
+        opt.dataset.unit = m.unit;
+        opt.dataset.unitCost = m.unitCost;
+        opt.dataset.supplier = m.supplierName || 'Vendor Rekanan';
+        sel.appendChild(opt);
+      });
+      if (preSelectMatId) sel.value = preSelectMatId;
+      updatePOCostPreview();
+      document.getElementById('po-modal').classList.remove('hidden');
     }
+
+    function closePOModal() {
+      document.getElementById('po-modal').classList.add('hidden');
+    }
+
+    function updatePOCostPreview() {
+      const sel = document.getElementById('po-mat-select');
+      const opt = sel.options[sel.selectedIndex];
+      if (!opt) return;
+      document.getElementById('po-unit').value = opt.dataset.unit || 'Unit';
+      document.getElementById('po-vendor').value = opt.dataset.supplier || 'Vendor Rekanan';
+      const qty = parseInt(document.getElementById('po-qty').value, 10) || 0;
+      const unitCost = parseInt(opt.dataset.unitCost, 10) || 0;
+      document.getElementById('po-cost-preview').textContent = window.DrizzleApp.formatRupiah(qty * unitCost);
+    }
+
+    document.getElementById('po-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const matId = document.getElementById('po-mat-select').value;
+      const qty = parseInt(document.getElementById('po-qty').value, 10) || 1;
+      const vendor = document.getElementById('po-vendor').value.trim();
+      const res = window.DrizzleApp.createPurchaseOrder(matId, qty, vendor);
+      closePOModal();
+      alert(`Purchase Order ${res.po.poId} (Status: ORDERED) berhasil diterbitkan ke ${vendor}!`);
+      renderAll();
+    });
 
     function triggerAutoPOAll() {
       const db = window.DrizzleApp.getDB();
@@ -1055,26 +1252,21 @@
         return;
       }
       lowMaterials.forEach(m => {
-        const orderQty = Math.max(100, (m.minThreshold * 2) - m.currentStock);
-        window.DrizzleApp.createAutoPO(m.materialId, orderQty, 'SCM Auto-PO Engine');
+        const orderQty = Math.max(50, (m.minThreshold * 2) - m.currentStock);
+        window.DrizzleApp.createPurchaseOrder(m.materialId, orderQty, m.supplierName);
       });
-      alert(`Berhasil menerbitkan ${lowMaterials.length} Purchase Order otomatis ke vendor rekanan!`);
+      alert(`Berhasil menerbitkan ${lowMaterials.length} Purchase Order otomatis (Status: ORDERED) ke vendor supplier!`);
       renderAll();
     }
 
     function receivePO(poId) {
-      const db = window.DrizzleApp.getDB();
-      const po = (db.purchaseOrders || []).find(p => p.poId === poId);
-      if (!po) return;
-
-      const mat = (db.materials || []).find(m => m.materialId === po.materialId);
-      if (mat) {
-        mat.currentStock += po.qtyOrdered;
+      const res = window.DrizzleApp.receivePurchaseOrder(poId);
+      if (res.success) {
+        alert(`Barang dari PO ${poId} berhasil diterima di gudang Drizzle!\nStok ${res.material ? (res.material.materialName || res.material.name) : ''} bertambah +${res.po.qtyOrdered} ${res.po.unit}.\nBiaya ${window.DrizzleApp.formatRupiah(res.po.totalCost)} otomatis dicatat sebagai pengeluaran (EXPENSE) di Buku Kas.`);
+        renderAll();
+      } else {
+        alert(res.reason || 'Gagal menerima PO');
       }
-      po.poStatus = 'RECEIVED';
-      window.DrizzleApp.saveDB(db);
-      alert(`Barang dari PO ${poId} telah diterima di gudang Drizzle! Stok ${mat ? mat.name : ''} bertambah +${po.qtyOrdered}.`);
-      renderAll();
     }
 
     // 5. FINANCE TABLES RENDERER

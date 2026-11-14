@@ -1256,9 +1256,16 @@ function moveKanbanStage(orderId, newStage, note = '') {
   return { success: true, order };
 }
 
-// Deduct Materials with Buffer 3% and Mandatory 1:1 Packaging
+// SCM Module: MRP Calculation & Mandatory 1:1 Packaging Rule
 function deductOrderMaterials(order) {
   const db = getDB();
+  // 1. Bypass if order mode is DESIGN_ONLY
+  if (order.serviceMode === 'DESIGN_ONLY') {
+    order.materialsDeducted = true;
+    saveDB(db);
+    return { success: true, bypassed: true, reason: 'Layanan desain saja — bypass pemotongan fisik & kemasan.' };
+  }
+
   const srv = (db.services || []).find(s => s.serviceId === order.serviceId || s.name.toLowerCase() === (order.serviceName || '').toLowerCase());
   const qty = order.qty || 1;
 
@@ -1267,7 +1274,7 @@ function deductOrderMaterials(order) {
       const mat = (db.materials || []).find(m => m.materialId === item.materialId);
       if (mat) {
         if (mat.isMandatoryPack1to1) {
-          // Rule 1:1 Packaging
+          // Rule 1:1 Packaging: Exactly 1 unit per physical product qty
           mat.currentStock = Math.max(0, mat.currentStock - qty);
         } else {
           // Fabric & Chemical with 3% safety buffer
@@ -1276,13 +1283,21 @@ function deductOrderMaterials(order) {
         }
       }
     });
+  } else {
+    // Fallback physical allocation: enforce mandatory 1:1 packaging for physical products
+    const poly = (db.materials || []).find(m => m.materialId === 'MAT-05');
+    const card = (db.materials || []).find(m => m.materialId === 'MAT-06');
+    if (poly) poly.currentStock = Math.max(0, poly.currentStock - qty);
+    if (card) card.currentStock = Math.max(0, card.currentStock - qty);
   }
+
   order.materialsDeducted = true;
   saveDB(db);
+  return { success: true, deducted: true };
 }
 
-// Auto-PO Generator to Vendor
-function createAutoPO(materialId, qtyToAdd, orderId = null) {
+// SCM Module: Create Purchase Order (Status: ORDERED)
+function createPurchaseOrder(materialId, qtyToAdd, vendorName = null, orderId = null) {
   const db = getDB();
   const mat = (db.materials || []).find(m => m.materialId === materialId);
   if (!mat) return { success: false, reason: 'Material not found' };
@@ -1294,38 +1309,68 @@ function createAutoPO(materialId, qtyToAdd, orderId = null) {
 
   const newPO = {
     poId,
-    orderId,
+    orderId: orderId || null,
     materialId: mat.materialId,
-    materialName: mat.materialName,
-    vendorName: mat.supplierName,
+    materialName: mat.materialName || mat.name,
+    vendorName: vendorName || mat.supplierName || 'Vendor Rekanan',
     qtyOrdered: qty,
     unit: mat.unit,
     totalCost,
-    poStatus: 'RECEIVED', // Auto-received on restock execution
+    poStatus: 'ORDERED', // Menunggu Pengiriman dari Vendor
     createdAt: now
   };
-
-  // Add stock to material
-  mat.currentStock += qty;
-
-  // Record into Finance Ledger
-  const txId = generateNextTxId();
-  db.financeLedger.unshift({
-    txId,
-    orderId: null,
-    poId,
-    txType: 'EXPENSE',
-    amount: totalCost,
-    description: `Pengadaan SCM ${qty} ${mat.unit} ${mat.materialName} (${poId})`,
-    txDate: now
-  });
 
   db.purchaseOrders.unshift(newPO);
   saveDB(db);
   return { success: true, po: newPO };
 }
 
-// Record Customer Payment (DP / Pelunasan)
+// SCM Module: Receive Purchase Order (Status: RECEIVED -> Update Stock & Record Expense)
+function receivePurchaseOrder(poId) {
+  const db = getDB();
+  const po = (db.purchaseOrders || []).find(p => p.poId === poId);
+  if (!po) return { success: false, reason: 'PO tidak ditemukan' };
+  if (po.poStatus === 'RECEIVED') return { success: false, reason: 'PO sudah diterima sebelumnya' };
+
+  po.poStatus = 'RECEIVED';
+  const now = new Date().toISOString().replace('T', ' ').substring(0, 16);
+
+  // 1. Add Stock to Material Inventory
+  const mat = (db.materials || []).find(m => m.materialId === po.materialId);
+  if (mat) {
+    mat.currentStock += po.qtyOrdered;
+  }
+
+  // 2. Record Expense into Finance Ledger
+  const txId = generateNextTxId();
+  db.financeLedger.unshift({
+    txId,
+    orderId: po.orderId || null,
+    poId: po.poId,
+    txType: 'EXPENSE',
+    amount: po.totalCost,
+    description: `Penerimaan PO ${po.poId} dari ${po.vendorName} (+${po.qtyOrdered} ${mat ? mat.unit : 'unit'} ${mat ? (mat.materialName || mat.name) : ''})`,
+    txDate: now
+  });
+
+  // 3. Update Order HPP if linked to a specific order
+  if (po.orderId) {
+    const linkedOrder = (db.orders || []).find(o => o.orderId === po.orderId);
+    if (linkedOrder) {
+      linkedOrder.hppTotal = (linkedOrder.hppTotal || 0) + po.totalCost;
+    }
+  }
+
+  saveDB(db);
+  return { success: true, po, material: mat };
+}
+
+// Alias for Auto-PO
+function createAutoPO(materialId, qtyToAdd, orderId = null) {
+  return createPurchaseOrder(materialId, qtyToAdd, null, orderId);
+}
+
+// Record Customer Payment (DP / Pelunasan) with Automated MRP Execution
 function updatePaymentStatus(orderId, newStatus) {
   const db = getDB();
   const order = (db.orders || []).find(o => o.orderId === orderId || o.tracking_code === orderId);
@@ -1349,6 +1394,10 @@ function updatePaymentStatus(orderId, newStatus) {
         txDate: now
       });
     }
+    // Automated MRP Execution if not yet deducted
+    if (!order.materialsDeducted && order.serviceMode !== 'DESIGN_ONLY') {
+      deductOrderMaterials(order);
+    }
   } else if (newStatus === 'DP_50_PAID') {
     order.paidAmount = order.dpAmount || (order.totalPrice * 0.5);
     const txId = generateNextTxId();
@@ -1361,6 +1410,10 @@ function updatePaymentStatus(orderId, newStatus) {
       description: `Penerimaan DP 50% Pesanan ${order.orderId} (${order.serviceName})`,
       txDate: now
     });
+    // Automated MRP Execution upon DP Verification
+    if (!order.materialsDeducted && order.serviceMode !== 'DESIGN_ONLY') {
+      deductOrderMaterials(order);
+    }
   } else {
     order.paidAmount = 0;
   }
@@ -1369,7 +1422,7 @@ function updatePaymentStatus(orderId, newStatus) {
   return { success: true, order };
 }
 
-// Update Outbound Shipping Tracking Info
+// Update Outbound Shipping Tracking Info (Courier & Resi)
 function updateShippingInfo(orderId, carrier, resi) {
   const db = getDB();
   const order = (db.orders || []).find(o => o.orderId === orderId || o.tracking_code === orderId);
@@ -1384,9 +1437,13 @@ function updateShippingInfo(orderId, carrier, resi) {
   order.historyLogs.unshift({
     timestamp: now,
     stage: 'SHIPPED',
-    note: `Pesanan dikirimkan via ${carrier} dengan nomor resi/AWB: ${resi}.`,
-    author: 'Outbound SCM'
+    note: `Pesanan telah selesai QC & dikirimkan via ${carrier} dengan nomor resi/AWB: ${resi}.`,
+    author: 'Outbound SCM Logistics'
   });
+
+  saveDB(db);
+  return { success: true, order };
+}
 
   saveDB(db);
   return { success: true, order };
@@ -1540,6 +1597,9 @@ window.DrizzleApp = {
   generateNextPOId,
   generateNextTxId,
   moveKanbanStage,
+  deductOrderMaterials,
+  createPurchaseOrder,
+  receivePurchaseOrder,
   createAutoPO,
   updatePaymentStatus,
   updateShippingInfo,
