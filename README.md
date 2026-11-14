@@ -1,55 +1,75 @@
-# Drizzle Project — Integrated Order & Studio Management System
+# Drizzle Project — Integrated CRM, SCM & ERP Studio Management System
 
-Web-based Order & Studio Management System untuk **Drizzle Project** (Vendor merchandise, konveksi apparel custom, dan jasa desain kreatif & branding).
+Web-based Order, Supply Chain & Enterprise Resource Planning System untuk **Drizzle Project** (Vendor merchandise, konveksi apparel custom, dan creative studio berbasis di Surakarta, Solo).
 
-## 🚀 Fitur Utama
-- **Modul CRM (*Customer Relationship Management*)**: Digitalisasi interaksi klien organisasi/komunitas, form pemesanan mandiri (12 kategori apparel & 7 layanan desain kreatif/branding), pelacakan progres real-time, dan fitur *Repeat Order* 1-klik.
-- **Modul ERP (*Enterprise Resource Planning*)**: Pengelolaan pesanan terpadu, matrix ukuran S–XXL, kontrol kuota revisi pra-produksi (maks. 3x), alur 6 tahap produksi makloon & QC, pencetakan lembar kerja SPK, serta kalkulasi termin pembayaran & HPP.
-- **Modul SCM (*Supply Chain Management*)**: Direktori pemasok & mitra makloon, kalkulasi kebutuhan material otomatis (*MRP* dengan *buffer* 3% & *packaging* 1:1), draf *Purchase Order (PO)*, kontrol gudang (*Inbound QC* & *Goods Issue*), serta integrasi nomor resi kargo *outbound*.
+## 🚀 Ringkasan Modul Terintegrasi (DrizzleOS)
 
-## 🤝 Rancangan Modul CRM (Drizzle Project)
-Modul CRM mendigitalisasi alur interaksi klien (organisasi kampus, komunitas, dan perusahaan) untuk menggantikan pendataan pesanan melalui chat grup WhatsApp:
+Sistem mengintegrasikan 3 pilar operasional studio ke dalam satu database relasional browser (`localStorage` key: `drizzle_sim_db`) dengan palet warna studio hangat (*Warm Studio Light Theme*: Canvas `#FAF7F4`, Card `#FFFFFF`, Brand Orange `#FF791D`, Dark `#33302D`):
 
-1. **Manajemen Pelanggan & Segmentasi (*Customer Database*):** Menyimpan database PIC, nama instansi/komunitas, kontak WhatsApp, dan alamat pengiriman secara terpusat untuk mendukung kebutuhan lintas periode kepengurusan.
-2. **Katalog Layanan & Portofolio (*Service Portal*):** Menyajikan 12 kategori apparel custom (*all product include packaging*) dan 7 layanan *creative & brand consultancy* beserta portofolio produksi riil Drizzle Project.
-3. **Pengajuan Pesanan Mandiri (*Self-Service Order Entry*):** Menyediakan formulir dinamis untuk input *matrix* ukuran S–XXL, daftar *nickname*/divisi PDH, pengajuan *alternative design*, maupun *brief* konsultasi brand dengan penerbitan kode tracking otomatis (`DRZ-2026-XXX`).
-4. **Pelacakan Progres Real-Time (*Order Tracking*):** Memungkinkan klien memantau status pembayaran (DP/Lunas), progres produksi 6 tahap dari ERP, serta nomor resi pengiriman dari SCM tanpa perlu bertanya manual di grup chat.
-5. **Riwayat Pesanan & Retensi (*Order History & Reorder*):** Mengarsipkan spesifikasi desain dan ukuran proyek terdahulu untuk mempermudah pemesanan ulang (*repeat order*) satu klik.
+### 1. 👥 Modul CRM (Customer Relationship Management)
+- **Deteksi Pelanggan Otomatis via WhatsApp:** Pencocokan nomor WhatsApp otomatis saat pemesanan; menentukan segmen secara dinamis (*Baru*, *Repeat*, atau *Instansi* jika menyertakan nama organisasi) serta mengakumulasi total belanja.
+- **Katalog Layanan & Portofolio:** Menyajikan 12 lini custom apparel (*Cotton Combed, Drill, Fleece, Taslan*) dan 7 layanan *creative design & branding* lengkap dengan 17 rekap proyek klien nyata.
+- **Formulir Pemesanan Mandiri (`order.html`):** Input matrix ukuran S–XXL, brief teknis, pemilihan ekspedisi kargo, serta otomatisasi penetapan tagihan DP 50% dan kode pesanan berurutan (`DRZ-2026-XXX`).
+- **Portal Tracking Publik (`tracking.html`):** Pencarian real-time via Kode Order atau Nomor WhatsApp dengan visualisasi stepper 6 tahap, timeline log riwayat produksi, status pembayaran, dan tombol reorder 1-klik.
+- **Direktori Pelanggan CRM (`admin.html`):** Tabel direktori seluruh klien lengkap dengan filter segmen, statistik transaksi, dan riwayat pesanan per klien.
 
-## 🏢 Rancangan Modul ERP (5 Sub-Modul Terintegrasi)
-1. **Penjualan (*Sales & Order Management*):** Mengelola 12 kategori produk apparel (matrix ukuran S–XXL & daftar *nickname*/divisi PDH) dan paket jasa kreatif studio, skema *tiered pricing* (16 hingga 650+ pcs), serta penerbitan kode tracking otomatis.
-2. **Pra-Produksi (*Design & Sampling*):** Mengatur alur pengajuan *alternative designs*, kontrol batas kuota revisi (maks. 3x), serta persetujuan *sample* sebelum Surat Perintah Kerja (SPK) diterbitkan.
-3. **Produksi & QC (*Production Pipeline & Makloon*):** Memantau pengerjaan 6 tahap (*Design Approved -> DP Verified -> Potong & Bahan -> Sablon/Bordir -> Jahit & QC -> Packaging & Siap Kirim*), pembagian vendor *makloon*, dan pencatatan hasil QC (*passed* vs *reject*).
-4. **Persediaan (*Inventory & Packaging - SCM*):** Mengontrol stok kain roll, perlengkapan sablon/bordir, *buffer* bahan 3%, serta stok wajib *packaging* (rasio 1:1 per produk) yang otomatis terpotong saat pesanan masuk produksi.
-5. **Keuangan (*Finance & HPP*):** Mengelola termin pembayaran klien (DP 50% dan pelunasan), menghitung Harga Pokok Produksi (HPP) per proyek, serta menyajikan rekapitulasi kas masuk, piutang, dan laba bersih.
+### 2. 📦 Modul SCM (Supply Chain Management)
+- **Kalkulasi MRP & Aturan Wajib Kemasan 1:1:** Setiap 1 unit produk apparel fisik otomatis mengalokasikan 1 unit Polymailer/Box Drizzle (`MAT-05`) dan 1 unit Thank You Card (`MAT-06`), ditambah buffer toleransi bahan baku 3%. Layanan desain (*DESIGN_ONLY*) otomatis membypass pemotongan fisik.
+- **Kontrol Inventaris Gudang:** Monitoring stok bahan baku (*Cotton Combed Roll, American Drill, Cotton Fleece, Tinta DTF/Plastisol*) dan indikator stok kritis (`currentStock <= minThreshold`).
+- **Auto-Procurement Purchase Order (PO):** Penerbitan PO otomatis ke vendor rekanan saat stok menipis (`PO-2026-XXX`). Fitur *Receive PO* otomatis menambah stok gudang, mencatat pengeluaran (*EXPENSE*) ke Buku Kas, dan menambah HPP pesanan terkait.
+- **Outbound Logistics & Fulfillment:** Form input nomor resi kurir (J&T Cargo, Baraka Sarana Tama, Lion Parcel, dll) untuk pesanan yang telah lolos QC dan berstatus LUNAS. Resi otomatis tersinkronisasi ke portal lacak pelanggan.
 
-## 📦 Rancangan Modul SCM (Drizzle Project)
-Modul SCM mengelola aliran material dan distribusi dari pemasok hingga ke tangan klien untuk mendukung produksi 12 lini apparel custom Drizzle Project melalui 5 pilar terpadu:
+### 3. 🏢 Modul ERP (Enterprise Resource Planning & Finance)
+- **Verifikasi Pembayaran Cepat:** Tombol aksi pada tiket order untuk verifikasi *DP 50%* dan *Pelunasan 50%*, yang otomatis mencatat arus kas masuk (*INCOME*) ke Buku Kas dan memajukan status pesanan.
+- **Papan Kanban Produksi (6 Tahap):**
+  1. `MENUNGGU_DP` (Menunggu Pembayaran DP 50%)
+  2. `DESIGN` (Desain & Brief Mockup Approval)
+  3. `PRINTING` (Sablon DTF/Plastisol & Bordir Komputer)
+  4. `SEWING` (Jahit & Assembly Garmen)
+  5. `QC` (Quality Control & Kemasan 1:1)
+  6. `SHIPPED` (Siap Kirim / Terkirim)
+  - *Bypass Otomatis:* Pesanan dengan mode `DESIGN_ONLY` otomatis melompati tahap Sablon dan Jahit langsung ke QC.
+  - Setiap pemindahan tahap kartu otomatis mencatat riwayat log dengan timestamp ke `historyLogs`.
+- **Buku Kas & Analisis HPP (Finance Ledger):**
+  - Jurnal transaksi arus kas masuk (`INCOME`) dari termin pembayaran klien vs arus kas keluar (`EXPENSE`) dari penerimaan PO vendor.
+  - Analisis margin laba kotor, perbandingan nilai jual terhadap Harga Pokok Produksi (HPP/COGS), dan persentase laba per proyek.
+- **Dasbor Ringkasan Eksekutif (4 KPI Dinamis):**
+  1. *Total Order Aktif* (jumlah proyek aktif & akumulasi volume pcs)
+  2. *Total Omzet Masuk (Rp)* (realisasi kas masuk & piutang klien)
+  3. *Jumlah Material Stok Kritis* (indikator bahan menipis & stok kemasan 1:1)
+  4. *Persentase Margin Keuntungan Bersih* ($\frac{\text{Kas Masuk} - \text{Kas Keluar}}{\text{Kas Masuk}} \times 100\%$)
 
-1. **Manajemen Pemasok & Mitra Makloon (*Supplier & Vendor*):** Mengelola database pemasok kain (*Combed, Drill, Fleece, Taslan*), aksesoris, *Drizzle Packaging*, serta mitra *makloon* (sablon, bordir, jahit) untuk menopang pesanan skala kecil maupun massal (16 hingga 650+ pcs).
-2. **Perencanaan Material (*MRP*):** Menghitung otomatis kebutuhan bahan baku dari setiap SPK ERP lengkap dengan *buffer* toleransi cacat 3% dan rasio wajib kemasan 1:1 (*all product include packaging*).
-3. **Pengadaan (*Procurement & PO*):** Menerbitkan draf *Purchase Order (PO)* otomatis saat stok menyentuh batas minimum dan menghubungkan biaya pembelian ke pencatatan HPP modul Keuangan ERP.
-4. **Manajemen Gudang (*Warehouse Control*):** Mencatat pemeriksaan kualitas bahan masuk (*Inbound QC*) dan alokasi pengeluaran bahan per kode pesanan (`Goods Issue`).
-5. **Logistik & Distribusi (*Outbound Fulfillment*):** Mengatur serah terima atau pengiriman kargo setelah status pembayaran lunas serta menyinkronkan nomor resi langsung ke halaman *Order Tracking* pelanggan.
+---
 
-## 🛠️ Tech Stack
-- **Frontend**: HTML5, Tailwind CSS, JavaScript (ES6)
-- **Storage & Schema**: Browser localStorage (`drizzle_integrated_db`)
-- **Development Tool**: Antigravity AI
-- **Deployment**: Cloudflare Workers & Pages via GitHub Repository
+## 🛠️ Tech Stack & Arsitektur Database
 
-## 📁 Struktur Proyek
+- **Frontend**: HTML5 Semantic, Tailwind CSS (CDN), Vanilla JavaScript (ES6 Modules)
+- **Database Architecture**: Browser `localStorage` (`drizzle_sim_db`) dengan 6 koleksi relasional:
+  - `services` (PK: `serviceId` SRV-XX, kategori, harga dasar, HPP, resep BOM)
+  - `customers` (PK: `customerId` CUST-XXX, nama, WhatsApp, segmen, akumulasi belanja)
+  - `orders` (PK: `orderId` DRZ-2026-XXX, FK: `customerId`, `serviceId`, mode, DP, HPP, resi, log)
+  - `materials` (PK: `materialId` MAT-XX, stok gudang, batas aman, rasio kemasan 1:1)
+  - `purchaseOrders` (PK: `poId` PO-2026-XXX, FK: `orderId`, `materialId`, vendor, status PO)
+  - `financeLedger` (PK: `txId` TRX-XXX, FK: `orderId`, `poId`, tipe INCOME/EXPENSE, nominal)
+  - `tenantConfig` (Konfigurasi identitas multi-tenant Drizzle Project Studio Solo)
+- **Design Philosophy**: *"Warm Studio Light Theme"* (Palet warna hangat studio konveksi, tipografi Inter & JetBrains Mono, border halus, responsive mobile-first)
+
+---
+
+## 📁 Struktur Berkas
+
 ```plaintext
 drizzle-project/
-├── index.html          # Landing Page & Katalog Studio
-├── order.html          # Form Pemesanan Terpadu (Apparel & Desain)
-├── tracking.html       # Portal Lacak Status Pesanan Pelanggan
-├── admin.html          # Dashboard ERP & SCM Terintegrasi
-├── assets/             # Gambar portofolio & aset Drizzle
+├── index.html          # Landing Page Studio, Portofolio Klien, & Quick Catalog
+├── order.html          # Form Pemesanan Mandiri, Kalkulator Matrix Ukuran & DP
+├── tracking.html       # Portal Lacak Status Pesanan (Order ID & WhatsApp)
+├── admin.html          # Pusat Kendali Terpadu (Kanban 6 Tahap, CRM, SCM, & Buku Kas)
+├── assets/             # Aset portofolio & identitas visual studio
 ├── js/
-│   └── store.js        # Pusat Data Terintegrasi (drizzle_integrated_db)
-├── schema.sql          # Skema database relasional
-├── wrangler.json       # Konfigurasi deployment Cloudflare
-├── PROMPT.md           # Panduan konteks resmi Drizzle Project
-└── README.md
+│   ├── app.js          # Core SaaS Engine, Database Relasional, Kalkulasi MRP & Finance
+│   └── tracking.js     # Tracking Engine, Stepper 6 Tahap, & History Timeline
+├── schema.sql          # Blueprint skema database relasional (PostgreSQL/SQLite)
+├── wrangler.json       # Konfigurasi deployment Cloudflare Pages / Workers
+├── PROMPT.md           # Master context & profil resmi Drizzle Project
+└── README.md           # Dokumentasi teknis sistem terpadu CRM, SCM & ERP
 ```
