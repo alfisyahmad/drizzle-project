@@ -1202,13 +1202,99 @@ function getDB() {
   }
 }
 
-// Save Database to localStorage
-function saveDB(data) {
+// ==================== CENTRALIZED REACTIVE STATE ENGINE & REAL-TIME SYNC ====================
+
+// Toast Notification System (Warm Studio Light Palette)
+function showToast(message, type = 'info') {
+  if (!message || typeof document === 'undefined') return;
+
+  let container = document.getElementById('drizzle-toast-container');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'drizzle-toast-container';
+    container.className = 'fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm pointer-events-none';
+    document.body.appendChild(container);
+  }
+
+  const toast = document.createElement('div');
+  toast.className = 'pointer-events-auto bg-[#33302D] text-[#FAF7F4] border border-[#E6DDD6]/30 rounded-xl px-4 py-2.5 shadow-2xl flex items-center gap-2.5 text-xs transition-all duration-300 transform translate-y-3 opacity-0';
+  
+  let icon = '⚡';
+  if (type === 'success') icon = '✓';
+  else if (type === 'warning') icon = '⚠️';
+  else if (type === 'danger') icon = '✕';
+
+  toast.innerHTML = `
+    <span class="w-5 h-5 rounded-full bg-[#FF791D]/20 text-[#FF791D] flex items-center justify-center font-bold text-[11px] shrink-0">${icon}</span>
+    <span class="flex-1 text-[#FAF7F4] text-[11px] leading-tight font-sans font-medium">${message}</span>
+  `;
+
+  container.appendChild(toast);
+
+  // Trigger smooth enter animation
+  requestAnimationFrame(() => {
+    toast.classList.remove('translate-y-3', 'opacity-0');
+  });
+
+  // Auto-dismiss after 3.5s
+  setTimeout(() => {
+    toast.classList.add('opacity-0', 'translate-y-2');
+    setTimeout(() => {
+      if (toast.parentNode) toast.parentNode.removeChild(toast);
+    }, 300);
+  }, 3500);
+}
+
+// Centralized Reactive State Engine: Saves to localStorage, emits CustomEvent, and shows Live Toast
+function saveAndSyncDB(data, eventMessage = '') {
   try {
     localStorage.setItem(DRIZZLE_SIM_DB_KEY, JSON.stringify(data));
   } catch (e) {
     console.error('Error saving drizzle_sim_db:', e);
   }
+
+  // 1. Dispatch custom event for current window/tab
+  const syncEvent = new CustomEvent('drizzle:sync', {
+    detail: {
+      message: eventMessage,
+      timestamp: Date.now(),
+      data
+    }
+  });
+  window.dispatchEvent(syncEvent);
+
+  // 2. Show brief toast notification if message provided
+  if (eventMessage) {
+    showToast(eventMessage, 'success');
+  }
+}
+
+// Cross-Tab Real-Time Sync Listener (Catches storage changes across open tabs without page reload)
+if (typeof window !== 'undefined') {
+  window.addEventListener('storage', (e) => {
+    if (e.key === DRIZZLE_SIM_DB_KEY && e.newValue) {
+      try {
+        const parsed = JSON.parse(e.newValue);
+        const syncEvent = new CustomEvent('drizzle:sync', {
+          detail: {
+            message: 'Sinkronisasi real-time dari tab lain aktif.',
+            external: true,
+            timestamp: Date.now(),
+            data: parsed
+          }
+        });
+        window.dispatchEvent(syncEvent);
+        showToast('Data disinkronkan secara real-time dari tab lain', 'info');
+      } catch (err) {
+        console.error('Error parsing synced storage:', err);
+      }
+    }
+  });
+}
+
+// Save Database to localStorage (Delegates to Reactive saveAndSyncDB)
+function saveDB(data, eventMessage = '') {
+  return saveAndSyncDB(data, eventMessage);
 }
 
 // Reset Database to Seed State
@@ -1301,48 +1387,113 @@ function moveKanbanStage(orderId, newStage, note = '') {
     deductOrderMaterials(order);
   }
 
-  saveDB(db);
+  saveAndSyncDB(db, `Tahap order ${order.orderId} dipindahkan ke ${newStage}`);
   return { success: true, order };
 }
 
-// SCM Module: MRP Calculation & Mandatory 1:1 Packaging Rule
+// SCM Module: MRP Calculation & Mandatory 1:1 Packaging Rule (Auto-PO on shortage)
 function deductOrderMaterials(order) {
   const db = getDB();
   // 1. Bypass if order mode is DESIGN_ONLY
   if (order.serviceMode === 'DESIGN_ONLY') {
     order.materialsDeducted = true;
-    saveDB(db);
+    order.waitingPO = false;
+    order.readyForProduction = true;
+    saveAndSyncDB(db, `Layanan desain (${order.orderId}) diverifikasi — bypass pemotongan fisik & kemasan.`);
     return { success: true, bypassed: true, reason: 'Layanan desain saja — bypass pemotongan fisik & kemasan.' };
   }
 
   const srv = (db.services || []).find(s => s.serviceId === order.serviceId || s.name.toLowerCase() === (order.serviceName || '').toLowerCase());
   const qty = order.qty || 1;
+  const shortageMaterials = [];
 
+  // Build full BOM list (recipes + mandatory 1:1 packaging)
+  let recipes = [];
   if (srv && srv.bomRecipe && srv.bomRecipe.length > 0) {
-    srv.bomRecipe.forEach(item => {
-      const mat = (db.materials || []).find(m => m.materialId === item.materialId);
-      if (mat) {
-        if (mat.isMandatoryPack1to1) {
-          // Rule 1:1 Packaging: Exactly 1 unit per physical product qty
-          mat.currentStock = Math.max(0, mat.currentStock - qty);
-        } else {
-          // Fabric & Chemical with 3% safety buffer
-          const totalReq = Math.ceil(qty * 1.03 * item.qtyPerUnit);
-          mat.currentStock = Math.max(0, mat.currentStock - totalReq);
-        }
-      }
-    });
-  } else {
-    // Fallback physical allocation: enforce mandatory 1:1 packaging for physical products
-    const poly = (db.materials || []).find(m => m.materialId === 'MAT-05');
-    const card = (db.materials || []).find(m => m.materialId === 'MAT-06');
-    if (poly) poly.currentStock = Math.max(0, poly.currentStock - qty);
-    if (card) card.currentStock = Math.max(0, card.currentStock - qty);
+    recipes = [...srv.bomRecipe];
+  }
+  // Ensure MAT-05 (Polymailer) and MAT-06 (Card) are present for physical products
+  if (!recipes.some(r => r.materialId === 'MAT-05')) {
+    recipes.push({ materialId: 'MAT-05', qtyPerUnit: 1.0, isMandatoryPack1to1: true, name: 'Polymailer/Box Drizzle (1:1)' });
+  }
+  if (!recipes.some(r => r.materialId === 'MAT-06')) {
+    recipes.push({ materialId: 'MAT-06', qtyPerUnit: 1.0, isMandatoryPack1to1: true, name: 'Thank You Card (1:1)' });
   }
 
+  recipes.forEach(item => {
+    const mat = (db.materials || []).find(m => m.materialId === item.materialId);
+    if (mat) {
+      const isPack = mat.isMandatoryPack1to1 || item.isMandatoryPack1to1;
+      const neededQty = isPack ? qty : Math.ceil(qty * 1.03 * (item.qtyPerUnit || 1));
+
+      // Check if stock in warehouse is less than requirement
+      if (mat.currentStock < neededQty) {
+        const shortage = neededQty - mat.currentStock;
+        const autoPOQty = Math.max(shortage * 2, mat.minThreshold || 25);
+        
+        // Auto-create purchase order if no open PO already exists for this order & material
+        const existingPO = (db.purchaseOrders || []).find(p => p.orderId === order.orderId && p.materialId === mat.materialId && p.poStatus === 'ORDERED');
+        let poId = existingPO ? existingPO.poId : null;
+        if (!existingPO) {
+          const newPO = {
+            poId: generateNextPOId(),
+            orderId: order.orderId,
+            materialId: mat.materialId,
+            materialName: mat.materialName || mat.name,
+            vendorName: mat.supplierName || 'Vendor Rekanan',
+            qtyOrdered: autoPOQty,
+            unit: mat.unit,
+            totalCost: autoPOQty * mat.unitCost,
+            poStatus: 'ORDERED',
+            createdAt: new Date().toISOString().replace('T', ' ').substring(0, 16)
+          };
+          if (!db.purchaseOrders) db.purchaseOrders = [];
+          db.purchaseOrders.unshift(newPO);
+          poId = newPO.poId;
+        }
+
+        shortageMaterials.push({
+          materialId: mat.materialId,
+          materialName: mat.materialName || mat.name,
+          neededQty,
+          currentStock: mat.currentStock,
+          poId
+        });
+      }
+
+      // Lock and deduct physical stock (down to 0 min)
+      mat.currentStock = Math.max(0, mat.currentStock - neededQty);
+    }
+  });
+
   order.materialsDeducted = true;
-  saveDB(db);
-  return { success: true, deducted: true };
+
+  if (shortageMaterials.length > 0) {
+    order.waitingPO = true;
+    order.readyForProduction = false;
+    order.poShortage = shortageMaterials;
+    const poList = shortageMaterials.map(s => s.poId).filter(Boolean).join(', ');
+    if (!order.historyLogs) order.historyLogs = [];
+    order.historyLogs.unshift({
+      timestamp: new Date().toISOString().replace('T', ' ').substring(0, 16),
+      stage: order.kanbanStage,
+      note: `Kalkulasi MRP SCM: Terdeteksi ${shortageMaterials.length} bahan kurang stok di gudang. Draf PO otomatis diterbitkan (${poList}). Status: Menunggu Stok PO.`,
+      author: 'SCM MRP Engine'
+    });
+  } else {
+    order.waitingPO = false;
+    order.readyForProduction = true;
+    if (!order.historyLogs) order.historyLogs = [];
+    order.historyLogs.unshift({
+      timestamp: new Date().toISOString().replace('T', ' ').substring(0, 16),
+      stage: order.kanbanStage,
+      note: `Kalkulasi MRP & Kemasan 1:1 terpenuhi. Seluruh kebutuhan material (${order.qty} pcs kemasan & kain) tersedia di gudang. Siap masuk jalur produksi.`,
+      author: 'SCM MRP Engine'
+    });
+  }
+
+  saveAndSyncDB(db, `Kalkulasi MRP pesanan ${order.orderId}: ${shortageMaterials.length > 0 ? 'PO otomatis diterbitkan' : 'Stok bahan aman'}`);
+  return { success: true, deducted: true, shortages: shortageMaterials };
 }
 
 // SCM Module: Create Purchase Order (Status: ORDERED)
@@ -1370,11 +1521,11 @@ function createPurchaseOrder(materialId, qtyToAdd, vendorName = null, orderId = 
   };
 
   db.purchaseOrders.unshift(newPO);
-  saveDB(db);
+  saveAndSyncDB(db, `PO ${poId} berhasil diterbitkan ke ${newPO.vendorName}`);
   return { success: true, po: newPO };
 }
 
-// SCM Module: Receive Purchase Order (Status: RECEIVED -> Update Stock & Record Expense)
+// SCM Module: Receive Purchase Order (Status: RECEIVED -> Update Stock, Record Expense & Release Order)
 function receivePurchaseOrder(poId) {
   const db = getDB();
   const po = (db.purchaseOrders || []).find(p => p.poId === poId);
@@ -1402,15 +1553,29 @@ function receivePurchaseOrder(poId) {
     txDate: now
   });
 
-  // 3. Update Order HPP if linked to a specific order
+  // 3. Update Order HPP and release waitingPO if linked to a specific order
   if (po.orderId) {
     const linkedOrder = (db.orders || []).find(o => o.orderId === po.orderId);
     if (linkedOrder) {
       linkedOrder.hppTotal = (linkedOrder.hppTotal || 0) + po.totalCost;
+      
+      // Check if any other POs for this order are still pending (ORDERED)
+      const remainingOpenPOs = (db.purchaseOrders || []).filter(p => p.orderId === linkedOrder.orderId && p.poStatus === 'ORDERED');
+      if (remainingOpenPOs.length === 0) {
+        linkedOrder.waitingPO = false;
+        linkedOrder.readyForProduction = true;
+        if (!linkedOrder.historyLogs) linkedOrder.historyLogs = [];
+        linkedOrder.historyLogs.unshift({
+          timestamp: now,
+          stage: linkedOrder.kanbanStage,
+          note: `Penerimaan PO ${po.poId} selesai. Seluruh material & kemasan 1:1 telah terpenuhi di gudang. Pesanan siap produksi.`,
+          author: 'SCM Warehouse'
+        });
+      }
     }
   }
 
-  saveDB(db);
+  saveAndSyncDB(db, `Penerimaan PO ${po.poId} berhasil (+${po.qtyOrdered} ${mat ? mat.unit : 'unit'}). Arus kas keluar tercatat.`);
   return { success: true, po, material: mat };
 }
 
@@ -1502,7 +1667,7 @@ function updatePaymentStatus(orderId, newStatus) {
     });
   }
 
-  saveDB(db);
+  saveAndSyncDB(db, `Status pembayaran ${order.orderId} diperbarui ke ${newStatus}`);
   return { success: true, order };
 }
 
@@ -1525,7 +1690,7 @@ function updateShippingInfo(orderId, carrier, resi) {
     author: 'Outbound SCM Logistics'
   });
 
-  saveDB(db);
+  saveAndSyncDB(db, `Resi ${resi} (${carrier}) disimpan untuk ${order.orderId}. Status: Terkirim.`);
   return { success: true, order };
 }
 
@@ -1601,7 +1766,7 @@ function registerOrUpdateCustomer(custData, orderTotalPrice = 0) {
     if (rawPhone) customer.whatsapp = rawPhone;
   }
 
-  saveDB(db);
+  saveAndSyncDB(db, `Profil pelanggan ${customer.name} (Segmen: ${customer.segment}) diperbarui`);
   return customer;
 }
 
@@ -1667,6 +1832,8 @@ function searchOrdersOrCustomer(rawQuery) {
 window.DrizzleApp = {
   getDB,
   saveDB,
+  saveAndSyncDB,
+  showToast,
   resetDB,
   formatRupiah,
   cleanPhoneNumber,

@@ -76,8 +76,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Main Lookup Function (Order ID or WhatsApp Number)
+  let currentTrackQuery = '';
   window.lookupTracking = function(rawQuery) {
     const query = (rawQuery || '').trim();
+    currentTrackQuery = query;
     if (!query || !window.DrizzleApp) return;
 
     const result = window.DrizzleApp.searchOrdersOrCustomer ? window.DrizzleApp.searchOrdersOrCustomer(query) : null;
@@ -101,6 +103,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Render the active order details
     renderOrderView(result.activeOrder, customer);
   };
+
+  // Real-Time Reactive Sync Listener (Cross-tab and in-tab live updates)
+  window.addEventListener('drizzle:sync', (e) => {
+    if (currentTrackQuery) {
+      lookupTracking(currentTrackQuery);
+    }
+  });
 
   function renderMultiOrdersNav(orders, activeOrderId, customer) {
     if (!multiOrdersNav) return;
@@ -217,6 +226,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const reorderBtn = document.getElementById('res-reorder-btn');
     if (reorderBtn) {
       reorderBtn.href = `order.html?reorder=${encodeURIComponent(order.orderId)}`;
+    }
+
+    // SCM Auto-PO Status Alert
+    const poBadge = document.getElementById('res-po-status-badge');
+    if (poBadge) {
+      if (order.waitingPO) {
+        poBadge.classList.remove('hidden');
+        const textEl = document.getElementById('res-po-status-text');
+        const shortageList = (order.poShortage || []).map(s => s.materialName).join(', ');
+        if (textEl) {
+          textEl.textContent = `Menunggu Pasokan Vendor (PO Diterbitkan SCM: ${shortageList || 'Bahan Baku & Kemasan 1:1'})`;
+        }
+      } else {
+        poBadge.classList.add('hidden');
+      }
     }
 
     // Render 6-Stage Stepper

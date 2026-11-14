@@ -94,7 +94,11 @@
         <h1 class="text-2xl sm:text-3xl font-extrabold text-dark mt-1">Dashboard Terpadu CRM &bull; ERP &bull; SCM</h1>
         <p class="text-xs sm:text-sm text-muted mt-0.5">Memantau alur operasional 12 lini apparel & 7 layanan kreatif Drizzle Project, integrasi Kanban, MRP, dan Buku Kas.</p>
       </div>
-      <div class="flex items-center gap-2">
+      <div class="flex items-center gap-2 flex-wrap justify-end">
+        <div id="live-sync-badge" class="hidden sm:flex items-center gap-2 text-xs font-mono text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-200 shadow-sm">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span class="font-bold">Live Sync Aktif</span>
+        </div>
         <button onclick="renderAll()" class="text-xs font-semibold px-3.5 py-2 bg-card border border-borderCard rounded-lg hover:border-dark transition shadow-sm flex items-center gap-1.5">
           <span>↻ Segarkan</span>
         </button>
@@ -877,6 +881,24 @@
           nextLabel = 'QC (Bypass) &rarr;';
         }
 
+        // Build MRP/PO status badge
+        let poStatusBadgeHtml = '';
+        if (order.waitingPO === true) {
+          const shortages = order.poShortage || [];
+          const shortageText = shortages.map(s => `${s.materialName}: perlu ${s.neededQty}, ada ${s.currentStock}`).join(' | ');
+          poStatusBadgeHtml = `
+            <div class="flex items-center gap-1.5 mt-1 px-2 py-1 rounded-lg bg-amber-50 border border-amber-300 text-amber-800 text-[9px] font-mono font-bold">
+              <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse flex-shrink-0"></span>
+              <span>⏳ Menunggu Stok PO</span>
+              ${shortageText ? `<span class="font-normal text-amber-600 truncate max-w-[120px]" title="${shortageText}">— ${shortageText}</span>` : ''}
+            </div>`;
+        } else if (order.readyForProduction === true && order.kanbanStage !== 'MENUNGGU_DP') {
+          poStatusBadgeHtml = `
+            <div class="flex items-center gap-1 mt-1 px-2 py-0.5 rounded bg-emerald-50 border border-emerald-200 text-emerald-700 text-[9px] font-mono font-bold">
+              <span>✓ Stok Siap Produksi</span>
+            </div>`;
+        }
+
         card.innerHTML = `
           <div class="flex justify-between items-start gap-1">
             <span class="font-mono font-bold text-dark">${order.orderId}</span>
@@ -889,6 +911,7 @@
           <div>
             <div class="font-bold text-dark text-xs">${custName} <span class="text-[10px] text-muted font-normal">[${cust.organization || 'Umum'}]</span></div>
             <span class="text-[11px] text-muted block mt-0.5">${order.serviceName || order.serviceId} (${order.qty} pcs)</span>
+            ${poStatusBadgeHtml}
           </div>
 
           <!-- Payment Verification Bar -->
@@ -1493,6 +1516,31 @@
     // Init
     document.addEventListener('DOMContentLoaded', () => {
       renderAll();
+
+      // Show Live Sync badge
+      const liveBadge = document.getElementById('live-sync-badge');
+      if (liveBadge) liveBadge.classList.remove('hidden');
+
+      // ── drizzle:sync listener (same-tab reactive updates) ──────────────────
+      window.addEventListener('drizzle:sync', (e) => {
+        renderAll();
+        if (liveBadge) {
+          liveBadge.title = `Terakhir sync: ${new Date().toLocaleTimeString('id-ID')}`;
+        }
+      });
+
+      // ── storage listener (cross-tab reactive updates) ──────────────────────
+      window.addEventListener('storage', (e) => {
+        if (e.key === 'drizzle_sim_db') {
+          renderAll();
+          if (window.DrizzleApp && window.DrizzleApp.showToast) {
+            window.DrizzleApp.showToast('🔄 Data disinkronkan dari tab lain', 'info');
+          }
+          if (liveBadge) {
+            liveBadge.title = `Cross-tab sync: ${new Date().toLocaleTimeString('id-ID')}`;
+          }
+        }
+      });
     });
   </script>
 </body>

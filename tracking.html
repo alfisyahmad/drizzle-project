@@ -65,9 +65,9 @@
       </nav>
 
       <!-- Badge -->
-      <div class="hidden sm:flex items-center gap-2 text-xs font-mono text-muted bg-card px-3 py-1.5 rounded-full border border-borderCard">
+      <div class="hidden sm:flex items-center gap-2 text-xs font-mono text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-200 shadow-sm">
         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-        <span>Live Production Tracking</span>
+        <span class="font-bold">Live Sync Aktif</span>
       </div>
     </div>
   </header>
@@ -137,6 +137,15 @@
             <span class="text-xs font-bold text-dark" id="res-cust-name">SMANKRAPFANS 1982</span>
             <span class="text-[11px] text-muted block" id="res-cust-org">Komunitas Suporter SMA N Karangpandan</span>
           </div>
+        </div>
+
+        <!-- SCM MRP Auto-PO Status Alert -->
+        <div id="res-po-status-badge" class="hidden py-2 px-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs font-mono flex items-center justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+            <span id="res-po-status-text" class="font-bold">Menunggu Pasokan Bahan Baku Vendor (PO Diterbitkan SCM)</span>
+          </div>
+          <span class="text-[10px] text-amber-700 bg-card px-2 py-0.5 rounded border border-amber-200">MRP In-Progress</span>
         </div>
 
         <!-- KANBAN PROGRESS STEPPER (DrizzleOS ERP) -->

@@ -65,9 +65,9 @@
       </nav>
 
       <!-- Badge -->
-      <div class="hidden sm:flex items-center gap-2 text-xs font-mono text-muted bg-card px-3 py-1.5 rounded-full border border-borderCard">
+      <div class="hidden sm:flex items-center gap-2 text-xs font-mono text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-200 shadow-sm">
         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-        <span>Order Form Terintegrasi</span>
+        <span class="font-bold">Live Sync Aktif</span>
       </div>
     </div>
   </header>
@@ -891,17 +891,8 @@
         const dbNow = window.DrizzleApp.getDB();
         dbNow.orders.unshift(newOrder);
 
-        // 3. MRP & 1:1 Packaging Rule Check
-        if (serviceMode === 'HYBRID' || serviceMode === 'PRODUCTION') {
-          // Check Polymailer & Card
-          const poly = (dbNow.materials || []).find(m => m.materialId === 'MAT-05');
-          const card = (dbNow.materials || []).find(m => m.materialId === 'MAT-06');
-          if (poly) poly.currentStock = Math.max(0, poly.currentStock - qty);
-          if (card) card.currentStock = Math.max(0, card.currentStock - qty);
-        }
-
-        // Save DB
-        window.DrizzleApp.saveDB(dbNow);
+        // 3. Centralized Reactive State Engine: Save and broadcast to all open tabs (Real-Time Sync)
+        window.DrizzleApp.saveAndSyncDB(dbNow, `Pesanan baru ${orderId} (${srvName}) berhasil terdaftar di ERP & CRM!`);
 
         // Show Modal with CRM & Billing Details
         document.getElementById('modal-tracking-code').textContent = orderId;
