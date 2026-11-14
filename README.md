@@ -7,6 +7,15 @@ Web-based Order & Studio Management System untuk **Drizzle Project** (Vendor mer
 - **Customer Order Tracking**: Pelacakan status pengerjaan secara real-time menggunakan Kode Tracking unik (`DRZ-2026-XXX`) dengan visual 6 tahapan progres.
 - **Admin ERP & SCM Dashboard**: Pengelolaan pesanan masuk, verifikasi status pembayaran (DP & Lunas), pencetakan Surat Perintah Kerja (SPK), serta pengurangan otomatis stok bahan baku & kemasan saat pesanan masuk produksi.
 
+## 🤝 Rancangan Modul CRM (Drizzle Project)
+Modul CRM mendigitalisasi alur interaksi klien (organisasi kampus, komunitas, dan perusahaan) untuk menggantikan pendataan pesanan melalui chat grup WhatsApp:
+
+1. **Manajemen Pelanggan & Segmentasi (*Customer Database*):** Menyimpan database PIC, nama instansi/komunitas, kontak WhatsApp, dan alamat pengiriman secara terpusat untuk mendukung kebutuhan lintas periode kepengurusan.
+2. **Katalog Layanan & Portofolio (*Service Portal*):** Menyajikan 12 kategori apparel custom (*all product include packaging*) dan 7 layanan *creative & brand consultancy* beserta portofolio produksi riil Drizzle Project.
+3. **Pengajuan Pesanan Mandiri (*Self-Service Order Entry*):** Menyediakan formulir dinamis untuk input *matrix* ukuran S–XXL, daftar *nickname*/divisi PDH, pengajuan *alternative design*, maupun *brief* konsultasi brand dengan penerbitan kode tracking otomatis (`DRZ-2026-XXX`).
+4. **Pelacakan Progres Real-Time (*Order Tracking*):** Memungkinkan klien memantau status pembayaran (DP/Lunas), progres produksi 6 tahap dari ERP, serta nomor resi pengiriman dari SCM tanpa perlu bertanya manual di grup chat.
+5. **Riwayat Pesanan & Retensi (*Order History & Reorder*):** Mengarsipkan spesifikasi desain dan ukuran proyek terdahulu untuk mempermudah pemesanan ulang (*repeat order*) satu klik.
+
 ## 🏢 Rancangan Modul ERP (5 Sub-Modul Terintegrasi)
 1. **Penjualan (*Sales & Order Management*):** Mengelola 12 kategori produk apparel (matrix ukuran S–XXL & daftar *nickname*/divisi PDH) dan paket jasa kreatif studio, skema *tiered pricing* (16 hingga 650+ pcs), serta penerbitan kode tracking otomatis.
 2. **Pra-Produksi (*Design & Sampling*):** Mengatur alur pengajuan *alternative designs*, kontrol batas kuota revisi (maks. 3x), serta persetujuan *sample* sebelum Surat Perintah Kerja (SPK) diterbitkan.

@@ -89,6 +89,18 @@
       </button>
     </div>
 
+    <!-- Reorder Banner (Hidden by default, shown if ?reorder= exists) -->
+    <div id="reorder-banner" class="hidden mb-6 bg-brandLight border border-brand/30 rounded-2xl p-4 text-xs text-brandDark flex items-start justify-between gap-3 shadow-sm">
+      <div class="flex items-start gap-2.5">
+        <span class="text-base">🔁</span>
+        <div>
+          <strong class="font-bold">Mode Pesanan Ulang (CRM Reorder 1-Klik):</strong>
+          <p class="mt-0.5 text-dark" id="reorder-banner-text">Data dan spesifikasi berhasil disalin dari riwayat pesanan sebelumnya.</p>
+        </div>
+      </div>
+      <span class="px-2 py-0.5 rounded bg-brand text-white font-mono font-bold text-[10px]">REPEAT ORDER</span>
+    </div>
+
     <!-- Form Container -->
     <form id="unified-order-form" class="space-y-6" novalidate>
       
@@ -115,6 +127,10 @@
           <div>
             <label class="block text-xs font-medium text-muted mb-1.5">Alamat Email *</label>
             <input type="email" id="cust-email" required placeholder="name@email.com" class="w-full bg-subtle border border-borderSubtle rounded-lg px-3.5 py-2.5 text-sm text-dark focus:outline-none focus:border-brand focus:bg-white transition">
+          </div>
+          <div class="sm:col-span-2">
+            <label class="block text-xs font-medium text-muted mb-1.5">Alamat Lengkap Pengiriman (Kota/Kecamatan/Kode Pos) *</label>
+            <input type="text" id="cust-address" required placeholder="Contoh: Jl. Slamet Riyadi No. 120, Laweyan, Surakarta (Kode Pos 57141)" class="w-full bg-subtle border border-borderSubtle rounded-lg px-3.5 py-2.5 text-sm text-dark focus:outline-none focus:border-brand focus:bg-white transition">
           </div>
         </div>
       </div>
@@ -352,12 +368,61 @@
         creativeSelect.appendChild(opt);
       });
 
-      // Check URL Query Parameters
+      // Check URL Query Parameters (including CRM Pilar 5: Repeat Order 1-Klik)
       const urlParams = new URLSearchParams(window.location.search);
       const preProduct = urlParams.get('product');
       const preService = urlParams.get('service');
+      const reorderCode = urlParams.get('reorder');
 
-      if (preService) {
+      if (reorderCode) {
+        const db = window.DrizzleStore.getDB();
+        const prevOrder = (db.orders || []).find(o => o.tracking_code === reorderCode.toUpperCase().trim());
+        if (prevOrder) {
+          document.getElementById('reorder-banner').classList.remove('hidden');
+          document.getElementById('reorder-banner-text').textContent = `Menyalin data & spesifikasi dari riwayat pesanan #${prevOrder.tracking_code} (${prevOrder.customer.organization || prevOrder.customer.name}). Silakan sesuaikan jumlah atau langsung konfirmasi pesanan.`;
+
+          if (prevOrder.customer) {
+            document.getElementById('cust-name').value = prevOrder.customer.name || '';
+            document.getElementById('cust-org').value = prevOrder.customer.organization || '';
+            document.getElementById('cust-phone').value = prevOrder.customer.phone || '';
+            document.getElementById('cust-email').value = prevOrder.customer.email || '';
+            document.getElementById('cust-address').value = prevOrder.customer.address || '';
+          }
+
+          if (prevOrder.service_type === 'apparel') {
+            setServiceType('apparel');
+            for (let i = 0; i < productSelect.options.length; i++) {
+              if (productSelect.options[i].value.toLowerCase() === (prevOrder.product_name || '').toLowerCase()) {
+                productSelect.selectedIndex = i;
+                break;
+              }
+            }
+            if (prevOrder.size_breakdown) {
+              document.getElementById('size-s').value = prevOrder.size_breakdown.S || 0;
+              document.getElementById('size-m').value = prevOrder.size_breakdown.M || 0;
+              document.getElementById('size-l').value = prevOrder.size_breakdown.L || 0;
+              document.getElementById('size-xl').value = prevOrder.size_breakdown.XL || 0;
+              document.getElementById('size-xxl').value = prevOrder.size_breakdown.XXL || 0;
+            }
+            if (prevOrder.specs) {
+              document.getElementById('spec-print-type').value = prevOrder.specs.print_type || 'Sablon Plastisol';
+              document.getElementById('spec-fabric-color').value = prevOrder.specs.fabric_color || '';
+              document.getElementById('spec-notes').value = (prevOrder.specs.notes || '') + ' [Repeat Order dari #' + prevOrder.tracking_code + ']';
+            }
+          } else {
+            setServiceType('creative');
+            for (let i = 0; i < creativeSelect.options.length; i++) {
+              if (creativeSelect.options[i].value.toLowerCase() === (prevOrder.product_name || '').toLowerCase()) {
+                creativeSelect.selectedIndex = i;
+                break;
+              }
+            }
+            if (prevOrder.specs && prevOrder.specs.notes) {
+              document.getElementById('creative-notes').value = prevOrder.specs.notes + ' [Repeat Order dari #' + prevOrder.tracking_code + ']';
+            }
+          }
+        }
+      } else if (preService) {
         setServiceType('creative');
         for (let i = 0; i < creativeSelect.options.length; i++) {
           if (creativeSelect.options[i].value.toLowerCase() === preService.toLowerCase()) {
@@ -440,9 +505,10 @@
         const org = document.getElementById('cust-org').value.trim();
         const phone = document.getElementById('cust-phone').value.trim();
         const email = document.getElementById('cust-email').value.trim();
+        const address = document.getElementById('cust-address') ? document.getElementById('cust-address').value.trim() : '';
 
-        if (!name || !org || !phone || !email) {
-          alert('Mohon lengkapi seluruh kolom identitas pemesan.');
+        if (!name || !org || !phone || !email || !address) {
+          alert('Mohon lengkapi seluruh kolom identitas pemesan & alamat pengiriman.');
           return;
         }
 
@@ -465,7 +531,7 @@
           orderItem = {
             tracking_code: trackingCode,
             service_type: 'apparel',
-            customer: { name, organization: org, phone, email },
+            customer: { name, organization: org, phone, email, address },
             product_name: prodName,
             total_pcs: calc.totalPcs,
             size_breakdown: { S: calc.s, M: calc.m, L: calc.l, XL: calc.xl, XXL: calc.xxl },
@@ -483,7 +549,7 @@
           orderItem = {
             tracking_code: trackingCode,
             service_type: 'creative',
-            customer: { name, organization: org, phone, email },
+            customer: { name, organization: org, phone, email, address },
             product_name: servName,
             total_pcs: 1,
             size_breakdown: null,

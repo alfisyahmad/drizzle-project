@@ -22,14 +22,15 @@ const DRIZZLE_PRODUCTS = [
   { id: 12, name: 'Tote Bag', price: 35000, hppUnit: 21000, category: 'Accessories', minQty: 30, badge: 'ECO CANVAS', desc: 'Kanvas tebal 12oz atau blacu natural, sablon awet untuk goodie bag.' }
 ];
 
-// Creative Studio & Brand Consultation Services
+// 7 Creative Studio & Brand Consultation Services (CRM Pilar 2: Service Portal)
 const DRIZZLE_CREATIVE_SERVICES = [
   { id: 'cs-1', name: 'Merchandising Consultant', basePrice: 500000, hppUnit: 150000, desc: 'Konsultasi kurasi material, budgeting HPP, dan manajemen alur produksi merchandise.' },
   { id: 'cs-2', name: 'Brand Identities', basePrice: 1500000, hppUnit: 450000, desc: 'Pembuatan logo, visual guidelines, color palette, typography system, dan brand collateral.' },
   { id: 'cs-3', name: 'Graphic Design', basePrice: 350000, hppUnit: 100000, desc: 'Desain visual kustom untuk kaos, merchandise, poster event, dan packaging unik.' },
   { id: 'cs-4', name: 'Infographic', basePrice: 400000, hppUnit: 120000, desc: 'Penyajian data visual terstruktur, infografis korporat, materi presentasi edukatif.' },
   { id: 'cs-5', name: 'Editorial Layout', basePrice: 750000, hppUnit: 250000, desc: 'Tata letak majalah, katalog lookbook apparel, annual report, booklet organisasi.' },
-  { id: 'cs-6', name: 'Digital Media & Social Media Management', basePrice: 1200000, hppUnit: 400000, desc: 'Strategi content planning, feeds Instagram template, banner web, microblog visual.' }
+  { id: 'cs-6', name: 'Digital Media', basePrice: 650000, hppUnit: 200000, desc: 'Desain banner web, display ads, materi promo interaktif, dan visual digital lookbook.' },
+  { id: 'cs-7', name: 'Content Plan & Social Media Management', basePrice: 1200000, hppUnit: 400000, desc: 'Strategi content planning, feeds Instagram template, carousel visual, dan copy caption.' }
 ];
 
 // 6 Production Stages
@@ -76,7 +77,7 @@ const INITIAL_ORDERS = [
   {
     tracking_code: 'DRZ-2026-001',
     service_type: 'apparel',
-    customer: { name: 'Alif Kurniawan', organization: 'SMANKRAPFANS 1982', phone: '081234567890', email: 'smankrap@gmail.com' },
+    customer: { name: 'Alif Kurniawan', organization: 'SMANKRAPFANS 1982', phone: '081234567890', email: 'smankrap@gmail.com', address: 'Jl. Slamet Riyadi No. 45, Laweyan, Surakarta' },
     product_name: 'T-Shirt',
     total_pcs: 652,
     size_breakdown: { S: 100, M: 220, L: 200, XL: 100, XXL: 32 },
@@ -98,7 +99,7 @@ const INITIAL_ORDERS = [
   {
     tracking_code: 'DRZ-2026-002',
     service_type: 'apparel',
-    customer: { name: 'Bagus Pratama', organization: 'BUSHWACKER', phone: '088211223344', email: 'bushwacker@gmail.com' },
+    customer: { name: 'Bagus Pratama', organization: 'BUSHWACKER', phone: '088211223344', email: 'bushwacker@gmail.com', address: 'Jl. Veteran No. 12, Pasar Kliwon, Surakarta' },
     product_name: 'T-Shirt',
     total_pcs: 379,
     size_breakdown: { S: 50, M: 120, L: 130, XL: 60, XXL: 19 },
@@ -120,7 +121,7 @@ const INITIAL_ORDERS = [
   {
     tracking_code: 'DRZ-2026-003',
     service_type: 'apparel',
-    customer: { name: 'Rendra Wijaya', organization: 'Spartan Stately (SPRTN)', phone: '085712345678', email: 'spartan@gmail.com' },
+    customer: { name: 'Rendra Wijaya', organization: 'Spartan Stately (SPRTN)', phone: '085712345678', email: 'spartan@gmail.com', address: 'Jl. Ir. Sutami No. 88, Jebres, Surakarta' },
     product_name: 'T-Shirt',
     total_pcs: 190,
     size_breakdown: { S: 30, M: 70, L: 60, XL: 25, XXL: 5 },
@@ -142,7 +143,7 @@ const INITIAL_ORDERS = [
   {
     tracking_code: 'DRZ-2026-004',
     service_type: 'apparel',
-    customer: { name: 'Fajar Nugroho', organization: 'MPD UNS (Manajemen Perdagangan)', phone: '081398765432', email: 'mpd.uns@gmail.com' },
+    customer: { name: 'Fajar Nugroho', organization: 'MPD UNS (Manajemen Perdagangan)', phone: '081398765432', email: 'mpd.uns@gmail.com', address: 'Gedung BEM MPD UNS, Kampus Mesen, Surakarta' },
     product_name: 'Shirt / PDH',
     total_pcs: 75,
     size_breakdown: { S: 10, M: 25, L: 25, XL: 12, XXL: 3 },
@@ -168,7 +169,7 @@ const INITIAL_ORDERS = [
   {
     tracking_code: 'DRZ-2026-005',
     service_type: 'apparel',
-    customer: { name: 'Dewi Anggraini', organization: 'IMAKA UNDIP', phone: '082155443322', email: 'imaka.undip@gmail.com' },
+    customer: { name: 'Dewi Anggraini', organization: 'IMAKA UNDIP', phone: '082155443322', email: 'imaka.undip@gmail.com', address: 'Sekretariat IMAKA, Jl. Prof. Soedarto, Tembalang, Semarang' },
     product_name: 'Shirt / PDH',
     total_pcs: 32,
     size_breakdown: { S: 5, M: 12, L: 10, XL: 4, XXL: 1 },
@@ -194,7 +195,7 @@ const INITIAL_ORDERS = [
   {
     tracking_code: 'DRZ-2026-006',
     service_type: 'apparel',
-    customer: { name: 'Hendri Setiawan', organization: 'PT. Surya Nakula', phone: '081122334455', email: 'procurement@suryanakula.com' },
+    customer: { name: 'Hendri Setiawan', organization: 'PT. Surya Nakula', phone: '081122334455', email: 'procurement@suryanakula.com', address: 'Kawasan Industri Solo Baru Blok C-4, Sukoharjo' },
     product_name: 'Shirt / PDH',
     total_pcs: 16,
     size_breakdown: { S: 2, M: 6, L: 5, XL: 3, XXL: 0 },
@@ -264,6 +265,19 @@ function getDrizzleDB() {
       o5.shipping_resi = 'PICKUP-IMAKA-01';
       o5.shipping_status = 'Telah Diterima Klien';
     }
+
+    // Ensure customer address exists for CRM customer segmentation
+    (data.orders || []).forEach(o => {
+      if (o.customer && !o.customer.address) {
+        if (o.tracking_code === 'DRZ-2026-001') o.customer.address = 'Jl. Slamet Riyadi No. 45, Laweyan, Surakarta';
+        else if (o.tracking_code === 'DRZ-2026-002') o.customer.address = 'Jl. Veteran No. 12, Pasar Kliwon, Surakarta';
+        else if (o.tracking_code === 'DRZ-2026-003') o.customer.address = 'Jl. Ir. Sutami No. 88, Jebres, Surakarta';
+        else if (o.tracking_code === 'DRZ-2026-004') o.customer.address = 'Gedung BEM MPD UNS, Kampus Mesen, Surakarta';
+        else if (o.tracking_code === 'DRZ-2026-005') o.customer.address = 'Sekretariat IMAKA, Jl. Prof. Soedarto, Tembalang, Semarang';
+        else if (o.tracking_code === 'DRZ-2026-006') o.customer.address = 'Kawasan Industri Solo Baru Blok C-4, Sukoharjo';
+        else o.customer.address = 'Solo Raya, Jawa Tengah';
+      }
+    });
 
     return data;
   } catch (e) {
