@@ -104,54 +104,54 @@
       </div>
     </div>
 
-    <!-- 4 KPI CARDS -->
+    <!-- 4 KPI CARDS (DrizzleOS Executive Dashboard) -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       
-      <!-- KPI 1: Total Omset & Pesanan -->
+      <!-- KPI 1: Total Order Aktif -->
       <div class="bg-card border border-borderCard rounded-xl p-5 shadow-sm space-y-2">
         <div class="flex justify-between items-start">
-          <span class="text-xs font-mono font-bold text-muted uppercase">1. Total Omset & Volume</span>
-          <span class="p-1 rounded bg-brandLight text-brand text-xs">💰</span>
-        </div>
-        <div>
-          <div class="text-xl sm:text-2xl font-extrabold font-mono text-dark" id="kpi-total-revenue">Rp 0</div>
-          <span class="text-xs text-muted block mt-1" id="kpi-orders-count">0 Pesanan &bull; 0 Pcs</span>
-        </div>
-      </div>
-
-      <!-- KPI 2: Pipeline Produksi Aktif -->
-      <div class="bg-card border border-borderCard rounded-xl p-5 shadow-sm space-y-2">
-        <div class="flex justify-between items-start">
-          <span class="text-xs font-mono font-bold text-muted uppercase">2. Pipeline Produksi (ERP)</span>
+          <span class="text-xs font-mono font-bold text-muted uppercase">1. Total Order Aktif</span>
           <span class="p-1 rounded bg-brandLight text-brand text-xs">⚡</span>
         </div>
         <div>
           <div class="text-xl sm:text-2xl font-extrabold font-mono text-brand" id="kpi-active-pipeline">0 Proyek Aktif</div>
-          <span class="text-xs text-muted block mt-1" id="kpi-completed-pipeline">0 Proyek Selesai / Terkirim</span>
+          <span class="text-xs text-muted block mt-1" id="kpi-orders-count">0 Pesanan &bull; 0 Pcs Volume</span>
         </div>
       </div>
 
-      <!-- KPI 3: Stok Menipis & Kemasan 1:1 -->
+      <!-- KPI 2: Total Omzet Masuk (Rp) -->
       <div class="bg-card border border-borderCard rounded-xl p-5 shadow-sm space-y-2">
         <div class="flex justify-between items-start">
-          <span class="text-xs font-mono font-bold text-muted uppercase">3. Persediaan & Kemasan 1:1</span>
-          <span class="p-1 rounded bg-emerald-50 text-emerald-600 text-xs">📦</span>
+          <span class="text-xs font-mono font-bold text-muted uppercase">2. Total Omzet Masuk (Rp)</span>
+          <span class="p-1 rounded bg-emerald-50 text-emerald-600 text-xs">💰</span>
         </div>
         <div>
-          <div class="text-xl sm:text-2xl font-extrabold font-mono text-dark" id="kpi-mrp-status">Aman</div>
-          <span class="text-xs text-muted block mt-1" id="kpi-pack-status">Polymailer: 0 | Card: 0</span>
+          <div class="text-xl sm:text-2xl font-extrabold font-mono text-dark tabular-nums" id="kpi-total-revenue">Rp 0</div>
+          <span class="text-xs text-amber-600 font-semibold block mt-1" id="kpi-receivable">Piutang Klien: Rp 0</span>
         </div>
       </div>
 
-      <!-- KPI 4: Keuangan & Laba Bersih -->
+      <!-- KPI 3: Jumlah Material Stok Kritis -->
       <div class="bg-card border border-borderCard rounded-xl p-5 shadow-sm space-y-2">
         <div class="flex justify-between items-start">
-          <span class="text-xs font-mono font-bold text-muted uppercase">4. Keuangan & Kas (HPP)</span>
+          <span class="text-xs font-mono font-bold text-muted uppercase">3. Material Stok Kritis</span>
+          <span class="p-1 rounded bg-rose-50 text-rose-600 text-xs">📦</span>
+        </div>
+        <div>
+          <div class="text-xl sm:text-2xl font-extrabold font-mono text-dark" id="kpi-mrp-status">0 Material Kritis</div>
+          <span class="text-xs text-muted block mt-1" id="kpi-pack-status">Kemasan 1:1: Poly: 0 | Card: 0</span>
+        </div>
+      </div>
+
+      <!-- KPI 4: Persentase Margin Keuntungan Bersih -->
+      <div class="bg-card border border-borderCard rounded-xl p-5 shadow-sm space-y-2">
+        <div class="flex justify-between items-start">
+          <span class="text-xs font-mono font-bold text-muted uppercase">4. Margin Keuntungan Bersih</span>
           <span class="p-1 rounded bg-sky-50 text-sky-600 text-xs">📊</span>
         </div>
         <div>
-          <div class="text-xl sm:text-2xl font-extrabold font-mono text-emerald-600" id="kpi-net-profit">Rp 0</div>
-          <span class="text-xs text-amber-600 font-semibold block mt-1" id="kpi-receivable">Piutang Klien: Rp 0</span>
+          <div class="text-xl sm:text-2xl font-extrabold font-mono text-emerald-600" id="kpi-net-margin">0%</div>
+          <span class="text-xs text-emerald-600 font-semibold block mt-1" id="kpi-net-profit">Kas Bersih: Rp 0</span>
         </div>
       </div>
 
@@ -160,7 +160,7 @@
     <!-- 4 TABS NAVIGATION -->
     <div class="flex flex-wrap gap-2 border-b border-borderCard pb-0">
       <button id="tab-btn-kanban" onclick="switchTab('kanban')" class="px-4 py-2.5 text-xs sm:text-sm font-bold border-b-2 border-brand text-brand flex items-center gap-2">
-        <span>📋 Papan Kanban Produksi (5 Tahap)</span>
+        <span>📋 Papan Kanban Produksi (6 Tahap)</span>
       </button>
       <button id="tab-btn-crm" onclick="switchTab('crm')" class="px-4 py-2.5 text-xs sm:text-sm font-semibold border-b-2 border-transparent text-muted hover:text-dark flex items-center gap-2">
         <span>👥 Direktori Pelanggan (CRM)</span>
@@ -177,78 +177,92 @@
     <div id="tab-kanban" class="space-y-4">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-card border border-borderCard p-4 rounded-xl shadow-sm">
         <div class="text-xs text-muted">
-          <strong class="text-dark">Workflow State Machine:</strong> Menggeser kartu antar-tahap akan <em>otomatis menyinkronkan status</em> ke halaman <a href="tracking.html" class="underline text-brand">tracking.html</a> dan mencatat riwayat log secara real-time.
+          <strong class="text-dark">Workflow State Machine (6 Tahap):</strong> Menunggu DP &rarr; Desain & Brief &rarr; Sablon/Bordir &rarr; Jahit &rarr; QC & Kemasan 1:1 &rarr; Siap Kirim. Pesanan <span class="px-1.5 py-0.5 rounded bg-sky-50 text-sky-800 font-mono font-bold text-[10px]">DESIGN_ONLY</span> otomatis melompati tahap Sablon & Jahit langsung ke QC. Setiap pergeseran otomatis mencatat riwayat log ke <a href="tracking.html" target="_blank" class="underline text-brand font-semibold">tracking.html</a>.
         </div>
         <input type="text" id="kanban-search" oninput="renderKanbanBoard()" placeholder="Filter order ID / nama klien..." class="w-full sm:w-64 bg-canvas border border-borderCard rounded-lg px-3 py-1.5 text-xs text-dark focus:outline-none focus:border-brand">
       </div>
 
-      <!-- 5-Column Kanban Board -->
-      <div class="grid grid-cols-1 md:grid-cols-5 gap-3.5 overflow-x-auto min-w-full pb-4">
+      <!-- 6-Column Kanban Board -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3.5 overflow-x-auto min-w-full pb-4">
         
-        <!-- Col 1: DESIGN -->
-        <div class="bg-card/70 border border-borderCard rounded-xl p-3 flex flex-col min-w-[220px]">
+        <!-- Col 1: MENUNGGU_DP -->
+        <div class="bg-card/70 border border-borderCard rounded-xl p-3 flex flex-col min-w-[210px]">
           <div class="flex items-center justify-between pb-2 mb-3 border-b border-borderCard">
             <div class="flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-amber-500"></span>
-              <span class="font-bold text-xs text-dark font-mono uppercase">1. DESIGN</span>
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+              <span class="font-bold text-[11px] text-dark font-mono uppercase">1. MENUNGGU DP</span>
             </div>
-            <span class="text-xs font-mono font-bold text-muted" id="count-stage-design">0</span>
+            <span class="text-xs font-mono font-bold text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200" id="count-stage-menunggu_dp">0</span>
+          </div>
+          <div class="space-y-2.5 flex-1" id="kanban-col-MENUNGGU_DP">
+            <!-- Cards rendered via JS -->
+          </div>
+        </div>
+
+        <!-- Col 2: DESIGN -->
+        <div class="bg-card/70 border border-borderCard rounded-xl p-3 flex flex-col min-w-[210px]">
+          <div class="flex items-center justify-between pb-2 mb-3 border-b border-borderCard">
+            <div class="flex items-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-full bg-sky-500"></span>
+              <span class="font-bold text-[11px] text-dark font-mono uppercase">2. DESAIN & BRIEF</span>
+            </div>
+            <span class="text-xs font-mono font-bold text-sky-700 bg-sky-50 px-1.5 py-0.5 rounded border border-sky-200" id="count-stage-design">0</span>
           </div>
           <div class="space-y-2.5 flex-1" id="kanban-col-DESIGN">
             <!-- Cards rendered via JS -->
           </div>
         </div>
 
-        <!-- Col 2: PRINTING -->
-        <div class="bg-card/70 border border-borderCard rounded-xl p-3 flex flex-col min-w-[220px]">
+        <!-- Col 3: PRINTING -->
+        <div class="bg-card/70 border border-borderCard rounded-xl p-3 flex flex-col min-w-[210px]">
           <div class="flex items-center justify-between pb-2 mb-3 border-b border-borderCard">
             <div class="flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-blue-500"></span>
-              <span class="font-bold text-xs text-dark font-mono uppercase">2. PRINTING</span>
+              <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+              <span class="font-bold text-[11px] text-dark font-mono uppercase">3. SABLON & BORDIR</span>
             </div>
-            <span class="text-xs font-mono font-bold text-muted" id="count-stage-printing">0</span>
+            <span class="text-xs font-mono font-bold text-blue-700 bg-blue-50 px-1.5 py-0.5 rounded border border-blue-200" id="count-stage-printing">0</span>
           </div>
           <div class="space-y-2.5 flex-1" id="kanban-col-PRINTING">
             <!-- Cards rendered via JS -->
           </div>
         </div>
 
-        <!-- Col 3: SEWING -->
-        <div class="bg-card/70 border border-borderCard rounded-xl p-3 flex flex-col min-w-[220px]">
+        <!-- Col 4: SEWING -->
+        <div class="bg-card/70 border border-borderCard rounded-xl p-3 flex flex-col min-w-[210px]">
           <div class="flex items-center justify-between pb-2 mb-3 border-b border-borderCard">
             <div class="flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-purple-500"></span>
-              <span class="font-bold text-xs text-dark font-mono uppercase">3. SEWING</span>
+              <span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span>
+              <span class="font-bold text-[11px] text-dark font-mono uppercase">4. JAHIT & ASSEMBLY</span>
             </div>
-            <span class="text-xs font-mono font-bold text-muted" id="count-stage-sewing">0</span>
+            <span class="text-xs font-mono font-bold text-purple-700 bg-purple-50 px-1.5 py-0.5 rounded border border-purple-200" id="count-stage-sewing">0</span>
           </div>
           <div class="space-y-2.5 flex-1" id="kanban-col-SEWING">
             <!-- Cards rendered via JS -->
           </div>
         </div>
 
-        <!-- Col 4: QC -->
-        <div class="bg-card/70 border border-borderCard rounded-xl p-3 flex flex-col min-w-[220px]">
+        <!-- Col 5: QC -->
+        <div class="bg-card/70 border border-borderCard rounded-xl p-3 flex flex-col min-w-[210px]">
           <div class="flex items-center justify-between pb-2 mb-3 border-b border-borderCard">
             <div class="flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-orange-500"></span>
-              <span class="font-bold text-xs text-dark font-mono uppercase">4. QC & PACK</span>
+              <span class="w-2.5 h-2.5 rounded-full bg-orange-500"></span>
+              <span class="font-bold text-[11px] text-dark font-mono uppercase">5. QC & PACK 1:1</span>
             </div>
-            <span class="text-xs font-mono font-bold text-muted" id="count-stage-qc">0</span>
+            <span class="text-xs font-mono font-bold text-orange-700 bg-orange-50 px-1.5 py-0.5 rounded border border-orange-200" id="count-stage-qc">0</span>
           </div>
           <div class="space-y-2.5 flex-1" id="kanban-col-QC">
             <!-- Cards rendered via JS -->
           </div>
         </div>
 
-        <!-- Col 5: SHIPPED -->
-        <div class="bg-card/70 border border-borderCard rounded-xl p-3 flex flex-col min-w-[220px]">
+        <!-- Col 6: SHIPPED -->
+        <div class="bg-card/70 border border-borderCard rounded-xl p-3 flex flex-col min-w-[210px]">
           <div class="flex items-center justify-between pb-2 mb-3 border-b border-borderCard">
             <div class="flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-              <span class="font-bold text-xs text-dark font-mono uppercase">5. SHIPPED</span>
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+              <span class="font-bold text-[11px] text-dark font-mono uppercase">6. SIAP KIRIM / SELESAI</span>
             </div>
-            <span class="text-xs font-mono font-bold text-muted" id="count-stage-shipped">0</span>
+            <span class="text-xs font-mono font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200" id="count-stage-shipped">0</span>
           </div>
           <div class="space-y-2.5 flex-1" id="kanban-col-SHIPPED">
             <!-- Cards rendered via JS -->
@@ -747,122 +761,167 @@
       if (activeTab === 'finance') renderFinanceTables();
     }
 
-    // 1. KPI CARDS RENDERER
+    // 1. KPI CARDS RENDERER (DrizzleOS Executive Dashboard)
     function renderKPICards(db) {
       const orders = db.orders || [];
       const materials = db.materials || [];
       const ledger = db.financeLedger || [];
 
-      // Revenue & Orders
-      const totalRev = orders.reduce((sum, o) => sum + (o.totalPrice || 0), 0);
-      const totalPcs = orders.reduce((sum, o) => sum + (o.qty || 0), 0);
-      document.getElementById('kpi-total-revenue').textContent = window.DrizzleApp.formatRupiah(totalRev);
-      document.getElementById('kpi-orders-count').textContent = `${orders.length} Pesanan • ${totalPcs} Pcs Volume`;
-
-      // Production Pipeline
+      // 1. Total Order Aktif & Volume Pcs
       const activeOrders = orders.filter(o => o.kanbanStage !== 'SHIPPED');
-      const completedOrders = orders.filter(o => o.kanbanStage === 'SHIPPED');
+      const activePcs = activeOrders.reduce((sum, o) => sum + (o.qty || 0), 0);
       document.getElementById('kpi-active-pipeline').textContent = `${activeOrders.length} Proyek Aktif`;
-      document.getElementById('kpi-completed-pipeline').textContent = `${completedOrders.length} Proyek Selesai / Terkirim`;
+      document.getElementById('kpi-orders-count').textContent = `${orders.length} Pesanan Total • ${activePcs} Pcs Aktif`;
 
-      // MRP & Packaging 1:1
-      const lowMaterials = materials.filter(m => m.currentStock <= m.minThreshold);
-      const poly = materials.find(m => m.materialId === 'MAT-05');
-      const card = materials.find(m => m.materialId === 'MAT-06');
-      if (lowMaterials.length > 0) {
-        document.getElementById('kpi-mrp-status').textContent = `${lowMaterials.length} Bahan Kurang!`;
-        document.getElementById('kpi-mrp-status').className = 'text-xl sm:text-2xl font-extrabold font-mono text-rose-600';
-      } else {
-        document.getElementById('kpi-mrp-status').textContent = 'Stok Aman';
-        document.getElementById('kpi-mrp-status').className = 'text-xl sm:text-2xl font-extrabold font-mono text-emerald-600';
-      }
-      document.getElementById('kpi-pack-status').textContent = `Polymailer: ${poly ? poly.currentStock : 0} | Card: ${card ? card.currentStock : 0}`;
-
-      // Finance & Laba
+      // 2. Total Omzet Masuk (Rp) from Finance Ledger INCOME
       const totalIncome = ledger.filter(l => l.txType === 'INCOME').reduce((sum, l) => sum + l.amount, 0);
-      const totalExpense = ledger.filter(l => l.txType === 'EXPENSE').reduce((sum, l) => sum + l.amount, 0);
-      const netProfit = totalIncome - totalExpense;
       const totalReceivable = orders.reduce((sum, o) => {
         const paid = o.paidAmount || (o.paymentStatus === 'LUNAS' ? o.totalPrice : (o.paymentStatus === 'DP_50_PAID' ? o.dpAmount : 0));
         return sum + Math.max(0, o.totalPrice - paid);
       }, 0);
-
-      document.getElementById('kpi-net-profit').textContent = window.DrizzleApp.formatRupiah(netProfit);
+      document.getElementById('kpi-total-revenue').textContent = window.DrizzleApp.formatRupiah(totalIncome);
       document.getElementById('kpi-receivable').textContent = `Piutang Klien: ${window.DrizzleApp.formatRupiah(totalReceivable)}`;
+
+      // 3. Jumlah Material Stok Kritis & Kemasan 1:1
+      const lowMaterials = materials.filter(m => m.currentStock <= m.minThreshold);
+      const poly = materials.find(m => m.materialId === 'MAT-05');
+      const card = materials.find(m => m.materialId === 'MAT-06');
+      if (lowMaterials.length > 0) {
+        document.getElementById('kpi-mrp-status').textContent = `${lowMaterials.length} Material Kritis!`;
+        document.getElementById('kpi-mrp-status').className = 'text-xl sm:text-2xl font-extrabold font-mono text-rose-600';
+      } else {
+        document.getElementById('kpi-mrp-status').textContent = '0 Material Kritis (Aman)';
+        document.getElementById('kpi-mrp-status').className = 'text-xl sm:text-2xl font-extrabold font-mono text-emerald-600';
+      }
+      document.getElementById('kpi-pack-status').textContent = `Kemasan 1:1: Poly: ${poly ? poly.currentStock : 0} | Card: ${card ? card.currentStock : 0}`;
+
+      // 4. Persentase Margin Keuntungan Bersih
+      const totalExpense = ledger.filter(l => l.txType === 'EXPENSE').reduce((sum, l) => sum + l.amount, 0);
+      const netProfit = totalIncome - totalExpense;
+      const netMarginPct = totalIncome > 0 ? Math.round((netProfit / totalIncome) * 100) : 0;
+      document.getElementById('kpi-net-margin').textContent = `${netMarginPct >= 0 ? '+' : ''}${netMarginPct}%`;
+      document.getElementById('kpi-net-profit').textContent = `Kas Bersih: ${window.DrizzleApp.formatRupiah(netProfit)}`;
     }
 
-    // 2. KANBAN BOARD RENDERER
+    // 2. KANBAN BOARD RENDERER (6 Tahap dengan Bypass DESIGN_ONLY)
     function renderKanbanBoard() {
       const db = window.DrizzleApp.getDB();
       const orders = db.orders || [];
       const customers = db.customers || [];
       const search = (document.getElementById('kanban-search').value || '').toLowerCase();
 
-      const stages = ['DESIGN', 'PRINTING', 'SEWING', 'QC', 'SHIPPED'];
+      const stages = ['MENUNGGU_DP', 'DESIGN', 'PRINTING', 'SEWING', 'QC', 'SHIPPED'];
       stages.forEach(st => {
         const col = document.getElementById(`kanban-col-${st}`);
-        col.innerHTML = '';
+        if (col) col.innerHTML = '';
       });
 
-      const counts = { DESIGN: 0, PRINTING: 0, SEWING: 0, QC: 0, SHIPPED: 0 };
+      const counts = { MENUNGGU_DP: 0, DESIGN: 0, PRINTING: 0, SEWING: 0, QC: 0, SHIPPED: 0 };
 
       orders.forEach(order => {
         const cust = customers.find(c => c.customerId === order.customerId) || {};
         const custName = cust.name || 'Klien';
-        const matchSearch = order.orderId.toLowerCase().includes(search) || custName.toLowerCase().includes(search) || (order.serviceName || '').toLowerCase().includes(search);
+        const matchSearch = order.orderId.toLowerCase().includes(search) || 
+                            custName.toLowerCase().includes(search) || 
+                            (order.serviceName || '').toLowerCase().includes(search) ||
+                            (cust.organization || '').toLowerCase().includes(search);
 
         if (!matchSearch) return;
 
-        const stage = stages.includes(order.kanbanStage) ? order.kanbanStage : 'DESIGN';
+        const stage = stages.includes(order.kanbanStage) ? order.kanbanStage : 'MENUNGGU_DP';
         counts[stage] = (counts[stage] || 0) + 1;
 
-        const stageIdx = stages.indexOf(stage);
-        const prevStage = stageIdx > 0 ? stages[stageIdx - 1] : null;
-        const nextStage = stageIdx < stages.length - 1 ? stages[stageIdx + 1] : null;
+        const prevStage = window.DrizzleApp.getPrevStage(stage, order.serviceMode);
+        const nextStage = window.DrizzleApp.getNextStage(stage, order.serviceMode);
 
         const card = document.createElement('div');
-        card.className = 'bg-card border border-borderCard rounded-xl p-3.5 shadow-sm space-y-2.5 hover:border-brand transition text-xs';
+        card.className = 'bg-card border border-borderCard rounded-xl p-3 shadow-sm space-y-2 hover:border-brand transition text-xs';
         
         let payBadgeColor = 'bg-amber-50 text-amber-700 border-amber-200';
         if (order.paymentStatus === 'LUNAS') payBadgeColor = 'bg-emerald-50 text-emerald-700 border-emerald-200';
         else if (order.paymentStatus === 'DP_50_PAID') payBadgeColor = 'bg-sky-50 text-sky-700 border-sky-200';
 
+        const isDesignOnly = order.serviceMode === 'DESIGN_ONLY';
+        const modeBadge = isDesignOnly 
+          ? `<span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-sky-50 text-sky-700 font-bold border border-sky-200" title="Layanan Desain (Bypass Sablon/Jahit)">DESAIN ONLY</span>`
+          : `<span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-canvas text-muted border border-borderCard">${order.serviceMode || 'PROD'}</span>`;
+
+        // Payment Action Button Bar
+        let paymentActionHtml = '';
+        if (order.paymentStatus === 'UNPAID') {
+          paymentActionHtml = `
+            <button onclick="verifyPayment('${order.orderId}', 'DP_50_PAID')" class="w-full py-1 px-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-mono font-bold text-[10px] shadow-sm flex items-center justify-center gap-1 transition">
+              <span>💳 Verifikasi DP 50%</span>
+              <span class="opacity-90 font-normal">(${window.DrizzleApp.formatRupiah(order.dpAmount)})</span>
+            </button>
+          `;
+        } else if (order.paymentStatus === 'DP_50_PAID') {
+          const remaining = Math.max(0, order.totalPrice - (order.paidAmount || order.dpAmount));
+          paymentActionHtml = `
+            <button onclick="verifyPayment('${order.orderId}', 'LUNAS')" class="w-full py-1 px-2 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-mono font-bold text-[10px] shadow-sm flex items-center justify-center gap-1 transition">
+              <span>💰 Verifikasi Pelunasan 50%</span>
+              <span class="opacity-90 font-normal">(${window.DrizzleApp.formatRupiah(remaining)})</span>
+            </button>
+          `;
+        } else {
+          paymentActionHtml = `
+            <div class="w-full py-0.5 px-2 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 text-center font-mono font-bold text-[10px]">
+              ✓ LUNAS 100% (Kas Masuk)
+            </div>
+          `;
+        }
+
+        // Advance label
+        let nextLabel = 'Lanjut &rarr;';
+        if (isDesignOnly && stage === 'DESIGN') {
+          nextLabel = 'QC (Bypass) &rarr;';
+        }
+
         card.innerHTML = `
-          <div class="flex justify-between items-start">
+          <div class="flex justify-between items-start gap-1">
             <span class="font-mono font-bold text-dark">${order.orderId}</span>
-            <span class="text-[10px] font-mono px-2 py-0.5 rounded border ${payBadgeColor}">${order.paymentStatus}</span>
+            <div class="flex items-center gap-1">
+              ${modeBadge}
+              <span class="text-[9px] font-mono px-1.5 py-0.2 rounded border ${payBadgeColor}">${order.paymentStatus}</span>
+            </div>
           </div>
 
           <div>
-            <div class="font-bold text-dark text-xs">${custName}</div>
-            <span class="text-[11px] text-muted block">${order.serviceName || order.serviceId} (${order.qty} pcs)</span>
+            <div class="font-bold text-dark text-xs">${custName} <span class="text-[10px] text-muted font-normal">[${cust.organization || 'Umum'}]</span></div>
+            <span class="text-[11px] text-muted block mt-0.5">${order.serviceName || order.serviceId} (${order.qty} pcs)</span>
           </div>
 
-          <div class="pt-2 border-t border-borderCard flex justify-between items-center text-[11px]">
+          <!-- Payment Verification Bar -->
+          <div class="pt-1.5">
+            ${paymentActionHtml}
+          </div>
+
+          <div class="pt-1.5 border-t border-borderCard flex justify-between items-center text-[11px]">
             <span class="font-mono font-bold text-brand">${window.DrizzleApp.formatRupiah(order.totalPrice)}</span>
             <button onclick="openSPKModal('${order.orderId}')" class="text-[10px] font-mono underline text-muted hover:text-dark">SPK 🖨️</button>
           </div>
 
-          <!-- Action Buttons Bar -->
-          <div class="pt-2 border-t border-borderCard flex items-center justify-between gap-1">
+          <!-- Action Navigation Buttons Bar -->
+          <div class="pt-1.5 border-t border-borderCard flex items-center justify-between gap-1">
             <div class="flex items-center gap-1">
-              ${prevStage ? `<button onclick="advanceStage('${order.orderId}', '${prevStage}')" title="Kembalikan ke ${prevStage}" class="px-2 py-1 rounded bg-canvas border border-borderCard hover:bg-borderCard text-muted hover:text-dark font-mono font-bold text-[10px]">&larr;</button>` : ''}
-              ${nextStage ? `<button onclick="advanceStage('${order.orderId}', '${nextStage}')" title="Majukan ke ${nextStage}" class="px-2.5 py-1 rounded bg-brand text-white hover:bg-brandDark font-mono font-bold text-[10px] flex items-center gap-1"><span>Lanjut</span> &rarr;</button>` : ''}
+              ${prevStage ? `<button onclick="advanceStage('${order.orderId}', '${prevStage}')" title="Kembalikan ke ${prevStage}" class="px-2 py-0.5 rounded bg-canvas border border-borderCard hover:bg-borderCard text-muted hover:text-dark font-mono font-bold text-[10px]">&larr;</button>` : ''}
+              ${nextStage ? `<button onclick="advanceStage('${order.orderId}', '${nextStage}')" title="Majukan ke ${nextStage}" class="px-2 py-0.5 rounded bg-brand text-white hover:bg-brandDark font-mono font-bold text-[10px] flex items-center gap-0.5">${nextLabel}</button>` : ''}
             </div>
             
             <div class="flex items-center gap-1">
-              ${order.paymentStatus !== 'LUNAS' ? `<button onclick="promptPayment('${order.orderId}')" title="Verifikasi Pembayaran" class="px-2 py-1 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] font-semibold">Bayar</button>` : ''}
-              <button onclick="openResiModal('${order.orderId}')" title="Input Resi Ekspedisi" class="px-2 py-1 rounded bg-canvas border border-borderCard text-[10px] text-muted hover:text-dark">Resi</button>
+              <button onclick="openResiModal('${order.orderId}')" title="Input Resi Ekspedisi" class="px-2 py-0.5 rounded bg-canvas border border-borderCard text-[10px] text-muted hover:text-dark">Resi</button>
             </div>
           </div>
         `;
 
-        document.getElementById(`kanban-col-${stage}`).appendChild(card);
+        const targetCol = document.getElementById(`kanban-col-${stage}`);
+        if (targetCol) targetCol.appendChild(card);
       });
 
       // Update counters
       stages.forEach(st => {
-        document.getElementById(`count-stage-${st.toLowerCase()}`).textContent = counts[st] || 0;
+        const countEl = document.getElementById(`count-stage-${st.toLowerCase()}`);
+        if (countEl) countEl.textContent = counts[st] || 0;
       });
     }
 
@@ -871,19 +930,21 @@
       renderAll();
     }
 
-    function promptPayment(orderId) {
+    function verifyPayment(orderId, targetStatus) {
       const db = window.DrizzleApp.getDB();
       const order = db.orders.find(o => o.orderId === orderId);
       if (!order) return;
 
-      if (order.paymentStatus === 'UNPAID') {
-        if (confirm(`Verifikasi penerimaan DP 50% (${window.DrizzleApp.formatRupiah(order.dpAmount)}) untuk pesanan ${orderId}?`)) {
+      if (targetStatus === 'DP_50_PAID') {
+        const dpAmountStr = window.DrizzleApp.formatRupiah(order.dpAmount);
+        if (confirm(`Verifikasi penerimaan pembayaran DP 50% sebesar ${dpAmountStr} untuk pesanan ${orderId} (${order.serviceName})?\n\n✓ Mencatat transaksi kas masuk (INCOME) di Buku Kas ERP\n✓ Mengalokasikan bahan baku & rasio kemasan 1:1 di SCM\n✓ Memajukan tiket ke antrean Desain & Brief jika sebelumnya Menunggu DP`)) {
           window.DrizzleApp.updatePaymentStatus(orderId, 'DP_50_PAID');
           renderAll();
         }
-      } else if (order.paymentStatus === 'DP_50_PAID') {
-        const remaining = order.totalPrice - order.dpAmount;
-        if (confirm(`Verifikasi pelunasan 100% (Sisa ${window.DrizzleApp.formatRupiah(remaining)}) untuk pesanan ${orderId}?`)) {
+      } else if (targetStatus === 'LUNAS') {
+        const remaining = Math.max(0, order.totalPrice - (order.paidAmount || order.dpAmount));
+        const remStr = window.DrizzleApp.formatRupiah(remaining);
+        if (confirm(`Verifikasi pelunasan 100% sebesar ${remStr} untuk pesanan ${orderId} (${order.serviceName})?\n\n✓ Mencatat sisa penerimaan kas masuk (INCOME) di Buku Kas ERP\n✓ Status pembayaran menjadi LUNAS\n✓ Mengaktifkan otorisasi pengiriman & input resi kargo`)) {
           window.DrizzleApp.updatePaymentStatus(orderId, 'LUNAS');
           renderAll();
         }
@@ -1164,7 +1225,7 @@
           } else if (isQC && !isLunas) {
             actionBtn = `<div class="flex items-center justify-end gap-1.5">
                            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-50 text-amber-700 border border-amber-200">Menunggu Pelunasan</span>
-                           <button onclick="promptPayment('${o.orderId}')" class="text-[10px] font-mono underline text-emerald-700 hover:text-emerald-800 font-bold">Verifikasi Lunas</button>
+                           <button onclick="verifyPayment('${o.orderId}', 'LUNAS')" class="text-[10px] font-mono underline text-emerald-700 hover:text-emerald-800 font-bold">Verifikasi Lunas</button>
                          </div>`;
           } else {
             actionBtn = `<span class="text-muted text-[10px] font-mono">Dalam Produksi (${o.kanbanStage})</span>`;
@@ -1307,7 +1368,7 @@
           <td class="px-4 py-3 font-mono text-muted text-[11px]">${l.txDate}</td>
           <td class="px-4 py-3">${typeBadge}</td>
           <td class="px-4 py-3 font-mono text-[11px] text-muted">${l.orderId || l.poId || '-'}</td>
-          <td class="px-4 py-3 text-dark">${l.note}</td>
+          <td class="px-4 py-3 text-dark">${l.description || l.note || '-'}</td>
           <td class="px-4 py-3 text-right font-mono font-bold ${isIncome ? 'text-emerald-600' : 'text-rose-600'}">
             ${isIncome ? '+' : '-'}${window.DrizzleApp.formatRupiah(l.amount)}
           </td>

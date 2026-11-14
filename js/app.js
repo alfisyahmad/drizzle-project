@@ -909,35 +909,35 @@ const INITIAL_ORDERS = [
     dpAmount: (16 * 110000) * 0.5,
     paidAmount: 0,
     paymentStatus: 'UNPAID',
-    kanbanStage: 'DESIGN',
+    kanbanStage: 'MENUNGGU_DP',
     hppTotal: 16 * 72000,
     trackingResi: '',
     shippingCarrier: 'Kurir Internal Drizzle',
     createdAt: '2026-11-13 16:10',
     historyLogs: [
-      { timestamp: '2026-11-13 16:10', stage: 'DESIGN', note: 'Invoice dan SPK diterbitkan, menunggu pembayaran DP.', author: 'Finance ERP' }
+      { timestamp: '2026-11-13 16:10', stage: 'MENUNGGU_DP', note: 'Invoice dan SPK diterbitkan, menunggu verifikasi pembayaran DP 50%.', author: 'Finance ERP' }
     ]
   },
   {
     orderId: 'DRZ-2026-016',
     customerId: 'CUST-016',
-    serviceId: 'SRV-01',
-    serviceName: 'T-Shirt',
-    serviceMode: 'PRODUCTION',
-    qty: 24,
-    sizeBreakdown: { S: 4, M: 8, L: 8, XL: 4, XXL: 0 },
-    briefUrl: 'T-Shirt Machine "This Story 1998 Wont End", Sablon Discharge Vintage, Heavyweight Cotton 20s.',
-    totalPrice: 24 * 65000,
-    dpAmount: (24 * 65000) * 0.5,
-    paidAmount: (24 * 65000) * 0.5,
+    serviceId: 'SRV-13',
+    serviceName: 'Brand Identity & Visual Guidelines',
+    serviceMode: 'DESIGN_ONLY',
+    qty: 1,
+    sizeBreakdown: null,
+    briefUrl: 'Brand Identity Suite "This Story 1998 Wont End", Visual Guidelines PDF & Asset DTF Tracing.',
+    totalPrice: 1500000,
+    dpAmount: 750000,
+    paidAmount: 750000,
     paymentStatus: 'DP_50_PAID',
     kanbanStage: 'DESIGN',
-    hppTotal: 24 * 42000,
+    hppTotal: 450000,
     trackingResi: '',
-    shippingCarrier: 'J&T Cargo',
+    shippingCarrier: 'Google Drive Asset / Email Delivery',
     createdAt: '2026-11-13 10:00',
     historyLogs: [
-      { timestamp: '2026-11-13 10:00', stage: 'DESIGN', note: 'Approval sample discharge vintage.', author: 'Creative' }
+      { timestamp: '2026-11-13 10:00', stage: 'DESIGN', note: 'Approval sample visual guidelines & brief creative masuk. Mode DESIGN_ONLY aktif (bypass sablon & jahit).', author: 'Creative' }
     ]
   },
   {
@@ -1226,13 +1226,49 @@ function resetDB() {
   return initData;
 }
 
-// Move Kanban Stage & Append History Log
+// ERP Module: Kanban Multi-Tahap Stages Configuration
+const KANBAN_STAGES_CONFIG = [
+  { key: 'MENUNGGU_DP', label: '1. Menunggu DP', badge: 'bg-amber-100 text-amber-800 border-amber-300' },
+  { key: 'DESIGN', label: '2. Desain & Brief', badge: 'bg-sky-100 text-sky-800 border-sky-300' },
+  { key: 'PRINTING', label: '3. Sablon & Bordir', badge: 'bg-blue-100 text-blue-800 border-blue-300' },
+  { key: 'SEWING', label: '4. Jahit & Assembly', badge: 'bg-purple-100 text-purple-800 border-purple-300' },
+  { key: 'QC', label: '5. Quality Control', badge: 'bg-orange-100 text-orange-800 border-orange-300' },
+  { key: 'SHIPPED', label: '6. Siap Kirim / Terkirim', badge: 'bg-emerald-100 text-emerald-800 border-emerald-300' }
+];
+
+// Determine Next Stage with DESIGN_ONLY Bypass Logic
+function getNextStage(currentStage, serviceMode = 'PRODUCTION') {
+  if (currentStage === 'MENUNGGU_DP') return 'DESIGN';
+  if (currentStage === 'DESIGN') {
+    // Mode DESIGN_ONLY melompati tahap Sablon dan Jahit, langsung masuk ke QC
+    return serviceMode === 'DESIGN_ONLY' ? 'QC' : 'PRINTING';
+  }
+  if (currentStage === 'PRINTING') return 'SEWING';
+  if (currentStage === 'SEWING') return 'QC';
+  if (currentStage === 'QC') return 'SHIPPED';
+  return null;
+}
+
+// Determine Previous Stage with DESIGN_ONLY Bypass Logic
+function getPrevStage(currentStage, serviceMode = 'PRODUCTION') {
+  if (currentStage === 'SHIPPED') return 'QC';
+  if (currentStage === 'QC') {
+    // Mode DESIGN_ONLY mundur langsung ke DESIGN
+    return serviceMode === 'DESIGN_ONLY' ? 'DESIGN' : 'SEWING';
+  }
+  if (currentStage === 'SEWING') return 'PRINTING';
+  if (currentStage === 'PRINTING') return 'DESIGN';
+  if (currentStage === 'DESIGN') return 'MENUNGGU_DP';
+  return null;
+}
+
+// Move Kanban Stage & Append Real-Time History Log
 function moveKanbanStage(orderId, newStage, note = '') {
   const db = getDB();
   const order = (db.orders || []).find(o => o.orderId === orderId || o.tracking_code === orderId);
   if (!order) return { success: false, reason: 'Order not found' };
 
-  const validStages = ['DESIGN', 'PRINTING', 'SEWING', 'QC', 'SHIPPED'];
+  const validStages = ['MENUNGGU_DP', 'DESIGN', 'PRINTING', 'SEWING', 'QC', 'SHIPPED'];
   if (!validStages.includes(newStage)) return { success: false, reason: 'Invalid stage' };
 
   const oldStage = order.kanbanStage;
@@ -1240,14 +1276,27 @@ function moveKanbanStage(orderId, newStage, note = '') {
   if (!order.historyLogs) order.historyLogs = [];
 
   const now = new Date().toISOString().replace('T', ' ').substring(0, 16);
+  const stageLabels = {
+    MENUNGGU_DP: 'Menunggu DP 50%',
+    DESIGN: 'Desain & Brief',
+    PRINTING: 'Sablon & Bordir',
+    SEWING: 'Jahit & Assembly',
+    QC: 'Quality Control (QC)',
+    SHIPPED: 'Siap Kirim / Terkirim'
+  };
+
+  const defaultNote = note || (order.serviceMode === 'DESIGN_ONLY' && newStage === 'QC' && oldStage === 'DESIGN'
+    ? `Layanan desain disetujui — bypass sablon & jahit langsung ke tahap Quality Control (QC final aset).`
+    : `Status progres pengerjaan dipindahkan dari ${stageLabels[oldStage] || oldStage} ke ${stageLabels[newStage] || newStage}.`);
+
   order.historyLogs.unshift({
     timestamp: now,
     stage: newStage,
-    note: note || `Status progres pengerjaan dipindahkan dari ${oldStage} ke ${newStage}.`,
-    author: 'Drizzle Admin'
+    note: defaultNote,
+    author: 'Drizzle ERP Admin'
   });
 
-  // If moving into production for the first time, check material deduction
+  // If moving into physical production for the first time, check material deduction
   if (['PRINTING', 'SEWING', 'QC', 'SHIPPED'].includes(newStage) && !order.materialsDeducted) {
     deductOrderMaterials(order);
   }
@@ -1370,17 +1419,18 @@ function createAutoPO(materialId, qtyToAdd, orderId = null) {
   return createPurchaseOrder(materialId, qtyToAdd, null, orderId);
 }
 
-// Record Customer Payment (DP / Pelunasan) with Automated MRP Execution
+// ERP Module: Record Customer Payment (DP / Pelunasan) with Automated MRP Execution & Kanban Sync
 function updatePaymentStatus(orderId, newStatus) {
   const db = getDB();
   const order = (db.orders || []).find(o => o.orderId === orderId || o.tracking_code === orderId);
-  if (!order) return { success: false };
+  if (!order) return { success: false, reason: 'Order not found' };
 
   order.paymentStatus = newStatus;
   const now = new Date().toISOString().replace('T', ' ').substring(0, 16);
+  if (!order.historyLogs) order.historyLogs = [];
 
   if (newStatus === 'LUNAS') {
-    const remaining = order.totalPrice - (order.paidAmount || 0);
+    const remaining = Math.max(0, order.totalPrice - (order.paidAmount || 0));
     order.paidAmount = order.totalPrice;
     if (remaining > 0) {
       const txId = generateNextTxId();
@@ -1390,32 +1440,66 @@ function updatePaymentStatus(orderId, newStatus) {
         poId: null,
         txType: 'INCOME',
         amount: remaining,
-        description: `Pelunasan 100% Pesanan ${order.orderId} (${order.serviceName})`,
+        description: `Pelunasan 100% Pesanan ${order.orderId} (${order.serviceName || order.serviceId})`,
         txDate: now
       });
     }
+
+    order.historyLogs.unshift({
+      timestamp: now,
+      stage: order.kanbanStage,
+      note: `Verifikasi pelunasan 100% senilai ${formatRupiah(remaining || order.totalPrice)} berhasil dicatat di Buku Kas ERP. Status pembayaran: LUNAS.`,
+      author: 'Finance ERP'
+    });
+
     // Automated MRP Execution if not yet deducted
     if (!order.materialsDeducted && order.serviceMode !== 'DESIGN_ONLY') {
       deductOrderMaterials(order);
     }
   } else if (newStatus === 'DP_50_PAID') {
-    order.paidAmount = order.dpAmount || (order.totalPrice * 0.5);
+    const dpVal = order.dpAmount || Math.round(order.totalPrice * 0.5);
+    order.paidAmount = dpVal;
     const txId = generateNextTxId();
     db.financeLedger.unshift({
       txId,
       orderId: order.orderId,
       poId: null,
       txType: 'INCOME',
-      amount: order.paidAmount,
-      description: `Penerimaan DP 50% Pesanan ${order.orderId} (${order.serviceName})`,
+      amount: dpVal,
+      description: `Penerimaan DP 50% Pesanan ${order.orderId} (${order.serviceName || order.serviceId})`,
       txDate: now
     });
+
+    // Auto-advance stage from MENUNGGU_DP to DESIGN upon receiving DP
+    if (order.kanbanStage === 'MENUNGGU_DP') {
+      order.kanbanStage = 'DESIGN';
+      order.historyLogs.unshift({
+        timestamp: now,
+        stage: 'DESIGN',
+        note: `Verifikasi penerimaan DP 50% (${formatRupiah(dpVal)}) berhasil dicatat di Buku Kas ERP. Tiket order otomatis dimajukan ke antrean Desain & Brief.`,
+        author: 'Finance ERP'
+      });
+    } else {
+      order.historyLogs.unshift({
+        timestamp: now,
+        stage: order.kanbanStage,
+        note: `Verifikasi DP 50% (${formatRupiah(dpVal)}) berhasil dicatat di Buku Kas ERP.`,
+        author: 'Finance ERP'
+      });
+    }
+
     // Automated MRP Execution upon DP Verification
     if (!order.materialsDeducted && order.serviceMode !== 'DESIGN_ONLY') {
       deductOrderMaterials(order);
     }
   } else {
     order.paidAmount = 0;
+    order.historyLogs.unshift({
+      timestamp: now,
+      stage: order.kanbanStage,
+      note: `Status pembayaran diubah menjadi UNPAID oleh Finance Admin.`,
+      author: 'Finance ERP'
+    });
   }
 
   saveDB(db);
@@ -1440,10 +1524,6 @@ function updateShippingInfo(orderId, carrier, resi) {
     note: `Pesanan telah selesai QC & dikirimkan via ${carrier} dengan nomor resi/AWB: ${resi}.`,
     author: 'Outbound SCM Logistics'
   });
-
-  saveDB(db);
-  return { success: true, order };
-}
 
   saveDB(db);
   return { success: true, order };
@@ -1597,6 +1677,9 @@ window.DrizzleApp = {
   generateNextPOId,
   generateNextTxId,
   moveKanbanStage,
+  getNextStage,
+  getPrevStage,
+  KANBAN_STAGES_CONFIG,
   deductOrderMaterials,
   createPurchaseOrder,
   receivePurchaseOrder,

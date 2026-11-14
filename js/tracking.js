@@ -13,11 +13,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const multiOrdersNav = document.getElementById('multi-orders-nav');
 
   const KANBAN_STAGES = [
-    { key: 'DESIGN', label: '1. Design & Approval', desc: 'Mockup disetujui & verifikasi DP.' },
-    { key: 'PRINTING', label: '2. Printing & Cutting', desc: 'Potong bahan & sablon/bordir.' },
-    { key: 'SEWING', label: '3. Sewing & Assembly', desc: 'Perakitan garmen & label woven.' },
-    { key: 'QC', label: '4. Quality Control', desc: 'Steam press & kemasan 1:1.' },
-    { key: 'SHIPPED', label: '5. Shipped & Completed', desc: 'Serah terima / kurir kargo.' }
+    { key: 'MENUNGGU_DP', label: '1. Menunggu DP', desc: 'Verifikasi DP 50% masuk ke kas ERP.' },
+    { key: 'DESIGN', label: '2. Desain & Brief', desc: 'Mockup disetujui & approval desain.' },
+    { key: 'PRINTING', label: '3. Sablon & Bordir', desc: 'Potong bahan & sablon/bordir presisi.' },
+    { key: 'SEWING', label: '4. Jahit & Assembly', desc: 'Perakitan garmen & label woven Drizzle.' },
+    { key: 'QC', label: '5. Quality Control', desc: 'Steam press & kemasan wajib 1:1.' },
+    { key: 'SHIPPED', label: '6. Siap Kirim / Selesai', desc: 'Serah terima / kurir kargo ekspedisi.' }
   ];
 
   // 1. Populate Sample Chips (Orders + WhatsApp Numbers)
@@ -218,33 +219,48 @@ document.addEventListener('DOMContentLoaded', () => {
       reorderBtn.href = `order.html?reorder=${encodeURIComponent(order.orderId)}`;
     }
 
-    // Render 5-Stage Stepper
-    renderStepper(order.kanbanStage);
+    // Render 6-Stage Stepper
+    renderStepper(order.kanbanStage, order.serviceMode);
 
     // Render History Logs Timeline
     renderHistoryTimeline(order.historyLogs || []);
   }
 
-  function renderStepper(currentStageKey) {
+  function renderStepper(currentStageKey, serviceMode = 'PRODUCTION') {
     const container = document.getElementById('stepper-container');
     if (!container) return;
     container.innerHTML = '';
 
-    const stageKeys = ['DESIGN', 'PRINTING', 'SEWING', 'QC', 'SHIPPED'];
+    const stageKeys = ['MENUNGGU_DP', 'DESIGN', 'PRINTING', 'SEWING', 'QC', 'SHIPPED'];
     const currentIdx = stageKeys.indexOf(currentStageKey);
     const activeIdx = currentIdx >= 0 ? currentIdx : 0;
+    const isDesignOnly = serviceMode === 'DESIGN_ONLY';
 
     KANBAN_STAGES.forEach((st, idx) => {
-      const isDone = idx < activeIdx;
-      const isActive = idx === activeIdx;
-      const isPending = idx > activeIdx;
+      const isBypassed = isDesignOnly && (st.key === 'PRINTING' || st.key === 'SEWING');
+      let isDone = idx < activeIdx;
+      let isActive = idx === activeIdx;
+
+      // In DESIGN_ONLY mode, if we are at QC or SHIPPED, PRINTING and SEWING are marked as bypassed (completed/skipped)
+      if (isBypassed) {
+        if (activeIdx > 1) { // active is QC (idx 4) or SHIPPED (idx 5)
+          isDone = true;
+          isActive = false;
+        } else {
+          isActive = false;
+          isDone = false;
+        }
+      }
 
       const item = document.createElement('div');
       item.className = 'flex-1 text-center relative';
 
       let circleClass = '';
       let circleText = '';
-      if (isDone) {
+      if (isBypassed && !isDone) {
+        circleClass = 'bg-canvas text-muted border-dashed border-borderCard opacity-60';
+        circleText = '—';
+      } else if (isDone) {
         circleClass = 'bg-emerald-500 text-white border-emerald-500';
         circleText = '✓';
       } else if (isActive) {
@@ -255,6 +271,8 @@ document.addEventListener('DOMContentLoaded', () => {
         circleText = idx + 1;
       }
 
+      const labelDesc = isBypassed ? '<span class="text-amber-600 font-semibold">(Bypass Desain)</span>' : st.desc;
+
       item.innerHTML = `
         <div class="w-8 h-8 mx-auto rounded-full border-2 flex items-center justify-center font-bold text-xs font-mono shadow-sm transition-all ${circleClass}">
           ${circleText}
@@ -262,7 +280,7 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="mt-2 text-[11px] font-bold ${isActive ? 'text-brand' : (isDone ? 'text-dark' : 'text-muted')}">
           ${st.label}
         </div>
-        <p class="text-[10px] text-muted hidden sm:block mt-0.5">${st.desc}</p>
+        <p class="text-[10px] text-muted hidden sm:block mt-0.5">${labelDesc}</p>
       `;
       container.appendChild(item);
     });

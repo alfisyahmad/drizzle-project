@@ -873,15 +873,15 @@
           dpAmount: dpAmount,
           paidAmount: 0,
           paymentStatus: 'UNPAID',
-          kanbanStage: 'DESIGN',
+          kanbanStage: 'MENUNGGU_DP',
           hppTotal: Math.round(totalPrice * 0.65),
           trackingResi: '',
           shippingCarrier: '',
           createdAt: `${dateStr} ${timeStr}`,
           historyLogs: [
             {
-              stage: 'DESIGN',
-              note: `Pesanan terdaftar via web portal oleh ${name} [${org}]. Tagihan DP 50% (${window.DrizzleApp.formatRupiah(dpAmount)}) diterbitkan.`,
+              stage: 'MENUNGGU_DP',
+              note: `Pesanan terdaftar via web portal oleh ${name} [${org}]. Menunggu verifikasi pembayaran DP 50% (${window.DrizzleApp.formatRupiah(dpAmount)}).`,
               timestamp: `${dateStr} ${timeStr}`,
               author: 'Customer Portal'
             }
