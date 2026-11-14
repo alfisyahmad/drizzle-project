@@ -1,45 +1,45 @@
 /**
  * Drizzle Project — Integrated Central Data Store
  * Key: 'drizzle_integrated_db' in localStorage
- * Integrates CRM (Orders/Clients) + ERP (Production & SPK) + SCM (Materials & Suppliers)
+ * Integrates CRM (Orders/Clients) + 5 ERP Submodules + SCM (Materials & Suppliers)
  */
 
 const DRIZZLE_DB_KEY = 'drizzle_integrated_db';
 
 // 12 Products for Apparel & Merchandise
 const DRIZZLE_PRODUCTS = [
-  { id: 1, name: 'T-Shirt', price: 65000, category: 'Apparel', minQty: 24, badge: 'BESTSELLER', desc: 'Cotton Combed 30s/24s Reactive super lembut, sablon DTF & Plastisol.' },
-  { id: 2, name: 'Shirt / PDH', price: 110000, category: 'Apparel', minQty: 12, badge: 'CAMPUS & BEM', desc: 'American & Japan Drill premium, bordir komputer presisi instansi.' },
-  { id: 3, name: 'Hoodie', price: 145000, category: 'Outerwear', minQty: 12, badge: 'HEAVYWEIGHT', desc: 'Cotton Fleece 330gsm, tali katun tebal, eyelet metal, saku kangguru.' },
-  { id: 4, name: 'Coach', price: 135000, category: 'Outerwear', minQty: 15, badge: 'STREETWEAR', desc: 'Windbreaker coach jacket, kancing snap logam anti karat & sablon punggung.' },
-  { id: 5, name: 'Vest', price: 125000, category: 'Outerwear', minQty: 15, badge: 'TACTICAL', desc: 'Rompi tactical/formal padding dacron ringan dengan resleting YKK.' },
-  { id: 6, name: 'Varsity', price: 175000, category: 'Outerwear', minQty: 12, badge: 'SIGNATURE', desc: 'Wool blend body, leather sleeve & towel chenille patch embroidery.' },
-  { id: 7, name: 'Bomber', price: 165000, category: 'Outerwear', minQty: 12, badge: 'MILITARY FIT', desc: 'Flight jacket klasik, saku zipper lengan utility, rib elastis tebal.' },
-  { id: 8, name: 'Polo', price: 85000, category: 'Apparel', minQty: 20, badge: 'SEMI-FORMAL', desc: 'Lacoste CVC Pique adem, kerah rajut padat & bordir dada berkelas.' },
-  { id: 9, name: 'Jacket', price: 140000, category: 'Outerwear', minQty: 15, badge: 'ALL-WEATHER', desc: 'Taslan/Microfiber tahan angin & percikan air, furing jaring bernapas.' },
-  { id: 10, name: 'Hat', price: 45000, category: 'Accessories', minQty: 24, badge: 'ACCESSORY', desc: 'Topi twill/kanvas custom, bordir 3D puff atau sablon presisi.' },
-  { id: 11, name: 'Lanyard', price: 15000, category: 'Accessories', minQty: 50, badge: 'EVENT MERCH', desc: 'Tali tisu polyester 2-2.5cm, print full-color sublimasi presisi + stopper.' },
-  { id: 12, name: 'Tote Bag', price: 35000, category: 'Accessories', minQty: 30, badge: 'ECO CANVAS', desc: 'Kanvas tebal 12oz atau blacu natural, sablon awet untuk goodie bag.' }
+  { id: 1, name: 'T-Shirt', price: 65000, hppUnit: 42000, category: 'Apparel', minQty: 24, badge: 'BESTSELLER', desc: 'Cotton Combed 30s/24s Reactive super lembut, sablon DTF & Plastisol.' },
+  { id: 2, name: 'Shirt / PDH', price: 110000, hppUnit: 72000, category: 'Apparel', minQty: 12, badge: 'CAMPUS & BEM', desc: 'American & Japan Drill premium, bordir komputer presisi instansi.' },
+  { id: 3, name: 'Hoodie', price: 145000, hppUnit: 98000, category: 'Outerwear', minQty: 12, badge: 'HEAVYWEIGHT', desc: 'Cotton Fleece 330gsm, tali katun tebal, eyelet metal, saku kangguru.' },
+  { id: 4, name: 'Coach', price: 135000, hppUnit: 88000, category: 'Outerwear', minQty: 15, badge: 'STREETWEAR', desc: 'Windbreaker coach jacket, kancing snap logam anti karat & sablon punggung.' },
+  { id: 5, name: 'Vest', price: 125000, hppUnit: 82000, category: 'Outerwear', minQty: 15, badge: 'TACTICAL', desc: 'Rompi tactical/formal padding dacron ringan dengan resleting YKK.' },
+  { id: 6, name: 'Varsity', price: 175000, hppUnit: 115000, category: 'Outerwear', minQty: 12, badge: 'SIGNATURE', desc: 'Wool blend body, leather sleeve & towel chenille patch embroidery.' },
+  { id: 7, name: 'Bomber', price: 165000, hppUnit: 108000, category: 'Outerwear', minQty: 12, badge: 'MILITARY FIT', desc: 'Flight jacket klasik, saku zipper lengan utility, rib elastis tebal.' },
+  { id: 8, name: 'Polo', price: 85000, hppUnit: 56000, category: 'Apparel', minQty: 20, badge: 'SEMI-FORMAL', desc: 'Lacoste CVC Pique adem, kerah rajut padat & bordir dada berkelas.' },
+  { id: 9, name: 'Jacket', price: 140000, hppUnit: 92000, category: 'Outerwear', minQty: 15, badge: 'ALL-WEATHER', desc: 'Taslan/Microfiber tahan angin & percikan air, furing jaring bernapas.' },
+  { id: 10, name: 'Hat', price: 45000, hppUnit: 28000, category: 'Accessories', minQty: 24, badge: 'ACCESSORY', desc: 'Topi twill/kanvas custom, bordir 3D puff atau sablon presisi.' },
+  { id: 11, name: 'Lanyard', price: 15000, hppUnit: 9000, category: 'Accessories', minQty: 50, badge: 'EVENT MERCH', desc: 'Tali tisu polyester 2-2.5cm, print full-color sublimasi presisi + stopper.' },
+  { id: 12, name: 'Tote Bag', price: 35000, hppUnit: 21000, category: 'Accessories', minQty: 30, badge: 'ECO CANVAS', desc: 'Kanvas tebal 12oz atau blacu natural, sablon awet untuk goodie bag.' }
 ];
 
 // Creative Studio & Brand Consultation Services
 const DRIZZLE_CREATIVE_SERVICES = [
-  { id: 'cs-1', name: 'Merchandising Consultant', basePrice: 500000, desc: 'Konsultasi kurasi material, budgeting HPP, dan manajemen alur produksi merchandise.' },
-  { id: 'cs-2', name: 'Brand Identities', basePrice: 1500000, desc: 'Pembuatan logo, visual guidelines, color palette, typography system, dan brand collateral.' },
-  { id: 'cs-3', name: 'Graphic Design', basePrice: 350000, desc: 'Desain visual kustom untuk kaos, merchandise, poster event, dan packaging unik.' },
-  { id: 'cs-4', name: 'Infographic', basePrice: 400000, desc: 'Penyajian data visual terstruktur, infografis korporat, materi presentasi edukatif.' },
-  { id: 'cs-5', name: 'Editorial Layout', basePrice: 750000, desc: 'Tata letak majalah, katalog lookbook apparel, annual report, booklet organisasi.' },
-  { id: 'cs-6', name: 'Digital Media & Social Media Management', basePrice: 1200000, desc: 'Strategi content planning, feeds Instagram template, banner web, microblog visual.' }
+  { id: 'cs-1', name: 'Merchandising Consultant', basePrice: 500000, hppUnit: 150000, desc: 'Konsultasi kurasi material, budgeting HPP, dan manajemen alur produksi merchandise.' },
+  { id: 'cs-2', name: 'Brand Identities', basePrice: 1500000, hppUnit: 450000, desc: 'Pembuatan logo, visual guidelines, color palette, typography system, dan brand collateral.' },
+  { id: 'cs-3', name: 'Graphic Design', basePrice: 350000, hppUnit: 100000, desc: 'Desain visual kustom untuk kaos, merchandise, poster event, dan packaging unik.' },
+  { id: 'cs-4', name: 'Infographic', basePrice: 400000, hppUnit: 120000, desc: 'Penyajian data visual terstruktur, infografis korporat, materi presentasi edukatif.' },
+  { id: 'cs-5', name: 'Editorial Layout', basePrice: 750000, hppUnit: 250000, desc: 'Tata letak majalah, katalog lookbook apparel, annual report, booklet organisasi.' },
+  { id: 'cs-6', name: 'Digital Media & Social Media Management', basePrice: 1200000, hppUnit: 400000, desc: 'Strategi content planning, feeds Instagram template, banner web, microblog visual.' }
 ];
 
-// Production Stages (6 Steps)
+// 6 Production Stages
 const PRODUCTION_STAGES = [
   { step: 1, name: 'Design Approved', label: '1. Design Approved', desc: 'Mockup & spesifikasi disetujui pemesan.' },
-  { step: 2, name: 'Down Payment (DP)', label: '2. Down Payment (DP)', desc: 'DP terverifikasi untuk antrean produksi.' },
-  { step: 3, name: 'Bahan & Potong', label: '3. Bahan & Potong', desc: 'Pemotongan pola kain rol di cutting section.' },
-  { step: 4, name: 'Sablon/Bordir', label: '4. Sablon/Bordir', desc: 'Aplikasi sablon DTF/Plastisol / bordir komputer.' },
-  { step: 5, name: 'Jahit & Finishing', label: '5. Jahit & Finishing', desc: 'Perakitan garmen, pasang label, steam press & QC.' },
-  { step: 6, name: 'Siap Kirim/Ambil', label: '6. Siap Kirim/Ambil', desc: 'Packing kemasan siap diambil/dikirim.' }
+  { step: 2, name: 'DP Verified', label: '2. DP Verified', desc: 'DP 50% terverifikasi untuk antrean produksi.' },
+  { step: 3, name: 'Potong & Bahan', label: '3. Potong & Bahan', desc: 'Pemotongan pola kain di cutting section (Buffer 3%).' },
+  { step: 4, name: 'Sablon/Bordir', label: '4. Sablon/Bordir', desc: 'Aplikasi sablon DTF/Plastisol atau bordir makloon.' },
+  { step: 5, name: 'Jahit & QC', label: '5. Jahit & QC', desc: 'Perakitan garmen, pasang label, steam press & QC.' },
+  { step: 6, name: 'Packaging & Siap Kirim', label: '6. Packaging & Siap Kirim', desc: 'Packing kemasan rasio 1:1 siap diambil/dikirim.' }
 ];
 
 // Initial SCM Raw Materials
@@ -51,7 +51,7 @@ const INITIAL_MATERIALS = [
   { id: 5, name: 'Kemasan / Packaging Drizzle', unit: 'Pcs', stock: 850, minStock: 200, supplier: 'CV Packindo Solusindo' }
 ];
 
-// Seed Real Client Orders
+// Seed Real Client Orders with ERP Attributes
 const INITIAL_ORDERS = [
   {
     tracking_code: 'DRZ-2026-001',
@@ -62,10 +62,18 @@ const INITIAL_ORDERS = [
     size_breakdown: { S: 100, M: 220, L: 200, XL: 100, XXL: 32 },
     specs: { print_type: 'Sablon Plastisol High Density', fabric_color: 'Jet Black 30s', notes: 'Desain artwork ultras depan dan punggung A3, label woven Drizzle.' },
     total_price: 652 * 65000,
+    unit_price: 65000,
+    hpp_unit: 42000,
     status_payment: 'DP Verified',
     stage: 'Sablon/Bordir',
     created_at: '2026-11-02 10:15:00',
-    materials_deducted: true
+    materials_deducted: true,
+    revisions_used: 1,
+    sample_approved: true,
+    makloon_vendor: 'CV Grafika Sablonindo',
+    qc_passed: 650,
+    qc_reject: 2,
+    paid_amount: (652 * 65000) * 0.5
   },
   {
     tracking_code: 'DRZ-2026-002',
@@ -76,10 +84,18 @@ const INITIAL_ORDERS = [
     size_breakdown: { S: 50, M: 120, L: 130, XL: 60, XXL: 19 },
     specs: { print_type: 'Sablon DTF Full Color', fabric_color: 'White Combed 24s', notes: 'Eternal For Bushwacker Finest Badge edition.' },
     total_price: 379 * 65000,
+    unit_price: 65000,
+    hpp_unit: 42000,
     status_payment: 'DP Verified',
-    stage: 'Bahan & Potong',
+    stage: 'Potong & Bahan',
     created_at: '2026-11-05 14:20:00',
-    materials_deducted: true
+    materials_deducted: true,
+    revisions_used: 2,
+    sample_approved: true,
+    makloon_vendor: 'Solo Cutting Specialist',
+    qc_passed: 379,
+    qc_reject: 0,
+    paid_amount: (379 * 65000) * 0.5
   },
   {
     tracking_code: 'DRZ-2026-003',
@@ -90,10 +106,18 @@ const INITIAL_ORDERS = [
     size_breakdown: { S: 30, M: 70, L: 60, XL: 25, XXL: 5 },
     specs: { print_type: 'Sablon Plastisol Doff', fabric_color: 'Navy Blue 30s', notes: 'Natus Vincere edition, logo dada kiri & typogafi punggung.' },
     total_price: 190 * 65000,
+    unit_price: 65000,
+    hpp_unit: 42000,
     status_payment: 'DP Verified',
-    stage: 'Down Payment (DP)',
+    stage: 'DP Verified',
     created_at: '2026-11-08 09:30:00',
-    materials_deducted: false
+    materials_deducted: false,
+    revisions_used: 1,
+    sample_approved: true,
+    makloon_vendor: 'CV Makloon Jahit Sejahtera',
+    qc_passed: 0,
+    qc_reject: 0,
+    paid_amount: (190 * 65000) * 0.5
   },
   {
     tracking_code: 'DRZ-2026-004',
@@ -103,11 +127,20 @@ const INITIAL_ORDERS = [
     total_pcs: 75,
     size_breakdown: { S: 10, M: 25, L: 25, XL: 12, XXL: 3 },
     specs: { print_type: 'Bordir Komputer Presisi', fabric_color: 'American Drill Khaki & Hitam', notes: 'Bordir logo UNS dada kiri, bendera lengan kanan, nama mahasiswa dada kanan.' },
+    nicknames: 'Terlampir 75 nama mahasiswa & divisi BEM',
     total_price: 75 * 110000,
+    unit_price: 110000,
+    hpp_unit: 72000,
     status_payment: 'Lunas',
-    stage: 'Siap Kirim/Ambil',
+    stage: 'Packaging & Siap Kirim',
     created_at: '2026-11-01 11:00:00',
-    materials_deducted: true
+    materials_deducted: true,
+    revisions_used: 3,
+    sample_approved: true,
+    makloon_vendor: 'Bordir Komputer Makmur',
+    qc_passed: 75,
+    qc_reject: 0,
+    paid_amount: 75 * 110000
   },
   {
     tracking_code: 'DRZ-2026-005',
@@ -117,11 +150,20 @@ const INITIAL_ORDERS = [
     total_pcs: 32,
     size_breakdown: { S: 5, M: 12, L: 10, XL: 4, XXL: 1 },
     specs: { print_type: 'Bordir Komputer', fabric_color: 'Japan Drill Navy', notes: 'Kemeja pengurus harian IMAKA Karanganyar.' },
+    nicknames: 'Terlampir 32 nama pengurus harian',
     total_price: 32 * 110000,
+    unit_price: 110000,
+    hpp_unit: 72000,
     status_payment: 'Lunas',
-    stage: 'Siap Kirim/Ambil',
+    stage: 'Packaging & Siap Kirim',
     created_at: '2026-10-28 13:40:00',
-    materials_deducted: true
+    materials_deducted: true,
+    revisions_used: 1,
+    sample_approved: true,
+    makloon_vendor: 'Bordir Komputer Makmur',
+    qc_passed: 32,
+    qc_reject: 0,
+    paid_amount: 32 * 110000
   },
   {
     tracking_code: 'DRZ-2026-006',
@@ -131,11 +173,20 @@ const INITIAL_ORDERS = [
     total_pcs: 16,
     size_breakdown: { S: 2, M: 6, L: 5, XL: 3, XXL: 0 },
     specs: { print_type: 'Bordir Komputer Logo Perusahaan', fabric_color: 'American Drill Abu Tua', notes: 'Seragam teknisi lapangan PT Surya Nakula.' },
+    nicknames: '16 Nama Teknisi & Divisi Lapangan',
     total_price: 16 * 110000,
+    unit_price: 110000,
+    hpp_unit: 72000,
     status_payment: 'Menunggu DP',
     stage: 'Design Approved',
     created_at: '2026-11-13 16:10:00',
-    materials_deducted: false
+    materials_deducted: false,
+    revisions_used: 1,
+    sample_approved: false,
+    makloon_vendor: 'Antrean Cutting Solo',
+    qc_passed: 0,
+    qc_reject: 0,
+    paid_amount: 0
   }
 ];
 
@@ -158,8 +209,8 @@ function getDrizzleDB() {
       materials: INITIAL_MATERIALS,
       logs: [
         { id: 1, type: 'CRM -> ERP', message: 'Pesanan SMANKRAPFANS (652 pcs T-Shirt) berhasil masuk sistem.', time: '2026-11-02 10:15:00' },
-        { id: 2, type: 'ERP -> SCM', message: 'Alokasi bahan baku SMANKRAPFANS: Kain Roll -22 roll, Kemasan -652 pcs.', time: '2026-11-03 08:30:00' },
-        { id: 3, type: 'CRM -> ERP', message: 'Pesanan BUSHWACKER (379 pcs T-Shirt) masuk ke antrean produksi.', time: '2026-11-05 14:20:00' },
+        { id: 2, type: 'ERP -> SCM', message: 'Alokasi bahan baku SMANKRAPFANS: Kain Roll -22 roll (Buffer 3%), Kemasan -652 pcs.', time: '2026-11-03 08:30:00' },
+        { id: 3, type: 'CRM -> ERP', message: 'Pesanan BUSHWACKER (379 pcs T-Shirt) masuk ke antrean potong & bahan.', time: '2026-11-05 14:20:00' },
         { id: 4, type: 'SCM -> ERP', message: 'Restock bahan baku: Kemasan Drizzle +500 pcs dari CV Packindo.', time: '2026-11-09 11:00:00' }
       ]
     };
@@ -180,6 +231,25 @@ function saveDrizzleDB(data) {
   } catch (e) {
     console.error('Error saving central DB:', e);
   }
+}
+
+// Tiered Pricing Calculator
+function calculateTieredPrice(productName, totalPcs) {
+  const prod = DRIZZLE_PRODUCTS.find(p => p.name.toLowerCase() === productName.toLowerCase());
+  if (!prod) return 65000;
+  let base = prod.price;
+
+  // Tier discount based on volume:
+  // 1-49 pcs: normal price
+  // 50-149 pcs: 5% discount
+  // 150-349 pcs: 10% discount
+  // 350-649 pcs: 15% discount
+  // 650+ pcs: 20% discount
+  if (totalPcs >= 650) return Math.round(base * 0.80);
+  if (totalPcs >= 350) return Math.round(base * 0.85);
+  if (totalPcs >= 150) return Math.round(base * 0.90);
+  if (totalPcs >= 50) return Math.round(base * 0.95);
+  return base;
 }
 
 // Generate Next Code: DRZ-2026-XXX
@@ -207,7 +277,7 @@ function logIntegration(type, message) {
   saveDrizzleDB(db);
 }
 
-// Deduct SCM Materials for an Order
+// Deduct SCM Materials for an Order with 3% Buffer Margin
 function deductOrderMaterials(orderCode) {
   const db = getDrizzleDB();
   const order = db.orders.find(o => o.tracking_code === orderCode);
@@ -216,9 +286,10 @@ function deductOrderMaterials(orderCode) {
   const qty = order.total_pcs || 0;
   const pName = (order.product_name || '').toLowerCase();
 
-  // Determine needed materials
-  let rollNeeded = Math.max(1, Math.ceil(qty / 30));
-  let pkgNeeded = qty;
+  // 3% Buffer included: total fabric needed includes safety margin
+  const qtyWithBuffer = Math.ceil(qty * 1.03);
+  let rollNeeded = Math.max(1, Math.ceil(qtyWithBuffer / 30));
+  let pkgNeeded = qty; // 1:1 packaging ratio per finished product
 
   let matTarget = db.materials.find(m => m.id === 1); // default combed
   if (pName.includes('shirt') || pName.includes('pdh')) {
@@ -229,10 +300,10 @@ function deductOrderMaterials(orderCode) {
   const pkgMat = db.materials.find(m => m.id === 5); // packaging
 
   if (matTarget && matTarget.stock < rollNeeded) {
-    return { success: false, reason: `Stok ${matTarget.name} tidak mencukupi (Tersedia: ${matTarget.stock} ${matTarget.unit}, Butuh: ${rollNeeded} ${matTarget.unit}). Harap restock di tab SCM.` };
+    return { success: false, reason: `Stok ${matTarget.name} tidak mencukupi (Tersedia: ${matTarget.stock} ${matTarget.unit}, Butuh: ${rollNeeded} ${matTarget.unit} inc. buffer 3%). Harap restock di tab SCM.` };
   }
   if (pkgMat && pkgMat.stock < pkgNeeded) {
-    return { success: false, reason: `Stok Kemasan tidak mencukupi (Tersedia: ${pkgMat.stock} pcs, Butuh: ${pkgNeeded} pcs). Harap restock di tab SCM.` };
+    return { success: false, reason: `Stok Kemasan tidak mencukupi (Tersedia: ${pkgMat.stock} pcs, Butuh: ${pkgNeeded} pcs rasio 1:1). Harap restock di tab SCM.` };
   }
 
   // Deduct
@@ -241,7 +312,7 @@ function deductOrderMaterials(orderCode) {
   order.materials_deducted = true;
 
   saveDrizzleDB(db);
-  logIntegration('ERP -> SCM', `Pemotongan stok otomatis untuk ${order.tracking_code} (${qty} pcs ${order.product_name}): ${matTarget ? matTarget.name : 'Kain'} -${rollNeeded} roll, Packaging -${pkgNeeded} pcs.`);
+  logIntegration('ERP -> SCM', `Pemotongan stok otomatis untuk ${order.tracking_code} (${qty} pcs ${order.product_name} + 3% buffer): ${matTarget ? matTarget.name : 'Kain'} -${rollNeeded} roll, Packaging -${pkgNeeded} pcs (rasio 1:1).`);
   return { success: true };
 }
 
@@ -253,6 +324,7 @@ window.DrizzleStore = {
   getDB: getDrizzleDB,
   saveDB: saveDrizzleDB,
   formatRupiah: formatRupiah,
+  calculateTieredPrice: calculateTieredPrice,
   generateNextCode: generateNextTrackingCode,
   logIntegration: logIntegration,
   deductMaterials: deductOrderMaterials

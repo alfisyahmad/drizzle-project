@@ -21,6 +21,35 @@
   3. Lacak Pesanan (`tracking.html`)
   4. Dashboard Admin ERP & SCM (`admin.html`)
 
+## Rancangan Modul ERP (Drizzle Project)
+
+Modul ERP mengintegrasikan lima sub-modul operasional internal untuk mengelola layanan **Konveksi Apparel & Merchandise Custom** serta **Jasa Desain Kreatif & Konsultasi Brand**:
+
+1. **Penjualan (*Sales & Order Management*):**
+   - Mengelola pesanan dari 12 kategori produk apparel (termasuk *matrix* ukuran S–XXL dan daftar *nickname*/divisi untuk PDH) maupun paket jasa kreatif.
+   - Skema *tiered pricing* (16 hingga 650+ pcs) dengan penerbitan kode tracking otomatis (`DRZ-2026-XXX`).
+2. **Pra-Produksi (*Design & Sampling*):**
+   - Mengatur alur pengajuan *alternative designs*.
+   - Batas kuota revisi desain (maks. 3x).
+   - Persetujuan *sample* fisik/digital sebelum Surat Perintah Kerja (SPK) diterbitkan.
+3. **Produksi & QC (*Production Pipeline & Makloon*):**
+   - Memantau pengerjaan 6 tahap:
+     1. Design Approved
+     2. Down Payment (DP)
+     3. Potong & Bahan
+     4. Sablon/Bordir
+     5. Jahit & QC
+     6. Packaging & Siap Kirim
+   - Pembagian vendor *makloon* (Cutting, Sablon/Bordir, Jahit/Sewing).
+   - Pencatatan hasil QC (*passed* vs *reject*).
+4. **Persediaan (*Inventory & Packaging - SCM*):**
+   - Mengontrol stok kain roll, perlengkapan sablon/bordir, *buffer* bahan 3%, serta stok wajib *packaging* (rasio 1:1 per produk).
+   - Pengurangan stok otomatis saat SPK berjalan yang terhubung ke peringatan *restock* SCM.
+5. **Keuangan (*Finance & HPP*):**
+   - Termin pembayaran klien (DP 50% dan pelunasan).
+   - Perhitungan Harga Pokok Produksi (HPP) per proyek (bahan + makloon + packaging + operasional).
+   - Rekap kas masuk, piutang klien, dan margin laba bersih.
+
 ## Arsitektur Integrasi Terpusat (CRM + ERP + SCM)
 - State terpusat tunggal di `localStorage`: `drizzle_integrated_db`
 - Data Rekap Klien Riil Awal Drizzle Project:
@@ -30,23 +59,3 @@
   - MPD UNS — 75 Pcs PDH
   - IMAKA UNDIP — 32 Pcs Shirt
   - PT. Surya Nakula — 16 Pcs Shirt
-- Alur Kerja Sistem:
-  1. **CRM / Order Form (`order.html`)**:
-     - Mendukung 2 jenis layanan: **Produksi Apparel Custom** (dengan input breakdown ukuran S–XXL) dan **Jasa Desain & Konsultasi Brand**.
-     - Otomatis menghasilkan kode pelacakan unik (`DRZ-2026-XXX`).
-  2. **Admin ERP (`admin.html`)**:
-     - Sinkronisasi real-time data pesanan masuk.
-     - Verifikasi status pembayaran (Menunggu DP -> DP Terverifikasi -> Lunas).
-     - Pengelolaan 6 tahapan produksi:
-       1. Design Approved
-       2. Down Payment (DP)
-       3. Bahan & Potong
-       4. Sablon/Bordir
-       5. Jahit & Finishing
-       6. Siap Kirim/Ambil
-     - Fitur cetak Work Order / SPK otomatis.
-  3. **SCM / Inventory Management (`admin.html`)**:
-     - Saat pesanan berstatus masuk proses potong/produksi, stok bahan baku kain, benang, aksesoris, dan packaging otomatis dipotong sesuai kuantitas pesanan.
-     - Restock supplier / PO vendor otomatis menambah kembali ketersediaan stok.
-  4. **Pelanggan / Tracking Portal (`tracking.html`)**:
-     - Pelacakan 6 tahap progres produksi secara live menggunakan kode pesanan (`DRZ-2026-XXX`).

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard Admin ERP & SCM — Drizzle Project</title>
+  <title>Dashboard Terpadu ERP — Drizzle Project</title>
 
   <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -55,7 +55,7 @@
         </div>
         <div>
           <span class="font-bold text-lg tracking-tight text-dark block leading-tight">Drizzle Project</span>
-          <span class="text-[11px] font-mono text-muted tracking-wider uppercase block">ERP & SCM Control Center</span>
+          <span class="text-[11px] font-mono text-muted tracking-wider uppercase block">Integrated ERP System (5 Sub-Modul)</span>
         </div>
       </a>
 
@@ -66,77 +66,99 @@
         <a href="tracking.html" class="text-muted hover:text-dark transition">Lacak Pesanan</a>
         <a href="admin.html" class="text-brand font-semibold flex items-center gap-1.5 px-3 py-1 rounded-md border border-brand/20 bg-brandLight">
           <span class="w-1.5 h-1.5 rounded-full bg-brand"></span>
-          Dashboard Admin
+          Dashboard ERP
         </a>
       </nav>
 
       <!-- Badge -->
       <div class="hidden sm:flex items-center gap-2 text-xs font-mono text-muted bg-white px-3 py-1.5 rounded-full border border-borderSubtle">
         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-        <span>Storage: drizzle_integrated_db</span>
+        <span>ERP Core Active</span>
       </div>
     </div>
   </header>
 
   <!-- ==================== MAIN DASHBOARD ==================== -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full space-y-8">
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-1 w-full space-y-7">
     
     <!-- Header -->
-    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-borderSubtle pb-5">
       <div>
-        <h1 class="text-2xl sm:text-3xl font-extrabold text-dark">Dashboard Terpadu ERP & SCM</h1>
-        <p class="text-xs sm:text-sm text-muted mt-0.5">Kelola antrean produksi garmen, verifikasi pembayaran, dan pantau stok bahan baku.</p>
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-dark">Modul ERP Terpadu Drizzle Project</h1>
+        <p class="text-xs sm:text-sm text-muted mt-0.5">Integrasi 5 Sub-Modul: Penjualan, Pra-Produksi, Produksi & QC Makloon, Persediaan SCM, serta Keuangan & HPP.</p>
       </div>
       <button onclick="renderDashboard()" class="text-xs font-semibold px-4 py-2 bg-white border border-borderSubtle rounded-lg hover:border-dark transition">
         ↻ Segarkan Data
       </button>
     </div>
 
-    <!-- KPI STATS -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div class="bg-white border border-borderSubtle rounded-xl p-5 shadow-sm">
-        <span class="text-xs text-muted block font-medium">Total Pesanan Masuk</span>
-        <div class="text-2xl sm:text-3xl font-extrabold font-mono text-dark mt-1" id="kpi-orders-count">0</div>
-        <span class="text-[11px] text-muted mt-1 block">Tersimpan di database</span>
+    <!-- 5 KEY ERP STATS / KPI -->
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-3.5">
+      <!-- 1. Penjualan -->
+      <div class="bg-white border border-borderSubtle rounded-xl p-4 shadow-sm">
+        <span class="text-[11px] text-muted block font-mono uppercase">1. Penjualan (Sales)</span>
+        <div class="text-xl sm:text-2xl font-extrabold font-mono text-dark mt-1" id="kpi-orders-count">0</div>
+        <span class="text-[10px] text-muted block" id="kpi-total-pcs">0 Pcs Apparel</span>
       </div>
 
-      <div class="bg-white border border-borderSubtle rounded-xl p-5 shadow-sm">
-        <span class="text-xs text-muted block font-medium">Total Kuantitas Pcs</span>
-        <div class="text-2xl sm:text-3xl font-extrabold font-mono text-brand mt-1" id="kpi-total-pcs">0 Pcs</div>
-        <span class="text-[11px] text-muted mt-1 block">Akumulasi seluruh apparel</span>
+      <!-- 2. Pra-Produksi -->
+      <div class="bg-white border border-borderSubtle rounded-xl p-4 shadow-sm">
+        <span class="text-[11px] text-muted block font-mono uppercase">2. Pra-Produksi</span>
+        <div class="text-xl sm:text-2xl font-extrabold font-mono text-brand mt-1" id="kpi-sampling-status">Sample OK</div>
+        <span class="text-[10px] text-muted block">Batas revisi maks 3x</span>
       </div>
 
-      <div class="bg-white border border-borderSubtle rounded-xl p-5 shadow-sm">
-        <span class="text-xs text-muted block font-medium">Menunggu Verifikasi DP</span>
-        <div class="text-2xl sm:text-3xl font-extrabold font-mono text-amber-600 mt-1" id="kpi-pending-dp">0</div>
-        <span class="text-[11px] text-muted mt-1 block">Perlu tindakan konfirmasi</span>
+      <!-- 3. Produksi & Makloon -->
+      <div class="bg-white border border-borderSubtle rounded-xl p-4 shadow-sm">
+        <span class="text-[11px] text-muted block font-mono uppercase">3. Produksi & QC</span>
+        <div class="text-xl sm:text-2xl font-extrabold font-mono text-dark mt-1" id="kpi-active-pipeline">0 Active</div>
+        <span class="text-[10px] text-emerald-600 font-semibold block" id="kpi-qc-passed">QC: 0 Passed</span>
       </div>
 
-      <div class="bg-white border border-borderSubtle rounded-xl p-5 shadow-sm">
-        <span class="text-xs text-muted block font-medium">Peringatan Stok SCM</span>
-        <div class="text-2xl sm:text-3xl font-extrabold font-mono text-emerald-600 mt-1" id="kpi-low-stock">Aman</div>
-        <span class="text-[11px] text-muted mt-1 block">Bahan baku & packaging</span>
+      <!-- 4. Persediaan SCM -->
+      <div class="bg-white border border-borderSubtle rounded-xl p-4 shadow-sm">
+        <span class="text-[11px] text-muted block font-mono uppercase">4. Persediaan SCM</span>
+        <div class="text-xl sm:text-2xl font-extrabold font-mono text-emerald-600 mt-1" id="kpi-low-stock">Aman</div>
+        <span class="text-[10px] text-muted block">Buffer 3% & Pack 1:1</span>
+      </div>
+
+      <!-- 5. Keuangan HPP -->
+      <div class="bg-white border border-borderSubtle rounded-xl p-4 shadow-sm">
+        <span class="text-[11px] text-muted block font-mono uppercase">5. Keuangan (Laba)</span>
+        <div class="text-xl sm:text-2xl font-extrabold font-mono text-emerald-600 mt-1" id="kpi-net-profit">Rp 0</div>
+        <span class="text-[10px] text-amber-600 font-semibold block" id="kpi-receivable">Piutang: Rp 0</span>
       </div>
     </div>
 
-    <!-- TABS NAVIGATION -->
-    <div class="flex gap-2 border-b border-borderSubtle pb-0">
-      <button id="tab-btn-orders" onclick="switchAdminTab('orders')" class="px-5 py-3 text-xs sm:text-sm font-semibold border-b-2 border-brand text-brand">
-        📋 Pesanan & Produksi (ERP)
+    <!-- SUB-MODULES TAB NAVIGATION -->
+    <div class="flex flex-wrap gap-1 border-b border-borderSubtle pb-0">
+      <button id="tab-btn-sales" onclick="switchERPModule('sales')" class="px-4 py-2.5 text-xs sm:text-sm font-semibold border-b-2 border-brand text-brand">
+        1. Penjualan (*Sales & Orders*)
       </button>
-      <button id="tab-btn-scm" onclick="switchAdminTab('scm')" class="px-5 py-3 text-xs sm:text-sm font-semibold border-b-2 border-transparent text-muted hover:text-dark">
-        📦 Bahan Baku & Supplier (SCM)
+      <button id="tab-btn-preprod" onclick="switchERPModule('preprod')" class="px-4 py-2.5 text-xs sm:text-sm font-semibold border-b-2 border-transparent text-muted hover:text-dark">
+        2. Pra-Produksi (*Design & Sampling*)
       </button>
-      <button id="tab-btn-logs" onclick="switchAdminTab('logs')" class="px-5 py-3 text-xs sm:text-sm font-semibold border-b-2 border-transparent text-muted hover:text-dark">
-        ⚡ Log Integrasi Sistem
+      <button id="tab-btn-prod" onclick="switchERPModule('prod')" class="px-4 py-2.5 text-xs sm:text-sm font-semibold border-b-2 border-transparent text-muted hover:text-dark">
+        3. Produksi & QC (*Makloon Pipeline*)
+      </button>
+      <button id="tab-btn-scm" onclick="switchERPModule('scm')" class="px-4 py-2.5 text-xs sm:text-sm font-semibold border-b-2 border-transparent text-muted hover:text-dark">
+        4. Persediaan (*Inventory & SCM*)
+      </button>
+      <button id="tab-btn-finance" onclick="switchERPModule('finance')" class="px-4 py-2.5 text-xs sm:text-sm font-semibold border-b-2 border-transparent text-muted hover:text-dark">
+        5. Keuangan (*Finance & HPP*)
+      </button>
+      <button id="tab-btn-logs" onclick="switchERPModule('logs')" class="px-4 py-2.5 text-xs sm:text-sm font-semibold border-b-2 border-transparent text-muted hover:text-dark">
+        ⚡ Log Integrasi
       </button>
     </div>
 
-    <!-- ==================== TAB 1: ERP ORDERS TABLE ==================== -->
-    <div id="tab-orders" class="space-y-4">
+    <!-- ==================== SUB-MODUL 1: SALES & ORDER MANAGEMENT ==================== -->
+    <div id="module-sales" class="space-y-4">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-        <input type="text" id="order-search" oninput="renderOrdersTable()" placeholder="Cari kode pesanan, nama, atau instansi..." class="w-full sm:w-80 bg-white border border-borderSubtle rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand">
-        <span class="text-xs text-muted font-medium" id="order-filtered-count">Menampilkan data</span>
+        <input type="text" id="sales-search" oninput="renderSalesTable()" placeholder="Cari kode pesanan, nama pemesan, atau instansi..." class="w-full sm:w-80 bg-white border border-borderSubtle rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand">
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-muted font-medium" id="sales-count-badge">Menampilkan pesanan</span>
+        </div>
       </div>
 
       <div class="bg-white border border-borderSubtle rounded-2xl shadow-sm overflow-hidden">
@@ -145,15 +167,16 @@
             <thead class="bg-subtle text-muted font-mono uppercase text-[11px] border-b border-borderSubtle">
               <tr>
                 <th class="px-4 py-3">Kode Tracking</th>
-                <th class="px-4 py-3">Klien / Pemesan</th>
-                <th class="px-4 py-3">Produk / Layanan</th>
-                <th class="px-4 py-3 text-center">Qty</th>
-                <th class="px-4 py-3">Status DP</th>
-                <th class="px-4 py-3">Tahap Produksi</th>
+                <th class="px-4 py-3">Klien & Lembaga</th>
+                <th class="px-4 py-3">Item Produk</th>
+                <th class="px-4 py-3 text-center">Qty & Tiering</th>
+                <th class="px-4 py-3">Matrix Ukuran / Nickname</th>
+                <th class="px-4 py-3">Nilai Proyek</th>
+                <th class="px-4 py-3">Status Termin</th>
                 <th class="px-4 py-3 text-right">Aksi</th>
               </tr>
             </thead>
-            <tbody id="orders-table-body" class="divide-y divide-borderSubtle">
+            <tbody id="sales-table-body" class="divide-y divide-borderSubtle">
               <!-- Rendered via JS -->
             </tbody>
           </table>
@@ -161,12 +184,66 @@
       </div>
     </div>
 
-    <!-- ==================== TAB 2: SCM MATERIALS ==================== -->
-    <div id="tab-scm" class="hidden space-y-4">
-      <div class="flex justify-between items-center">
-        <p class="text-xs text-muted">Pemotongan stok kain dan kemasan terjadi otomatis saat pesanan masuk proses produksi.</p>
+    <!-- ==================== SUB-MODUL 2: PRA-PRODUKSI (DESIGN & SAMPLING) ==================== -->
+    <div id="module-preprod" class="hidden space-y-4">
+      <div class="bg-brandLight border border-brand/20 p-4 rounded-xl text-xs text-brandDark">
+        <strong>Aturan Pra-Produksi Drizzle Project:</strong> Setiap pemesanan mencakup penyediaan <em>alternative designs</em>, kuota revisi maksimal 3x, dan persetujuan <em>sample</em> sebelum SPK resmi naik cetak.
+      </div>
+
+      <div class="bg-white border border-borderSubtle rounded-2xl shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-subtle text-muted font-mono uppercase text-[11px] border-b border-borderSubtle">
+              <tr>
+                <th class="px-4 py-3">Kode Order</th>
+                <th class="px-4 py-3">Klien</th>
+                <th class="px-4 py-3">Artwork & Spesifikasi</th>
+                <th class="px-4 py-3 text-center">Kuota Revisi (Maks 3x)</th>
+                <th class="px-4 py-3 text-center">Persetujuan Sample</th>
+                <th class="px-4 py-3 text-right">Kelola Persetujuan</th>
+              </tr>
+            </thead>
+            <tbody id="preprod-table-body" class="divide-y divide-borderSubtle">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SUB-MODUL 3: PRODUKSI & QC (MAKLOON PIPELINE) ==================== -->
+    <div id="module-prod" class="hidden space-y-4">
+      <div class="flex justify-between items-center text-xs text-muted">
+        <p>Alur 6 Tahap Produksi & Pembagian Vendor Makloon (Potong, Sablon/Bordir, Jahit & QC).</p>
+      </div>
+
+      <div class="bg-white border border-borderSubtle rounded-2xl shadow-sm overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-subtle text-muted font-mono uppercase text-[11px] border-b border-borderSubtle">
+              <tr>
+                <th class="px-4 py-3">Kode Order</th>
+                <th class="px-4 py-3">Item & Qty</th>
+                <th class="px-4 py-3">Vendor Makloon</th>
+                <th class="px-4 py-3">Tahap Produksi Aktif</th>
+                <th class="px-4 py-3 text-center">Hasil QC (Pass/Reject)</th>
+                <th class="px-4 py-3 text-right">Update Tahap</th>
+              </tr>
+            </thead>
+            <tbody id="prod-table-body" class="divide-y divide-borderSubtle">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SUB-MODUL 4: PERSEDIAAN & SCM (INVENTORY & PACKAGING) ==================== -->
+    <div id="module-scm" class="hidden space-y-4">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+        <p class="text-xs text-muted">Stok kain roll memperhitungkan <strong>buffer bahan 3%</strong> dan <strong>stok packaging rasio 1:1</strong> per produk jadi.</p>
         <button onclick="openRestockModal()" class="text-xs font-semibold px-4 py-2 bg-brand text-white rounded-lg hover:bg-brandDark transition">
-          + Restock Material
+          + Restock Bahan Supplier
         </button>
       </div>
 
@@ -175,10 +252,60 @@
       </div>
     </div>
 
-    <!-- ==================== TAB 3: INTEGRATION LOGS ==================== -->
-    <div id="tab-logs" class="hidden space-y-4">
+    <!-- ==================== SUB-MODUL 5: KEUANGAN & HPP (FINANCE) ==================== -->
+    <div id="module-finance" class="hidden space-y-4">
+      <!-- Finance Summary Cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+        <div class="bg-white border border-borderSubtle rounded-xl p-4">
+          <span class="text-xs text-muted block font-medium">Total Nilai Kontrak (Omset)</span>
+          <div class="text-xl font-bold font-mono text-dark mt-1" id="fin-total-revenue">Rp 0</div>
+        </div>
+        <div class="bg-white border border-borderSubtle rounded-xl p-4">
+          <span class="text-xs text-muted block font-medium">Kas Masuk (DP & Pelunasan)</span>
+          <div class="text-xl font-bold font-mono text-emerald-600 mt-1" id="fin-total-paid">Rp 0</div>
+        </div>
+        <div class="bg-white border border-borderSubtle rounded-xl p-4">
+          <span class="text-xs text-muted block font-medium">Piutang Klien (Menunggu Bayar)</span>
+          <div class="text-xl font-bold font-mono text-amber-600 mt-1" id="fin-total-receivable">Rp 0</div>
+        </div>
+        <div class="bg-white border border-borderSubtle rounded-xl p-4">
+          <span class="text-xs text-muted block font-medium">Estimasi Laba Bersih</span>
+          <div class="text-xl font-bold font-mono text-brand mt-1" id="fin-total-profit">Rp 0</div>
+        </div>
+      </div>
+
+      <!-- Finance Breakdown Table -->
+      <div class="bg-white border border-borderSubtle rounded-2xl shadow-sm overflow-hidden">
+        <div class="p-4 border-b border-borderSubtle flex justify-between items-center">
+          <h3 class="font-bold text-dark text-sm">Rekapitulasi HPP & Termin Pembayaran per Proyek</h3>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-subtle text-muted font-mono uppercase text-[11px] border-b border-borderSubtle">
+              <tr>
+                <th class="px-4 py-3">Kode Order</th>
+                <th class="px-4 py-3">Klien</th>
+                <th class="px-4 py-3">Pendapatan</th>
+                <th class="px-4 py-3">Estimasi HPP</th>
+                <th class="px-4 py-3">Margin Laba</th>
+                <th class="px-4 py-3">Sudah Dibayar</th>
+                <th class="px-4 py-3">Sisa Piutang</th>
+                <th class="px-4 py-3">Status Termin</th>
+                <th class="px-4 py-3 text-right">Tindakan Bayar</th>
+              </tr>
+            </thead>
+            <tbody id="finance-table-body" class="divide-y divide-borderSubtle">
+              <!-- Rendered via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== SUB-MODUL 6: INTEGRATION LOGS ==================== -->
+    <div id="module-logs" class="hidden space-y-4">
       <div class="bg-white border border-borderSubtle rounded-2xl p-6 shadow-sm">
-        <h3 class="text-sm font-bold text-dark mb-4">Catatan Sinkronisasi Dua Arah (CRM &harr; ERP &harr; SCM)</h3>
+        <h3 class="text-sm font-bold text-dark mb-4">Catatan Sinkronisasi Sistem Terintegrasi</h3>
         <div class="space-y-3 font-mono text-xs" id="integration-logs-list">
           <!-- Rendered via JS -->
         </div>
@@ -195,7 +322,7 @@
       </div>
       <div class="mt-6 flex justify-end gap-3 border-t border-borderSubtle pt-4">
         <button onclick="window.print()" class="px-5 py-2.5 bg-brand hover:bg-brandDark text-white font-semibold text-xs rounded-lg transition">
-          🖨️ Cetak Lembar Kerja (SPK)
+          🖨️ Cetak Lembar Kerja SPK
         </button>
         <button onclick="document.getElementById('spk-modal').classList.add('hidden')" class="px-4 py-2.5 bg-subtle text-dark border border-borderSubtle text-xs rounded-lg hover:bg-borderSubtle transition">
           Tutup
@@ -204,10 +331,10 @@
     </div>
   </div>
 
-  <!-- ==================== RESTOCK MODAL ==================== -->
+  <!-- ==================== RESTOCK SCM MODAL ==================== -->
   <div id="restock-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-xl border border-borderSubtle">
-      <h3 class="text-lg font-bold text-dark mb-4">Restock Bahan Baku Supplier</h3>
+      <h3 class="text-lg font-bold text-dark mb-4">Restock Bahan Baku Supplier SCM</h3>
       <div class="space-y-3 text-xs">
         <div>
           <label class="block text-muted mb-1 font-medium">Pilih Bahan Baku</label>
@@ -230,13 +357,13 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
       <div>
         <span class="font-bold text-dark text-sm">Drizzle Project</span>
-        <p class="mt-0.5">&copy; 2026 Drizzle Project. All Product Include Packaging.</p>
+        <p class="mt-0.5">&copy; 2026 Drizzle Project ERP System. All Product Include Packaging.</p>
       </div>
       <div class="flex items-center gap-6 font-medium">
         <a href="index.html" class="hover:text-dark transition">Beranda</a>
         <a href="order.html" class="hover:text-dark transition">Buat Pesanan</a>
         <a href="tracking.html" class="hover:text-dark transition">Lacak Pesanan</a>
-        <a href="admin.html" class="text-brand font-semibold">Dashboard Admin</a>
+        <a href="admin.html" class="text-brand font-semibold">Dashboard ERP</a>
       </div>
     </div>
   </footer>
@@ -246,25 +373,28 @@
 
   <!-- Admin Controller Script -->
   <script>
-    function switchAdminTab(tab) {
-      document.getElementById('tab-orders').classList.add('hidden');
-      document.getElementById('tab-scm').classList.add('hidden');
-      document.getElementById('tab-logs').classList.add('hidden');
+    let activeModule = 'sales';
 
-      document.getElementById('tab-btn-orders').className = 'px-5 py-3 text-xs sm:text-sm font-semibold border-b-2 border-transparent text-muted hover:text-dark';
-      document.getElementById('tab-btn-scm').className = 'px-5 py-3 text-xs sm:text-sm font-semibold border-b-2 border-transparent text-muted hover:text-dark';
-      document.getElementById('tab-btn-logs').className = 'px-5 py-3 text-xs sm:text-sm font-semibold border-b-2 border-transparent text-muted hover:text-dark';
+    function switchERPModule(mod) {
+      activeModule = mod;
+      ['sales', 'preprod', 'prod', 'scm', 'finance', 'logs'].forEach(m => {
+        const el = document.getElementById(`module-${m}`);
+        const btn = document.getElementById(`tab-btn-${m}`);
+        if (el) el.classList.add('hidden');
+        if (btn) btn.className = 'px-4 py-2.5 text-xs sm:text-sm font-semibold border-b-2 border-transparent text-muted hover:text-dark';
+      });
 
-      if (tab === 'orders') {
-        document.getElementById('tab-orders').classList.remove('hidden');
-        document.getElementById('tab-btn-orders').className = 'px-5 py-3 text-xs sm:text-sm font-semibold border-b-2 border-brand text-brand';
-      } else if (tab === 'scm') {
-        document.getElementById('tab-scm').classList.remove('hidden');
-        document.getElementById('tab-btn-scm').className = 'px-5 py-3 text-xs sm:text-sm font-semibold border-b-2 border-brand text-brand';
-      } else if (tab === 'logs') {
-        document.getElementById('tab-logs').classList.remove('hidden');
-        document.getElementById('tab-btn-logs').className = 'px-5 py-3 text-xs sm:text-sm font-semibold border-b-2 border-brand text-brand';
-      }
+      const targetEl = document.getElementById(`module-${mod}`);
+      const targetBtn = document.getElementById(`tab-btn-${mod}`);
+      if (targetEl) targetEl.classList.remove('hidden');
+      if (targetBtn) targetBtn.className = 'px-4 py-2.5 text-xs sm:text-sm font-semibold border-b-2 border-brand text-brand';
+
+      if (mod === 'sales') renderSalesTable();
+      if (mod === 'preprod') renderPreprodTable();
+      if (mod === 'prod') renderProdTable();
+      if (mod === 'scm') renderSCMGrid();
+      if (mod === 'finance') renderFinanceTable();
+      if (mod === 'logs') renderIntegrationLogs();
     }
 
     function renderDashboard() {
@@ -272,35 +402,68 @@
       const orders = db.orders || [];
       const materials = db.materials || [];
 
-      // Render KPIs
-      document.getElementById('kpi-orders-count').textContent = orders.length;
+      // 1. KPI Sales
+      document.getElementById('kpi-orders-count').textContent = `${orders.length} Order`;
       const totalPcs = orders.reduce((sum, o) => sum + (o.total_pcs || 0), 0);
-      document.getElementById('kpi-total-pcs').textContent = `${totalPcs} Pcs`;
+      document.getElementById('kpi-total-pcs').textContent = `${totalPcs} Pcs Apparel`;
 
-      const pendingDP = orders.filter(o => o.status_payment === 'Menunggu DP').length;
-      document.getElementById('kpi-pending-dp').textContent = pendingDP;
+      // 2. KPI Pipeline & QC
+      const activePipeline = orders.filter(o => o.stage !== 'Packaging & Siap Kirim').length;
+      document.getElementById('kpi-active-pipeline').textContent = `${activePipeline} Aktif`;
+      const totalQcPassed = orders.reduce((sum, o) => sum + (o.qc_passed || 0), 0);
+      document.getElementById('kpi-qc-passed').textContent = `QC: ${totalQcPassed} Passed`;
 
+      // 3. KPI SCM Low Stock
       const lowMaterials = materials.filter(m => m.stock <= m.minStock);
       const kpiStock = document.getElementById('kpi-low-stock');
       if (lowMaterials.length > 0) {
         kpiStock.textContent = `${lowMaterials.length} Menipis`;
-        kpiStock.className = 'text-2xl sm:text-3xl font-extrabold font-mono text-red-600 mt-1';
+        kpiStock.className = 'text-xl sm:text-2xl font-extrabold font-mono text-red-600 mt-1';
       } else {
         kpiStock.textContent = 'Aman';
-        kpiStock.className = 'text-2xl sm:text-3xl font-extrabold font-mono text-emerald-600 mt-1';
+        kpiStock.className = 'text-xl sm:text-2xl font-extrabold font-mono text-emerald-600 mt-1';
       }
 
-      renderOrdersTable();
+      // 4. KPI Finance
+      let totalRevenue = 0;
+      let totalPaid = 0;
+      let totalHPP = 0;
+
+      orders.forEach(o => {
+        const rev = o.total_price || 0;
+        const paid = o.status_payment === 'Lunas' ? rev : (o.status_payment === 'DP Verified' ? rev * 0.5 : 0);
+        const hpp = (o.hpp_unit || 42000) * (o.total_pcs || 1);
+        totalRevenue += rev;
+        totalPaid += paid;
+        totalHPP += hpp;
+      });
+
+      const totalReceivable = totalRevenue - totalPaid;
+      const totalNetProfit = totalRevenue - totalHPP;
+
+      document.getElementById('kpi-net-profit').textContent = window.DrizzleStore.formatRupiah(totalNetProfit);
+      document.getElementById('kpi-receivable').textContent = `Piutang: ${window.DrizzleStore.formatRupiah(totalReceivable)}`;
+
+      document.getElementById('fin-total-revenue').textContent = window.DrizzleStore.formatRupiah(totalRevenue);
+      document.getElementById('fin-total-paid').textContent = window.DrizzleStore.formatRupiah(totalPaid);
+      document.getElementById('fin-total-receivable').textContent = window.DrizzleStore.formatRupiah(totalReceivable);
+      document.getElementById('fin-total-profit').textContent = window.DrizzleStore.formatRupiah(totalNetProfit);
+
+      renderSalesTable();
+      renderPreprodTable();
+      renderProdTable();
       renderSCMGrid();
+      renderFinanceTable();
       renderIntegrationLogs();
     }
 
-    function renderOrdersTable() {
+    /* SUB-MODUL 1: SALES & ORDERS */
+    function renderSalesTable() {
       const db = window.DrizzleStore.getDB();
-      const tbody = document.getElementById('orders-table-body');
+      const tbody = document.getElementById('sales-table-body');
       tbody.innerHTML = '';
 
-      const query = (document.getElementById('order-search').value || '').toLowerCase().trim();
+      const query = (document.getElementById('sales-search').value || '').toLowerCase().trim();
       const orders = (db.orders || []).filter(o => {
         if (!query) return true;
         return (o.tracking_code || '').toLowerCase().includes(query) ||
@@ -308,26 +471,37 @@
                (o.customer.organization || '').toLowerCase().includes(query);
       });
 
-      document.getElementById('order-filtered-count').textContent = `Menampilkan ${orders.length} pesanan`;
+      document.getElementById('sales-count-badge').textContent = `Menampilkan ${orders.length} pesanan`;
 
       orders.forEach(order => {
         const tr = document.createElement('tr');
         tr.className = 'hover:bg-subtle/80 transition';
 
-        // Payment status badge
+        let tierBadge = '';
+        const qty = order.total_pcs || 1;
+        if (qty >= 650) tierBadge = '<span class="text-[9px] px-1.5 py-0.5 rounded bg-brandLight text-brand font-bold font-mono">Tier 650+ (Diskon 20%)</span>';
+        else if (qty >= 350) tierBadge = '<span class="text-[9px] px-1.5 py-0.5 rounded bg-brandLight text-brand font-bold font-mono">Tier 350+ (Diskon 15%)</span>';
+        else if (qty >= 150) tierBadge = '<span class="text-[9px] px-1.5 py-0.5 rounded bg-brandLight text-brand font-bold font-mono">Tier 150+ (Diskon 10%)</span>';
+        else if (qty >= 50) tierBadge = '<span class="text-[9px] px-1.5 py-0.5 rounded bg-brandLight text-brand font-bold font-mono">Tier 50+ (Diskon 5%)</span>';
+        else tierBadge = '<span class="text-[9px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 font-mono">Tier Standar</span>';
+
+        const bd = order.size_breakdown;
+        let matrixText = '-';
+        if (bd) {
+          matrixText = `S:${bd.S||0} M:${bd.M||0} L:${bd.L||0} XL:${bd.XL||0} XXL:${bd.XXL||0}`;
+        }
+        if (order.nicknames) {
+          matrixText += `<br><span class="text-brand text-[10px]">🔖 ${order.nicknames}</span>`;
+        }
+
         let payBadge = '';
         if (order.status_payment === 'Lunas') {
           payBadge = `<span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-mono font-bold text-[10px]">Lunas</span>`;
         } else if (order.status_payment === 'DP Verified') {
-          payBadge = `<span class="px-2 py-0.5 rounded bg-sky-50 text-sky-700 font-mono font-bold text-[10px]">DP Verified</span>`;
+          payBadge = `<span class="px-2 py-0.5 rounded bg-sky-50 text-sky-700 font-mono font-bold text-[10px]">DP 50%</span>`;
         } else {
           payBadge = `<span class="px-2 py-0.5 rounded bg-amber-50 text-amber-700 font-mono font-bold text-[10px]">Menunggu DP</span>`;
         }
-
-        // Stage selector options
-        let stageOptions = window.DrizzleStore.stages.map(st => {
-          return `<option value="${st.name}" ${order.stage === st.name ? 'selected' : ''}>${st.label}</option>`;
-        }).join('');
 
         tr.innerHTML = `
           <td class="px-4 py-3 font-mono font-bold text-brand whitespace-nowrap">
@@ -339,21 +513,18 @@
           </td>
           <td class="px-4 py-3">
             <div class="font-medium text-dark">${order.product_name}</div>
-            <div class="text-[11px] text-muted">${window.DrizzleStore.formatRupiah(order.total_price)}</div>
+            <div class="text-[11px] text-muted">${order.specs ? order.specs.print_type : ''}</div>
           </td>
-          <td class="px-4 py-3 text-center font-mono font-bold text-dark">${order.total_pcs || 1}</td>
+          <td class="px-4 py-3 text-center">
+            <span class="font-bold text-dark font-mono block">${order.total_pcs || 1} Pcs</span>
+            ${tierBadge}
+          </td>
+          <td class="px-4 py-3 font-mono text-[11px] text-muted leading-relaxed">${matrixText}</td>
+          <td class="px-4 py-3 font-mono font-bold text-dark">${window.DrizzleStore.formatRupiah(order.total_price)}</td>
           <td class="px-4 py-3">${payBadge}</td>
-          <td class="px-4 py-3">
-            <select onchange="changeOrderStage('${order.tracking_code}', this.value)" class="bg-subtle border border-borderSubtle rounded px-2 py-1 text-xs text-dark focus:outline-none focus:border-brand">
-              ${stageOptions}
-            </select>
-          </td>
           <td class="px-4 py-3 text-right whitespace-nowrap">
-            <button onclick="togglePayment('${order.tracking_code}')" class="px-2 py-1 bg-subtle border border-borderSubtle rounded text-[11px] hover:border-dark mr-1 font-medium">
-              ${order.status_payment === 'Menunggu DP' ? 'Verifikasi DP' : (order.status_payment === 'DP Verified' ? 'Set Lunas' : 'Reset')}
-            </button>
-            <button onclick="printSPK('${order.tracking_code}')" class="px-2 py-1 bg-brandLight text-brand border border-brand/20 rounded text-[11px] font-semibold hover:bg-brand hover:text-white transition">
-              SPK
+            <button onclick="printSPK('${order.tracking_code}')" class="px-2.5 py-1 bg-brandLight text-brand border border-brand/20 rounded text-[11px] font-semibold hover:bg-brand hover:text-white transition">
+              Cetak SPK
             </button>
           </td>
         `;
@@ -361,130 +532,144 @@
       });
     }
 
-    function changeOrderStage(code, newStage) {
+    /* SUB-MODUL 2: PRA-PRODUKSI (DESIGN & SAMPLING) */
+    function renderPreprodTable() {
+      const db = window.DrizzleStore.getDB();
+      const tbody = document.getElementById('preprod-table-body');
+      tbody.innerHTML = '';
+
+      (db.orders || []).forEach(order => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-subtle/80 transition';
+
+        const revCount = order.revisions_used || 1;
+        const revBadge = revCount >= 3 
+          ? `<span class="px-2 py-0.5 rounded bg-red-100 text-red-700 font-mono font-bold text-[10px]">3 / 3 (Maksimal)</span>`
+          : `<span class="px-2 py-0.5 rounded bg-amber-50 text-amber-700 font-mono font-bold text-[10px]">${revCount} / 3 Digunakan</span>`;
+
+        const sampleStatus = order.sample_approved
+          ? `<span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-bold text-[10px]">✓ Disetujui Klien</span>`
+          : `<span class="px-2 py-0.5 rounded bg-gray-100 text-gray-600 text-[10px]">Menunggu Approval</span>`;
+
+        tr.innerHTML = `
+          <td class="px-4 py-3 font-mono font-bold text-brand">${order.tracking_code}</td>
+          <td class="px-4 py-3">
+            <div class="font-bold text-dark">${order.customer.name}</div>
+            <div class="text-[11px] text-muted">${order.customer.organization}</div>
+          </td>
+          <td class="px-4 py-3 text-xs">
+            <div class="font-medium text-dark">${order.specs ? order.specs.print_type : '-'}</div>
+            <div class="text-[11px] text-muted">Kain: ${order.specs ? order.specs.fabric_color : '-'}</div>
+          </td>
+          <td class="px-4 py-3 text-center">
+            ${revBadge}
+            <div class="mt-1">
+              <button onclick="addRevision('${order.tracking_code}')" class="text-[10px] text-muted hover:text-dark underline" ${revCount >= 3 ? 'disabled' : ''}>+ Tambah Revisi</button>
+            </div>
+          </td>
+          <td class="px-4 py-3 text-center">${sampleStatus}</td>
+          <td class="px-4 py-3 text-right whitespace-nowrap">
+            <button onclick="toggleSampleApproval('${order.tracking_code}')" class="px-2.5 py-1 bg-subtle border border-borderSubtle rounded text-[11px] hover:border-dark font-medium">
+              ${order.sample_approved ? 'Batalkan Sample' : 'Setujui Sample'}
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function addRevision(code) {
       const db = window.DrizzleStore.getDB();
       const order = db.orders.find(o => o.tracking_code === code);
       if (!order) return;
-
-      order.stage = newStage;
-      window.DrizzleStore.saveDB(db);
-
-      window.DrizzleStore.logIntegration(
-        'ERP -> SCM',
-        `Pesanan ${code} (${order.product_name}) dipindah ke tahap: "${newStage}".`
-      );
-
-      // Deduct materials if moved to production stages
-      if (newStage === 'Bahan & Potong' || newStage === 'Sablon/Bordir') {
-        const deductResult = window.DrizzleStore.deductMaterials(code);
-        if (!deductResult.success) {
-          alert(deductResult.reason);
-        }
+      if ((order.revisions_used || 0) >= 3) {
+        alert('Batas kuota revisi (3x) telah tercapai!');
+        return;
       }
-
+      order.revisions_used = (order.revisions_used || 0) + 1;
+      window.DrizzleStore.saveDB(db);
+      window.DrizzleStore.logIntegration('CRM -> ERP', `Revisi ke-${order.revisions_used} dicatat untuk pesanan ${code}.`);
       renderDashboard();
     }
 
-    function togglePayment(code) {
+    function toggleSampleApproval(code) {
       const db = window.DrizzleStore.getDB();
       const order = db.orders.find(o => o.tracking_code === code);
       if (!order) return;
-
-      if (order.status_payment === 'Menunggu DP') {
-        order.status_payment = 'DP Verified';
-        if (order.stage === 'Design Approved') order.stage = 'Down Payment (DP)';
-        window.DrizzleStore.logIntegration('ERP -> SCM', `DP pesanan ${code} diverifikasi oleh Admin.`);
-      } else if (order.status_payment === 'DP Verified') {
-        order.status_payment = 'Lunas';
-        window.DrizzleStore.logIntegration('CRM -> ERP', `Pelunasan pesanan ${code} berhasil diverifikasi.`);
-      } else {
-        order.status_payment = 'Menunggu DP';
-      }
-
+      order.sample_approved = !order.sample_approved;
       window.DrizzleStore.saveDB(db);
+      window.DrizzleStore.logIntegration('ERP -> SCM', `Status persetujuan sample untuk ${code} diubah menjadi: ${order.sample_approved ? 'APPROVED' : 'PENDING'}.`);
       renderDashboard();
     }
 
-    function printSPK(code) {
+    /* SUB-MODUL 3: PRODUKSI & QC (MAKLOON PIPELINE) */
+    function renderProdTable() {
+      const db = window.DrizzleStore.getDB();
+      const tbody = document.getElementById('prod-table-body');
+      tbody.innerHTML = '';
+
+      (db.orders || []).forEach(order => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-subtle/80 transition';
+
+        let stageOptions = window.DrizzleStore.stages.map(st => {
+          return `<option value="${st.name}" ${order.stage === st.name ? 'selected' : ''}>${st.label}</option>`;
+        }).join('');
+
+        const passed = order.qc_passed || 0;
+        const reject = order.qc_reject || 0;
+
+        tr.innerHTML = `
+          <td class="px-4 py-3 font-mono font-bold text-brand">${order.tracking_code}</td>
+          <td class="px-4 py-3">
+            <div class="font-bold text-dark">${order.product_name}</div>
+            <div class="text-[11px] text-muted">${order.total_pcs || 1} pcs (Inc. Pack 1:1)</div>
+          </td>
+          <td class="px-4 py-3">
+            <span class="px-2 py-0.5 rounded bg-gray-100 text-gray-700 font-mono text-[11px] block w-max">
+              🏢 ${order.makloon_vendor || 'Vendor Makloon Internal'}
+            </span>
+          </td>
+          <td class="px-4 py-3">
+            <select onchange="changeOrderStage('${order.tracking_code}', this.value)" class="bg-subtle border border-borderSubtle rounded px-2 py-1 text-xs text-dark focus:outline-none focus:border-brand">
+              ${stageOptions}
+            </select>
+          </td>
+          <td class="px-4 py-3 text-center">
+            <span class="text-emerald-700 font-bold font-mono text-[11px]">${passed} Passed</span> / 
+            <span class="text-red-600 font-bold font-mono text-[11px]">${reject} Reject</span>
+            <div class="mt-1">
+              <button onclick="promptQC('${order.tracking_code}')" class="text-[10px] text-muted hover:text-dark underline">Input QC</button>
+            </div>
+          </td>
+          <td class="px-4 py-3 text-right whitespace-nowrap">
+            <button onclick="printSPK('${order.tracking_code}')" class="px-2 py-1 bg-brandLight text-brand border border-brand/20 rounded text-[11px] font-semibold hover:bg-brand hover:text-white transition">
+              Lembar SPK
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function promptQC(code) {
       const db = window.DrizzleStore.getDB();
       const order = db.orders.find(o => o.tracking_code === code);
       if (!order) return;
 
-      const bd = order.size_breakdown || { S: 0, M: 0, L: 0, XL: 0, XXL: 0 };
-      const content = `
-        <div class="border-b border-gray-200 pb-4 mb-4 flex justify-between items-start">
-          <div>
-            <h2 class="text-xl font-bold">DRIZZLE PROJECT // WORK ORDER (SPK)</h2>
-            <p class="text-xs text-gray-500">Lembar Instruksi Kerja Produksi & Quality Control</p>
-          </div>
-          <div class="text-right">
-            <span class="font-mono text-lg font-bold text-orange-600">${order.tracking_code}</span>
-            <p class="text-xs text-gray-400">Tanggal: ${order.created_at || '-'}</p>
-          </div>
-        </div>
+      const p = prompt(`Masukkan jumlah QC Passed untuk ${code} (Total order: ${order.total_pcs} pcs):`, order.qc_passed || order.total_pcs);
+      if (p === null) return;
+      const r = prompt(`Masukkan jumlah QC Reject (jika ada):`, order.qc_reject || 0);
 
-        <div class="grid grid-cols-2 gap-4 text-xs mb-4">
-          <div class="p-3 bg-gray-50 rounded-lg">
-            <span class="font-bold text-gray-600 block mb-1">DATA PEMESAN</span>
-            <p><strong>Nama:</strong> ${order.customer.name}</p>
-            <p><strong>Organisasi:</strong> ${order.customer.organization}</p>
-            <p><strong>WA / Kontak:</strong> ${order.customer.phone}</p>
-          </div>
-          <div class="p-3 bg-gray-50 rounded-lg">
-            <span class="font-bold text-gray-600 block mb-1">DETAIL ITEM</span>
-            <p><strong>Produk:</strong> ${order.product_name}</p>
-            <p><strong>Total Kuantitas:</strong> ${order.total_pcs} Pcs (Include Packaging)</p>
-            <p><strong>Tahapan Saat Ini:</strong> ${order.stage}</p>
-          </div>
-        </div>
+      order.qc_passed = parseInt(p, 10) || 0;
+      order.qc_reject = parseInt(r, 10) || 0;
 
-        ${order.service_type === 'apparel' ? `
-          <div class="mb-4">
-            <span class="font-bold text-xs block mb-2">RINCIAN UKURAN (PCS)</span>
-            <table class="w-full text-center text-xs border border-gray-200">
-              <thead class="bg-gray-100 font-bold">
-                <tr><th class="p-2 border">S</th><th class="p-2 border">M</th><th class="p-2 border">L</th><th class="p-2 border">XL</th><th class="p-2 border">XXL</th></tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td class="p-2 border">${bd.S || 0}</td>
-                  <td class="p-2 border">${bd.M || 0}</td>
-                  <td class="p-2 border">${bd.L || 0}</td>
-                  <td class="p-2 border">${bd.XL || 0}</td>
-                  <td class="p-2 border">${bd.XXL || 0}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        ` : ''}
-
-        <div class="p-3 bg-gray-50 rounded-lg text-xs mb-4">
-          <span class="font-bold text-gray-600 block mb-1">SPESIFIKASI TEKNIS</span>
-          <p><strong>Aplikasi / Teknik:</strong> ${order.specs ? order.specs.print_type : '-'}</p>
-          <p><strong>Warna Bahan:</strong> ${order.specs ? order.specs.fabric_color : '-'}</p>
-          <p><strong>Catatan Tambahan:</strong> ${order.specs ? order.specs.notes : '-'}</p>
-        </div>
-
-        <div class="grid grid-cols-3 gap-4 text-center text-xs pt-8 border-t border-gray-200">
-          <div>
-            <p class="mb-10 text-gray-400">Admin Studio</p>
-            <div class="border-b border-gray-400 w-24 mx-auto"></div>
-          </div>
-          <div>
-            <p class="mb-10 text-gray-400">Kepala Produksi</p>
-            <div class="border-b border-gray-400 w-24 mx-auto"></div>
-          </div>
-          <div>
-            <p class="mb-10 text-gray-400">Quality Control</p>
-            <div class="border-b border-gray-400 w-24 mx-auto"></div>
-          </div>
-        </div>
-      `;
-
-      document.getElementById('spk-modal-content').innerHTML = content;
-      document.getElementById('spk-modal').classList.remove('hidden');
+      window.DrizzleStore.saveDB(db);
+      window.DrizzleStore.logIntegration('ERP -> SCM', `Hasil QC untuk ${code} dicatat: ${order.qc_passed} Passed, ${order.qc_reject} Reject.`);
+      renderDashboard();
     }
 
+    /* SUB-MODUL 4: PERSEDIAAN & SCM */
     function renderSCMGrid() {
       const db = window.DrizzleStore.getDB();
       const grid = document.getElementById('scm-materials-grid');
@@ -497,7 +682,7 @@
         card.innerHTML = `
           <div class="flex justify-between items-start">
             <div>
-              <span class="text-[10px] font-mono text-muted uppercase">Bahan Baku & Aksesoris</span>
+              <span class="text-[10px] font-mono text-muted uppercase">Bahan Baku & Packaging</span>
               <h4 class="font-bold text-dark text-sm mt-0.5">${m.name}</h4>
             </div>
             ${isLow ? '<span class="text-[10px] font-bold px-2 py-0.5 rounded bg-red-100 text-red-700">Stok Menipis</span>' : '<span class="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700">Stok Aman</span>'}
@@ -510,13 +695,55 @@
 
           <div class="pt-2 border-t border-borderSubtle text-[11px] text-muted">
             <p>Supplier: <span class="text-dark font-medium">${m.supplier}</span></p>
-            <p>Batas Minimum: ${m.minStock} ${m.unit}</p>
+            <p>Batas Minimum: ${m.minStock} ${m.unit} (termasuk buffer 3%)</p>
           </div>
         `;
         grid.appendChild(card);
       });
     }
 
+    /* SUB-MODUL 5: KEUANGAN & HPP */
+    function renderFinanceTable() {
+      const db = window.DrizzleStore.getDB();
+      const tbody = document.getElementById('finance-table-body');
+      tbody.innerHTML = '';
+
+      (db.orders || []).forEach(order => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-subtle/80 transition';
+
+        const rev = order.total_price || 0;
+        const paid = order.status_payment === 'Lunas' ? rev : (order.status_payment === 'DP Verified' ? rev * 0.5 : 0);
+        const receivable = rev - paid;
+        const hppTotal = (order.hpp_unit || 42000) * (order.total_pcs || 1);
+        const profit = rev - hppTotal;
+        const marginPct = rev > 0 ? Math.round((profit / rev) * 100) : 0;
+
+        tr.innerHTML = `
+          <td class="px-4 py-3 font-mono font-bold text-brand">${order.tracking_code}</td>
+          <td class="px-4 py-3">
+            <div class="font-bold text-dark">${order.customer.name}</div>
+            <div class="text-[11px] text-muted">${order.customer.organization}</div>
+          </td>
+          <td class="px-4 py-3 font-mono font-bold text-dark">${window.DrizzleStore.formatRupiah(rev)}</td>
+          <td class="px-4 py-3 font-mono text-muted">${window.DrizzleStore.formatRupiah(hppTotal)}</td>
+          <td class="px-4 py-3 font-mono text-emerald-600 font-bold">${window.DrizzleStore.formatRupiah(profit)} <span class="text-[10px] font-normal text-muted">(${marginPct}%)</span></td>
+          <td class="px-4 py-3 font-mono text-dark">${window.DrizzleStore.formatRupiah(paid)}</td>
+          <td class="px-4 py-3 font-mono ${receivable > 0 ? 'text-amber-600 font-bold' : 'text-muted'}">${window.DrizzleStore.formatRupiah(receivable)}</td>
+          <td class="px-4 py-3">
+            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold ${order.status_payment === 'Lunas' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}">${order.status_payment}</span>
+          </td>
+          <td class="px-4 py-3 text-right whitespace-nowrap">
+            <button onclick="togglePayment('${order.tracking_code}')" class="px-2 py-1 bg-subtle border border-borderSubtle rounded text-[11px] hover:border-dark font-medium">
+              ${order.status_payment === 'Menunggu DP' ? 'Verifikasi DP' : (order.status_payment === 'DP Verified' ? 'Set Pelunasan' : 'Reset')}
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    /* SUB-MODUL 6: INTEGRATION LOGS */
     function renderIntegrationLogs() {
       const db = window.DrizzleStore.getDB();
       const container = document.getElementById('integration-logs-list');
@@ -534,6 +761,133 @@
         `;
         container.appendChild(item);
       });
+    }
+
+    /* ACTIONS & MODALS */
+    function changeOrderStage(code, newStage) {
+      const db = window.DrizzleStore.getDB();
+      const order = db.orders.find(o => o.tracking_code === code);
+      if (!order) return;
+
+      order.stage = newStage;
+      window.DrizzleStore.saveDB(db);
+
+      window.DrizzleStore.logIntegration(
+        'ERP -> SCM',
+        `Pesanan ${code} (${order.product_name}) dipindah ke tahap: "${newStage}".`
+      );
+
+      if (newStage === 'Potong & Bahan' || newStage === 'Sablon/Bordir') {
+        const deductResult = window.DrizzleStore.deductMaterials(code);
+        if (!deductResult.success) {
+          alert(deductResult.reason);
+        }
+      }
+
+      renderDashboard();
+    }
+
+    function togglePayment(code) {
+      const db = window.DrizzleStore.getDB();
+      const order = db.orders.find(o => o.tracking_code === code);
+      if (!order) return;
+
+      if (order.status_payment === 'Menunggu DP') {
+        order.status_payment = 'DP Verified';
+        if (order.stage === 'Design Approved') order.stage = 'DP Verified';
+        window.DrizzleStore.logIntegration('ERP -> SCM', `DP 50% pesanan ${code} diverifikasi oleh Admin Finance.`);
+      } else if (order.status_payment === 'DP Verified') {
+        order.status_payment = 'Lunas';
+        window.DrizzleStore.logIntegration('CRM -> ERP', `Pelunasan 100% pesanan ${code} berhasil diverifikasi.`);
+      } else {
+        order.status_payment = 'Menunggu DP';
+      }
+
+      window.DrizzleStore.saveDB(db);
+      renderDashboard();
+    }
+
+    function printSPK(code) {
+      const db = window.DrizzleStore.getDB();
+      const order = db.orders.find(o => o.tracking_code === code);
+      if (!order) return;
+
+      const bd = order.size_breakdown || { S: 0, M: 0, L: 0, XL: 0, XXL: 0 };
+      const content = `
+        <div class="border-b border-gray-200 pb-4 mb-4 flex justify-between items-start font-sans">
+          <div>
+            <h2 class="text-xl font-bold">DRIZZLE PROJECT // SURAT PERINTAH KERJA (SPK)</h2>
+            <p class="text-xs text-gray-500">Lembar Kerja Produksi, Makloon & QC</p>
+          </div>
+          <div class="text-right">
+            <span class="font-mono text-lg font-bold text-orange-600">${order.tracking_code}</span>
+            <p class="text-xs text-gray-400">Tanggal: ${order.created_at || '-'}</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 text-xs mb-4">
+          <div class="p-3 bg-gray-50 rounded-lg">
+            <span class="font-bold text-gray-600 block mb-1">1. IDENTITAS PEMESAN (CRM)</span>
+            <p><strong>Nama:</strong> ${order.customer.name}</p>
+            <p><strong>Organisasi:</strong> ${order.customer.organization}</p>
+            <p><strong>WhatsApp:</strong> ${order.customer.phone}</p>
+          </div>
+          <div class="p-3 bg-gray-50 rounded-lg">
+            <span class="font-bold text-gray-600 block mb-1">2. DETAIL SPK & MAKLOON</span>
+            <p><strong>Produk:</strong> ${order.product_name}</p>
+            <p><strong>Total Kuantitas:</strong> ${order.total_pcs} Pcs (Include Packaging 1:1)</p>
+            <p><strong>Vendor Makloon:</strong> ${order.makloon_vendor || 'Internal Konveksi'}</p>
+            <p><strong>Persetujuan Sample:</strong> ${order.sample_approved ? 'APPROVED' : 'PENDING'}</p>
+          </div>
+        </div>
+
+        ${order.service_type === 'apparel' ? `
+          <div class="mb-4">
+            <span class="font-bold text-xs block mb-2">3. MATRIX UKURAN (PCS) & NICKNAMES</span>
+            <table class="w-full text-center text-xs border border-gray-200 mb-2">
+              <thead class="bg-gray-100 font-bold">
+                <tr><th class="p-2 border">S</th><th class="p-2 border">M</th><th class="p-2 border">L</th><th class="p-2 border">XL</th><th class="p-2 border">XXL</th><th class="p-2 border">Buffer (3%)</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="p-2 border">${bd.S || 0}</td>
+                  <td class="p-2 border">${bd.M || 0}</td>
+                  <td class="p-2 border">${bd.L || 0}</td>
+                  <td class="p-2 border">${bd.XL || 0}</td>
+                  <td class="p-2 border">${bd.XXL || 0}</td>
+                  <td class="p-2 border text-orange-600 font-bold">+${Math.ceil((order.total_pcs || 1) * 0.03)} Pcs</td>
+                </tr>
+              </tbody>
+            </table>
+            ${order.nicknames ? `<p class="text-[11px] text-gray-600 bg-gray-50 p-2 rounded"><strong>Daftar Nickname/Divisi:</strong> ${order.nicknames}</p>` : ''}
+          </div>
+        ` : ''}
+
+        <div class="p-3 bg-gray-50 rounded-lg text-xs mb-4">
+          <span class="font-bold text-gray-600 block mb-1">4. SPESIFIKASI TEKNIS PRODUKSI</span>
+          <p><strong>Aplikasi Sablon/Bordir:</strong> ${order.specs ? order.specs.print_type : '-'}</p>
+          <p><strong>Warna Bahan:</strong> ${order.specs ? order.specs.fabric_color : '-'}</p>
+          <p><strong>Catatan Produksi:</strong> ${order.specs ? order.specs.notes : '-'}</p>
+        </div>
+
+        <div class="grid grid-cols-3 gap-4 text-center text-xs pt-8 border-t border-gray-200">
+          <div>
+            <p class="mb-10 text-gray-400">Admin Sales & Finance</p>
+            <div class="border-b border-gray-400 w-24 mx-auto"></div>
+          </div>
+          <div>
+            <p class="mb-10 text-gray-400">Kepala Produksi / Makloon</p>
+            <div class="border-b border-gray-400 w-24 mx-auto"></div>
+          </div>
+          <div>
+            <p class="mb-10 text-gray-400">Quality Control (QC)</p>
+            <div class="border-b border-gray-400 w-24 mx-auto"></div>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('spk-modal-content').innerHTML = content;
+      document.getElementById('spk-modal').classList.remove('hidden');
     }
 
     function openRestockModal() {
