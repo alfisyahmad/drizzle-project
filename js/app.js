@@ -1,13 +1,14 @@
 /**
  * DrizzleOS — Core SaaS Engine & Multi-Tenant SIM Architecture
- * LocalStorage Key: 'drizzle_sim_db'
+ * LocalStorage Key: 'drizzle_sim_db_clean_v1'
  * 6 Relational Collections: services, customers, orders, materials, purchaseOrders, financeLedger
  * + tenantConfig (Multi-Tenant SaaS Configuration)
  *
- * v3.0 — Clean slate transactions, flexible payment, cancel/return support
+ * v3.1 — Clean slate transactions, fresh DB key, flexible payment, cancel/return support
  */
 
-const DRIZZLE_SIM_DB_KEY = 'drizzle_sim_db';
+const DRIZZLE_SIM_DB_KEY = 'drizzle_sim_db_clean_v1';
+const DRIZZLE_LEGACY_KEYS = ['drizzle_sim_db']; // Old keys to auto-purge on init
 
 // 1. TENANT CONFIGURATION (Multi-Tenant SaaS Ready)
 const DEFAULT_TENANT_CONFIG = {
@@ -248,6 +249,16 @@ function generateNextTxId() {
 
 // Get Database from localStorage (or initialize with master data only — NO transaction data)
 function getDB() {
+  // Auto-purge legacy localStorage keys so old dummy data is wiped from the browser automatically
+  if (typeof window !== 'undefined' && window.localStorage) {
+    DRIZZLE_LEGACY_KEYS.forEach(oldKey => {
+      if (localStorage.getItem(oldKey) !== null) {
+        localStorage.removeItem(oldKey);
+        console.info(`[DrizzleOS] Legacy key '${oldKey}' dihapus otomatis.`);
+      }
+    });
+  }
+
   const raw = localStorage.getItem(DRIZZLE_SIM_DB_KEY);
   if (!raw) {
     // First run: seed only master data, all transaction collections start EMPTY
@@ -294,7 +305,7 @@ function getDB() {
     if (changed) saveDB(data);
     return data;
   } catch (e) {
-    console.error('Error parsing drizzle_sim_db:', e);
+    console.error('Error parsing drizzle_sim_db_clean_v1:', e);
     // Corrupt data: re-initialize with clean slate
     const initData = {
       tenantConfig: DEFAULT_TENANT_CONFIG,
@@ -358,7 +369,7 @@ function saveAndSyncDB(data, eventMessage = '') {
   try {
     localStorage.setItem(DRIZZLE_SIM_DB_KEY, JSON.stringify(data));
   } catch (e) {
-    console.error('Error saving drizzle_sim_db:', e);
+    console.error('Error saving drizzle_sim_db_clean_v1:', e);
   }
 
   // 1. Dispatch custom event for current window/tab
