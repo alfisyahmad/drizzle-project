@@ -3,6 +3,8 @@
  * LocalStorage Key: 'drizzle_sim_db'
  * 6 Relational Collections: services, customers, orders, materials, purchaseOrders, financeLedger
  * + tenantConfig (Multi-Tenant SaaS Configuration)
+ *
+ * v3.0 — Clean slate transactions, flexible payment, cancel/return support
  */
 
 const DRIZZLE_SIM_DB_KEY = 'drizzle_sim_db';
@@ -15,30 +17,30 @@ const DEFAULT_TENANT_CONFIG = {
   tagline: 'Customize Your Merchandise — We Handle What You Need',
   philosophy: 'Human Help Human (All Product Include Packaging)',
   establishedYear: 2023,
-  contactWA: '+62 882-0075-46920',
+  contactWA: '+62 895-2295-1860',
+  contactWALink: 'https://wa.me/6289522951860',
   contactEmail: 'drizzlethelabel@gmail.com',
   contactIG: '@drizzleproject',
   studioLocation: 'Surakarta (Solo), Jawa Tengah',
   defaultPackagingRatio: 1.0, // 1:1 Rule
-  defaultDpPercentage: 0.5,   // 50% DP
+  defaultDpPercentage: 0.5,   // 50% DP (default, now flexible)
   currency: 'IDR',
   activeTheme: 'warm-studio',
-  version: 'DrizzleOS v2.4 SaaS Multi-Tenant'
+  version: 'DrizzleOS v3.0 SaaS Multi-Tenant'
 };
 
-// 2. SERVICES CATALOG (12 Apparel & Merch + 7 Creative Services)
+// 2. MASTER KATALOG LAYANAN (5 Layanan Utama Siap Pakai)
 const INITIAL_SERVICES = [
-  // APPAREL
   {
     serviceId: 'SRV-01',
     category: 'APPAREL',
-    name: 'T-Shirt',
+    name: 'Kaos Cotton Combed 24s',
     basePrice: 65000,
     hppUnit: 42000,
     leadTimeDays: 7,
-    minQty: 24,
+    minQty: 12,
     badge: 'BESTSELLER',
-    desc: 'Cotton Combed 30s/24s Reactive super lembut, sablon DTF & Plastisol high density.',
+    desc: 'Cotton Combed 24s Reactive super lembut & adem, sablon DTF & Plastisol high density.',
     bomRecipe: [
       { materialId: 'MAT-01', qtyPerUnit: 0.034, name: 'Kain Cotton Combed (Roll)' },
       { materialId: 'MAT-04', qtyPerUnit: 0.05, name: 'Tinta Sablon (Kg)' },
@@ -49,15 +51,15 @@ const INITIAL_SERVICES = [
   {
     serviceId: 'SRV-02',
     category: 'APPAREL',
-    name: 'Shirt / PDH',
-    basePrice: 110000,
-    hppUnit: 72000,
+    name: 'Hoodie / Crewneck Fleece',
+    basePrice: 145000,
+    hppUnit: 98000,
     leadTimeDays: 10,
     minQty: 12,
-    badge: 'CAMPUS & BEM',
-    desc: 'American & Japan Drill premium, bordir komputer presisi instansi & ventilasi furing.',
+    badge: 'HEAVYWEIGHT',
+    desc: 'Cotton Fleece 330gsm tebal hangat, tali katun, saku kangguru atau crewneck rapi.',
     bomRecipe: [
-      { materialId: 'MAT-02', qtyPerUnit: 0.04, name: 'Kain American/Japan Drill (Roll)' },
+      { materialId: 'MAT-03', qtyPerUnit: 0.05, name: 'Kain Fleece (Roll)' },
       { materialId: 'MAT-05', qtyPerUnit: 1.0, name: 'Polymailer/Box Drizzle (1:1)' },
       { materialId: 'MAT-06', qtyPerUnit: 1.0, name: 'Thank You Card (1:1)' }
     ]
@@ -65,267 +67,66 @@ const INITIAL_SERVICES = [
   {
     serviceId: 'SRV-03',
     category: 'APPAREL',
-    name: 'Hoodie',
-    basePrice: 145000,
-    hppUnit: 98000,
+    name: 'Kemeja PDH / Workshirt American Drill',
+    basePrice: 110000,
+    hppUnit: 72000,
     leadTimeDays: 10,
     minQty: 12,
-    badge: 'HEAVYWEIGHT',
-    desc: 'Cotton Fleece 330gsm tebal, tali katun bulat, eyelet metal, saku kangguru.',
+    badge: 'KOMUNITAS & KANTOR',
+    desc: 'American Drill premium, jahitan kokoh, bordir komputer presisi instansi & ventilasi furing.',
     bomRecipe: [
-      { materialId: 'MAT-03', qtyPerUnit: 0.05, name: 'Kain Cotton Fleece (Roll)' },
+      { materialId: 'MAT-02', qtyPerUnit: 0.04, name: 'Kain American Drill (Roll)' },
       { materialId: 'MAT-05', qtyPerUnit: 1.0, name: 'Polymailer/Box Drizzle (1:1)' },
       { materialId: 'MAT-06', qtyPerUnit: 1.0, name: 'Thank You Card (1:1)' }
     ]
   },
   {
     serviceId: 'SRV-04',
-    category: 'APPAREL',
-    name: 'Coach Jacket',
-    basePrice: 135000,
-    hppUnit: 88000,
-    leadTimeDays: 10,
-    minQty: 15,
-    badge: 'STREETWEAR',
-    desc: 'Windbreaker coach jacket, kancing snap logam anti karat & sablon punggung A3.',
+    category: 'MERCH',
+    name: 'Totebag / Merchandise Custom',
+    basePrice: 35000,
+    hppUnit: 21000,
+    leadTimeDays: 5,
+    minQty: 24,
+    badge: 'MERCHANDISE',
+    desc: 'Bahan kanvas tebal 12oz atau blacu natural dengan sablon awet untuk souvenir dan event.',
     bomRecipe: [
-      { materialId: 'MAT-03', qtyPerUnit: 0.04, name: 'Kain Taslan/Fleece (Roll)' },
+      { materialId: 'MAT-02', qtyPerUnit: 0.02, name: 'Kain American Drill / Kanvas (Roll)' },
       { materialId: 'MAT-05', qtyPerUnit: 1.0, name: 'Polymailer/Box Drizzle (1:1)' },
       { materialId: 'MAT-06', qtyPerUnit: 1.0, name: 'Thank You Card (1:1)' }
     ]
   },
   {
     serviceId: 'SRV-05',
-    category: 'APPAREL',
-    name: 'Vest',
-    basePrice: 125000,
-    hppUnit: 82000,
-    leadTimeDays: 10,
-    minQty: 15,
-    badge: 'TACTICAL',
-    desc: 'Rompi tactical/formal padding dacron ringan dengan resleting YKK multi-pocket utility.',
-    bomRecipe: [
-      { materialId: 'MAT-02', qtyPerUnit: 0.035, name: 'Kain Drill (Roll)' },
-      { materialId: 'MAT-05', qtyPerUnit: 1.0, name: 'Polymailer/Box Drizzle (1:1)' },
-      { materialId: 'MAT-06', qtyPerUnit: 1.0, name: 'Thank You Card (1:1)' }
-    ]
-  },
-  {
-    serviceId: 'SRV-06',
-    category: 'APPAREL',
-    name: 'Varsity',
-    basePrice: 175000,
-    hppUnit: 115000,
-    leadTimeDays: 14,
-    minQty: 12,
-    badge: 'SIGNATURE',
-    desc: 'Wool blend body, leather sleeve & towel chenille patch embroidery berkelas.',
-    bomRecipe: [
-      { materialId: 'MAT-03', qtyPerUnit: 0.05, name: 'Kain Wool/Fleece (Roll)' },
-      { materialId: 'MAT-05', qtyPerUnit: 1.0, name: 'Polymailer/Box Drizzle (1:1)' },
-      { materialId: 'MAT-06', qtyPerUnit: 1.0, name: 'Thank You Card (1:1)' }
-    ]
-  },
-  {
-    serviceId: 'SRV-07',
-    category: 'APPAREL',
-    name: 'Bomber Jacket',
-    basePrice: 165000,
-    hppUnit: 108000,
-    leadTimeDays: 12,
-    minQty: 12,
-    badge: 'MILITARY FIT',
-    desc: 'Classic flight jacket, furing oranye dacron tebal & saku zipper lengan utility.',
-    bomRecipe: [
-      { materialId: 'MAT-03', qtyPerUnit: 0.045, name: 'Kain Taslan/Fleece (Roll)' },
-      { materialId: 'MAT-05', qtyPerUnit: 1.0, name: 'Polymailer/Box Drizzle (1:1)' },
-      { materialId: 'MAT-06', qtyPerUnit: 1.0, name: 'Thank You Card (1:1)' }
-    ]
-  },
-  {
-    serviceId: 'SRV-08',
-    category: 'APPAREL',
-    name: 'Polo Shirt',
-    basePrice: 85000,
-    hppUnit: 56000,
-    leadTimeDays: 8,
-    minQty: 20,
-    badge: 'SEMI-FORMAL',
-    desc: 'Lacoste CVC Pique adem, kerah rajut padat & bordir dada presisi.',
-    bomRecipe: [
-      { materialId: 'MAT-01', qtyPerUnit: 0.036, name: 'Kain Pique/Combed (Roll)' },
-      { materialId: 'MAT-05', qtyPerUnit: 1.0, name: 'Polymailer/Box Drizzle (1:1)' },
-      { materialId: 'MAT-06', qtyPerUnit: 1.0, name: 'Thank You Card (1:1)' }
-    ]
-  },
-  {
-    serviceId: 'SRV-09',
-    category: 'APPAREL',
-    name: 'All-Weather Jacket',
-    basePrice: 140000,
-    hppUnit: 92000,
-    leadTimeDays: 10,
-    minQty: 15,
-    badge: 'ALL-WEATHER',
-    desc: 'Taslan/Microfiber water-repellent, furing jaring bernapas & saku resleting.',
-    bomRecipe: [
-      { materialId: 'MAT-03', qtyPerUnit: 0.04, name: 'Kain Taslan (Roll)' },
-      { materialId: 'MAT-05', qtyPerUnit: 1.0, name: 'Polymailer/Box Drizzle (1:1)' },
-      { materialId: 'MAT-06', qtyPerUnit: 1.0, name: 'Thank You Card (1:1)' }
-    ]
-  },
-  // MERCHANDISE
-  {
-    serviceId: 'SRV-10',
-    category: 'MERCH',
-    name: 'Custom Hat',
-    basePrice: 45000,
-    hppUnit: 28000,
-    leadTimeDays: 7,
-    minQty: 24,
-    badge: 'ACCESSORY',
-    desc: 'Topi twill/kanvas custom, bordir 3D puff atau sablon presisi.',
-    bomRecipe: [
-      { materialId: 'MAT-02', qtyPerUnit: 0.015, name: 'Kain Twill/Drill (Roll)' },
-      { materialId: 'MAT-05', qtyPerUnit: 1.0, name: 'Polymailer/Box Drizzle (1:1)' },
-      { materialId: 'MAT-06', qtyPerUnit: 1.0, name: 'Thank You Card (1:1)' }
-    ]
-  },
-  {
-    serviceId: 'SRV-11',
-    category: 'MERCH',
-    name: 'Sublimation Lanyard',
-    basePrice: 15000,
-    hppUnit: 9000,
-    leadTimeDays: 5,
-    minQty: 50,
-    badge: 'EVENT MERCH',
-    desc: 'Tali tisu polyester 2-2.5cm, print full-color sublimasi presisi + stopper.',
-    bomRecipe: [
-      { materialId: 'MAT-05', qtyPerUnit: 1.0, name: 'Kemasan Plastik Drizzle (1:1)' },
-      { materialId: 'MAT-06', qtyPerUnit: 1.0, name: 'Thank You Card (1:1)' }
-    ]
-  },
-  {
-    serviceId: 'SRV-12',
-    category: 'MERCH',
-    name: 'Canvas Tote Bag',
-    basePrice: 35000,
-    hppUnit: 21000,
-    leadTimeDays: 6,
-    minQty: 30,
-    badge: 'ECO CANVAS',
-    desc: 'Kanvas tebal 12oz atau blacu natural, sablon awet untuk souvenir & goodie bag.',
-    bomRecipe: [
-      { materialId: 'MAT-02', qtyPerUnit: 0.02, name: 'Kain Kanvas/Blacu (Roll)' },
-      { materialId: 'MAT-05', qtyPerUnit: 1.0, name: 'Polymailer/Box Drizzle (1:1)' },
-      { materialId: 'MAT-06', qtyPerUnit: 1.0, name: 'Thank You Card (1:1)' }
-    ]
-  },
-  // 7 CREATIVE & BRAND CONSULTANCY SERVICES
-  {
-    serviceId: 'SRV-13',
     category: 'DESIGN',
-    name: 'Merchandising Consultant',
-    basePrice: 500000,
-    hppUnit: 150000,
-    leadTimeDays: 3,
-    minQty: 1,
-    badge: 'CONSULTING',
-    desc: 'Konsultasi kurasi material, budgeting HPP, dan manajemen alur produksi merchandise.',
-    bomRecipe: []
-  },
-  {
-    serviceId: 'SRV-14',
-    category: 'DESIGN',
-    name: 'Brand Identities',
-    basePrice: 1500000,
-    hppUnit: 450000,
-    leadTimeDays: 7,
-    minQty: 1,
-    badge: 'IDENTITY',
-    desc: 'Pembuatan logo, visual guidelines, color palette, typography system, dan brand collateral.',
-    bomRecipe: []
-  },
-  {
-    serviceId: 'SRV-15',
-    category: 'DESIGN',
-    name: 'Graphic Design',
+    name: 'Jasa Desain Grafis & Mockup',
     basePrice: 350000,
     hppUnit: 100000,
     leadTimeDays: 3,
     minQty: 1,
-    badge: 'ARTWORK',
-    desc: 'Desain visual kustom untuk kaos, merchandise, poster event, dan packaging unik.',
-    bomRecipe: []
-  },
-  {
-    serviceId: 'SRV-16',
-    category: 'DESIGN',
-    name: 'Infographic',
-    basePrice: 400000,
-    hppUnit: 120000,
-    leadTimeDays: 3,
-    minQty: 1,
-    badge: 'DATA VISUAL',
-    desc: 'Penyajian data visual terstruktur, infografis korporat, materi presentasi edukatif.',
-    bomRecipe: []
-  },
-  {
-    serviceId: 'SRV-17',
-    category: 'DESIGN',
-    name: 'Editorial Layout',
-    basePrice: 750000,
-    hppUnit: 250000,
-    leadTimeDays: 5,
-    minQty: 1,
-    badge: 'EDITORIAL',
-    desc: 'Tata letak majalah, katalog lookbook apparel, annual report, booklet organisasi.',
-    bomRecipe: []
-  },
-  {
-    serviceId: 'SRV-18',
-    category: 'DESIGN',
-    name: 'Digital Media',
-    basePrice: 650000,
-    hppUnit: 200000,
-    leadTimeDays: 4,
-    minQty: 1,
-    badge: 'DIGITAL',
-    desc: 'Desain banner web, display ads, materi promo interaktif, dan visual digital lookbook.',
-    bomRecipe: []
-  },
-  {
-    serviceId: 'SRV-19',
-    category: 'DESIGN',
-    name: 'Content Plan & Social Media',
-    basePrice: 1200000,
-    hppUnit: 400000,
-    leadTimeDays: 7,
-    minQty: 1,
-    badge: 'SOCIAL MEDIA',
-    desc: 'Strategi content planning, feeds Instagram template, carousel visual, dan copy caption.',
+    badge: 'STUDIO DESAIN',
+    desc: 'Pembuatan artwork kaos, apparel mockup 3D visual, tracing logo vector, dan brief teknis produksi.',
     bomRecipe: []
   }
 ];
 
-// 3. MATERIALS & SCM INVENTORY (Rule Wajib Kemasan 1:1)
+// 3. MASTER STOK GUDANG (Kemasan Wajib Rasio 1:1)
 const INITIAL_MATERIALS = [
   {
     materialId: 'MAT-01',
-    materialName: 'Kain Cotton Combed 30s/24s',
+    materialName: 'Kain Cotton Combed',
     unit: 'Roll',
-    currentStock: 48,
-    minThreshold: 12,
+    currentStock: 50,
+    minThreshold: 10,
     unitCost: 1250000,
     supplierName: 'CV Tekstil Mandiri Bandung',
     isMandatoryPack1to1: false
   },
   {
     materialId: 'MAT-02',
-    materialName: 'Kain American & Japan Drill',
+    materialName: 'Kain American Drill',
     unit: 'Roll',
-    currentStock: 25,
+    currentStock: 30,
     minThreshold: 8,
     unitCost: 1450000,
     supplierName: 'PT Sinar Sandang Utama',
@@ -333,9 +134,9 @@ const INITIAL_MATERIALS = [
   },
   {
     materialId: 'MAT-03',
-    materialName: 'Kain Cotton Fleece 330gsm',
+    materialName: 'Kain Fleece',
     unit: 'Roll',
-    currentStock: 16,
+    currentStock: 25,
     minThreshold: 6,
     unitCost: 1650000,
     supplierName: 'PT Dunia Tekstil Bandung',
@@ -343,10 +144,10 @@ const INITIAL_MATERIALS = [
   },
   {
     materialId: 'MAT-04',
-    materialName: 'Tinta Plastisol & DTF Film',
+    materialName: 'Tinta Sablon DTF/Plastisol',
     unit: 'Kg',
-    currentStock: 55,
-    minThreshold: 15,
+    currentStock: 40,
+    minThreshold: 10,
     unitCost: 180000,
     supplierName: 'Mitra Kimia Sablon Grafika',
     isMandatoryPack1to1: false
@@ -355,8 +156,8 @@ const INITIAL_MATERIALS = [
     materialId: 'MAT-05',
     materialName: 'Polymailer & Box Packaging Drizzle',
     unit: 'Pcs',
-    currentStock: 1200,
-    minThreshold: 300,
+    currentStock: 500,
+    minThreshold: 100,
     unitCost: 2500,
     supplierName: 'CV Packindo Solusindo',
     isMandatoryPack1to1: true // WAJIB 1:1
@@ -365,728 +166,18 @@ const INITIAL_MATERIALS = [
     materialId: 'MAT-06',
     materialName: 'Thank You Card & Care Label',
     unit: 'Pcs',
-    currentStock: 1500,
-    minThreshold: 300,
+    currentStock: 500,
+    minThreshold: 100,
     unitCost: 500,
     supplierName: 'Percetakan Grafika Solo',
     isMandatoryPack1to1: true // WAJIB 1:1
   }
 ];
 
-// 4. CUSTOMERS DIRECTORY (CRM Segmentation: Baru / Repeat / Instansi)
-const INITIAL_CUSTOMERS = [
-  {
-    customerId: 'CUST-001',
-    name: 'Alif Kurniawan',
-    organization: 'SMANKRAPFANS 1982',
-    whatsapp: '081234567890',
-    email: 'smankrap@gmail.com',
-    address: 'Jl. Slamet Riyadi No. 45, Laweyan, Surakarta',
-    segment: 'Instansi',
-    totalOrders: 1,
-    totalSpent: 652 * 52000
-  },
-  {
-    customerId: 'CUST-002',
-    name: 'Bagus Pratama',
-    organization: 'Bushwacker Finest',
-    whatsapp: '088211223344',
-    email: 'bushwacker@gmail.com',
-    address: 'Jl. Veteran No. 12, Pasar Kliwon, Surakarta',
-    segment: 'Repeat',
-    totalOrders: 1,
-    totalSpent: 379 * 55250
-  },
-  {
-    customerId: 'CUST-003',
-    name: 'Fandi Ahmad',
-    organization: 'SMEA FAMS 1963',
-    whatsapp: '085712348899',
-    email: 'smeafams@gmail.com',
-    address: 'Jl. Kolonel Sugiyono No. 18, Banjarsari, Surakarta',
-    segment: 'Instansi',
-    totalOrders: 1,
-    totalSpent: 200 * 58500
-  },
-  {
-    customerId: 'CUST-004',
-    name: 'Rendra Wijaya',
-    organization: 'Spartan Stately MMXIX',
-    whatsapp: '085712345678',
-    email: 'spartan@gmail.com',
-    address: 'Jl. Ir. Sutami No. 88, Jebres, Surakarta',
-    segment: 'Repeat',
-    totalOrders: 1,
-    totalSpent: 190 * 58500
-  },
-  {
-    customerId: 'CUST-005',
-    name: 'Guruh Prasetyo',
-    organization: 'Emperor Club',
-    whatsapp: '081399881122',
-    email: 'emperor@gmail.com',
-    address: 'Jl. Gajah Mada No. 34, Ketelan, Surakarta',
-    segment: 'Baru',
-    totalOrders: 1,
-    totalSpent: 77 * 61750
-  },
-  {
-    customerId: 'CUST-006',
-    name: 'Fajar Nugroho',
-    organization: 'MPD UNS (Manajemen Perdagangan)',
-    whatsapp: '081398765432',
-    email: 'mpd.uns@gmail.com',
-    address: 'Gedung BEM MPD UNS, Kampus Mesen, Surakarta',
-    segment: 'Instansi',
-    totalOrders: 1,
-    totalSpent: 75 * 104500
-  },
-  {
-    customerId: 'CUST-007',
-    name: 'Satria Adhi',
-    organization: 'Assolous Class MMXXIII',
-    whatsapp: '087812993344',
-    email: 'assolous@gmail.com',
-    address: 'Jl. Urip Sumoharjo No. 70, Jebres, Surakarta',
-    segment: 'Baru',
-    totalOrders: 1,
-    totalSpent: 39 * 65000
-  },
-  {
-    customerId: 'CUST-008',
-    name: 'Rian Pratama',
-    organization: 'Gengga Genius Official',
-    whatsapp: '089622334455',
-    email: 'gengga@gmail.com',
-    address: 'Jl. Adisucipto No. 102, Manahan, Surakarta',
-    segment: 'Baru',
-    totalOrders: 1,
-    totalSpent: 36 * 65000
-  },
-  {
-    customerId: 'CUST-009',
-    name: 'Zulfikar Ali',
-    organization: 'Rohis SMNSA',
-    whatsapp: '085288991122',
-    email: 'rohis.smnsa@gmail.com',
-    address: 'Kompleks SMAN 1 Surakarta, Jl. Monginsidi',
-    segment: 'Instansi',
-    totalOrders: 1,
-    totalSpent: 35 * 110000
-  },
-  {
-    customerId: 'CUST-010',
-    name: 'Hendra Gunawan',
-    organization: 'Excellent Apparel',
-    whatsapp: '081266778899',
-    email: 'excellent@gmail.com',
-    address: 'Jl. Kapten Mulyadi No. 55, Pasar Kliwon, Surakarta',
-    segment: 'Baru',
-    totalOrders: 1,
-    totalSpent: 33 * 65000
-  },
-  {
-    customerId: 'CUST-011',
-    name: 'Ilham Maulana',
-    organization: 'HSTRC Community',
-    whatsapp: '082133445566',
-    email: 'hstrc@gmail.com',
-    address: 'Jl. Bhayangkara No. 20, Tipes, Surakarta',
-    segment: 'Repeat',
-    totalOrders: 1,
-    totalSpent: 32 * 135000
-  },
-  {
-    customerId: 'CUST-012',
-    name: 'Dewi Anggraini',
-    organization: 'IMAKA UNDIP',
-    whatsapp: '082155443322',
-    email: 'imaka.undip@gmail.com',
-    address: 'Sekretariat IMAKA, Jl. Prof. Soedarto, Tembalang, Semarang',
-    segment: 'Instansi',
-    totalOrders: 1,
-    totalSpent: 32 * 110000
-  },
-  {
-    customerId: 'CUST-013',
-    name: 'Bayu Saputra',
-    organization: 'IATMI SM UPNVYK',
-    whatsapp: '081377889900',
-    email: 'iatmi.upn@gmail.com',
-    address: 'Kampus UPN Veteran Yogyakarta, Condongcatur, Sleman',
-    segment: 'Instansi',
-    totalOrders: 1,
-    totalSpent: 30 * 140000
-  },
-  {
-    customerId: 'CUST-014',
-    name: 'Taufiq Hidayat',
-    organization: 'Adventure Team (ADVNTR)',
-    whatsapp: '085699001122',
-    email: 'advntr@gmail.com',
-    address: 'Jl. Ahmad Yani No. 15, Kartasura, Sukoharjo',
-    segment: 'Repeat',
-    totalOrders: 1,
-    totalSpent: 30 * 85000
-  },
-  {
-    customerId: 'CUST-015',
-    name: 'Hendri Setiawan',
-    organization: 'PT. Surya Nakula',
-    whatsapp: '081122334455',
-    email: 'procurement@suryanakula.com',
-    address: 'Kawasan Industri Solo Baru Blok C-4, Sukoharjo',
-    segment: 'Instansi',
-    totalOrders: 1,
-    totalSpent: 16 * 110000
-  },
-  {
-    customerId: 'CUST-016',
-    name: 'Eko Prasetyo',
-    organization: 'Machine Collective 1998',
-    whatsapp: '081822446688',
-    email: 'machine1998@gmail.com',
-    address: 'Jl. Honggowongso No. 89, Serengan, Surakarta',
-    segment: 'Baru',
-    totalOrders: 1,
-    totalSpent: 24 * 65000
-  },
-  {
-    customerId: 'CUST-017',
-    name: 'Aldo Kusuma',
-    organization: 'Propundt Banana Crew',
-    whatsapp: '087788990011',
-    email: 'propundt@gmail.com',
-    address: 'Jl. Dr. Radjiman No. 210, Laweyan, Surakarta',
-    segment: 'Repeat',
-    totalOrders: 1,
-    totalSpent: 20 * 165000
-  }
-];
-
-// 5. ORDERS COLLECTION (17 Real Client Projects)
-// Kanban Stages: DESIGN, PRINTING, SEWING, QC, SHIPPED
-const INITIAL_ORDERS = [
-  {
-    orderId: 'DRZ-2026-001',
-    customerId: 'CUST-001',
-    serviceId: 'SRV-01',
-    serviceName: 'T-Shirt',
-    serviceMode: 'PRODUCTION',
-    qty: 652,
-    sizeBreakdown: { S: 100, M: 220, L: 200, XL: 100, XXL: 32 },
-    briefUrl: 'Desain artwork ultras depan dan punggung A3, Sablon Plastisol High Density, Jet Black 30s.',
-    totalPrice: 652 * 52000,
-    dpAmount: (652 * 52000) * 0.5,
-    paidAmount: (652 * 52000) * 0.5,
-    paymentStatus: 'DP_50_PAID',
-    kanbanStage: 'PRINTING',
-    hppTotal: 652 * 42000,
-    trackingResi: '',
-    shippingCarrier: 'Baraka Sarana Tama Cargo',
-    createdAt: '2026-11-02 10:15',
-    historyLogs: [
-      { timestamp: '2026-11-02 10:15', stage: 'DESIGN', note: 'Pesanan masuk dan mockup disetujui pemesan.', author: 'Sales CRM' },
-      { timestamp: '2026-11-02 11:30', stage: 'DESIGN', note: 'DP 50% sebesar Rp 16.952.000 terverifikasi.', author: 'Finance ERP' },
-      { timestamp: '2026-11-03 08:30', stage: 'PRINTING', note: 'Kain dipotong di cutting section & naik meja sablon Plastisol HD.', author: 'Produksi' }
-    ]
-  },
-  {
-    orderId: 'DRZ-2026-002',
-    customerId: 'CUST-002',
-    serviceId: 'SRV-01',
-    serviceName: 'T-Shirt',
-    serviceMode: 'PRODUCTION',
-    qty: 379,
-    sizeBreakdown: { S: 50, M: 120, L: 130, XL: 60, XXL: 19 },
-    briefUrl: 'T-Shirt Official "Eternal For Bushwacker Finest Badge", Sablon DTF Full Color, White Combed 24s.',
-    totalPrice: 379 * 55250,
-    dpAmount: (379 * 55250) * 0.5,
-    paidAmount: (379 * 55250) * 0.5,
-    paymentStatus: 'DP_50_PAID',
-    kanbanStage: 'PRINTING',
-    hppTotal: 379 * 42000,
-    trackingResi: '',
-    shippingCarrier: 'J&T Cargo',
-    createdAt: '2026-11-05 14:20',
-    historyLogs: [
-      { timestamp: '2026-11-05 14:20', stage: 'DESIGN', note: 'Artwork badge Bushwacker final disetujui.', author: 'Sales CRM' },
-      { timestamp: '2026-11-05 15:00', stage: 'PRINTING', note: 'Bahan Combed 24s teralokasi, proses cetak DTF film.', author: 'Produksi' }
-    ]
-  },
-  {
-    orderId: 'DRZ-2026-003',
-    customerId: 'CUST-003',
-    serviceId: 'SRV-01',
-    serviceName: 'T-Shirt',
-    serviceMode: 'PRODUCTION',
-    qty: 200,
-    sizeBreakdown: { S: 30, M: 70, L: 70, XL: 25, XXL: 5 },
-    briefUrl: 'T-Shirt Alumni Edition "Never Forget History", Sablon Plastisol Doff, Black Combed 30s.',
-    totalPrice: 200 * 58500,
-    dpAmount: (200 * 58500) * 0.5,
-    paidAmount: 200 * 58500,
-    paymentStatus: 'LUNAS',
-    kanbanStage: 'SHIPPED',
-    hppTotal: 200 * 42000,
-    trackingResi: 'JTC-2026-196300',
-    shippingCarrier: 'J&T Cargo',
-    createdAt: '2026-10-25 09:00',
-    historyLogs: [
-      { timestamp: '2026-10-25 09:00', stage: 'DESIGN', note: 'Pesanan SMEA FAMS 1963 disetujui.', author: 'Sales CRM' },
-      { timestamp: '2026-10-28 14:00', stage: 'SEWING', note: 'Perakitan garmen selesai, steam press & QC passed.', author: 'QC' },
-      { timestamp: '2026-10-30 11:00', stage: 'SHIPPED', note: 'Pelunasan 100% diterima. Dikirim via J&T Cargo No. Resi: JTC-2026-196300.', author: 'Outbound SCM' }
-    ]
-  },
-  {
-    orderId: 'DRZ-2026-004',
-    customerId: 'CUST-004',
-    serviceId: 'SRV-01',
-    serviceName: 'T-Shirt',
-    serviceMode: 'PRODUCTION',
-    qty: 190,
-    sizeBreakdown: { S: 30, M: 70, L: 60, XL: 25, XXL: 5 },
-    briefUrl: 'Spartan Stately "Natus Vincere", Sablon Plastisol Doff, Navy Blue 30s.',
-    totalPrice: 190 * 58500,
-    dpAmount: (190 * 58500) * 0.5,
-    paidAmount: (190 * 58500) * 0.5,
-    paymentStatus: 'DP_50_PAID',
-    kanbanStage: 'PRINTING',
-    hppTotal: 190 * 42000,
-    trackingResi: '',
-    shippingCarrier: 'Baraka Sarana Tama Cargo',
-    createdAt: '2026-11-08 09:30',
-    historyLogs: [
-      { timestamp: '2026-11-08 09:30', stage: 'DESIGN', note: 'Artwork Spartan Natus Vincere disetujui.', author: 'Sales CRM' },
-      { timestamp: '2026-11-09 10:00', stage: 'PRINTING', note: 'Proses sablon plastisol doff meja afdruk.', author: 'Produksi' }
-    ]
-  },
-  {
-    orderId: 'DRZ-2026-005',
-    customerId: 'CUST-005',
-    serviceId: 'SRV-01',
-    serviceName: 'T-Shirt',
-    serviceMode: 'PRODUCTION',
-    qty: 77,
-    sizeBreakdown: { S: 10, M: 25, L: 25, XL: 12, XXL: 5 },
-    briefUrl: 'T-Shirt "Mesin Penebar Teror", Sablon Discharge Vintage, Charcoal 30s.',
-    totalPrice: 77 * 61750,
-    dpAmount: (77 * 61750) * 0.5,
-    paidAmount: (77 * 61750) * 0.5,
-    paymentStatus: 'DP_50_PAID',
-    kanbanStage: 'DESIGN',
-    hppTotal: 77 * 42000,
-    trackingResi: '',
-    shippingCarrier: 'J&T Cargo',
-    createdAt: '2026-11-12 11:00',
-    historyLogs: [
-      { timestamp: '2026-11-12 11:00', stage: 'DESIGN', note: 'Brief masuk, pembuatan mockup alternatif.', author: 'Creative' }
-    ]
-  },
-  {
-    orderId: 'DRZ-2026-006',
-    customerId: 'CUST-006',
-    serviceId: 'SRV-02',
-    serviceName: 'Shirt / PDH',
-    serviceMode: 'PRODUCTION',
-    qty: 75,
-    sizeBreakdown: { S: 10, M: 25, L: 25, XL: 12, XXL: 3 },
-    briefUrl: 'Kemeja PDH Mahasiswa MPD UNS, American Drill Khaki & Hitam, Bordir Komputer Tajima (75 Nickname).',
-    totalPrice: 75 * 104500,
-    dpAmount: (75 * 104500) * 0.5,
-    paidAmount: 75 * 104500,
-    paymentStatus: 'LUNAS',
-    kanbanStage: 'SHIPPED',
-    hppTotal: 75 * 72000,
-    trackingResi: 'BST-2026-881920',
-    shippingCarrier: 'Baraka Sarana Tama Cargo',
-    createdAt: '2026-11-01 11:00',
-    historyLogs: [
-      { timestamp: '2026-11-01 11:00', stage: 'DESIGN', note: 'Desain PDH & lampiran 75 nama BEM tervalidasi.', author: 'Sales CRM' },
-      { timestamp: '2026-11-04 14:00', stage: 'PRINTING', note: 'Bordir komputer Tajima presisi selesai.', author: 'Makloon Bordir' },
-      { timestamp: '2026-11-07 16:00', stage: 'QC', note: 'QC passed 75 pcs, packing rasio 1:1 Drizzle.', author: 'QC Gudang' },
-      { timestamp: '2026-11-10 14:00', stage: 'SHIPPED', note: 'Pesanan lunas, diserahkan ke Baraka Sarana Tama Cargo (Resi: BST-2026-881920).', author: 'Outbound SCM' }
-    ]
-  },
-  {
-    orderId: 'DRZ-2026-007',
-    customerId: 'CUST-007',
-    serviceId: 'SRV-01',
-    serviceName: 'T-Shirt',
-    serviceMode: 'PRODUCTION',
-    qty: 39,
-    sizeBreakdown: { S: 5, M: 15, L: 14, XL: 4, XXL: 1 },
-    briefUrl: 'T-Shirt Angkatan Kelas MMXXIII, Sablon Plastisol White on Maroon Combed 30s.',
-    totalPrice: 39 * 65000,
-    dpAmount: (39 * 65000) * 0.5,
-    paidAmount: 39 * 65000,
-    paymentStatus: 'LUNAS',
-    kanbanStage: 'SHIPPED',
-    hppTotal: 39 * 42000,
-    trackingResi: 'PICKUP-ASSO-07',
-    shippingCarrier: 'Pick-Up Studio Solo',
-    createdAt: '2026-10-20 13:00',
-    historyLogs: [
-      { timestamp: '2026-10-20 13:00', stage: 'DESIGN', note: 'Pesanan diterima.', author: 'Sales CRM' },
-      { timestamp: '2026-10-27 15:30', stage: 'SHIPPED', note: 'Telah diserahkan ke perwakilan kelas di Studio Drizzle.', author: 'Outbound SCM' }
-    ]
-  },
-  {
-    orderId: 'DRZ-2026-008',
-    customerId: 'CUST-008',
-    serviceId: 'SRV-01',
-    serviceName: 'T-Shirt',
-    serviceMode: 'PRODUCTION',
-    qty: 36,
-    sizeBreakdown: { S: 6, M: 12, L: 12, XL: 5, XXL: 1 },
-    briefUrl: 'T-Shirt Gengga "Genius" Edition, Sablon DTF High Density, Dark Grey Combed 24s.',
-    totalPrice: 36 * 65000,
-    dpAmount: (36 * 65000) * 0.5,
-    paidAmount: (36 * 65000) * 0.5,
-    paymentStatus: 'DP_50_PAID',
-    kanbanStage: 'SEWING',
-    hppTotal: 36 * 42000,
-    trackingResi: '',
-    shippingCarrier: 'Pick-Up Studio Solo',
-    createdAt: '2026-11-09 15:00',
-    historyLogs: [
-      { timestamp: '2026-11-09 15:00', stage: 'DESIGN', note: 'Mockup disetujui pemesan.', author: 'Creative' },
-      { timestamp: '2026-11-11 11:00', stage: 'PRINTING', note: 'Sablon DTF selesai, masuk ke antrean jahit.', author: 'Produksi' },
-      { timestamp: '2026-11-13 14:00', stage: 'SEWING', note: 'Perakitan garmen & pemasangan label woven Drizzle.', author: 'Jahit' }
-    ]
-  },
-  {
-    orderId: 'DRZ-2026-009',
-    customerId: 'CUST-009',
-    serviceId: 'SRV-02',
-    serviceName: 'Shirt / PDH',
-    serviceMode: 'PRODUCTION',
-    qty: 35,
-    sizeBreakdown: { S: 5, M: 12, L: 12, XL: 5, XXL: 1 },
-    briefUrl: 'PDH Pengurus Rohis SMAN 1 Surakarta, Japan Drill Putih & Hijau Sage, Bordir Logo Rohis & Nama.',
-    totalPrice: 35 * 110000,
-    dpAmount: (35 * 110000) * 0.5,
-    paidAmount: 35 * 110000,
-    paymentStatus: 'LUNAS',
-    kanbanStage: 'SHIPPED',
-    hppTotal: 35 * 72000,
-    trackingResi: 'DLV-SMNSA-09',
-    shippingCarrier: 'Kurir Internal Drizzle',
-    createdAt: '2026-10-18 10:00',
-    historyLogs: [
-      { timestamp: '2026-10-18 10:00', stage: 'DESIGN', note: 'Approval sample kemeja.', author: 'Sales CRM' },
-      { timestamp: '2026-10-26 14:00', stage: 'SHIPPED', note: 'Diantar kurir internal ke sekolah SMAN 1 Surakarta.', author: 'Outbound SCM' }
-    ]
-  },
-  {
-    orderId: 'DRZ-2026-010',
-    customerId: 'CUST-010',
-    serviceId: 'SRV-01',
-    serviceName: 'T-Shirt',
-    serviceMode: 'PRODUCTION',
-    qty: 33,
-    sizeBreakdown: { S: 5, M: 12, L: 10, XL: 5, XXL: 1 },
-    briefUrl: 'T-Shirt Excellent Minimalist Typography, Sablon Plastisol HD, Combed 30s Sand Khaki.',
-    totalPrice: 33 * 65000,
-    dpAmount: (33 * 65000) * 0.5,
-    paidAmount: (33 * 65000) * 0.5,
-    paymentStatus: 'DP_50_PAID',
-    kanbanStage: 'SEWING',
-    hppTotal: 33 * 42000,
-    trackingResi: '',
-    shippingCarrier: 'J&T Cargo',
-    createdAt: '2026-11-10 16:00',
-    historyLogs: [
-      { timestamp: '2026-11-10 16:00', stage: 'DESIGN', note: 'Desain disetujui.', author: 'Sales CRM' },
-      { timestamp: '2026-11-12 13:00', stage: 'PRINTING', note: 'Sablon HD selesai.', author: 'Produksi' },
-      { timestamp: '2026-11-14 09:30', stage: 'SEWING', note: 'Jahit rantai pundak & stik leher.', author: 'Jahit' }
-    ]
-  },
-  {
-    orderId: 'DRZ-2026-011',
-    customerId: 'CUST-011',
-    serviceId: 'SRV-04',
-    serviceName: 'Coach Jacket',
-    serviceMode: 'PRODUCTION',
-    qty: 32,
-    sizeBreakdown: { S: 4, M: 10, L: 12, XL: 5, XXL: 1 },
-    briefUrl: 'Coach Jacket Windbreaker HSTRC, Taslan ZN Milky, Sablon Punggung A3 Plastisol White on Navy.',
-    totalPrice: 32 * 135000,
-    dpAmount: (32 * 135000) * 0.5,
-    paidAmount: 32 * 135000,
-    paymentStatus: 'LUNAS',
-    kanbanStage: 'SHIPPED',
-    hppTotal: 32 * 88000,
-    trackingResi: 'ILC-2026-32011',
-    shippingCarrier: 'Indah Logistik Cargo',
-    createdAt: '2026-10-15 11:00',
-    historyLogs: [
-      { timestamp: '2026-10-15 11:00', stage: 'DESIGN', note: 'Pesanan coach jacket diverifikasi.', author: 'Sales CRM' },
-      { timestamp: '2026-10-24 16:00', stage: 'SHIPPED', note: 'Terkirim via Indah Logistik Cargo (Resi: ILC-2026-32011).', author: 'Outbound SCM' }
-    ]
-  },
-  {
-    orderId: 'DRZ-2026-012',
-    customerId: 'CUST-012',
-    serviceId: 'SRV-02',
-    serviceName: 'Shirt / PDH',
-    serviceMode: 'PRODUCTION',
-    qty: 32,
-    sizeBreakdown: { S: 5, M: 12, L: 10, XL: 4, XXL: 1 },
-    briefUrl: 'Kemeja PDH Pengurus Harian IMAKA Karanganyar UNDIP, Japan Drill Navy, Bordir Komputer Tajima (32 Nama).',
-    totalPrice: 32 * 110000,
-    dpAmount: (32 * 110000) * 0.5,
-    paidAmount: 32 * 110000,
-    paymentStatus: 'LUNAS',
-    kanbanStage: 'SHIPPED',
-    hppTotal: 32 * 72000,
-    trackingResi: 'PICKUP-IMAKA-01',
-    shippingCarrier: 'Pick-Up Studio Solo',
-    createdAt: '2026-10-28 13:40',
-    historyLogs: [
-      { timestamp: '2026-10-28 13:40', stage: 'DESIGN', note: 'Approval mockup kemeja IMAKA.', author: 'Sales CRM' },
-      { timestamp: '2026-11-04 10:00', stage: 'QC', note: 'QC Passed 32 pcs, finishing packing 1:1 zipper.', author: 'QC' },
-      { timestamp: '2026-11-05 15:00', stage: 'SHIPPED', note: 'Pesanan telah diambil langsung oleh pengurus di studio.', author: 'Outbound SCM' }
-    ]
-  },
-  {
-    orderId: 'DRZ-2026-013',
-    customerId: 'CUST-013',
-    serviceId: 'SRV-09',
-    serviceName: 'All-Weather Jacket',
-    serviceMode: 'PRODUCTION',
-    qty: 30,
-    sizeBreakdown: { S: 4, M: 10, L: 10, XL: 5, XXL: 1 },
-    briefUrl: 'Jacket Lapangan IATMI SM UPN Veteran Yogyakarta, Taslan Waterproof, Furing Quilting, Bordir Komputer.',
-    totalPrice: 30 * 140000,
-    dpAmount: (30 * 140000) * 0.5,
-    paidAmount: (30 * 140000) * 0.5,
-    paymentStatus: 'DP_50_PAID',
-    kanbanStage: 'QC',
-    hppTotal: 30 * 92000,
-    trackingResi: '',
-    shippingCarrier: 'J&T Cargo',
-    createdAt: '2026-11-06 14:00',
-    historyLogs: [
-      { timestamp: '2026-11-06 14:00', stage: 'DESIGN', note: 'Pesanan jacket IATMI masuk sistem.', author: 'Sales CRM' },
-      { timestamp: '2026-11-10 11:00', stage: 'SEWING', note: 'Jahit assembling & furing quilting selesai.', author: 'Jahit' },
-      { timestamp: '2026-11-13 16:00', stage: 'QC', note: 'Tahap inspeksi resleting YKK & steam press.', author: 'QC' }
-    ]
-  },
-  {
-    orderId: 'DRZ-2026-014',
-    customerId: 'CUST-014',
-    serviceId: 'SRV-08',
-    serviceName: 'Polo Shirt',
-    serviceMode: 'PRODUCTION',
-    qty: 30,
-    sizeBreakdown: { S: 5, M: 10, L: 10, XL: 4, XXL: 1 },
-    briefUrl: 'Polo Shirt Lacoste CVC Pique Black, Kerah Rajut Kuning Mustard, Bordir Dada Kiri & Lengan.',
-    totalPrice: 30 * 85000,
-    dpAmount: (30 * 85000) * 0.5,
-    paidAmount: (30 * 85000) * 0.5,
-    paymentStatus: 'DP_50_PAID',
-    kanbanStage: 'SEWING',
-    hppTotal: 30 * 56000,
-    trackingResi: '',
-    shippingCarrier: 'Pick-Up Studio Solo',
-    createdAt: '2026-11-09 10:00',
-    historyLogs: [
-      { timestamp: '2026-11-09 10:00', stage: 'DESIGN', note: 'Desain polo shirt disetujui.', author: 'Sales CRM' },
-      { timestamp: '2026-11-12 14:00', stage: 'SEWING', note: 'Pasang kerah rajut & kancing snap.', author: 'Jahit' }
-    ]
-  },
-  {
-    orderId: 'DRZ-2026-015',
-    customerId: 'CUST-015',
-    serviceId: 'SRV-02',
-    serviceName: 'Shirt / PDH',
-    serviceMode: 'PRODUCTION',
-    qty: 16,
-    sizeBreakdown: { S: 2, M: 6, L: 5, XL: 3, XXL: 0 },
-    briefUrl: 'Seragam Kemeja Teknisi Lapangan PT Surya Nakula, American Drill Abu Tua, Bordir Logo Perusahaan (16 Nama).',
-    totalPrice: 16 * 110000,
-    dpAmount: (16 * 110000) * 0.5,
-    paidAmount: 0,
-    paymentStatus: 'UNPAID',
-    kanbanStage: 'MENUNGGU_DP',
-    hppTotal: 16 * 72000,
-    trackingResi: '',
-    shippingCarrier: 'Kurir Internal Drizzle',
-    createdAt: '2026-11-13 16:10',
-    historyLogs: [
-      { timestamp: '2026-11-13 16:10', stage: 'MENUNGGU_DP', note: 'Invoice dan SPK diterbitkan, menunggu verifikasi pembayaran DP 50%.', author: 'Finance ERP' }
-    ]
-  },
-  {
-    orderId: 'DRZ-2026-016',
-    customerId: 'CUST-016',
-    serviceId: 'SRV-13',
-    serviceName: 'Brand Identity & Visual Guidelines',
-    serviceMode: 'DESIGN_ONLY',
-    qty: 1,
-    sizeBreakdown: null,
-    briefUrl: 'Brand Identity Suite "This Story 1998 Wont End", Visual Guidelines PDF & Asset DTF Tracing.',
-    totalPrice: 1500000,
-    dpAmount: 750000,
-    paidAmount: 750000,
-    paymentStatus: 'DP_50_PAID',
-    kanbanStage: 'DESIGN',
-    hppTotal: 450000,
-    trackingResi: '',
-    shippingCarrier: 'Google Drive Asset / Email Delivery',
-    createdAt: '2026-11-13 10:00',
-    historyLogs: [
-      { timestamp: '2026-11-13 10:00', stage: 'DESIGN', note: 'Approval sample visual guidelines & brief creative masuk. Mode DESIGN_ONLY aktif (bypass sablon & jahit).', author: 'Creative' }
-    ]
-  },
-  {
-    orderId: 'DRZ-2026-017',
-    customerId: 'CUST-017',
-    serviceId: 'SRV-07',
-    serviceName: 'Bomber Jacket',
-    serviceMode: 'PRODUCTION',
-    qty: 20,
-    sizeBreakdown: { S: 3, M: 7, L: 7, XL: 3, XXL: 0 },
-    briefUrl: 'Bomber Flight Jacket Propundt / Banana "Gaslur Let\'s Riding Together", Parasut Taslan Army Green, Furing Orange Dacron.',
-    totalPrice: 20 * 165000,
-    dpAmount: (20 * 165000) * 0.5,
-    paidAmount: (20 * 165000) * 0.5,
-    paymentStatus: 'DP_50_PAID',
-    kanbanStage: 'QC',
-    hppTotal: 20 * 108000,
-    trackingResi: '',
-    shippingCarrier: 'J&T Cargo',
-    createdAt: '2026-11-04 11:00',
-    historyLogs: [
-      { timestamp: '2026-11-04 11:00', stage: 'DESIGN', note: 'Pesanan bomber disetujui.', author: 'Sales CRM' },
-      { timestamp: '2026-11-08 14:00', stage: 'SEWING', note: 'Jahit rib elastis tebal & zipper utility lengan.', author: 'Jahit' },
-      { timestamp: '2026-11-12 16:30', stage: 'QC', note: 'QC Passed, packing kemasan Drizzle 1:1 ratio.', author: 'QC' }
-    ]
-  }
-];
-
-// 6. INITIAL PURCHASE ORDERS (SCM & Auto-PO)
-const INITIAL_PURCHASE_ORDERS = [
-  {
-    poId: 'PO-2026-001',
-    orderId: 'DRZ-2026-001',
-    materialId: 'MAT-01',
-    materialName: 'Kain Cotton Combed 30s/24s',
-    vendorName: 'CV Tekstil Mandiri Bandung',
-    qtyOrdered: 22,
-    unit: 'Roll',
-    totalCost: 27500000,
-    poStatus: 'RECEIVED',
-    createdAt: '2026-11-02 11:00'
-  },
-  {
-    poId: 'PO-2026-002',
-    orderId: 'DRZ-2026-001',
-    materialId: 'MAT-05',
-    materialName: 'Polymailer & Box Packaging Drizzle',
-    vendorName: 'CV Packindo Solusindo',
-    qtyOrdered: 652,
-    unit: 'Pcs',
-    totalCost: 1630000,
-    poStatus: 'RECEIVED',
-    createdAt: '2026-11-02 11:30'
-  },
-  {
-    poId: 'PO-2026-003',
-    orderId: 'DRZ-2026-002',
-    materialId: 'MAT-01',
-    materialName: 'Kain Cotton Combed 30s/24s',
-    vendorName: 'CV Tekstil Mandiri Bandung',
-    qtyOrdered: 13,
-    unit: 'Roll',
-    totalCost: 16250000,
-    poStatus: 'RECEIVED',
-    createdAt: '2026-11-05 14:40'
-  },
-  {
-    poId: 'PO-2026-004',
-    orderId: 'DRZ-2026-006',
-    materialId: 'MAT-02',
-    materialName: 'Kain American & Japan Drill',
-    vendorName: 'PT Sinar Sandang Utama',
-    qtyOrdered: 3,
-    unit: 'Roll',
-    totalCost: 4350000,
-    poStatus: 'RECEIVED',
-    createdAt: '2026-11-01 13:00'
-  },
-  {
-    poId: 'PO-2026-005',
-    orderId: null,
-    materialId: 'MAT-05',
-    materialName: 'Polymailer & Box Packaging Drizzle',
-    vendorName: 'CV Packindo Solusindo',
-    qtyOrdered: 500,
-    unit: 'Pcs',
-    totalCost: 1250000,
-    poStatus: 'DRAFT',
-    createdAt: '2026-11-14 08:30'
-  }
-];
-
-// 7. INITIAL FINANCE LEDGER (Buku Kas & HPP)
-const INITIAL_FINANCE_LEDGER = [
-  {
-    txId: 'TRX-001',
-    orderId: 'DRZ-2026-001',
-    poId: null,
-    txType: 'INCOME',
-    amount: (652 * 52000) * 0.5,
-    description: 'Penerimaan DP 50% Pesanan SMANKRAPFANS 1982 (652 pcs T-Shirt)',
-    txDate: '2026-11-02 11:30'
-  },
-  {
-    txId: 'TRX-002',
-    orderId: null,
-    poId: 'PO-2026-001',
-    txType: 'EXPENSE',
-    amount: 27500000,
-    description: 'Pembayaran PO-2026-001 Kain Combed 22 Roll ke CV Tekstil Mandiri',
-    txDate: '2026-11-02 14:00'
-  },
-  {
-    txId: 'TRX-003',
-    orderId: 'DRZ-2026-006',
-    poId: null,
-    txType: 'INCOME',
-    amount: 75 * 104500,
-    description: 'Pelunasan 100% Pesanan PDH MPD UNS (75 pcs)',
-    txDate: '2026-11-10 13:00'
-  },
-  {
-    txId: 'TRX-004',
-    orderId: 'DRZ-2026-012',
-    poId: null,
-    txType: 'INCOME',
-    amount: 32 * 110000,
-    description: 'Pelunasan 100% Pesanan Kemeja IMAKA UNDIP (32 pcs)',
-    txDate: '2026-11-05 14:00'
-  },
-  {
-    txId: 'TRX-005',
-    orderId: 'DRZ-2026-002',
-    poId: null,
-    txType: 'INCOME',
-    amount: (379 * 55250) * 0.5,
-    description: 'Penerimaan DP 50% Pesanan Bushwacker Finest (379 pcs T-Shirt)',
-    txDate: '2026-11-05 14:45'
-  },
-  {
-    txId: 'TRX-006',
-    orderId: null,
-    poId: 'PO-2026-004',
-    txType: 'EXPENSE',
-    amount: 4350000,
-    description: 'Pembayaran PO-2026-004 Kain Drill 3 Roll ke PT Sinar Sandang Utama',
-    txDate: '2026-11-01 15:00'
-  }
-];
+// ==================== DATA AWAL BERSIH ====================
+// Transaksi (customers, orders, purchaseOrders, financeLedger) selalu kosong di seed baru.
+// Tidak ada INITIAL_CUSTOMERS / INITIAL_ORDERS / INITIAL_PURCHASE_ORDERS / INITIAL_FINANCE_LEDGER
+// berisi data nyata supaya getDB() tidak pernah me-restore data transaksi lama.
 
 // Helper: Format Rupiah
 function formatRupiah(num) {
@@ -1109,7 +200,7 @@ function calculateTieredPrice(serviceId, totalPcs) {
   if (totalPcs >= 650) return Math.round(base * 0.80); // 20% disc
   if (totalPcs >= 350) return Math.round(base * 0.85); // 15% disc
   if (totalPcs >= 150) return Math.round(base * 0.90); // 10% disc
-  if (totalPcs >= 50) return Math.round(base * 0.95);  // 5% disc
+  if (totalPcs >= 50)  return Math.round(base * 0.95); // 5% disc
   return base;
 }
 
@@ -1155,18 +246,19 @@ function generateNextTxId() {
   return `TRX-${String(maxNum + 1).padStart(3, '0')}`;
 }
 
-// Get Database from localStorage (or initialize with schema)
+// Get Database from localStorage (or initialize with master data only — NO transaction data)
 function getDB() {
   const raw = localStorage.getItem(DRIZZLE_SIM_DB_KEY);
   if (!raw) {
+    // First run: seed only master data, all transaction collections start EMPTY
     const initData = {
       tenantConfig: DEFAULT_TENANT_CONFIG,
       services: INITIAL_SERVICES,
-      materials: INITIAL_MATERIALS,
-      customers: INITIAL_CUSTOMERS,
-      orders: INITIAL_ORDERS,
-      purchaseOrders: INITIAL_PURCHASE_ORDERS,
-      financeLedger: INITIAL_FINANCE_LEDGER
+      materials: JSON.parse(JSON.stringify(INITIAL_MATERIALS)), // deep clone to protect defaults
+      customers: [],
+      orders: [],
+      purchaseOrders: [],
+      financeLedger: []
     };
     saveDB(initData);
     return initData;
@@ -1175,27 +267,43 @@ function getDB() {
     const data = JSON.parse(raw);
     let changed = false;
 
-    // Ensure all 6 relational collections and tenantConfig exist
-    if (!data.tenantConfig) { data.tenantConfig = DEFAULT_TENANT_CONFIG; changed = true; }
-    if (!data.services || data.services.length < INITIAL_SERVICES.length) { data.services = INITIAL_SERVICES; changed = true; }
-    if (!data.materials || data.materials.length === 0) { data.materials = INITIAL_MATERIALS; changed = true; }
-    if (!data.customers || data.customers.length < INITIAL_CUSTOMERS.length) { data.customers = INITIAL_CUSTOMERS; changed = true; }
-    if (!data.orders || data.orders.length < INITIAL_ORDERS.length) { data.orders = INITIAL_ORDERS; changed = true; }
-    if (!data.purchaseOrders) { data.purchaseOrders = INITIAL_PURCHASE_ORDERS; changed = true; }
-    if (!data.financeLedger) { data.financeLedger = INITIAL_FINANCE_LEDGER; changed = true; }
+    // Ensure tenantConfig exists
+    if (!data.tenantConfig) {
+      data.tenantConfig = DEFAULT_TENANT_CONFIG;
+      changed = true;
+    }
+
+    // Ensure services are present (master data only — never touched by transactions)
+    if (!data.services || data.services.length !== INITIAL_SERVICES.length || data.services[0].name !== INITIAL_SERVICES[0].name) {
+      data.services = INITIAL_SERVICES;
+      changed = true;
+    }
+
+    // Ensure materials are present (master data only)
+    if (!data.materials || data.materials.length !== INITIAL_MATERIALS.length) {
+      data.materials = JSON.parse(JSON.stringify(INITIAL_MATERIALS));
+      changed = true;
+    }
+
+    // Ensure transaction collections exist as arrays (but NEVER force-restore data into them)
+    if (!Array.isArray(data.customers))      { data.customers = [];       changed = true; }
+    if (!Array.isArray(data.orders))         { data.orders = [];          changed = true; }
+    if (!Array.isArray(data.purchaseOrders)) { data.purchaseOrders = [];  changed = true; }
+    if (!Array.isArray(data.financeLedger))  { data.financeLedger = [];   changed = true; }
 
     if (changed) saveDB(data);
     return data;
   } catch (e) {
     console.error('Error parsing drizzle_sim_db:', e);
+    // Corrupt data: re-initialize with clean slate
     const initData = {
       tenantConfig: DEFAULT_TENANT_CONFIG,
       services: INITIAL_SERVICES,
-      materials: INITIAL_MATERIALS,
-      customers: INITIAL_CUSTOMERS,
-      orders: INITIAL_ORDERS,
-      purchaseOrders: INITIAL_PURCHASE_ORDERS,
-      financeLedger: INITIAL_FINANCE_LEDGER
+      materials: JSON.parse(JSON.stringify(INITIAL_MATERIALS)),
+      customers: [],
+      orders: [],
+      purchaseOrders: [],
+      financeLedger: []
     };
     saveDB(initData);
     return initData;
@@ -1218,7 +326,7 @@ function showToast(message, type = 'info') {
 
   const toast = document.createElement('div');
   toast.className = 'pointer-events-auto bg-[#33302D] text-[#FAF7F4] border border-[#E6DDD6]/30 rounded-xl px-4 py-2.5 shadow-2xl flex items-center gap-2.5 text-xs transition-all duration-300 transform translate-y-3 opacity-0';
-  
+
   let icon = '⚡';
   if (type === 'success') icon = '✓';
   else if (type === 'warning') icon = '⚠️';
@@ -1297,29 +405,47 @@ function saveDB(data, eventMessage = '') {
   return saveAndSyncDB(data, eventMessage);
 }
 
-// Reset Database to Seed State
+// Reset ONLY transaction data — master data (services, materials, tenantConfig) tetap utuh
+function resetTransactionData() {
+  const db = getDB();
+  db.orders = [];
+  db.customers = [];
+  db.purchaseOrders = [];
+  db.financeLedger = [];
+  saveAndSyncDB(db, 'Data transaksi berhasil direset. Mulai dari 0 pesanan.');
+  return db;
+}
+
+// Legacy alias — resets transaction data (same behavior as resetTransactionData)
 function resetDB() {
-  const initData = {
-    tenantConfig: DEFAULT_TENANT_CONFIG,
-    services: INITIAL_SERVICES,
-    materials: INITIAL_MATERIALS,
-    customers: INITIAL_CUSTOMERS,
-    orders: INITIAL_ORDERS,
-    purchaseOrders: INITIAL_PURCHASE_ORDERS,
-    financeLedger: INITIAL_FINANCE_LEDGER
-  };
-  saveDB(initData);
-  return initData;
+  return resetTransactionData();
+}
+
+// Backup seluruh database sebagai file JSON yang dapat diunduh
+function backupDatabaseJSON() {
+  const db = getDB();
+  const json = JSON.stringify(db, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `drizzle-backup-${new Date().toISOString().slice(0, 10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  if (window.DrizzleApp) showToast('Backup berhasil diunduh ✓', 'success');
 }
 
 // ERP Module: Kanban Multi-Tahap Stages Configuration
+// CANCELLED dan RETURNED ditambahkan ke validStages sebagai terminal stages
 const KANBAN_STAGES_CONFIG = [
-  { key: 'MENUNGGU_DP', label: '1. Menunggu DP', badge: 'bg-amber-100 text-amber-800 border-amber-300' },
-  { key: 'DESIGN', label: '2. Desain & Brief', badge: 'bg-sky-100 text-sky-800 border-sky-300' },
-  { key: 'PRINTING', label: '3. Sablon & Bordir', badge: 'bg-blue-100 text-blue-800 border-blue-300' },
-  { key: 'SEWING', label: '4. Jahit & Assembly', badge: 'bg-purple-100 text-purple-800 border-purple-300' },
-  { key: 'QC', label: '5. Quality Control', badge: 'bg-orange-100 text-orange-800 border-orange-300' },
-  { key: 'SHIPPED', label: '6. Siap Kirim / Terkirim', badge: 'bg-emerald-100 text-emerald-800 border-emerald-300' }
+  { key: 'MENUNGGU_DP', label: '1. Menunggu DP',          badge: 'bg-amber-100 text-amber-800 border-amber-300' },
+  { key: 'DESIGN',      label: '2. Desain & Brief',        badge: 'bg-sky-100 text-sky-800 border-sky-300' },
+  { key: 'PRINTING',    label: '3. Sablon & Bordir',       badge: 'bg-blue-100 text-blue-800 border-blue-300' },
+  { key: 'SEWING',      label: '4. Jahit & Assembly',      badge: 'bg-purple-100 text-purple-800 border-purple-300' },
+  { key: 'QC',          label: '5. Quality Control',       badge: 'bg-orange-100 text-orange-800 border-orange-300' },
+  { key: 'SHIPPED',     label: '6. Siap Kirim / Terkirim', badge: 'bg-emerald-100 text-emerald-800 border-emerald-300' },
+  { key: 'CANCELLED',   label: '✕ Dibatalkan',             badge: 'bg-red-100 text-red-800 border-red-300' },
+  { key: 'RETURNED',    label: '↩ Dikembalikan',           badge: 'bg-rose-100 text-rose-800 border-rose-300' }
 ];
 
 // Determine Next Stage with DESIGN_ONLY Bypass Logic
@@ -1354,7 +480,7 @@ function moveKanbanStage(orderId, newStage, note = '') {
   const order = (db.orders || []).find(o => o.orderId === orderId || o.tracking_code === orderId);
   if (!order) return { success: false, reason: 'Order not found' };
 
-  const validStages = ['MENUNGGU_DP', 'DESIGN', 'PRINTING', 'SEWING', 'QC', 'SHIPPED'];
+  const validStages = ['MENUNGGU_DP', 'DESIGN', 'PRINTING', 'SEWING', 'QC', 'SHIPPED', 'CANCELLED', 'RETURNED'];
   if (!validStages.includes(newStage)) return { success: false, reason: 'Invalid stage' };
 
   const oldStage = order.kanbanStage;
@@ -1368,7 +494,9 @@ function moveKanbanStage(orderId, newStage, note = '') {
     PRINTING: 'Sablon & Bordir',
     SEWING: 'Jahit & Assembly',
     QC: 'Quality Control (QC)',
-    SHIPPED: 'Siap Kirim / Terkirim'
+    SHIPPED: 'Siap Kirim / Terkirim',
+    CANCELLED: 'Dibatalkan',
+    RETURNED: 'Dikembalikan'
   };
 
   const defaultNote = note || (order.serviceMode === 'DESIGN_ONLY' && newStage === 'QC' && oldStage === 'DESIGN'
@@ -1430,7 +558,7 @@ function deductOrderMaterials(order) {
       if (mat.currentStock < neededQty) {
         const shortage = neededQty - mat.currentStock;
         const autoPOQty = Math.max(shortage * 2, mat.minThreshold || 25);
-        
+
         // Auto-create purchase order if no open PO already exists for this order & material
         const existingPO = (db.purchaseOrders || []).find(p => p.orderId === order.orderId && p.materialId === mat.materialId && p.poStatus === 'ORDERED');
         let poId = existingPO ? existingPO.poId : null;
@@ -1558,7 +686,7 @@ function receivePurchaseOrder(poId) {
     const linkedOrder = (db.orders || []).find(o => o.orderId === po.orderId);
     if (linkedOrder) {
       linkedOrder.hppTotal = (linkedOrder.hppTotal || 0) + po.totalCost;
-      
+
       // Check if any other POs for this order are still pending (ORDERED)
       const remainingOpenPOs = (db.purchaseOrders || []).filter(p => p.orderId === linkedOrder.orderId && p.poStatus === 'ORDERED');
       if (remainingOpenPOs.length === 0) {
@@ -1584,90 +712,244 @@ function createAutoPO(materialId, qtyToAdd, orderId = null) {
   return createPurchaseOrder(materialId, qtyToAdd, null, orderId);
 }
 
-// ERP Module: Record Customer Payment (DP / Pelunasan) with Automated MRP Execution & Kanban Sync
-function updatePaymentStatus(orderId, newStatus) {
+// ERP Module: Flexible Payment — mendukung nominal bebas (bukan hanya DP 50%)
+function recordPayment(orderId, amountPaid, note = '') {
   const db = getDB();
   const order = (db.orders || []).find(o => o.orderId === orderId || o.tracking_code === orderId);
   if (!order) return { success: false, reason: 'Order not found' };
 
-  order.paymentStatus = newStatus;
   const now = new Date().toISOString().replace('T', ' ').substring(0, 16);
   if (!order.historyLogs) order.historyLogs = [];
 
-  if (newStatus === 'LUNAS') {
-    const remaining = Math.max(0, order.totalPrice - (order.paidAmount || 0));
-    order.paidAmount = order.totalPrice;
-    if (remaining > 0) {
-      const txId = generateNextTxId();
-      db.financeLedger.unshift({
-        txId,
-        orderId: order.orderId,
-        poId: null,
-        txType: 'INCOME',
-        amount: remaining,
-        description: `Pelunasan 100% Pesanan ${order.orderId} (${order.serviceName || order.serviceId})`,
-        txDate: now
-      });
-    }
+  const prevPaid = order.paidAmount || 0;
+  const newTotalPaid = prevPaid + amountPaid;
+  const totalPrice = order.totalPrice || 0;
+  const wasUnpaid = order.paymentStatus === 'UNPAID' || prevPaid === 0;
 
-    order.historyLogs.unshift({
-      timestamp: now,
-      stage: order.kanbanStage,
-      note: `Verifikasi pelunasan 100% senilai ${formatRupiah(remaining || order.totalPrice)} berhasil dicatat di Buku Kas ERP. Status pembayaran: LUNAS.`,
-      author: 'Finance ERP'
-    });
+  // Update paidAmount
+  order.paidAmount = newTotalPaid;
 
-    // Automated MRP Execution if not yet deducted
-    if (!order.materialsDeducted && order.serviceMode !== 'DESIGN_ONLY') {
-      deductOrderMaterials(order);
-    }
-  } else if (newStatus === 'DP_50_PAID') {
-    const dpVal = order.dpAmount || Math.round(order.totalPrice * 0.5);
-    order.paidAmount = dpVal;
+  // Determine new paymentStatus
+  if (newTotalPaid >= totalPrice) {
+    order.paymentStatus = 'LUNAS';
+  } else if (newTotalPaid > 0) {
+    order.paymentStatus = 'DP_PAID';
+    order.dpAmount = newTotalPaid; // Store actual DP amount paid
+  }
+
+  // Record INCOME to financeLedger
+  if (amountPaid > 0) {
     const txId = generateNextTxId();
+    const description = note
+      ? `Pembayaran ${formatRupiah(amountPaid)} untuk ${order.orderId} — ${note}`
+      : (newTotalPaid >= totalPrice
+          ? `Pelunasan 100% Pesanan ${order.orderId} (${order.serviceName || order.serviceId})`
+          : `Penerimaan DP ${formatRupiah(amountPaid)} Pesanan ${order.orderId} (${order.serviceName || order.serviceId})`);
+
     db.financeLedger.unshift({
       txId,
       orderId: order.orderId,
       poId: null,
       txType: 'INCOME',
-      amount: dpVal,
-      description: `Penerimaan DP 50% Pesanan ${order.orderId} (${order.serviceName || order.serviceId})`,
+      amount: amountPaid,
+      description,
       txDate: now
     });
+  }
 
-    // Auto-advance stage from MENUNGGU_DP to DESIGN upon receiving DP
-    if (order.kanbanStage === 'MENUNGGU_DP') {
-      order.kanbanStage = 'DESIGN';
-      order.historyLogs.unshift({
-        timestamp: now,
-        stage: 'DESIGN',
-        note: `Verifikasi penerimaan DP 50% (${formatRupiah(dpVal)}) berhasil dicatat di Buku Kas ERP. Tiket order otomatis dimajukan ke antrean Desain & Brief.`,
-        author: 'Finance ERP'
-      });
-    } else {
-      order.historyLogs.unshift({
-        timestamp: now,
-        stage: order.kanbanStage,
-        note: `Verifikasi DP 50% (${formatRupiah(dpVal)}) berhasil dicatat di Buku Kas ERP.`,
-        author: 'Finance ERP'
-      });
-    }
+  // Log to historyLogs
+  const payNote = note ? ` — ${note}` : '';
+  const statusLabel = order.paymentStatus === 'LUNAS' ? 'LUNAS' : `DP_PAID (${formatRupiah(newTotalPaid)} / ${formatRupiah(totalPrice)})`;
+  order.historyLogs.unshift({
+    timestamp: now,
+    stage: order.kanbanStage,
+    note: `Pembayaran ${formatRupiah(amountPaid)} diterima${payNote}. Status pembayaran: ${statusLabel}.`,
+    author: 'Finance ERP'
+  });
 
-    // Automated MRP Execution upon DP Verification
-    if (!order.materialsDeducted && order.serviceMode !== 'DESIGN_ONLY') {
-      deductOrderMaterials(order);
-    }
+  // Jika sebelumnya UNPAID dan sekarang dibayar → majukan stage ke DESIGN
+  if (wasUnpaid && amountPaid > 0 && order.kanbanStage === 'MENUNGGU_DP') {
+    order.kanbanStage = 'DESIGN';
+    order.historyLogs.unshift({
+      timestamp: now,
+      stage: 'DESIGN',
+      note: `Pembayaran awal diterima — tiket order otomatis dimajukan ke antrean Desain & Brief.`,
+      author: 'Finance ERP'
+    });
+  }
+
+  // Jalankan MRP (deductOrderMaterials) jika belum pernah dijalankan dan ada pembayaran
+  if (amountPaid > 0 && !order.materialsDeducted && order.serviceMode !== 'DESIGN_ONLY') {
+    deductOrderMaterials(order);
+  }
+
+  saveAndSyncDB(db, `Pembayaran ${formatRupiah(amountPaid)} untuk ${order.orderId} dicatat. Status: ${order.paymentStatus}`);
+  return { success: true, order };
+}
+
+// ERP Module: Legacy updatePaymentStatus — alias ke recordPayment untuk backward compatibility
+function updatePaymentStatus(orderId, newStatus) {
+  const db = getDB();
+  const order = (db.orders || []).find(o => o.orderId === orderId || o.tracking_code === orderId);
+  if (!order) return { success: false, reason: 'Order not found' };
+
+  const totalPrice = order.totalPrice || 0;
+  const prevPaid = order.paidAmount || 0;
+
+  if (newStatus === 'LUNAS') {
+    const remaining = Math.max(0, totalPrice - prevPaid);
+    return recordPayment(orderId, remaining, 'Pelunasan via updatePaymentStatus');
+  } else if (newStatus === 'DP_50_PAID') {
+    const dpVal = order.dpAmount || Math.round(totalPrice * 0.5);
+    const toPay = Math.max(0, dpVal - prevPaid);
+    return recordPayment(orderId, toPay, 'DP 50% via updatePaymentStatus');
   } else {
+    // UNPAID: reset
+    const now = new Date().toISOString().replace('T', ' ').substring(0, 16);
+    if (!order.historyLogs) order.historyLogs = [];
     order.paidAmount = 0;
+    order.paymentStatus = 'UNPAID';
     order.historyLogs.unshift({
       timestamp: now,
       stage: order.kanbanStage,
       note: `Status pembayaran diubah menjadi UNPAID oleh Finance Admin.`,
       author: 'Finance ERP'
     });
+    saveAndSyncDB(db, `Status pembayaran ${order.orderId} diperbarui ke UNPAID`);
+    return { success: true, order };
+  }
+}
+
+// ERP/SCM Module: Cancel Order — kembalikan stok, catat refund jika ada
+function cancelOrder(orderId, reason = '') {
+  const db = getDB();
+  const order = (db.orders || []).find(o => o.orderId === orderId || o.tracking_code === orderId);
+  if (!order) return { success: false, reason: 'Order not found' };
+
+  const now = new Date().toISOString().replace('T', ' ').substring(0, 16);
+  if (!order.historyLogs) order.historyLogs = [];
+
+  // 1. Set stage CANCELLED
+  order.kanbanStage = 'CANCELLED';
+  order.cancelled = true;
+  order.cancelReason = reason || '';
+
+  // 2. Kembalikan stok bahan yang sudah dialokasikan (reverse deductOrderMaterials)
+  if (order.materialsDeducted && order.serviceMode !== 'DESIGN_ONLY') {
+    const srv = (db.services || []).find(s => s.serviceId === order.serviceId || s.name.toLowerCase() === (order.serviceName || '').toLowerCase());
+    const qty = order.qty || 1;
+
+    let recipes = [];
+    if (srv && srv.bomRecipe && srv.bomRecipe.length > 0) {
+      recipes = [...srv.bomRecipe];
+    }
+    // Ensure MAT-05 dan MAT-06 juga dikembalikan
+    if (!recipes.some(r => r.materialId === 'MAT-05')) {
+      recipes.push({ materialId: 'MAT-05', qtyPerUnit: 1.0, isMandatoryPack1to1: true });
+    }
+    if (!recipes.some(r => r.materialId === 'MAT-06')) {
+      recipes.push({ materialId: 'MAT-06', qtyPerUnit: 1.0, isMandatoryPack1to1: true });
+    }
+
+    recipes.forEach(item => {
+      const mat = (db.materials || []).find(m => m.materialId === item.materialId);
+      if (mat) {
+        const isPack = mat.isMandatoryPack1to1 || item.isMandatoryPack1to1;
+        const returnedQty = isPack ? qty : Math.ceil(qty * 1.03 * (item.qtyPerUnit || 1));
+        mat.currentStock += returnedQty;
+      }
+    });
+
+    order.materialsDeducted = false; // Reset flag supaya tidak dikembalikan dua kali
+    order.historyLogs.unshift({
+      timestamp: now,
+      stage: 'CANCELLED',
+      note: `Stok bahan dikembalikan ke gudang SCM karena order dibatalkan.`,
+      author: 'SCM Warehouse'
+    });
   }
 
-  saveAndSyncDB(db, `Status pembayaran ${order.orderId} diperbarui ke ${newStatus}`);
+  // 3. Jika ada paidAmount > 0 → catat REFUND di financeLedger
+  const paidAmount = order.paidAmount || 0;
+  if (paidAmount > 0) {
+    const txId = generateNextTxId();
+    db.financeLedger.unshift({
+      txId,
+      orderId: order.orderId,
+      poId: null,
+      txType: 'REFUND',
+      amount: paidAmount,
+      description: `Refund pembatalan Pesanan ${order.orderId} (${order.serviceName || order.serviceId})${reason ? ' — ' + reason : ''}`,
+      txDate: now
+    });
+  }
+
+  // 4. Log ke historyLogs
+  order.historyLogs.unshift({
+    timestamp: now,
+    stage: 'CANCELLED',
+    note: `Pesanan dibatalkan${reason ? ' — Alasan: ' + reason : ''}. ${paidAmount > 0 ? 'Refund ' + formatRupiah(paidAmount) + ' dicatat di buku kas.' : 'Tidak ada pembayaran yang perlu direfund.'}`,
+    author: 'Drizzle ERP Admin'
+  });
+
+  // 5. saveAndSyncDB
+  saveAndSyncDB(db, `Pesanan ${order.orderId} dibatalkan. ${paidAmount > 0 ? 'Refund ' + formatRupiah(paidAmount) + ' diproses.' : ''}`);
+  return { success: true, order };
+}
+
+// ERP Module: Return Order — catat retur, kembalikan stok, proses refund
+function returnOrder(orderId, reason = '', refundAmount = 0) {
+  const db = getDB();
+  const order = (db.orders || []).find(o => o.orderId === orderId || o.tracking_code === orderId);
+  if (!order) return { success: false, reason: 'Order not found' };
+
+  const now = new Date().toISOString().replace('T', ' ').substring(0, 16);
+  if (!order.historyLogs) order.historyLogs = [];
+
+  // 1. Set stage RETURNED
+  order.kanbanStage = 'RETURNED';
+  order.returned = true;
+  order.returnReason = reason || '';
+  order.returnRefundAmount = refundAmount || 0;
+
+  // 2. Catat log barang retur di gudang SCM — kembalikan packaging (MAT-05, MAT-06) sebagai stok retur
+  const qty = order.qty || 1;
+  const mat05 = (db.materials || []).find(m => m.materialId === 'MAT-05');
+  const mat06 = (db.materials || []).find(m => m.materialId === 'MAT-06');
+  if (mat05) mat05.currentStock += qty; // Kemasan bisa direcycle
+  if (mat06) mat06.currentStock += qty; // Card bisa direcycle
+
+  order.historyLogs.unshift({
+    timestamp: now,
+    stage: 'RETURNED',
+    note: `Barang retur diterima di gudang SCM. Stok kemasan MAT-05 & MAT-06 dikembalikan (+${qty} pcs masing-masing).${reason ? ' Alasan retur: ' + reason : ''}`,
+    author: 'SCM Warehouse'
+  });
+
+  // 3. Jika refundAmount > 0 → catat REFUND di financeLedger
+  if (refundAmount > 0) {
+    const txId = generateNextTxId();
+    db.financeLedger.unshift({
+      txId,
+      orderId: order.orderId,
+      poId: null,
+      txType: 'REFUND',
+      amount: refundAmount,
+      description: `Refund retur Pesanan ${order.orderId} (${order.serviceName || order.serviceId})${reason ? ' — ' + reason : ''}`,
+      txDate: now
+    });
+  }
+
+  // 4. Log ke historyLogs
+  order.historyLogs.unshift({
+    timestamp: now,
+    stage: 'RETURNED',
+    note: `Pesanan diretur${reason ? ' — Alasan: ' + reason : ''}. ${refundAmount > 0 ? 'Refund ' + formatRupiah(refundAmount) + ' dicatat di buku kas.' : 'Tidak ada refund yang diproses.'}`,
+    author: 'Drizzle ERP Admin'
+  });
+
+  // 5. saveAndSyncDB
+  saveAndSyncDB(db, `Pesanan ${order.orderId} diretur. ${refundAmount > 0 ? 'Refund ' + formatRupiah(refundAmount) + ' diproses.' : ''}`);
   return { success: true, order };
 }
 
@@ -1782,7 +1064,7 @@ function searchOrdersOrCustomer(rawQuery) {
   const upperQ = query.toUpperCase();
 
   // 1. Direct Order ID match
-  const directOrder = orders.find(o => 
+  const directOrder = orders.find(o =>
     (o.orderId && o.orderId.toUpperCase() === upperQ) ||
     (o.tracking_code && o.tracking_code.toUpperCase() === upperQ)
   );
@@ -1830,35 +1112,60 @@ function searchOrdersOrCustomer(rawQuery) {
 
 // Global Export to Window
 window.DrizzleApp = {
+  // Core DB
   getDB,
   saveDB,
   saveAndSyncDB,
   showToast,
   resetDB,
+  resetTransactionData,
+  backupDatabaseJSON,
+
+  // Formatting & Helpers
   formatRupiah,
   cleanPhoneNumber,
+
+  // CRM
   registerOrUpdateCustomer,
   searchOrdersOrCustomer,
+
+  // ERP Pricing & ID Generation
   calculateTieredPrice,
   generateNextOrderId,
   generateNextPOId,
   generateNextTxId,
+
+  // ERP Kanban
   moveKanbanStage,
   getNextStage,
   getPrevStage,
   KANBAN_STAGES_CONFIG,
+
+  // SCM MRP & PO
   deductOrderMaterials,
   createPurchaseOrder,
   receivePurchaseOrder,
   createAutoPO,
-  updatePaymentStatus,
+
+  // ERP Payment (flexible)
+  recordPayment,
+  updatePaymentStatus, // legacy alias
+
+  // ERP Shipping
   updateShippingInfo,
-  // Helper aliases
+
+  // ERP Order Lifecycle (Skenario 6)
+  cancelOrder,
+  returnOrder,
+
+  // Helper aliases (read-only references)
   tenantConfig: DEFAULT_TENANT_CONFIG,
   services: INITIAL_SERVICES,
   materials: INITIAL_MATERIALS,
-  customers: INITIAL_CUSTOMERS,
-  orders: INITIAL_ORDERS
+  contactWA: '+62 895-2295-1860',
+  contactWALink: 'https://wa.me/6289522951860',
+  contactEmail: 'drizzlethelabel@gmail.com',
+  contactIG: '@drizzleproject'
 };
 
 // Backward-Compatibility Alias for DrizzleStore

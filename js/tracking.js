@@ -1,7 +1,8 @@
 /**
- * DrizzleOS — Tracking Engine & 5-Stage Stepper
+ * DrizzleOS — Tracking Engine & 6-Stage Stepper
  * Relies on window.DrizzleApp (drizzle_sim_db)
  * Supports searching by: Order ID (DRZ-2026-XXX) or WhatsApp Number
+ * WhatsApp Official: +62 895-2295-1860
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -13,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const multiOrdersNav = document.getElementById('multi-orders-nav');
 
   const KANBAN_STAGES = [
-    { key: 'MENUNGGU_DP', label: '1. Menunggu DP', desc: 'Verifikasi DP 50% masuk ke kas ERP.' },
+    { key: 'MENUNGGU_DP', label: '1. Menunggu Konfirmasi', desc: 'Verifikasi pesanan & pembayaran DP via WA.' },
     { key: 'DESIGN', label: '2. Desain & Brief', desc: 'Mockup disetujui & approval desain.' },
     { key: 'PRINTING', label: '3. Sablon & Bordir', desc: 'Potong bahan & sablon/bordir presisi.' },
     { key: 'SEWING', label: '4. Jahit & Assembly', desc: 'Perakitan garmen & label woven Drizzle.' },
@@ -22,11 +23,17 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
 
   // 1. Populate Sample Chips (Orders + WhatsApp Numbers)
-  if (chipsContainer && window.DrizzleApp) {
+  function renderSampleChips() {
+    if (!chipsContainer || !window.DrizzleApp) return;
     const db = window.DrizzleApp.getDB();
     const orders = db.orders || [];
     const customers = db.customers || [];
     chipsContainer.innerHTML = '';
+
+    if (orders.length === 0) {
+      chipsContainer.innerHTML = '<span class="text-xs text-muted">Belum ada pesanan aktif. <a href="order.html" class="text-brand font-bold hover:underline">Buat Pesanan Pertama &rarr;</a></span>';
+      return;
+    }
 
     // Sample Order Chips
     orders.slice(0, 4).forEach(o => {
@@ -57,6 +64,8 @@ document.addEventListener('DOMContentLoaded', () => {
       chipsContainer.appendChild(btn);
     });
   }
+
+  renderSampleChips();
 
   // 2. Form Submit
   if (searchForm) {
@@ -105,7 +114,8 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   // Real-Time Reactive Sync Listener (Cross-tab and in-tab live updates)
-  window.addEventListener('drizzle:sync', (e) => {
+  window.addEventListener('drizzle:sync', () => {
+    renderSampleChips();
     if (currentTrackQuery) {
       lookupTracking(currentTrackQuery);
     }
@@ -170,18 +180,51 @@ document.addEventListener('DOMContentLoaded', () => {
     const createdAtEl = document.getElementById('res-created-at');
     if (createdAtEl) createdAtEl.textContent = `Dipesan: ${order.createdAt || '-'}`;
 
-    // Payment Badge (Belum Bayar / DP 50% Lunas / Lunas)
+    // Payment Badge & Flexible Amount
     const payBadge = document.getElementById('res-pay-badge');
+    const paidAmount = order.paidAmount || 0;
+    const totalPrice = order.totalPrice || 0;
+
     if (payBadge) {
-      if (order.paymentStatus === 'LUNAS') {
-        payBadge.textContent = 'Lunas';
+      if (order.paymentStatus === 'LUNAS' || paidAmount >= totalPrice) {
+        payBadge.textContent = '✓ Lunas';
         payBadge.className = 'text-xs font-bold font-mono px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200';
-      } else if (order.paymentStatus === 'DP_50_PAID') {
-        payBadge.textContent = 'DP 50% Lunas';
+      } else if (paidAmount > 0) {
+        payBadge.textContent = `DP Terbayar (${window.DrizzleApp.formatRupiah(paidAmount)})`;
         payBadge.className = 'text-xs font-bold font-mono px-3 py-1 rounded-full bg-sky-50 text-sky-700 border border-sky-200';
       } else {
-        payBadge.textContent = 'Belum Bayar';
+        payBadge.textContent = 'Menunggu Pembayaran';
         payBadge.className = 'text-xs font-bold font-mono px-3 py-1 rounded-full bg-amber-50 text-amber-700 border border-amber-200';
+      }
+    }
+
+    // Payment Info Banner (show if not fully paid)
+    const payInfo = document.getElementById('res-payment-info');
+    if (payInfo) {
+      if (order.paymentStatus !== 'LUNAS' && paidAmount < totalPrice) {
+        payInfo.classList.remove('hidden');
+      } else {
+        payInfo.classList.add('hidden');
+      }
+    }
+
+    // Cancelled / Returned Alert Badge
+    const cancelAlert = document.getElementById('res-cancel-alert');
+    const cancelTitle = document.getElementById('res-cancel-title');
+    const cancelReason = document.getElementById('res-cancel-reason');
+    if (cancelAlert) {
+      if (order.kanbanStage === 'CANCELLED') {
+        cancelAlert.classList.remove('hidden');
+        cancelAlert.className = 'py-2.5 px-4 rounded-xl text-xs font-mono flex items-start gap-3 bg-rose-50 border border-rose-200 text-rose-800';
+        if (cancelTitle) cancelTitle.textContent = '⛔ Pesanan Ini Telah Dibatalkan';
+        if (cancelReason) cancelReason.textContent = `Alasan: ${order.cancelReason || 'Dibatalkan oleh Admin'}`;
+      } else if (order.kanbanStage === 'RETURNED') {
+        cancelAlert.classList.remove('hidden');
+        cancelAlert.className = 'py-2.5 px-4 rounded-xl text-xs font-mono flex items-start gap-3 bg-amber-50 border border-amber-200 text-amber-800';
+        if (cancelTitle) cancelTitle.textContent = '🔄 Pesanan Ini Telah Diretur';
+        if (cancelReason) cancelReason.textContent = `Alasan: ${order.returnReason || 'Diretur oleh Klien'}${order.returnRefundAmount ? ' (Refund: ' + window.DrizzleApp.formatRupiah(order.returnRefundAmount) + ')' : ''}`;
+      } else {
+        cancelAlert.classList.add('hidden');
       }
     }
 
@@ -243,6 +286,13 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    // WhatsApp Contact Admin Button
+    const waBtn = document.getElementById('res-wa-btn');
+    if (waBtn) {
+      const waMsg = encodeURIComponent(`Halo Admin Drizzle (+62 895-2295-1860),\nSaya ingin menanyakan pesanan dengan Kode Order: ${order.orderId} (${order.serviceName || order.serviceId}).\nMohon informasi update pengerjaan. Terima kasih!`);
+      waBtn.href = `https://wa.me/6289522951860?text=${waMsg}`;
+    }
+
     // Render 6-Stage Stepper
     renderStepper(order.kanbanStage, order.serviceMode);
 
@@ -255,6 +305,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!container) return;
     container.innerHTML = '';
 
+    const isCancelledOrReturned = currentStageKey === 'CANCELLED' || currentStageKey === 'RETURNED';
+
     const stageKeys = ['MENUNGGU_DP', 'DESIGN', 'PRINTING', 'SEWING', 'QC', 'SHIPPED'];
     const currentIdx = stageKeys.indexOf(currentStageKey);
     const activeIdx = currentIdx >= 0 ? currentIdx : 0;
@@ -262,12 +314,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     KANBAN_STAGES.forEach((st, idx) => {
       const isBypassed = isDesignOnly && (st.key === 'PRINTING' || st.key === 'SEWING');
-      let isDone = idx < activeIdx;
-      let isActive = idx === activeIdx;
+      let isDone = !isCancelledOrReturned && idx < activeIdx;
+      let isActive = !isCancelledOrReturned && idx === activeIdx;
 
-      // In DESIGN_ONLY mode, if we are at QC or SHIPPED, PRINTING and SEWING are marked as bypassed (completed/skipped)
       if (isBypassed) {
-        if (activeIdx > 1) { // active is QC (idx 4) or SHIPPED (idx 5)
+        if (activeIdx > 1) {
           isDone = true;
           isActive = false;
         } else {
@@ -281,7 +332,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
       let circleClass = '';
       let circleText = '';
-      if (isBypassed && !isDone) {
+
+      if (isCancelledOrReturned) {
+        circleClass = 'bg-canvas text-muted border-dashed border-borderCard opacity-40';
+        circleText = '—';
+      } else if (isBypassed && !isDone) {
         circleClass = 'bg-canvas text-muted border-dashed border-borderCard opacity-60';
         circleText = '—';
       } else if (isDone) {

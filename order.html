@@ -55,10 +55,10 @@
 
       <!-- Navigation -->
       <nav class="hidden md:flex items-center gap-7 text-sm font-medium">
-        <a href="index.html" class="text-muted hover:text-dark transition">Beranda & Katalog</a>
+        <a href="index.html" class="text-muted hover:text-dark transition">Beranda &amp; Katalog</a>
         <a href="order.html" class="text-brand font-semibold flex items-center gap-1.5">
           <span class="w-1.5 h-1.5 rounded-full bg-brand"></span>
-          Buat Pesanan
+          Pesan Sekarang
         </a>
         <a href="tracking.html" class="text-muted hover:text-dark transition">Lacak Pesanan</a>
         <a href="admin.html" class="text-muted hover:text-dark transition px-3 py-1 rounded-md border border-borderCard bg-card hover:border-dark">Dashboard Admin</a>
@@ -155,7 +155,7 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-semibold text-dark mb-1">Nomor WhatsApp Aktif *</label>
-              <input type="tel" id="cust-phone" required placeholder="Contoh: 0882007546920" class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand font-mono">
+              <input type="tel" id="cust-phone" required placeholder="Contoh: 089522951860" class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand font-mono">
               <span class="text-[10px] text-muted mt-0.5 block">Sistem CRM otomatis mendeteksi riwayat belanja & segmen pelanggan dari WhatsApp.</span>
             </div>
             <div>
@@ -286,9 +286,19 @@
           </div>
         </div>
 
+        <!-- Keterangan Pembayaran via WhatsApp -->
+        <div class="p-3.5 rounded-xl bg-sky-50 border border-sky-200 text-sky-800 text-xs flex items-start gap-2.5">
+          <span class="text-base">💬</span>
+          <div>
+            <strong class="font-bold block">Metode Pembayaran via WhatsApp</strong>
+            <p class="mt-0.5 text-sky-700">Metode pembayaran &amp; nominal DP/pelunasan dikonfirmasi langsung bersama Admin via WhatsApp setelah pesanan terdaftar. Kami fleksibel menyesuaikan kebutuhan Anda.</p>
+            <a href="https://wa.me/6289522951860" target="_blank" class="inline-flex items-center gap-1 mt-1.5 font-bold text-sky-800 hover:underline">📱 Hubungi Admin WA +62 895-2295-1860 &rarr;</a>
+          </div>
+        </div>
+
         <!-- Submit Button -->
         <button type="submit" id="btn-submit-order" class="w-full bg-brand hover:bg-brandDark text-white font-bold py-3.5 px-6 rounded-xl transition shadow-md flex items-center justify-center gap-2 text-sm">
-          <span>Kirim Pesanan & Terbitkan Kode Tracking &rarr;</span>
+          <span>Kirim Pesanan &amp; Terbitkan Kode Tracking &rarr;</span>
         </button>
       </form>
 
@@ -321,15 +331,15 @@
             </div>
           </div>
 
-          <!-- Termin Pembayaran 50% -->
+          <!-- Termin Pembayaran Fleksibel -->
           <div class="py-4 space-y-2 border-b border-borderCard text-xs bg-canvas/60 -mx-6 px-6">
-            <span class="text-[11px] font-mono font-bold text-muted uppercase block">Termin Pembayaran Resmi (DP 50%)</span>
+            <span class="text-[11px] font-mono font-bold text-muted uppercase block">Estimasi DP (Fleksibel)</span>
             <div class="flex justify-between items-center">
-              <span class="text-dark font-medium">Uang Muka (DP 50%):</span>
+              <span class="text-dark font-medium">Uang Muka Standar (50%):</span>
               <span class="font-mono font-bold text-brand text-sm" id="live-dp-amount">Rp 0</span>
             </div>
             <div class="flex justify-between items-center text-muted">
-              <span>Pelunasan (50% Saat QC Selesai):</span>
+              <span>Sisa Pembayaran:</span>
               <span class="font-mono" id="live-remaining-amount">Rp 0</span>
             </div>
           </div>
@@ -356,7 +366,7 @@
           </div>
 
           <p class="text-[10px] text-muted mt-3 text-center">
-            Invoice resmi dan instruksi transfer DP 50% akan langsung diterbitkan setelah order terdaftar.
+            Metode &amp; nominal pembayaran dikonfirmasi langsung via WhatsApp bersama Admin setelah pesanan terdaftar.
           </p>
         </div>
 
@@ -364,8 +374,8 @@
         <div class="bg-card border border-borderCard rounded-xl p-4 text-xs text-muted flex items-start gap-3">
           <div class="text-lg">💬</div>
           <div>
-            <strong class="font-semibold text-dark block mb-0.5">Butuh Konsultasi Bahan & Desain?</strong>
-            <span>Tim Drizzle siap membantu menentukan spesifikasi terbaik via WhatsApp di 0882-0075-46920.</span>
+            <strong class="font-semibold text-dark block mb-0.5">Butuh Konsultasi Bahan &amp; Desain?</strong>
+            <span>Tim Drizzle siap membantu menentukan spesifikasi terbaik via WhatsApp resmi di <a href="https://wa.me/6289522951860" target="_blank" class="font-bold text-brand hover:underline">+62 895-2295-1860</a>.</span>
           </div>
         </div>
 
@@ -419,51 +429,16 @@
       </div>
 
       <!-- Action Buttons -->
-      <div class="space-y-2 pt-2">
-        <a id="modal-goto-tracking-btn" href="tracking.html" class="w-full bg-brand hover:bg-brandDark text-white font-bold py-3 px-4 rounded-xl transition block text-sm shadow-sm">
+      <div class="space-y-2.5 pt-2">
+        <a id="modal-wa-send-btn" href="https://wa.me/6289522951860" target="_blank" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl transition flex items-center justify-center gap-2 text-sm shadow-sm">
+          <span>📱 Kirim Rincian Pesanan ke WhatsApp Admin</span>
+        </a>
+        <a id="modal-goto-tracking-btn" href="tracking.html" class="w-full bg-brand hover:bg-brandDark text-white font-bold py-2.5 px-4 rounded-xl transition block text-xs shadow-sm">
           Buka Halaman Pelacakan Real-Time &rarr;
         </a>
-        <a href="order.html" class="w-full bg-canvas hover:bg-borderCard text-dark font-medium py-2.5 px-4 rounded-xl transition block text-xs border border-borderCard">
+        <a href="order.html" class="w-full bg-canvas hover:bg-borderCard text-dark font-medium py-2 px-4 rounded-xl transition block text-xs border border-borderCard">
           Buat Pesanan Baru Lainnya
         </a>
-      </div>
-    </div>
-  </div>
-
-  <!-- ==================== MULTI-TENANT SAAS BADGE & MODAL TRIGGER ==================== -->
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 text-center">
-    <button type="button" onclick="openTenantModal()" class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-card border border-borderCard text-xs font-mono text-muted hover:text-dark hover:border-brand transition shadow-sm">
-      <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-      <span>Powered by DrizzleOS &mdash; Multi-Tenant SaaS Architecture</span>
-    </button>
-  </div>
-
-  <!-- ==================== MULTI-TENANT MODAL ==================== -->
-  <div id="tenant-modal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-card border border-borderCard rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 text-left">
-      <div class="flex justify-between items-center pb-3 border-b border-borderCard">
-        <div>
-          <span class="text-[10px] font-mono text-brand font-bold uppercase tracking-wider block">System Architecture</span>
-          <h3 class="text-lg font-extrabold text-dark">DrizzleOS Multi-Tenant Architecture</h3>
-        </div>
-        <button type="button" onclick="closeTenantModal()" class="text-muted hover:text-dark text-lg font-bold">&times;</button>
-      </div>
-      
-      <div class="space-y-3 text-xs text-muted">
-        <p><strong class="text-dark">Tenant Aktif:</strong> <span class="font-mono text-brand">TNT-DRIZZLE-SOLO-01</span> (Drizzle Project Studio Solo HQ).</p>
-        <p><strong class="text-dark">Fitur Arsitektur Multi-Tenant:</strong></p>
-        <ul class="list-disc pl-5 space-y-1.5 text-[11px]">
-          <li><strong>Relational DB Sandbox:</strong> 6 koleksi relasional terisolasi (Services, Customers, Orders, Materials, PurchaseOrders, FinanceLedger).</li>
-          <li><strong>Mandatory 1:1 Packaging Engine:</strong> Alokasi kemasan otomatis 1:1 per unit apparel/merchandise di kalkulasi Material Requirements Planning (MRP).</li>
-          <li><strong>Integrated Production Workflow:</strong> State machine 5 tahap (DESIGN &rarr; PRINTING &rarr; SEWING &rarr; QC &rarr; SHIPPED).</li>
-          <li><strong>Finance & HPP Ledger:</strong> Pencatatan kas masuk termin DP 50%, pelunasan, pengeluaran vendor makloon, dan margin laba bersih otomatis.</li>
-        </ul>
-      </div>
-
-      <div class="pt-3 border-t border-borderCard flex justify-end">
-        <button type="button" onclick="closeTenantModal()" class="px-4 py-2 bg-dark text-white rounded-lg text-xs font-semibold">
-          Tutup
-        </button>
       </div>
     </div>
   </div>
@@ -474,10 +449,11 @@
       <div>
         <span class="font-bold text-dark text-sm">Drizzle Project</span>
         <p class="mt-0.5">&copy; 2026 Drizzle Project. All Product Include Packaging. Est. Late 2023.</p>
+        <p class="mt-0.5">📱 WhatsApp: <a href="https://wa.me/6289522951860" target="_blank" class="text-brand font-semibold hover:underline">+62 895-2295-1860</a></p>
       </div>
       <div class="flex items-center gap-6 font-medium">
-        <a href="index.html" class="hover:text-dark transition">Beranda</a>
-        <a href="order.html" class="text-brand font-semibold">Buat Pesanan</a>
+        <a href="index.html" class="hover:text-dark transition">Beranda &amp; Katalog</a>
+        <a href="order.html" class="text-brand font-semibold">Pesan Sekarang</a>
         <a href="tracking.html" class="hover:text-dark transition">Lacak Pesanan</a>
         <a href="admin.html" class="hover:text-dark transition">Dashboard Admin</a>
       </div>
@@ -505,18 +481,18 @@
       { client: 'SMEA FAMS 1963', category: 'APPAREL', srvId: 'SRV-01', item: 'T-Shirt', qty: 200, print: 'Sablon Discharge / Waterbased', fabric: 'Cotton Combed 30s Hitam', notes: 'Suporter Angkatan SMEA' },
       { client: 'Spartan Stately (SPRTN)', category: 'APPAREL', srvId: 'SRV-01', item: 'T-Shirt', qty: 190, print: 'Sablon Plastisol High Density', fabric: 'Cotton Combed 30s Navy Blue', notes: 'Tema Natus Vincere' },
       { client: 'Emperor', category: 'APPAREL', srvId: 'SRV-01', item: 'T-Shirt', qty: 77, print: 'Sablon Plastisol High Density', fabric: 'Cotton Combed 20s Heavyweight', notes: 'Tema Mesin Penebar Teror' },
-      { client: 'MPD UNS', category: 'APPAREL', srvId: 'SRV-02', item: 'Shirt / PDH', qty: 75, print: 'Bordir Komputer Presisi Tinggi', fabric: 'American Drill 1919 Navy', notes: 'PDH Pengurus Manajemen Perdagangan UNS' },
+      { client: 'MPD UNS', category: 'APPAREL', srvId: 'SRV-03', item: 'Shirt / PDH', qty: 75, print: 'Bordir Komputer Presisi Tinggi', fabric: 'American Drill 1919 Navy', notes: 'PDH Pengurus Manajemen Perdagangan UNS' },
       { client: 'Assolous Class MMXXIII', category: 'APPAREL', srvId: 'SRV-01', item: 'T-Shirt', qty: 39, print: 'Sablon Plastisol High Density', fabric: 'Cotton Combed 30s Bottle Green', notes: 'T-Shirt Kelas Angkatan' },
       { client: 'Gengga "Genius"', category: 'APPAREL', srvId: 'SRV-01', item: 'T-Shirt', qty: 36, print: 'Sablon Plastisol High Density', fabric: 'Cotton Combed 24s White', notes: 'Komunitas Genius' },
-      { client: 'Rohis SMNSA', category: 'APPAREL', srvId: 'SRV-02', item: 'Shirt / PDH', qty: 35, print: 'Bordir Komputer Presisi Tinggi', fabric: 'American Drill Putih & Army', notes: 'PDH Pengurus Rohis' },
+      { client: 'Rohis SMNSA', category: 'APPAREL', srvId: 'SRV-03', item: 'Shirt / PDH', qty: 35, print: 'Bordir Komputer Presisi Tinggi', fabric: 'American Drill Putih & Army', notes: 'PDH Pengurus Rohis' },
       { client: 'Excellent', category: 'APPAREL', srvId: 'SRV-01', item: 'T-Shirt', qty: 33, print: 'Sablon Plastisol High Density', fabric: 'Cotton Combed 30s Charcoal', notes: 'Event Gathering' },
-      { client: 'HSTRC', category: 'APPAREL', srvId: 'SRV-03', item: 'Coach Jacket', qty: 32, print: 'Sablon Plastisol High Density', fabric: 'Taslan Milky Waterproof', notes: 'Streetwear Label' },
-      { client: 'IMAKA UNDIP', category: 'APPAREL', srvId: 'SRV-02', item: 'Shirt / PDH', qty: 32, print: 'Bordir Komputer Presisi Tinggi', fabric: 'Japan Drill Maroon', notes: 'Ikatan Mahasiswa Karanganyar UNDIP' },
-      { client: 'IATMI SM UPNVYK', category: 'APPAREL', srvId: 'SRV-03', item: 'Coach Jacket', qty: 30, print: 'Bordir Komputer Presisi Tinggi', fabric: 'Baby Canvas Khaki', notes: 'Teknik Perminyakan UPNVYK' },
-      { client: 'Adventure Team (ADVNTR)', category: 'APPAREL', srvId: 'SRV-06', item: 'Polo Shirt', qty: 30, print: 'Bordir Komputer Presisi Tinggi', fabric: 'Lacoste Pique Cotton Hitam', notes: 'Komunitas Petualang' },
-      { client: 'PT. Surya Nakula', category: 'APPAREL', srvId: 'SRV-02', item: 'Shirt / PDH', qty: 16, print: 'Bordir Komputer Presisi Tinggi', fabric: 'American Drill Abu & Scotchlite', notes: 'Seragam Teknisi Lapangan' },
+      { client: 'HSTRC', category: 'APPAREL', srvId: 'SRV-02', item: 'Coach Jacket', qty: 32, print: 'Sablon Plastisol High Density', fabric: 'Taslan Milky Waterproof', notes: 'Streetwear Label' },
+      { client: 'IMAKA UNDIP', category: 'APPAREL', srvId: 'SRV-03', item: 'Shirt / PDH', qty: 32, print: 'Bordir Komputer Presisi Tinggi', fabric: 'Japan Drill Maroon', notes: 'Ikatan Mahasiswa Karanganyar UNDIP' },
+      { client: 'IATMI SM UPNVYK', category: 'APPAREL', srvId: 'SRV-02', item: 'Coach Jacket', qty: 30, print: 'Bordir Komputer Presisi Tinggi', fabric: 'Baby Canvas Khaki', notes: 'Teknik Perminyakan UPNVYK' },
+      { client: 'Adventure Team (ADVNTR)', category: 'APPAREL', srvId: 'SRV-01', item: 'Polo Shirt', qty: 30, print: 'Bordir Komputer Presisi Tinggi', fabric: 'Lacoste Pique Cotton Hitam', notes: 'Komunitas Petualang' },
+      { client: 'PT. Surya Nakula', category: 'APPAREL', srvId: 'SRV-03', item: 'Shirt / PDH', qty: 16, print: 'Bordir Komputer Presisi Tinggi', fabric: 'American Drill Abu & Scotchlite', notes: 'Seragam Teknisi Lapangan' },
       { client: 'Machine 1998', category: 'APPAREL', srvId: 'SRV-01', item: 'T-Shirt', qty: 24, print: 'Sablon Plastisol High Density', fabric: 'Cotton Combed 24s Jet Black', notes: 'This Story Wont End' },
-      { client: 'Propundt / Banana', category: 'APPAREL', srvId: 'SRV-07', item: 'Bomber Jacket', qty: 20, print: 'Bordir Woven Emblem Patch', fabric: 'Taslan ZN Water Repellent', notes: 'Riding Jacket' }
+      { client: 'Propundt / Banana', category: 'APPAREL', srvId: 'SRV-02', item: 'Bomber Jacket', qty: 20, print: 'Bordir Woven Emblem Patch', fabric: 'Taslan ZN Water Repellent', notes: 'Riding Jacket' }
     ];
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -891,8 +867,23 @@
         const dbNow = window.DrizzleApp.getDB();
         dbNow.orders.unshift(newOrder);
 
+        // Alokasikan stok bahan & kemasan wajib 1:1 di gudang SCM (Skenario 1)
+        if (serviceMode !== 'DESIGN_ONLY') {
+          window.DrizzleApp.deductOrderMaterials(newOrder);
+        } else {
+          newOrder.materialsDeducted = true;
+          newOrder.readyForProduction = true;
+        }
+
         // 3. Centralized Reactive State Engine: Save and broadcast to all open tabs (Real-Time Sync)
         window.DrizzleApp.saveAndSyncDB(dbNow, `Pesanan baru ${orderId} (${srvName}) berhasil terdaftar di ERP & CRM!`);
+
+        // Update WhatsApp Send Button with pre-filled order details
+        const waText = encodeURIComponent(`Halo Admin Drizzle (+62 895-2295-1860),\nSaya ingin konfirmasi pesanan baru:\n\n*Kode Order:* ${orderId}\n*Nama:* ${name}\n*Organisasi:* ${org || '-'}\n*Layanan:* ${srvName}\n*Jumlah:* ${qty} pcs\n*Total Estimasi:* ${window.DrizzleApp.formatRupiah(totalPrice)}\n*Rincian/Spesifikasi:* ${specsDesc}\n\nMohon konfirmasi instruksi pembayaran & alur produksi. Terima kasih!`);
+        const waSendBtn = document.getElementById('modal-wa-send-btn');
+        if (waSendBtn) {
+          waSendBtn.href = `https://wa.me/6289522951860?text=${waText}`;
+        }
 
         // Show Modal with CRM & Billing Details
         document.getElementById('modal-tracking-code').textContent = orderId;

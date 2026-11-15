@@ -63,8 +63,8 @@
 
       <!-- Navigation -->
       <nav class="hidden md:flex items-center gap-7 text-sm font-medium">
-        <a href="index.html" class="text-muted hover:text-dark transition">Beranda & Katalog</a>
-        <a href="order.html" class="text-muted hover:text-dark transition">Buat Pesanan</a>
+        <a href="index.html" class="text-muted hover:text-dark transition">Beranda &amp; Katalog</a>
+        <a href="order.html" class="text-muted hover:text-dark transition">Pesan Sekarang</a>
         <a href="tracking.html" class="text-muted hover:text-dark transition">Lacak Pesanan</a>
         <a href="admin.html" class="text-brand font-semibold flex items-center gap-1.5 px-3 py-1 rounded-md border border-brand/20 bg-brandLight">
           <span class="w-1.5 h-1.5 rounded-full bg-brand"></span>
@@ -72,12 +72,11 @@
         </a>
       </nav>
 
-      <!-- Multi-Tenant SaaS Badge -->
-      <button type="button" onclick="openTenantModal()" class="flex items-center gap-2 text-xs font-mono text-dark bg-card px-3.5 py-1.5 rounded-full border border-borderCard hover:border-brand transition shadow-sm">
+      <!-- WhatsApp Official Badge -->
+      <a href="https://wa.me/6289522951860" target="_blank" class="flex items-center gap-1.5 text-xs font-mono text-dark bg-card px-3 py-1.5 rounded-full border border-borderCard hover:border-brand transition shadow-sm">
         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-        <span class="font-bold">DrizzleOS SaaS</span>
-        <span class="text-[10px] text-muted hidden sm:inline">[TNT-SOLO-01]</span>
-      </button>
+        <span class="font-bold">WA: +62 895-2295-1860</span>
+      </a>
     </div>
   </header>
 
@@ -99,6 +98,12 @@
           <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
           <span class="font-bold">Live Sync Aktif</span>
         </div>
+        <button onclick="window.DrizzleApp.backupDatabaseJSON()" class="text-xs font-semibold px-3 py-2 bg-sky-50 text-sky-700 border border-sky-200 rounded-lg hover:bg-sky-100 transition shadow-sm flex items-center gap-1.5" title="Unduh cadangan data lengkap dalam format JSON">
+          <span>⬇ Backup (.JSON)</span>
+        </button>
+        <button onclick="resetTransactionData()" class="text-xs font-semibold px-3 py-2 bg-amber-50 text-amber-700 border border-amber-200 rounded-lg hover:bg-amber-100 transition shadow-sm" title="Mulai bersih: kosongkan seluruh transaksi tanpa menghapus katalog &amp; stok">
+          <span>🗑 Reset Transaksi (Mulai Bersih)</span>
+        </button>
         <button onclick="renderAll()" class="text-xs font-semibold px-3.5 py-2 bg-card border border-borderCard rounded-lg hover:border-dark transition shadow-sm flex items-center gap-1.5">
           <span>↻ Segarkan</span>
         </button>
@@ -273,6 +278,18 @@
           </div>
         </div>
 
+      </div>
+
+      <!-- Section: Arsip Pesanan Dibatalkan / Diretur (Skenario 6) -->
+      <div id="kanban-cancelled-section" class="hidden mt-6 p-4 rounded-xl bg-card border border-borderCard">
+        <div class="flex items-center justify-between mb-3 pb-2 border-b border-borderCard">
+          <div class="flex items-center gap-2">
+            <span class="text-sm">⚠️</span>
+            <span class="font-bold text-xs text-dark font-mono uppercase">Arsip Pesanan Dibatalkan &amp; Diretur</span>
+          </div>
+          <span class="text-xs font-mono font-bold text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200" id="count-stage-cancelled">0</span>
+        </div>
+        <div id="kanban-cancelled-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs"></div>
       </div>
     </div>
 
@@ -676,31 +693,49 @@
     </div>
   </div>
 
-  <!-- ==================== MULTI-TENANT MODAL ==================== -->
-  <div id="tenant-modal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-card border border-borderCard rounded-2xl max-w-lg w-full p-6 shadow-2xl space-y-4 text-left">
+  <!-- ==================== MODAL CATAT PEMBAYARAN (FLEKSIBEL) ==================== -->
+  <div id="payment-modal" class="hidden fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-card border border-borderCard rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
       <div class="flex justify-between items-center pb-3 border-b border-borderCard">
         <div>
-          <span class="text-[10px] font-mono text-brand font-bold uppercase tracking-wider block">System Architecture</span>
-          <h3 class="text-lg font-extrabold text-dark">DrizzleOS Multi-Tenant Architecture</h3>
+          <span class="text-[10px] font-mono text-brand font-bold uppercase tracking-wider block">Finance &amp; Buku Kas ERP</span>
+          <h3 class="font-bold text-base text-dark" id="payment-modal-title">Catat Pembayaran Klien</h3>
         </div>
-        <button type="button" onclick="closeTenantModal()" class="text-muted hover:text-dark text-lg font-bold">&times;</button>
-      </div>
-      
-      <div class="space-y-3 text-xs text-muted">
-        <p><strong class="text-dark">Tenant Aktif:</strong> <span class="font-mono text-brand">TNT-DRIZZLE-SOLO-01</span> (Drizzle Project Studio Solo HQ).</p>
-        <p><strong class="text-dark">Fitur Arsitektur Multi-Tenant:</strong></p>
-        <ul class="list-disc pl-5 space-y-1.5 text-[11px]">
-          <li><strong>Relational DB Sandbox:</strong> 6 koleksi relasional terisolasi (Services, Customers, Orders, Materials, PurchaseOrders, FinanceLedger).</li>
-          <li><strong>Mandatory 1:1 Packaging Engine:</strong> Alokasi kemasan otomatis 1:1 per unit apparel/merchandise di kalkulasi Material Requirements Planning (MRP).</li>
-          <li><strong>Integrated Production Workflow:</strong> State machine 5 tahap (DESIGN &rarr; PRINTING &rarr; SEWING &rarr; QC &rarr; SHIPPED).</li>
-          <li><strong>Finance & HPP Ledger:</strong> Pencatatan kas masuk termin DP 50%, pelunasan, pengeluaran vendor makloon, dan margin laba bersih otomatis.</li>
-        </ul>
+        <button onclick="closePaymentModal()" class="text-muted hover:text-dark text-lg font-bold">&times;</button>
       </div>
 
-      <div class="pt-3 border-t border-borderCard flex justify-end">
-        <button type="button" onclick="closeTenantModal()" class="px-4 py-2 bg-dark text-white rounded-lg text-xs font-semibold">
-          Tutup
+      <div id="payment-modal-order-info" class="p-3 bg-canvas rounded-xl border border-borderCard text-xs space-y-1.5 font-mono">
+        <!-- Filled by JS -->
+      </div>
+
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-dark mb-1">Jumlah Pembayaran Diterima (Rp) *</label>
+          <input type="number" id="payment-amount-input" min="0" step="1000" placeholder="Contoh: 500000" class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-sm text-dark font-mono font-bold focus:outline-none focus:border-brand">
+        </div>
+
+        <!-- Quick 1-Click Buttons -->
+        <div class="grid grid-cols-2 gap-2" id="payment-quick-btns">
+          <!-- Filled by JS -->
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-dark mb-1">Catatan Pembayaran (Opsional)</label>
+          <input type="text" id="payment-note-input" placeholder="Contoh: Transfer Bank BCA / Tunai Studio" class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand">
+        </div>
+
+        <div class="p-3 rounded-lg bg-sky-50 border border-sky-200 text-xs text-sky-800">
+          💬 Metode &amp; nominal pembayaran dikonfirmasi bersama klien via WhatsApp: 
+          <a href="https://wa.me/6289522951860" target="_blank" class="font-bold hover:underline">+62 895-2295-1860</a>
+        </div>
+      </div>
+
+      <div class="flex gap-2 pt-2">
+        <button type="button" onclick="confirmPayment()" class="flex-1 bg-brand hover:bg-brandDark text-white font-bold py-2.5 rounded-xl text-xs transition shadow-sm">
+          ✓ Simpan Pembayaran ke Kas ERP
+        </button>
+        <button type="button" onclick="closePaymentModal()" class="px-4 bg-canvas border border-borderCard rounded-xl text-xs text-dark hover:border-dark transition">
+          Batal
         </button>
       </div>
     </div>
@@ -712,10 +747,11 @@
       <div>
         <span class="font-bold text-dark text-sm">Drizzle Project</span>
         <p class="mt-0.5">&copy; 2026 Drizzle Project. All Product Include Packaging. Est. Late 2023.</p>
+        <p class="mt-0.5">📱 WhatsApp Resmi: <a href="https://wa.me/6289522951860" target="_blank" class="text-brand font-semibold hover:underline">+62 895-2295-1860</a></p>
       </div>
       <div class="flex items-center gap-6 font-medium">
-        <a href="index.html" class="hover:text-dark transition">Beranda</a>
-        <a href="order.html" class="hover:text-dark transition">Buat Pesanan</a>
+        <a href="index.html" class="hover:text-dark transition">Beranda &amp; Katalog</a>
+        <a href="order.html" class="hover:text-dark transition">Pesan Sekarang</a>
         <a href="tracking.html" class="hover:text-dark transition">Lacak Pesanan</a>
         <a href="admin.html" class="text-brand font-semibold">Dashboard Admin</a>
       </div>
@@ -800,7 +836,7 @@
       document.getElementById('kpi-pack-status').textContent = `Kemasan 1:1: Poly: ${poly ? poly.currentStock : 0} | Card: ${card ? card.currentStock : 0}`;
 
       // 4. Persentase Margin Keuntungan Bersih
-      const totalExpense = ledger.filter(l => l.txType === 'EXPENSE').reduce((sum, l) => sum + l.amount, 0);
+      const totalExpense = ledger.filter(l => l.txType === 'EXPENSE' || l.txType === 'REFUND').reduce((sum, l) => sum + l.amount, 0);
       const netProfit = totalIncome - totalExpense;
       const netMarginPct = totalIncome > 0 ? Math.round((netProfit / totalIncome) * 100) : 0;
       document.getElementById('kpi-net-margin').textContent = `${netMarginPct >= 0 ? '+' : ''}${netMarginPct}%`;
@@ -821,6 +857,7 @@
       });
 
       const counts = { MENUNGGU_DP: 0, DESIGN: 0, PRINTING: 0, SEWING: 0, QC: 0, SHIPPED: 0 };
+      const cancelledList = [];
 
       orders.forEach(order => {
         const cust = customers.find(c => c.customerId === order.customerId) || {};
@@ -832,6 +869,12 @@
 
         if (!matchSearch) return;
 
+        // Check if cancelled or returned
+        if (order.kanbanStage === 'CANCELLED' || order.kanbanStage === 'RETURNED' || order.cancelled || order.returned) {
+          cancelledList.push({ order, cust, custName });
+          return;
+        }
+
         const stage = stages.includes(order.kanbanStage) ? order.kanbanStage : 'MENUNGGU_DP';
         counts[stage] = (counts[stage] || 0) + 1;
 
@@ -841,37 +884,47 @@
         const card = document.createElement('div');
         card.className = 'bg-card border border-borderCard rounded-xl p-3 shadow-sm space-y-2 hover:border-brand transition text-xs';
         
+        const paidAmount = order.paidAmount || 0;
+        const totalPrice = order.totalPrice || 0;
+        const isFullyPaid = order.paymentStatus === 'LUNAS' || paidAmount >= totalPrice;
+
         let payBadgeColor = 'bg-amber-50 text-amber-700 border-amber-200';
-        if (order.paymentStatus === 'LUNAS') payBadgeColor = 'bg-emerald-50 text-emerald-700 border-emerald-200';
-        else if (order.paymentStatus === 'DP_50_PAID') payBadgeColor = 'bg-sky-50 text-sky-700 border-sky-200';
+        let payStatusText = 'Belum Bayar';
+        if (isFullyPaid) {
+          payBadgeColor = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+          payStatusText = 'LUNAS';
+        } else if (paidAmount > 0) {
+          payBadgeColor = 'bg-sky-50 text-sky-700 border-sky-200';
+          payStatusText = `DP: ${window.DrizzleApp.formatRupiah(paidAmount)}`;
+        }
 
         const isDesignOnly = order.serviceMode === 'DESIGN_ONLY';
         const modeBadge = isDesignOnly 
           ? `<span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-sky-50 text-sky-700 font-bold border border-sky-200" title="Layanan Desain (Bypass Sablon/Jahit)">DESAIN ONLY</span>`
           : `<span class="text-[9px] font-mono px-1.5 py-0.2 rounded bg-canvas text-muted border border-borderCard">${order.serviceMode || 'PROD'}</span>`;
 
-        // Payment Action Button Bar
+        // Payment Action Button Bar (Flexible Payment Input)
         let paymentActionHtml = '';
-        if (order.paymentStatus === 'UNPAID') {
+        if (isFullyPaid) {
           paymentActionHtml = `
-            <button onclick="verifyPayment('${order.orderId}', 'DP_50_PAID')" class="w-full py-1 px-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-mono font-bold text-[10px] shadow-sm flex items-center justify-center gap-1 transition">
-              <span>💳 Verifikasi DP 50%</span>
-              <span class="opacity-90 font-normal">(${window.DrizzleApp.formatRupiah(order.dpAmount)})</span>
-            </button>
+            <div class="w-full py-1 px-2 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 text-center font-mono font-bold text-[10px]">
+              ✓ LUNAS (${window.DrizzleApp.formatRupiah(paidAmount || totalPrice)})
+            </div>
           `;
-        } else if (order.paymentStatus === 'DP_50_PAID') {
-          const remaining = Math.max(0, order.totalPrice - (order.paidAmount || order.dpAmount));
+        } else if (paidAmount > 0) {
+          const sisa = Math.max(0, totalPrice - paidAmount);
           paymentActionHtml = `
-            <button onclick="verifyPayment('${order.orderId}', 'LUNAS')" class="w-full py-1 px-2 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white font-mono font-bold text-[10px] shadow-sm flex items-center justify-center gap-1 transition">
-              <span>💰 Verifikasi Pelunasan 50%</span>
-              <span class="opacity-90 font-normal">(${window.DrizzleApp.formatRupiah(remaining)})</span>
+            <button onclick="openPaymentModal('${order.orderId}')" class="w-full py-1 px-2 rounded-lg bg-sky-600 hover:bg-sky-700 text-white font-mono font-bold text-[10px] shadow-sm flex items-center justify-center gap-1 transition">
+              <span>💳 Catat Pembayaran</span>
+              <span class="opacity-90 font-normal">(Sisa ${window.DrizzleApp.formatRupiah(sisa)})</span>
             </button>
           `;
         } else {
           paymentActionHtml = `
-            <div class="w-full py-0.5 px-2 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 text-center font-mono font-bold text-[10px]">
-              ✓ LUNAS 100% (Kas Masuk)
-            </div>
+            <button onclick="openPaymentModal('${order.orderId}')" class="w-full py-1 px-2 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-mono font-bold text-[10px] shadow-sm flex items-center justify-center gap-1 transition">
+              <span>💳 Catat Pembayaran</span>
+              <span class="opacity-90 font-normal">(${window.DrizzleApp.formatRupiah(totalPrice)})</span>
+            </button>
           `;
         }
 
@@ -904,7 +957,7 @@
             <span class="font-mono font-bold text-dark">${order.orderId}</span>
             <div class="flex items-center gap-1">
               ${modeBadge}
-              <span class="text-[9px] font-mono px-1.5 py-0.2 rounded border ${payBadgeColor}">${order.paymentStatus}</span>
+              <span class="text-[9px] font-mono px-1.5 py-0.2 rounded border ${payBadgeColor}">${payStatusText}</span>
             </div>
           </div>
 
@@ -920,19 +973,21 @@
           </div>
 
           <div class="pt-1.5 border-t border-borderCard flex justify-between items-center text-[11px]">
-            <span class="font-mono font-bold text-brand">${window.DrizzleApp.formatRupiah(order.totalPrice)}</span>
+            <span class="font-mono font-bold text-brand">${window.DrizzleApp.formatRupiah(totalPrice)}</span>
             <button onclick="openSPKModal('${order.orderId}')" class="text-[10px] font-mono underline text-muted hover:text-dark">SPK 🖨️</button>
           </div>
 
           <!-- Action Navigation Buttons Bar -->
-          <div class="pt-1.5 border-t border-borderCard flex items-center justify-between gap-1">
+          <div class="pt-1.5 border-t border-borderCard flex items-center justify-between gap-1 flex-wrap">
             <div class="flex items-center gap-1">
               ${prevStage ? `<button onclick="advanceStage('${order.orderId}', '${prevStage}')" title="Kembalikan ke ${prevStage}" class="px-2 py-0.5 rounded bg-canvas border border-borderCard hover:bg-borderCard text-muted hover:text-dark font-mono font-bold text-[10px]">&larr;</button>` : ''}
               ${nextStage ? `<button onclick="advanceStage('${order.orderId}', '${nextStage}')" title="Majukan ke ${nextStage}" class="px-2 py-0.5 rounded bg-brand text-white hover:bg-brandDark font-mono font-bold text-[10px] flex items-center gap-0.5">${nextLabel}</button>` : ''}
             </div>
             
             <div class="flex items-center gap-1">
-              <button onclick="openResiModal('${order.orderId}')" title="Input Resi Ekspedisi" class="px-2 py-0.5 rounded bg-canvas border border-borderCard text-[10px] text-muted hover:text-dark">Resi</button>
+              <button onclick="openResiModal('${order.orderId}')" title="Input Resi Ekspedisi" class="px-1.5 py-0.5 rounded bg-canvas border border-borderCard text-[10px] text-muted hover:text-dark">Resi</button>
+              <button onclick="openCancelModal('${order.orderId}')" title="Batalkan Pesanan & Kembalikan Stok" class="px-1.5 py-0.5 rounded bg-rose-50 border border-rose-200 text-[10px] text-rose-700 hover:bg-rose-100 font-bold">Batal</button>
+              <button onclick="openReturnModal('${order.orderId}')" title="Catat Retur Barang" class="px-1.5 py-0.5 rounded bg-amber-50 border border-amber-200 text-[10px] text-amber-700 hover:bg-amber-100 font-bold">Retur</button>
             </div>
           </div>
         `;
@@ -946,6 +1001,40 @@
         const countEl = document.getElementById(`count-stage-${st.toLowerCase()}`);
         if (countEl) countEl.textContent = counts[st] || 0;
       });
+
+      // Render Cancelled & Returned Section
+      const cancelledSection = document.getElementById('kanban-cancelled-section');
+      const cancelledListEl = document.getElementById('kanban-cancelled-list');
+      const countCancelledEl = document.getElementById('count-stage-cancelled');
+
+      if (cancelledSection && cancelledListEl) {
+        if (cancelledList.length > 0) {
+          cancelledSection.classList.remove('hidden');
+          if (countCancelledEl) countCancelledEl.textContent = cancelledList.length;
+          cancelledListEl.innerHTML = '';
+          cancelledList.forEach(({ order, cust, custName }) => {
+            const isCancelled = order.kanbanStage === 'CANCELLED' || order.cancelled;
+            const badgeColor = isCancelled ? 'bg-rose-50 text-rose-700 border-rose-200' : 'bg-amber-50 text-amber-700 border-amber-200';
+            const statusLabel = isCancelled ? 'DIBATALKAN' : 'DIRETUR';
+            const reason = isCancelled ? order.cancelReason : order.returnReason;
+
+            const div = document.createElement('div');
+            div.className = 'p-3 bg-canvas border border-borderCard rounded-xl space-y-1.5';
+            div.innerHTML = `
+              <div class="flex justify-between items-start">
+                <span class="font-mono font-bold text-dark">${order.orderId}</span>
+                <span class="text-[9px] font-mono px-1.5 py-0.5 rounded border font-bold ${badgeColor}">${statusLabel}</span>
+              </div>
+              <div class="font-bold text-dark text-xs">${custName} <span class="text-[10px] text-muted font-normal">[${cust.organization || 'Umum'}]</span></div>
+              <span class="text-[11px] text-muted block">${order.serviceName || order.serviceId} (${order.qty} pcs)</span>
+              <p class="text-[10px] text-muted italic bg-card p-1.5 rounded border border-borderCard/60">Alasan: ${reason || '-'}</p>
+            `;
+            cancelledListEl.appendChild(div);
+          });
+        } else {
+          cancelledSection.classList.add('hidden');
+        }
+      }
     }
 
     function advanceStage(orderId, targetStage) {
@@ -953,25 +1042,96 @@
       renderAll();
     }
 
-    function verifyPayment(orderId, targetStatus) {
+    // Modal Catat Pembayaran Fleksibel (Skenario 4)
+    let currentPaymentOrderId = null;
+    function openPaymentModal(orderId) {
+      currentPaymentOrderId = orderId;
       const db = window.DrizzleApp.getDB();
-      const order = db.orders.find(o => o.orderId === orderId);
+      const order = (db.orders || []).find(o => o.orderId === orderId);
       if (!order) return;
 
-      if (targetStatus === 'DP_50_PAID') {
-        const dpAmountStr = window.DrizzleApp.formatRupiah(order.dpAmount);
-        if (confirm(`Verifikasi penerimaan pembayaran DP 50% sebesar ${dpAmountStr} untuk pesanan ${orderId} (${order.serviceName})?\n\n✓ Mencatat transaksi kas masuk (INCOME) di Buku Kas ERP\n✓ Mengalokasikan bahan baku & rasio kemasan 1:1 di SCM\n✓ Memajukan tiket ke antrean Desain & Brief jika sebelumnya Menunggu DP`)) {
-          window.DrizzleApp.updatePaymentStatus(orderId, 'DP_50_PAID');
-          renderAll();
-        }
-      } else if (targetStatus === 'LUNAS') {
-        const remaining = Math.max(0, order.totalPrice - (order.paidAmount || order.dpAmount));
-        const remStr = window.DrizzleApp.formatRupiah(remaining);
-        if (confirm(`Verifikasi pelunasan 100% sebesar ${remStr} untuk pesanan ${orderId} (${order.serviceName})?\n\n✓ Mencatat sisa penerimaan kas masuk (INCOME) di Buku Kas ERP\n✓ Status pembayaran menjadi LUNAS\n✓ Mengaktifkan otorisasi pengiriman & input resi kargo`)) {
-          window.DrizzleApp.updatePaymentStatus(orderId, 'LUNAS');
+      const paid = order.paidAmount || 0;
+      const total = order.totalPrice || 0;
+      const remaining = Math.max(0, total - paid);
+      const dp50 = Math.round(total * 0.5);
+
+      document.getElementById('payment-modal-title').textContent = `Catat Pembayaran — ${order.orderId}`;
+      document.getElementById('payment-modal-order-info').innerHTML = `
+        <div class="flex justify-between"><span class="text-muted">Klien:</span><span class="font-bold text-dark">${order.serviceName || order.serviceId} (${order.qty} pcs)</span></div>
+        <div class="flex justify-between"><span class="text-muted">Total Nilai Pesanan:</span><span class="font-bold text-dark">${window.DrizzleApp.formatRupiah(total)}</span></div>
+        <div class="flex justify-between"><span class="text-muted">Sudah Dibayar:</span><span class="font-bold text-emerald-600">${window.DrizzleApp.formatRupiah(paid)}</span></div>
+        <div class="flex justify-between font-bold border-t border-borderCard pt-1"><span class="text-dark">Sisa Tagihan:</span><span class="text-brand">${window.DrizzleApp.formatRupiah(remaining)}</span></div>
+      `;
+
+      // Quick 1-click buttons
+      const quickContainer = document.getElementById('payment-quick-btns');
+      quickContainer.innerHTML = `
+        <button type="button" onclick="document.getElementById('payment-amount-input').value=${dp50}" class="py-1.5 px-2 bg-canvas border border-borderCard rounded-lg hover:border-brand text-xs font-mono font-bold text-dark transition text-center">
+          DP 50%<br><span class="text-brand text-[11px]">${window.DrizzleApp.formatRupiah(dp50)}</span>
+        </button>
+        <button type="button" onclick="document.getElementById('payment-amount-input').value=${remaining}" class="py-1.5 px-2 bg-canvas border border-borderCard rounded-lg hover:border-brand text-xs font-mono font-bold text-dark transition text-center">
+          Pelunasan<br><span class="text-emerald-600 text-[11px]">${window.DrizzleApp.formatRupiah(remaining)}</span>
+        </button>
+      `;
+
+      document.getElementById('payment-amount-input').value = remaining > 0 ? (paid === 0 ? dp50 : remaining) : 0;
+      document.getElementById('payment-note-input').value = '';
+      document.getElementById('payment-modal').classList.remove('hidden');
+    }
+
+    function closePaymentModal() {
+      document.getElementById('payment-modal').classList.add('hidden');
+      currentPaymentOrderId = null;
+    }
+
+    function confirmPayment() {
+      const amount = parseInt(document.getElementById('payment-amount-input').value, 10) || 0;
+      const note = document.getElementById('payment-note-input').value.trim();
+      if (amount <= 0) {
+        alert('Mohon masukkan nominal pembayaran yang valid (lebih dari 0).');
+        return;
+      }
+      if (window.DrizzleApp && window.DrizzleApp.recordPayment) {
+        window.DrizzleApp.recordPayment(currentPaymentOrderId, amount, note);
+        closePaymentModal();
+        renderAll();
+      }
+    }
+
+    // Modal Pembatalan & Retur Pesanan (Skenario 6)
+    function openCancelModal(orderId) {
+      const reason = prompt(`Masukkan alasan pembatalan pesanan ${orderId}:\n(Stok bahan di gudang SCM akan otomatis dikembalikan, dan jika sudah ada pembayaran akan dicatat REFUND di kas ERP)`);
+      if (reason !== null) {
+        if (window.DrizzleApp && window.DrizzleApp.cancelOrder) {
+          window.DrizzleApp.cancelOrder(orderId, reason.trim() || 'Dibatalkan oleh Admin');
           renderAll();
         }
       }
+    }
+
+    function openReturnModal(orderId) {
+      const reason = prompt(`Masukkan alasan retur pesanan ${orderId}:\n(Barang retur akan dicatat di gudang SCM)`);
+      if (reason !== null) {
+        const refundStr = prompt('Masukkan nominal refund yang dikembalikan ke pelanggan (Rp):\n(Isi 0 jika tidak ada pengembalian dana)');
+        const refundAmount = parseInt(refundStr, 10) || 0;
+        if (window.DrizzleApp && window.DrizzleApp.returnOrder) {
+          window.DrizzleApp.returnOrder(orderId, reason.trim() || 'Retur oleh Klien', refundAmount);
+          renderAll();
+        }
+      }
+    }
+
+    function resetTransactionData() {
+      if (confirm('Apakah Anda yakin ingin mengosongkan seluruh data transaksi (Pesanan, Pelanggan, PO, dan Buku Kas)?\n\n✓ Master data layanan (5 produk) dan inventaris stok gudang tetap utuh.\n✓ Mulai dari 0 pesanan siap pakai operasional nyata.')) {
+        if (window.DrizzleApp && window.DrizzleApp.resetTransactionData) {
+          window.DrizzleApp.resetTransactionData();
+          renderAll();
+        }
+      }
+    }
+
+    function verifyPayment(orderId, targetStatus) {
+      openPaymentModal(orderId);
     }
 
     // Resi Modal
@@ -991,7 +1151,7 @@
       const orderId = document.getElementById('resi-order-id').value;
       const carrier = document.getElementById('resi-carrier').value;
       const resi = document.getElementById('resi-number').value.trim();
-      window.DrizzleApp.updateShippingInfo(orderId, resi, carrier);
+      window.DrizzleApp.updateShippingInfo(orderId, carrier, resi);
       closeResiModal();
       renderAll();
     });
@@ -1362,9 +1522,10 @@
 
       // Summary
       const totalIncome = ledger.filter(l => l.txType === 'INCOME').reduce((sum, l) => sum + l.amount, 0);
-      const totalExpense = ledger.filter(l => l.txType === 'EXPENSE').reduce((sum, l) => sum + l.amount, 0);
+      const totalExpense = ledger.filter(l => l.txType === 'EXPENSE' || l.txType === 'REFUND').reduce((sum, l) => sum + l.amount, 0);
       const netCash = totalIncome - totalExpense;
       const totalReceivable = orders.reduce((sum, o) => {
+        if (o.kanbanStage === 'CANCELLED' || o.kanbanStage === 'RETURNED' || o.cancelled || o.returned) return sum;
         const paid = o.paidAmount || (o.paymentStatus === 'LUNAS' ? o.totalPrice : (o.paymentStatus === 'DP_50_PAID' ? o.dpAmount : 0));
         return sum + Math.max(0, o.totalPrice - paid);
       }, 0);
@@ -1382,9 +1543,13 @@
         tr.className = 'hover:bg-canvas/50 transition';
 
         const isIncome = l.txType === 'INCOME';
-        const typeBadge = isIncome 
-          ? `<span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-mono font-bold border border-emerald-200 text-[10px]">KAS MASUK</span>`
-          : `<span class="px-2 py-0.5 rounded bg-rose-50 text-rose-700 font-mono font-bold border border-rose-200 text-[10px]">KAS KELUAR</span>`;
+        const isRefund = l.txType === 'REFUND';
+        let typeBadge = `<span class="px-2 py-0.5 rounded bg-rose-50 text-rose-700 font-mono font-bold border border-rose-200 text-[10px]">KAS KELUAR</span>`;
+        if (isIncome) {
+          typeBadge = `<span class="px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-mono font-bold border border-emerald-200 text-[10px]">KAS MASUK</span>`;
+        } else if (isRefund) {
+          typeBadge = `<span class="px-2 py-0.5 rounded bg-amber-50 text-amber-700 font-mono font-bold border border-amber-200 text-[10px]">REFUND / RETUR</span>`;
+        }
 
         tr.innerHTML = `
           <td class="px-4 py-3 font-mono font-bold text-dark">${l.txId}</td>
