@@ -60,15 +60,25 @@ order.html ──[submit]──► app.js: saveAndSyncDB()
          renderAll()                        renderOrderView()
 ```
 
-### 5 Rantai Trigger End-to-End
+### 6 Rantai Skenario Transaksi End-to-End
 
-| # | Trigger | Efek Otomatis |
-| :- | :--- | :--- |
-| 1 | **CRM Order Baru** (`order.html` submit) | Buat tiket `orders`, perbarui/buat profil `customers`, kartu masuk kolom `MENUNGGU_DP` di Kanban |
-| 2 | **ERP Verifikasi DP 50%** | Catat `INCOME` ke `financeLedger`, jalankan MRP (`deductOrderMaterials`), potong stok + kemasan 1:1, auto-PO jika kurang |
-| 3 | **SCM Terima Barang PO** | Stok gudang bertambah, catat `EXPENSE`, hitung ulang `hppTotal` order, lepas blokir `waitingPO` |
-| 4 | **ERP Geser Tahap Kanban** | Tambah log timestamp ke `historyLogs`, stepper & timeline `tracking.html` bergerak real-time |
-| 5 | **ERP Verifikasi Lunas + Input Resi** | Status `SHIPPED`, nomor resi live di `tracking.html`, order selesai |
+| Skenario | Trigger Aksi | Efek Otomatis Lintas Modul |
+| :--- | :--- | :--- |
+| **Skenario 1** | **Customer Buat Order** (`order.html`) | ID `DRZ-2026-XXX` terbit, profil `customers` terdeteksi/dibuat (auto-segmen), alokasi stok SCM + kemasan wajib 1:1, dan pesan konfirmasi WhatsApp siap kirim ke **+62 895-2295-1860**. |
+| **Skenario 2** | **Stok Kritis -> PO Supplier** (`admin.html`) | Notifikasi stok material `<= minThreshold`, admin terbitkan `PO-2026-XXX`, badge `Menunggu Stok PO` aktif di Kanban, riwayat tercatat di pelacakan klien. |
+| **Skenario 3** | **Terima Barang PO** (`admin.html`) | Klik *Barang Diterima* menambah stok gudang SCM, mencatat `EXPENSE` di buku kas ERP, dan mengubah status tiket menjadi siap produksi. |
+| **Skenario 4** | **Catat Pembayaran Fleksibel** (`admin.html`) | Input nominal pembayaran fleksibel (jalan pintas DP 50% / Pelunasan), mencatat `INCOME` di kas ERP, mengunci kesiapan produksi, memajukan tahap Kanban dari `MENUNGGU_DP` ke `DESIGN`. |
+| **Skenario 5** | **Update Progres & Pengiriman** (`admin.html`) | Pergeseran tahap Kanban (`DESIGN` → `PRINTING` → `SEWING` → `QC` → `SHIPPED` + resi) otomatis menggerakkan stepper 6 tahap dan timeline di `tracking.html` secara real-time. Mode `DESIGN_ONLY` otomatis melewati tahap sablon/jahit. |
+| **Skenario 6** | **Pembatalan & Retur Pesanan** (`admin.html`) | • **Batal:** Mengembalikan stok bahan baku & kemasan 1:1 ke gudang SCM, mencatat `REFUND` di kas ERP jika ada pembayaran, status `CANCELLED`.<br>• **Retur:** Mengembalikan kemasan ke gudang SCM, mencatat penyesuaian/refund di ERP, status `RETURNED`. |
+
+---
+
+## Kontak & Layanan Resmi Drizzle Project
+
+- **WhatsApp Resmi:** [+62 895-2295-1860](https://wa.me/6289522951860)
+- **Lokasi Studio:** Surakarta (Solo), Jawa Tengah
+- **Master Layanan:** Kaos Cotton Combed 24s, Hoodie/Crewneck Fleece, Kemeja PDH/Workshirt American Drill, Totebag/Merchandise Custom, & Jasa Desain Grafis/Mockup.
+- **Kesiapan Data:** Clean slate operasional nyata (0 transaksi awal, tombol reset transaksi & backup JSON tersedia).
 
 ---
 
