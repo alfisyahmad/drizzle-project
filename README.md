@@ -16,7 +16,7 @@ Sistem manajemen operasional terintegrasi berbasis web untuk **Drizzle Project**
 
 ## Struktur Halaman & Arsitektur Database
 
-### Antarmuka (Warm Studio Light Theme)
+### Antarmuka
 
 | Halaman | Fungsi |
 | :--- | :--- |
@@ -24,8 +24,6 @@ Sistem manajemen operasional terintegrasi berbasis web untuk **Drizzle Project**
 | `order.html` | Form pemesanan mandiri — Matriks ukuran, brief, kalkulasi DP |
 | `tracking.html` | Portal lacak publik — Stepper 6 tahap & timeline historyLogs |
 | `admin.html` | Dasbor terpadu — Kanban, CRM, SCM, Buku Kas, KPI Eksekutif |
-
-> **Palet Warna:** Canvas `#FAF7F4` · Card `#FFFFFF` · Brand Orange `#FF791D` · Dark Charcoal `#33302D`
 
 ### Skema Database (`drizzle_sim_db`)
 
@@ -64,7 +62,7 @@ order.html ──[submit]──► app.js: saveAndSyncDB()
 
 | Skenario | Trigger Aksi | Efek Otomatis Lintas Modul |
 | :--- | :--- | :--- |
-| **Skenario 1** | **Customer Buat Order** (`order.html`) | ID `DRZ-2026-XXX` terbit, profil `customers` terdeteksi/dibuat (auto-segmen), alokasi stok SCM + kemasan wajib 1:1, dan pesan konfirmasi WhatsApp siap kirim ke **+62 895-2295-1860**. |
+| **Skenario 1** | **Customer Buat Order** (`order.html`) | ID `DRZ-2026-XXX` terbit, profil `customers` terdeteksi/dibuat (auto-segmen), alokasi stok SCM + kemasan wajib 1:1, dan pesan konfirmasi WhatsApp siap dikirim ke admin. |
 | **Skenario 2** | **Stok Kritis -> PO Supplier** (`admin.html`) | Notifikasi stok material `<= minThreshold`, admin terbitkan `PO-2026-XXX`, badge `Menunggu Stok PO` aktif di Kanban, riwayat tercatat di pelacakan klien. |
 | **Skenario 3** | **Terima Barang PO** (`admin.html`) | Klik *Barang Diterima* menambah stok gudang SCM, mencatat `EXPENSE` di buku kas ERP, dan mengubah status tiket menjadi siap produksi. |
 | **Skenario 4** | **Catat Pembayaran Fleksibel** (`admin.html`) | Input nominal pembayaran fleksibel (jalan pintas DP 50% / Pelunasan), mencatat `INCOME` di kas ERP, mengunci kesiapan produksi, memajukan tahap Kanban dari `MENUNGGU_DP` ke `DESIGN`. |
