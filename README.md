@@ -1,6 +1,6 @@
 # Drizzle Project — Integrated CRM, SCM & ERP System (DrizzleOS)
 
-Sistem manajemen operasional terintegrasi berbasis web untuk **Drizzle Project** (vendor *merchandise*, konveksi *apparel custom*, dan *creative studio* di Surakarta, Solo). Seluruh modul terhubung secara *real-time* menggunakan satu database relasional di browser (`localStorage`: `drizzle_sim_db`).
+Sistem manajemen operasional terintegrasi berbasis web untuk **Drizzle Project** (vendor *merchandise*, konveksi *apparel custom*, dan *creative studio* di Surakarta). Seluruh modul terhubung secara *real-time* menggunakan satu database relasional di browser (`localStorage`: `drizzle_sim_db`).
 
 ---
 
