@@ -106,3 +106,15 @@ drizzle-project/
 - **Tipografi:** Inter & JetBrains Mono (`tabular-nums`)
 - **State Management:** Browser `localStorage` + `CustomEvent` + `window.storage`
 - **Hosting & CI/CD:** GitHub + Cloudflare Pages (*auto-deploy on push*)
+
+---
+
+## Tim Pengembang (Kelompok 7)
+
+| Anggota Tim | GitHub / Kontak |
+| :--- | :--- |
+| **Alfian Syahmad** | [@alfisyahmad](https://github.com/alfisyahmad) &bull; `alfisyahmad12@gmail.com` |
+| **Muhammad Rozaki** | [@muhammadrozaki](https://github.com/muhammadrozaki) &bull; `hammadzaky8@gmail.com` |
+| **Dewa Arungjiwa** | [@Dewaarungjiwa](https://github.com/Dewaarungjiwa) &bull; `dewaarungjiwa04@gmail.com` |
+| **Brocklyn** | [@Brocklyn2205](https://github.com/Brocklyn2205) &bull; `araraa0202@gmail.com` |
+
