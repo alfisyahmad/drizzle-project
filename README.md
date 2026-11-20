@@ -110,11 +110,9 @@ drizzle-project/
 ---
 
 ## Tim Pengembang (Kelompok 7)
+* **Alfi Syahrin Ramadhan** (12010225140068) — *Full-Stack Development, Database & Deployment*
+* **Muhammad Rozaki** (12010225140078) — *System Analysis & Business Process*
+* **Dewa Arungjiwa Mahardika** (12010225140093) — *UI/UX Design & Quality Assurance*
+* **Brocklyn Diga Pratama** (12010225140080) — *Documentation & Data Modeling*
 
-| Anggota Tim | GitHub / Kontak |
-| :--- | :--- |
-| **Alfi Syahmad** | [@alfisyahmad](https://github.com/alfisyahmad) • alfisyahmad12@gmail.com |
-| **Muhammad Rozaki** | [@muhammadrozaki](https://github.com/muhammadrozaki) • hammadzaky8@gmail.com |
-| **Dewa Arungjiwa** | [@Dewaarungjiwa](https://github.com/Dewaarungjiwa) • dewaarungjiwa04@gmail.com |
-| **Brocklyn** | [@Brocklyn2205](https://github.com/Brocklyn2205) • araraa0202@gmail.com |
 
