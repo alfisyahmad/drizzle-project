@@ -787,8 +787,10 @@
 
     function resetDatabaseToDefault() {
       if (confirm('Apakah Anda yakin ingin mereset seluruh database DrizzleOS ke kondisi bersih (mulai dari 0 transaksi)?')) {
+        if (window.DrizzleApp && window.DrizzleApp.purgeLegacyCaches) {
+          window.DrizzleApp.purgeLegacyCaches();
+        }
         localStorage.removeItem('drizzle_sim_db_clean_v1');
-        localStorage.removeItem('drizzle_sim_db'); // purge legacy key too
         window.location.reload();
       }
     }

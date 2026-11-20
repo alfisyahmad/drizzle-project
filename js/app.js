@@ -8,7 +8,55 @@
  */
 
 const DRIZZLE_SIM_DB_KEY = 'drizzle_sim_db_clean_v1';
-const DRIZZLE_LEGACY_KEYS = ['drizzle_sim_db']; // Old keys to auto-purge on init
+const CURRENT_SCHEMA_VERSION = 'v3.1.0';
+
+// Daftar seluruh key legacy/usang yang dibersihkan otomatis dari localStorage
+const DRIZZLE_LEGACY_KEYS = [
+  'drizzle_sim_db',
+  'drizzle_integrated_db',
+  'drizzle_db',
+  'drizzle_orders',
+  'drizzle_customers',
+  'drizzle_materials',
+  'drizzle_finance',
+  'drizzle_pos',
+  'drizzle_app_db',
+  'drizzle_sim_db_v1',
+  'drizzle_sim_db_v2',
+  'drizzle_state',
+  'drizzle_cache'
+];
+
+/**
+ * Pembersih Cache & Key Usang Otomatis:
+ * Menghapus semua key localStorage versi lama/duplikat dan mempertahankan hanya 1 key aktif
+ */
+function purgeLegacyCaches() {
+  if (typeof window === 'undefined' || !window.localStorage) return;
+  try {
+    // 1. Bersihkan key legacy eksplisit
+    DRIZZLE_LEGACY_KEYS.forEach(oldKey => {
+      if (localStorage.getItem(oldKey) !== null) {
+        localStorage.removeItem(oldKey);
+        console.info(`[DrizzleOS] Legacy key '${oldKey}' dihapus otomatis.`);
+      }
+    });
+
+    // 2. Pindai dan bersihkan key ber-prefix 'drizzle_' lainnya yang bukan versi aktif
+    for (let i = localStorage.length - 1; i >= 0; i--) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith('drizzle_') && key !== DRIZZLE_SIM_DB_KEY) {
+        localStorage.removeItem(key);
+        console.info(`[DrizzleOS] Cache usang '${key}' dihapus otomatis.`);
+      }
+    }
+  } catch (err) {
+    console.warn('[DrizzleOS] Gagal membersihkan cache lama:', err);
+  }
+}
+
+// Jalankan auto-purge segera saat script dimuat
+purgeLegacyCaches();
 
 // 1. TENANT CONFIGURATION (Multi-Tenant SaaS Ready)
 const DEFAULT_TENANT_CONFIG = {
@@ -22,12 +70,12 @@ const DEFAULT_TENANT_CONFIG = {
   contactWALink: 'https://wa.me/6289522951860',
   contactEmail: 'drizzlethelabel@gmail.com',
   contactIG: '@drizzleproject',
-  studioLocation: 'Surakarta (Solo), Jawa Tengah',
+  studioLocation: 'Surakarta, Jawa Tengah',
   defaultPackagingRatio: 1.0, // 1:1 Rule
   defaultDpPercentage: 0.5,   // 50% DP (default, now flexible)
   currency: 'IDR',
   activeTheme: 'warm-studio',
-  version: 'DrizzleOS v3.0 SaaS Multi-Tenant'
+  version: 'DrizzleOS v3.1 SaaS Multi-Tenant'
 };
 
 // 2. MASTER KATALOG LAYANAN (5 Layanan Utama Siap Pakai)
@@ -249,20 +297,14 @@ function generateNextTxId(providedDb = null) {
 
 // Get Database from localStorage (or initialize with master data only — NO transaction data)
 function getDB() {
-  // Auto-purge legacy localStorage keys so old dummy data is wiped from the browser automatically
-  if (typeof window !== 'undefined' && window.localStorage) {
-    DRIZZLE_LEGACY_KEYS.forEach(oldKey => {
-      if (localStorage.getItem(oldKey) !== null) {
-        localStorage.removeItem(oldKey);
-        console.info(`[DrizzleOS] Legacy key '${oldKey}' dihapus otomatis.`);
-      }
-    });
-  }
+  // Jalankan pembersihan cache & key versi lama setiap getDB dipanggil
+  purgeLegacyCaches();
 
   const raw = localStorage.getItem(DRIZZLE_SIM_DB_KEY);
   if (!raw) {
     // First run: seed only master data, all transaction collections start EMPTY
     const initData = {
+      schemaVersion: CURRENT_SCHEMA_VERSION,
       tenantConfig: DEFAULT_TENANT_CONFIG,
       services: INITIAL_SERVICES,
       materials: JSON.parse(JSON.stringify(INITIAL_MATERIALS)), // deep clone to protect defaults
@@ -277,6 +319,12 @@ function getDB() {
   try {
     const data = JSON.parse(raw);
     let changed = false;
+
+    // Pengecekan versi skema otomatis
+    if (data.schemaVersion !== CURRENT_SCHEMA_VERSION) {
+      data.schemaVersion = CURRENT_SCHEMA_VERSION;
+      changed = true;
+    }
 
     // Ensure tenantConfig exists
     if (!data.tenantConfig) {
@@ -308,6 +356,7 @@ function getDB() {
     console.error('Error parsing drizzle_sim_db_clean_v1:', e);
     // Corrupt data: re-initialize with clean slate
     const initData = {
+      schemaVersion: CURRENT_SCHEMA_VERSION,
       tenantConfig: DEFAULT_TENANT_CONFIG,
       services: INITIAL_SERVICES,
       materials: JSON.parse(JSON.stringify(INITIAL_MATERIALS)),
@@ -1193,6 +1242,8 @@ window.DrizzleApp = {
   resetDB,
   resetTransactionData,
   backupDatabaseJSON,
+  purgeLegacyCaches,
+  schemaVersion: CURRENT_SCHEMA_VERSION,
 
   // Formatting & Helpers
   formatRupiah,
