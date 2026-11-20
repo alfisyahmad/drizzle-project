@@ -86,6 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Main Lookup Function (Order ID or WhatsApp Number)
   let currentTrackQuery = '';
+  let currentActiveOrderId = '';
   window.lookupTracking = function(rawQuery) {
     const query = (rawQuery || '').trim();
     currentTrackQuery = query;
@@ -106,11 +107,19 @@ document.addEventListener('DOMContentLoaded', () => {
     const customer = result.customer || {};
     const allOrders = result.allOrders || [result.activeOrder];
 
+    // Determine active order to display (preserve selection in multi-order view)
+    let displayOrder = result.activeOrder;
+    if (currentActiveOrderId) {
+      const match = allOrders.find(o => o.orderId === currentActiveOrderId);
+      if (match) displayOrder = match;
+    }
+    currentActiveOrderId = displayOrder.orderId;
+
     // Render Multi-Orders Navigation if client has more than 1 order
-    renderMultiOrdersNav(allOrders, result.activeOrder.orderId, customer);
+    renderMultiOrdersNav(allOrders, displayOrder.orderId, customer);
 
     // Render the active order details
-    renderOrderView(result.activeOrder, customer);
+    renderOrderView(displayOrder, customer);
   };
 
   // Real-Time Reactive Sync Listener (Cross-tab and in-tab live updates)
@@ -118,6 +127,15 @@ document.addEventListener('DOMContentLoaded', () => {
     renderSampleChips();
     if (currentTrackQuery) {
       lookupTracking(currentTrackQuery);
+    }
+  });
+
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'drizzle_sim_db_clean_v1') {
+      renderSampleChips();
+      if (currentTrackQuery) {
+        lookupTracking(currentTrackQuery);
+      }
     }
   });
 
@@ -150,6 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
         : 'px-3 py-1.5 rounded-lg text-xs font-mono font-bold bg-card text-dark border border-borderCard hover:border-brand transition shadow-sm';
       btn.textContent = `${ord.orderId} (${ord.serviceName || ord.serviceId})`;
       btn.addEventListener('click', () => {
+        currentActiveOrderId = ord.orderId;
         renderMultiOrdersNav(orders, ord.orderId, customer);
         renderOrderView(ord, customer);
       });
@@ -158,6 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function renderOrderView(order, customer) {
+    currentActiveOrderId = order.orderId;
     // Fill Summary Cards
     const codeEl = document.getElementById('res-code');
     if (codeEl) codeEl.textContent = order.orderId;

@@ -147,8 +147,8 @@
               <input type="text" id="cust-name" required placeholder="Contoh: xxxxx" class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand">
             </div>
             <div>
-              <label class="block text-xs font-semibold text-dark mb-1">Nama Organisasi / Komunitas / Brand *</label>
-              <input type="text" id="cust-org" required placeholder="Contoh: xxxxx" class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand">
+              <label class="block text-xs font-semibold text-dark mb-1">Nama Organisasi / Komunitas / Kampus <span class="text-muted font-normal">(Opsional jika perorangan)</span></label>
+              <input type="text" id="cust-org" placeholder="Contoh: BEM FT UNS, SMANKRAPFANS, dll. (Kosongkan jika perorangan)" class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand">
             </div>
           </div>
 
@@ -762,8 +762,8 @@
         const email = document.getElementById('cust-email').value.trim();
         const address = document.getElementById('cust-address').value.trim();
 
-        if (!name || !org || !phone || !email || !address) {
-          alert('Mohon lengkapi seluruh kolom identitas pemesan & alamat pengiriman.');
+        if (!name || !phone || !email || !address) {
+          alert('Mohon lengkapi seluruh kolom identitas pemesan (nama, WhatsApp, email) & alamat pengiriman.');
           return;
         }
 
@@ -857,7 +857,7 @@
           historyLogs: [
             {
               stage: 'MENUNGGU_DP',
-              note: `Pesanan terdaftar via web portal oleh ${name} [${org}]. Menunggu verifikasi pembayaran DP 50% (${window.DrizzleApp.formatRupiah(dpAmount)}).`,
+              note: `Pesanan terdaftar via web portal oleh ${name}${org ? ' [' + org + ']' : ''}. Menunggu verifikasi pembayaran DP 50% (${window.DrizzleApp.formatRupiah(dpAmount)}).`,
               timestamp: `${dateStr} ${timeStr}`,
               author: 'Customer Portal'
             }
@@ -866,17 +866,16 @@
 
         const dbNow = window.DrizzleApp.getDB();
         dbNow.orders.unshift(newOrder);
+        window.DrizzleApp.saveDB(dbNow);
 
-        // Alokasikan stok bahan & kemasan wajib 1:1 di gudang SCM (Skenario 1)
+        // Alokasikan stok bahan & kemasan wajib 1:1 di gudang SCM
         if (serviceMode !== 'DESIGN_ONLY') {
           window.DrizzleApp.deductOrderMaterials(newOrder);
         } else {
           newOrder.materialsDeducted = true;
           newOrder.readyForProduction = true;
+          window.DrizzleApp.saveAndSyncDB(window.DrizzleApp.getDB(), `Pesanan baru ${orderId} (${srvName}) berhasil terdaftar di ERP & CRM!`);
         }
-
-        // 3. Centralized Reactive State Engine: Save and broadcast to all open tabs (Real-Time Sync)
-        window.DrizzleApp.saveAndSyncDB(dbNow, `Pesanan baru ${orderId} (${srvName}) berhasil terdaftar di ERP & CRM!`);
 
         // Update WhatsApp Send Button with pre-filled order details
         const waText = encodeURIComponent(`Halo Admin Drizzle (+62 895-2295-1860),\nSaya ingin konfirmasi pesanan baru:\n\n*Kode Order:* ${orderId}\n*Nama:* ${name}\n*Organisasi:* ${org || '-'}\n*Layanan:* ${srvName}\n*Jumlah:* ${qty} pcs\n*Total Estimasi:* ${window.DrizzleApp.formatRupiah(totalPrice)}\n*Rincian/Spesifikasi:* ${specsDesc}\n\nMohon konfirmasi instruksi pembayaran & alur produksi. Terima kasih!`);

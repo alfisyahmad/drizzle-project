@@ -530,14 +530,21 @@ function moveKanbanStage(orderId, newStage, note = '') {
   return { success: true, order };
 }
 
-// SCM Module: MRP Calculation & Mandatory 1:1 Packaging Rule (Auto-PO on shortage)
+// SCM Module: MRP Calculation & Mandatory 1:1 Packaging Rule (Auto-PO on shortage or threshold)
 function deductOrderMaterials(order) {
   const db = getDB();
+  const targetOrder = (db.orders || []).find(o => o.orderId === order.orderId);
+
   // 1. Bypass if order mode is DESIGN_ONLY
   if (order.serviceMode === 'DESIGN_ONLY') {
     order.materialsDeducted = true;
     order.waitingPO = false;
     order.readyForProduction = true;
+    if (targetOrder) {
+      targetOrder.materialsDeducted = true;
+      targetOrder.waitingPO = false;
+      targetOrder.readyForProduction = true;
+    }
     saveAndSyncDB(db, `Layanan desain (${order.orderId}) diverifikasi — bypass pemotongan fisik & kemasan.`);
     return { success: true, bypassed: true, reason: 'Layanan desain saja — bypass pemotongan fisik & kemasan.' };
   }
@@ -564,19 +571,22 @@ function deductOrderMaterials(order) {
     if (mat) {
       const isPack = mat.isMandatoryPack1to1 || item.isMandatoryPack1to1;
       const neededQty = isPack ? qty : Math.ceil(qty * 1.03 * (item.qtyPerUnit || 1));
+      const remainingStock = mat.currentStock - neededQty;
+      const isShortage = mat.currentStock < neededQty;
+      const isLowStock = remainingStock <= (mat.minThreshold || 0);
 
-      // Check if stock in warehouse is less than requirement
-      if (mat.currentStock < neededQty) {
-        const shortage = neededQty - mat.currentStock;
-        const autoPOQty = Math.max(shortage * 2, mat.minThreshold || 25);
+      // Trigger Auto-PO if stock is insufficient or drops to/below minimum threshold
+      if (isShortage || isLowStock) {
+        const shortage = Math.max(0, neededQty - mat.currentStock);
+        const autoPOQty = Math.max(shortage * 2, (mat.minThreshold || 25) * 2);
 
-        // Auto-create purchase order if no open PO already exists for this order & material
-        const existingPO = (db.purchaseOrders || []).find(p => p.orderId === order.orderId && p.materialId === mat.materialId && p.poStatus === 'ORDERED');
+        // Check if open PO already exists for this material
+        const existingPO = (db.purchaseOrders || []).find(p => p.materialId === mat.materialId && p.poStatus === 'ORDERED');
         let poId = existingPO ? existingPO.poId : null;
         if (!existingPO) {
           const newPO = {
             poId: generateNextPOId(),
-            orderId: order.orderId,
+            orderId: isShortage ? order.orderId : null,
             materialId: mat.materialId,
             materialName: mat.materialName || mat.name,
             vendorName: mat.supplierName || 'Vendor Rekanan',
@@ -591,44 +601,66 @@ function deductOrderMaterials(order) {
           poId = newPO.poId;
         }
 
-        shortageMaterials.push({
-          materialId: mat.materialId,
-          materialName: mat.materialName || mat.name,
-          neededQty,
-          currentStock: mat.currentStock,
-          poId
-        });
+        if (isShortage) {
+          shortageMaterials.push({
+            materialId: mat.materialId,
+            materialName: mat.materialName || mat.name,
+            neededQty,
+            currentStock: mat.currentStock,
+            poId
+          });
+        }
       }
 
       // Lock and deduct physical stock (down to 0 min)
-      mat.currentStock = Math.max(0, mat.currentStock - neededQty);
+      mat.currentStock = Math.max(0, remainingStock);
     }
   });
 
   order.materialsDeducted = true;
+  if (targetOrder) targetOrder.materialsDeducted = true;
 
   if (shortageMaterials.length > 0) {
     order.waitingPO = true;
     order.readyForProduction = false;
     order.poShortage = shortageMaterials;
+    if (targetOrder) {
+      targetOrder.waitingPO = true;
+      targetOrder.readyForProduction = false;
+      targetOrder.poShortage = shortageMaterials;
+    }
     const poList = shortageMaterials.map(s => s.poId).filter(Boolean).join(', ');
-    if (!order.historyLogs) order.historyLogs = [];
-    order.historyLogs.unshift({
+    const logEntry = {
       timestamp: new Date().toISOString().replace('T', ' ').substring(0, 16),
       stage: order.kanbanStage,
       note: `Kalkulasi MRP SCM: Terdeteksi ${shortageMaterials.length} bahan kurang stok di gudang. Draf PO otomatis diterbitkan (${poList}). Status: Menunggu Stok PO.`,
       author: 'SCM MRP Engine'
-    });
+    };
+    if (!order.historyLogs) order.historyLogs = [];
+    order.historyLogs.unshift(logEntry);
+    if (targetOrder) {
+      if (!targetOrder.historyLogs) targetOrder.historyLogs = [];
+      targetOrder.historyLogs.unshift(logEntry);
+    }
   } else {
     order.waitingPO = false;
     order.readyForProduction = true;
-    if (!order.historyLogs) order.historyLogs = [];
-    order.historyLogs.unshift({
+    if (targetOrder) {
+      targetOrder.waitingPO = false;
+      targetOrder.readyForProduction = true;
+    }
+    const logEntry = {
       timestamp: new Date().toISOString().replace('T', ' ').substring(0, 16),
       stage: order.kanbanStage,
       note: `Kalkulasi MRP & Kemasan 1:1 terpenuhi. Seluruh kebutuhan material (${order.qty} pcs kemasan & kain) tersedia di gudang. Siap masuk jalur produksi.`,
       author: 'SCM MRP Engine'
-    });
+    };
+    if (!order.historyLogs) order.historyLogs = [];
+    order.historyLogs.unshift(logEntry);
+    if (targetOrder) {
+      if (!targetOrder.historyLogs) targetOrder.historyLogs = [];
+      targetOrder.historyLogs.unshift(logEntry);
+    }
   }
 
   saveAndSyncDB(db, `Kalkulasi MRP pesanan ${order.orderId}: ${shortageMaterials.length > 0 ? 'PO otomatis diterbitkan' : 'Stok bahan aman'}`);
@@ -778,15 +810,25 @@ function recordPayment(orderId, amountPaid, note = '') {
     author: 'Finance ERP'
   });
 
-  // Jika sebelumnya UNPAID dan sekarang dibayar → majukan stage ke DESIGN
+  // Jika sebelumnya UNPAID dan sekarang dibayar → majukan stage (khusus DESIGN_ONLY langsung loncat ke QC)
   if (wasUnpaid && amountPaid > 0 && order.kanbanStage === 'MENUNGGU_DP') {
-    order.kanbanStage = 'DESIGN';
-    order.historyLogs.unshift({
-      timestamp: now,
-      stage: 'DESIGN',
-      note: `Pembayaran awal diterima — tiket order otomatis dimajukan ke antrean Desain & Brief.`,
-      author: 'Finance ERP'
-    });
+    if (order.serviceMode === 'DESIGN_ONLY') {
+      order.kanbanStage = 'QC';
+      order.historyLogs.unshift({
+        timestamp: now,
+        stage: 'QC',
+        note: `Pembayaran DP layanan desain diverifikasi — otomatis bypass antrean produksi fisik (Sablon & Jahit) dan langsung masuk ke tahap Quality Control (QC aset digital).`,
+        author: 'Finance ERP'
+      });
+    } else {
+      order.kanbanStage = 'DESIGN';
+      order.historyLogs.unshift({
+        timestamp: now,
+        stage: 'DESIGN',
+        note: `Pembayaran awal diterima — tiket order otomatis dimajukan ke antrean Desain & Brief.`,
+        author: 'Finance ERP'
+      });
+    }
   }
 
   // Jalankan MRP (deductOrderMaterials) jika belum pernah dijalankan dan ada pembayaran
@@ -995,6 +1037,8 @@ function cleanPhoneNumber(phone) {
     cleaned = '0' + cleaned.substring(3);
   } else if (cleaned.startsWith('62')) {
     cleaned = '0' + cleaned.substring(2);
+  } else if (cleaned.startsWith('8')) {
+    cleaned = '0' + cleaned;
   }
   return cleaned;
 }
@@ -1011,25 +1055,28 @@ function registerOrUpdateCustomer(custData, orderTotalPrice = 0) {
   const email = (custData.email || '').trim();
   const address = (custData.address || '').trim();
 
-  // Search existing customer by clean phone or exact name
+  // Search existing customer by clean phone (primary) or exact name
   let customer = db.customers.find(c => {
     const cPhoneClean = cleanPhoneNumber(c.whatsapp);
-    return (cleanPhone && cPhoneClean && cleanPhone === cPhoneClean) ||
-           (name && c.name && c.name.toLowerCase() === name.toLowerCase());
+    if (cleanPhone && cPhoneClean) {
+      return cleanPhone === cPhoneClean;
+    }
+    return name && c.name && c.name.toLowerCase() === name.toLowerCase();
   });
 
   const now = new Date().toISOString().split('T')[0];
+  const isInstansi = org && org.length > 0 && !['-', 'none', 'pribadi', 'personal', 'umum', 'individu', 'perorangan'].includes(org.toLowerCase());
 
   if (!customer) {
     // NEW CUSTOMER: Segment = "Instansi" (if has org) or "Baru"
     const nextNum = db.customers.length + 1;
     const custId = `CUST-${String(nextNum).padStart(3, '0')}`;
-    const initialSegment = (org && org.length > 0) ? 'Instansi' : 'Baru';
+    const initialSegment = isInstansi ? 'Instansi' : 'Baru';
 
     customer = {
       customerId: custId,
       name: name || 'Pelanggan Baru',
-      organization: org || '',
+      organization: isInstansi ? org : '',
       whatsapp: rawPhone,
       email: email || '',
       address: address || '',
@@ -1046,7 +1093,7 @@ function registerOrUpdateCustomer(custData, orderTotalPrice = 0) {
     customer.totalSpent = (customer.totalSpent || 0) + orderTotalPrice;
     customer.lastOrderAt = now;
 
-    if (org && org.length > 0) {
+    if (isInstansi) {
       customer.organization = org;
       customer.segment = 'Instansi';
     } else if (customer.segment !== 'Instansi') {
