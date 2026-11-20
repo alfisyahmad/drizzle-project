@@ -206,8 +206,8 @@ function calculateTieredPrice(serviceId, totalPcs) {
 }
 
 // Generate Next Order ID: DRZ-2026-XXX
-function generateNextOrderId() {
-  const db = getDB();
+function generateNextOrderId(providedDb = null) {
+  const db = providedDb || getDB();
   let maxNum = 0;
   (db.orders || []).forEach(o => {
     const id = o.orderId || o.tracking_code || '';
@@ -220,8 +220,8 @@ function generateNextOrderId() {
 }
 
 // Generate Next PO ID: PO-2026-XXX
-function generateNextPOId() {
-  const db = getDB();
+function generateNextPOId(providedDb = null) {
+  const db = providedDb || getDB();
   let maxNum = 0;
   (db.purchaseOrders || []).forEach(p => {
     const id = p.poId || '';
@@ -234,8 +234,8 @@ function generateNextPOId() {
 }
 
 // Generate Next Transaction ID: TRX-XXX
-function generateNextTxId() {
-  const db = getDB();
+function generateNextTxId(providedDb = null) {
+  const db = providedDb || getDB();
   let maxNum = 0;
   (db.financeLedger || []).forEach(t => {
     const id = t.txId || '';
@@ -494,6 +494,14 @@ function moveKanbanStage(orderId, newStage, note = '') {
   const validStages = ['MENUNGGU_DP', 'DESIGN', 'PRINTING', 'SEWING', 'QC', 'SHIPPED', 'CANCELLED', 'RETURNED'];
   if (!validStages.includes(newStage)) return { success: false, reason: 'Invalid stage' };
 
+  // Otomatis kembalikan stok gudang SCM & proses refund jika status diubah ke CANCELLED
+  if (newStage === 'CANCELLED') {
+    return cancelOrder(orderId, note || 'Dibatalkan melalui perpindahan status Kanban');
+  }
+  if (newStage === 'RETURNED') {
+    return returnOrder(orderId, note || 'Diretur melalui perpindahan status Kanban', 0);
+  }
+
   const oldStage = order.kanbanStage;
   order.kanbanStage = newStage;
   if (!order.historyLogs) order.historyLogs = [];
@@ -585,7 +593,7 @@ function deductOrderMaterials(order) {
         let poId = existingPO ? existingPO.poId : null;
         if (!existingPO) {
           const newPO = {
-            poId: generateNextPOId(),
+            poId: generateNextPOId(db),
             orderId: isShortage ? order.orderId : null,
             materialId: mat.materialId,
             materialName: mat.materialName || mat.name,
@@ -673,7 +681,7 @@ function createPurchaseOrder(materialId, qtyToAdd, vendorName = null, orderId = 
   const mat = (db.materials || []).find(m => m.materialId === materialId);
   if (!mat) return { success: false, reason: 'Material not found' };
 
-  const poId = generateNextPOId();
+  const poId = generateNextPOId(db);
   const qty = qtyToAdd || Math.max(20, mat.minThreshold * 2);
   const totalCost = qty * mat.unitCost;
   const now = new Date().toISOString().replace('T', ' ').substring(0, 16);
@@ -713,7 +721,7 @@ function receivePurchaseOrder(poId) {
   }
 
   // 2. Record Expense into Finance Ledger
-  const txId = generateNextTxId();
+  const txId = generateNextTxId(db);
   db.financeLedger.unshift({
     txId,
     orderId: po.orderId || null,
@@ -729,22 +737,26 @@ function receivePurchaseOrder(poId) {
     const linkedOrder = (db.orders || []).find(o => o.orderId === po.orderId);
     if (linkedOrder) {
       linkedOrder.hppTotal = (linkedOrder.hppTotal || 0) + po.totalCost;
+    }
+  }
 
-      // Check if any other POs for this order are still pending (ORDERED)
-      const remainingOpenPOs = (db.purchaseOrders || []).filter(p => p.orderId === linkedOrder.orderId && p.poStatus === 'ORDERED');
-      if (remainingOpenPOs.length === 0) {
-        linkedOrder.waitingPO = false;
-        linkedOrder.readyForProduction = true;
-        if (!linkedOrder.historyLogs) linkedOrder.historyLogs = [];
-        linkedOrder.historyLogs.unshift({
+  // Release waitingPO for all orders whose material shortages are now fulfilled
+  (db.orders || []).forEach(ord => {
+    if (ord.waitingPO) {
+      const remainingShortages = (db.purchaseOrders || []).filter(p => (p.orderId === ord.orderId || (ord.poShortage && ord.poShortage.some(s => s.materialId === p.materialId))) && p.poStatus === 'ORDERED');
+      if (remainingShortages.length === 0) {
+        ord.waitingPO = false;
+        ord.readyForProduction = true;
+        if (!ord.historyLogs) ord.historyLogs = [];
+        ord.historyLogs.unshift({
           timestamp: now,
-          stage: linkedOrder.kanbanStage,
+          stage: ord.kanbanStage,
           note: `Penerimaan PO ${po.poId} selesai. Seluruh material & kemasan 1:1 telah terpenuhi di gudang. Pesanan siap produksi.`,
           author: 'SCM Warehouse'
         });
       }
     }
-  }
+  });
 
   saveAndSyncDB(db, `Penerimaan PO ${po.poId} berhasil (+${po.qtyOrdered} ${mat ? mat.unit : 'unit'}). Arus kas keluar tercatat.`);
   return { success: true, po, material: mat };
@@ -782,7 +794,7 @@ function recordPayment(orderId, amountPaid, note = '') {
 
   // Record INCOME to financeLedger
   if (amountPaid > 0) {
-    const txId = generateNextTxId();
+    const txId = generateNextTxId(db);
     const description = note
       ? `Pembayaran ${formatRupiah(amountPaid)} untuk ${order.orderId} — ${note}`
       : (newTotalPaid >= totalPrice
@@ -925,7 +937,7 @@ function cancelOrder(orderId, reason = '') {
   // 3. Jika ada paidAmount > 0 → catat REFUND di financeLedger
   const paidAmount = order.paidAmount || 0;
   if (paidAmount > 0) {
-    const txId = generateNextTxId();
+    const txId = generateNextTxId(db);
     db.financeLedger.unshift({
       txId,
       orderId: order.orderId,
@@ -981,7 +993,7 @@ function returnOrder(orderId, reason = '', refundAmount = 0) {
 
   // 3. Jika refundAmount > 0 → catat REFUND di financeLedger
   if (refundAmount > 0) {
-    const txId = generateNextTxId();
+    const txId = generateNextTxId(db);
     db.financeLedger.unshift({
       txId,
       orderId: order.orderId,
@@ -1055,13 +1067,16 @@ function registerOrUpdateCustomer(custData, orderTotalPrice = 0) {
   const email = (custData.email || '').trim();
   const address = (custData.address || '').trim();
 
-  // Search existing customer by clean phone (primary) or exact name
+  // Search existing customer by clean phone (primary) or exact name if phone not provided
   let customer = db.customers.find(c => {
     const cPhoneClean = cleanPhoneNumber(c.whatsapp);
     if (cleanPhone && cPhoneClean) {
       return cleanPhone === cPhoneClean;
     }
-    return name && c.name && c.name.toLowerCase() === name.toLowerCase();
+    if (!cleanPhone && !cPhoneClean && name && c.name) {
+      return c.name.toLowerCase() === name.toLowerCase();
+    }
+    return false;
   });
 
   const now = new Date().toISOString().split('T')[0];

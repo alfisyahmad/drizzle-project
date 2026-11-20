@@ -765,8 +765,8 @@
   <script>
     let activeTab = 'kanban';
 
-    function openTenantModal() { document.getElementById('tenant-modal').classList.remove('hidden'); }
-    function closeTenantModal() { document.getElementById('tenant-modal').classList.add('hidden'); }
+    function openTenantModal() { const m = document.getElementById('tenant-modal'); if (m) m.classList.remove('hidden'); }
+    function closeTenantModal() { const m = document.getElementById('tenant-modal'); if (m) m.classList.add('hidden'); }
 
     function switchTab(tabId) {
       activeTab = tabId;
@@ -809,7 +809,7 @@
       const ledger = db.financeLedger || [];
 
       // 1. Total Order Aktif & Volume Pcs
-      const activeOrders = orders.filter(o => o.kanbanStage !== 'SHIPPED');
+      const activeOrders = orders.filter(o => o.kanbanStage !== 'SHIPPED' && o.kanbanStage !== 'CANCELLED' && o.kanbanStage !== 'RETURNED' && !o.cancelled && !o.returned);
       const activePcs = activeOrders.reduce((sum, o) => sum + (o.qty || 0), 0);
       document.getElementById('kpi-active-pipeline').textContent = `${activeOrders.length} Proyek Aktif`;
       document.getElementById('kpi-orders-count').textContent = `${orders.length} Pesanan Total • ${activePcs} Pcs Aktif`;
@@ -817,6 +817,7 @@
       // 2. Total Omzet Masuk (Rp) from Finance Ledger INCOME
       const totalIncome = ledger.filter(l => l.txType === 'INCOME').reduce((sum, l) => sum + l.amount, 0);
       const totalReceivable = orders.reduce((sum, o) => {
+        if (o.kanbanStage === 'CANCELLED' || o.kanbanStage === 'RETURNED' || o.cancelled || o.returned) return sum;
         const paid = o.paidAmount || (o.paymentStatus === 'LUNAS' ? o.totalPrice : (o.paymentStatus === 'DP_50_PAID' ? o.dpAmount : 0));
         return sum + Math.max(0, o.totalPrice - paid);
       }, 0);
@@ -1224,7 +1225,7 @@
             <button onclick="openCustomerOrdersModal('${c.customerId}')" class="px-2.5 py-1 rounded bg-brandLight text-brand hover:bg-brand hover:text-white transition font-mono font-bold text-[10px] mr-1 shadow-sm">
               Riwayat (${cOrders.length})
             </button>
-            <a href="order.html?reorder" class="px-2 py-1 rounded bg-canvas border border-borderCard hover:border-dark text-[10px] text-muted">
+            <a href="order.html${cOrders.length > 0 ? '?reorder=' + encodeURIComponent(cOrders[0].orderId) : ''}" class="px-2 py-1 rounded bg-canvas border border-borderCard hover:border-dark text-[10px] text-muted">
               + Order
             </a>
           </td>

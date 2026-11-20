@@ -137,10 +137,10 @@
 
           <!-- Service Category Filters -->
           <div class="flex flex-wrap gap-1.5 mt-4 md:mt-0" id="service-filters">
-            <button onclick="filterServices('ALL')" class="srv-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-brand text-white transition shadow-sm">Semua Layanan (19)</button>
-            <button onclick="filterServices('APPAREL')" class="srv-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-canvas text-muted hover:text-dark border border-borderCard transition">Apparel (9)</button>
-            <button onclick="filterServices('MERCH')" class="srv-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-canvas text-muted hover:text-dark border border-borderCard transition">Merchandise (3)</button>
-            <button onclick="filterServices('DESIGN')" class="srv-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-canvas text-muted hover:text-dark border border-borderCard transition">Creative &amp; Hybrid (7)</button>
+            <button onclick="filterServices('ALL', this)" class="srv-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-brand text-white transition shadow-sm">Semua Layanan (19)</button>
+            <button onclick="filterServices('APPAREL', this)" class="srv-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-canvas text-muted hover:text-dark border border-borderCard transition">Apparel (9)</button>
+            <button onclick="filterServices('MERCH', this)" class="srv-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-canvas text-muted hover:text-dark border border-borderCard transition">Merchandise (3)</button>
+            <button onclick="filterServices('DESIGN', this)" class="srv-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-canvas text-muted hover:text-dark border border-borderCard transition">Creative &amp; Hybrid (7)</button>
           </div>
         </div>
 
@@ -170,10 +170,10 @@
 
           <!-- Category Filter Buttons -->
           <div class="flex flex-wrap gap-1.5 mt-4 md:mt-0" id="portfolio-filters">
-            <button onclick="filterPortfolio('ALL')" class="port-filter-btn px-3 py-1 rounded-lg text-xs font-semibold bg-brand text-white transition shadow-sm">Semua (17)</button>
-            <button onclick="filterPortfolio('TSHIRT')" class="port-filter-btn px-3 py-1 rounded-lg text-xs font-semibold bg-card text-muted hover:text-dark border border-borderCard transition">T-Shirt</button>
-            <button onclick="filterPortfolio('SHIRT')" class="port-filter-btn px-3 py-1 rounded-lg text-xs font-semibold bg-card text-muted hover:text-dark border border-borderCard transition">Kemeja/PDH</button>
-            <button onclick="filterPortfolio('OUTER')" class="port-filter-btn px-3 py-1 rounded-lg text-xs font-semibold bg-card text-muted hover:text-dark border border-borderCard transition">Jaket &amp; Polo</button>
+            <button onclick="filterPortfolio('ALL', this)" class="port-filter-btn px-3 py-1 rounded-lg text-xs font-semibold bg-brand text-white transition shadow-sm">Semua (17)</button>
+            <button onclick="filterPortfolio('TSHIRT', this)" class="port-filter-btn px-3 py-1 rounded-lg text-xs font-semibold bg-card text-muted hover:text-dark border border-borderCard transition">T-Shirt</button>
+            <button onclick="filterPortfolio('SHIRT', this)" class="port-filter-btn px-3 py-1 rounded-lg text-xs font-semibold bg-card text-muted hover:text-dark border border-borderCard transition">Kemeja/PDH</button>
+            <button onclick="filterPortfolio('OUTER', this)" class="port-filter-btn px-3 py-1 rounded-lg text-xs font-semibold bg-card text-muted hover:text-dark border border-borderCard transition">Jaket &amp; Polo</button>
           </div>
         </div>
 
@@ -283,12 +283,15 @@
     let currentSrvFilter = 'ALL';
     let currentPortFilter = 'ALL';
 
-    function filterServices(categoryKey) {
+    function filterServices(categoryKey, btnEl) {
       currentSrvFilter = categoryKey;
       document.querySelectorAll('.srv-filter-btn').forEach(btn => {
         btn.className = 'srv-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-canvas text-muted hover:text-dark border border-borderCard transition';
       });
-      event.target.className = 'srv-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-brand text-white transition shadow-sm';
+      const targetBtn = btnEl || (window.event && (window.event.currentTarget || window.event.target));
+      if (targetBtn) {
+        targetBtn.className = 'srv-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-brand text-white transition shadow-sm';
+      }
       renderServicesCatalog();
     }
 
@@ -335,12 +338,15 @@
       });
     }
 
-    function filterPortfolio(filterKey) {
+    function filterPortfolio(filterKey, btnEl) {
       currentPortFilter = filterKey;
       document.querySelectorAll('.port-filter-btn').forEach(btn => {
         btn.className = 'port-filter-btn px-3 py-1 rounded-lg text-xs font-semibold bg-card text-muted hover:text-dark border border-borderCard transition';
       });
-      event.target.className = 'port-filter-btn px-3 py-1 rounded-lg text-xs font-semibold bg-brand text-white transition shadow-sm';
+      const targetBtn = btnEl || (window.event && (window.event.currentTarget || window.event.target));
+      if (targetBtn) {
+        targetBtn.className = 'port-filter-btn px-3 py-1 rounded-lg text-xs font-semibold bg-brand text-white transition shadow-sm';
+      }
       renderPortfolio();
     }
 

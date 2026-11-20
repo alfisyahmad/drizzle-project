@@ -468,10 +468,12 @@
     let currentCategory = 'APPAREL'; // 'APPAREL', 'MERCH', or 'DESIGN'
 
     function openTenantModal() {
-      document.getElementById('tenant-modal').classList.remove('hidden');
+      const m = document.getElementById('tenant-modal');
+      if (m) m.classList.remove('hidden');
     }
     function closeTenantModal() {
-      document.getElementById('tenant-modal').classList.add('hidden');
+      const m = document.getElementById('tenant-modal');
+      if (m) m.classList.add('hidden');
     }
 
     // 17 Real Client Projects for CRM Reference
@@ -872,9 +874,13 @@
         if (serviceMode !== 'DESIGN_ONLY') {
           window.DrizzleApp.deductOrderMaterials(newOrder);
         } else {
-          newOrder.materialsDeducted = true;
-          newOrder.readyForProduction = true;
-          window.DrizzleApp.saveAndSyncDB(window.DrizzleApp.getDB(), `Pesanan baru ${orderId} (${srvName}) berhasil terdaftar di ERP & CRM!`);
+          const dbDesign = window.DrizzleApp.getDB();
+          const target = (dbDesign.orders || []).find(o => o.orderId === orderId);
+          if (target) {
+            target.materialsDeducted = true;
+            target.readyForProduction = true;
+          }
+          window.DrizzleApp.saveAndSyncDB(dbDesign, `Pesanan baru ${orderId} (${srvName}) berhasil terdaftar di ERP & CRM!`);
         }
 
         // Update WhatsApp Send Button with pre-filled order details

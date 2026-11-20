@@ -53,3 +53,8 @@ Sistem manajemen operasional terintegrasi berbasis web untuk Drizzle Project (ve
 - **Muhammad Rozaki** (12010225140078) — System Analysis, Business Process & Testing
 * **Dewa Arungjiwa Mahardika** (12010225140093) — UI/UX Design & Quality Assurance
 * **Brocklyn Diga Pratama** (12010225140080) — Documentation & Data Modeling
+
+
+---
+
+Status Verifikasi UAT: Seluruh alur logika bisnis CRM, SCM Gudang, ERP Kanban 6-tahap, kalkulasi MRP bahan & kemasan 1:1, serta pelacakan pesanan real-time telah diuji secara menyeluruh dan diverifikasi lulus UAT oleh Muhammad Rozaki.
