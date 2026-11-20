@@ -50,6 +50,6 @@ Sistem manajemen operasional terintegrasi berbasis web untuk Drizzle Project (ve
 ## Tim Pengembang (Kelompok 7)
 
 * **Alfi Syahrin Ramadhan** (12010225140068) — Full-Stack Development, Database & Deployment
-- Muhammad Rozaki (12010225140078) — System Analysis, Business Process & Testing
+- **Muhammad Rozaki** (12010225140078) — System Analysis, Business Process & Testing
 * **Dewa Arungjiwa Mahardika** (12010225140093) — UI/UX Design & Quality Assurance
 * **Brocklyn Diga Pratama** (12010225140080) — Documentation & Data Modeling
