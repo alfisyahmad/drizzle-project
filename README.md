@@ -113,8 +113,8 @@ drizzle-project/
 
 | Anggota Tim | GitHub / Kontak |
 | :--- | :--- |
-| **Alfian Syahmad** | [@alfisyahmad](https://github.com/alfisyahmad) &bull; `alfisyahmad12@gmail.com` |
-| **Muhammad Rozaki** | [@muhammadrozaki](https://github.com/muhammadrozaki) &bull; `hammadzaky8@gmail.com` |
-| **Dewa Arungjiwa** | [@Dewaarungjiwa](https://github.com/Dewaarungjiwa) &bull; `dewaarungjiwa04@gmail.com` |
-| **Brocklyn** | [@Brocklyn2205](https://github.com/Brocklyn2205) &bull; `araraa0202@gmail.com` |
+| **Alfi Syahmad** | [@alfisyahmad](https://github.com/alfisyahmad) • alfisyahmad12@gmail.com |
+| **Muhammad Rozaki** | [@muhammadrozaki](https://github.com/muhammadrozaki) • hammadzaky8@gmail.com |
+| **Dewa Arungjiwa** | [@Dewaarungjiwa](https://github.com/Dewaarungjiwa) • dewaarungjiwa04@gmail.com |
+| **Brocklyn** | [@Brocklyn2205](https://github.com/Brocklyn2205) • araraa0202@gmail.com |
 
