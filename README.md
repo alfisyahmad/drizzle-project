@@ -1,6 +1,6 @@
 # Drizzle Project — Integrated CRM, SCM & ERP System (DrizzleOS)
 
-Sistem manajemen operasional terintegrasi berbasis web untuk Drizzle Project (vendor merchandise, konveksi apparel custom, dan creative studio di Surakarta). Seluruh modul terhubung secara real-time menggunakan database relasional di browser (localStorage: drizzle_sim_db).
+Sistem manajemen operasional terintegrasi berbasis web untuk Drizzle Project (vendor merchandise, konveksi apparel custom, dan creative studio di Surakarta). Seluruh modul terhubung secara real-time menggunakan database relasional di browser (localStorage: drizzle_sim_db_clean_v1).
 
 ---
 
@@ -9,7 +9,7 @@ Sistem manajemen operasional terintegrasi berbasis web untuk Drizzle Project (ve
 * **CRM (Customer Relationship):** Auto-segmentasi klien via WhatsApp (Baru, Repeat, Instansi), katalog layanan, form pemesanan mandiri (auto-ID DRZ-2026-XXX & kalkulasi DP 50%), serta pelacakan status real-time 6 tahap.
 * **SCM (Supply Chain & Gudang):** Alokasi otomatis bahan baku dan kemasan wajib 1:1 (Polymailer/Box + Thank You Card) dengan buffer +3%, peringatan stok kritis, auto-PO ke vendor (PO-2026-XXX), dan input resi pengiriman.
 * **ERP (Produksi & Finance):** Papan Kanban 6 tahap (MENUNGGU_DP → DESIGN → PRINTING → SEWING → QC → SHIPPED, dengan auto-bypass ke QC untuk jasa desain), buku kas otomatis (INCOME/EXPENSE/REFUND), serta 4 KPI eksekutif.
-* **Database Lokal (drizzle_sim_db):** Mencakup entitas services, customers, orders, materials, purchaseOrders, financeLedger, dan tenantConfig yang tersinkronisasi otomatis antar-tab.
+* **Database Lokal (drizzle_sim_db_clean_v1):** Mencakup entitas services, customers, orders, materials, purchaseOrders, financeLedger, dan tenantConfig yang tersinkronisasi otomatis antar-tab.
 
 ---
 
