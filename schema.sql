@@ -77,9 +77,9 @@ CREATE TABLE IF NOT EXISTS materials_scm (
 
 -- 11 Product Catalog Items
 INSERT OR IGNORE INTO products (product_id, category_name, base_price) VALUES
-(1, 'T-Shirt', 65000.00),
-(2, 'Kemeja/PDH', 110000.00),
-(3, 'Hoodie', 145000.00),
+(1, 'T-Shirt', 73000.00),
+(2, 'Kemeja/PDH', 120000.00),
+(3, 'Hoodie', 155000.00),
 (4, 'Polo', 85000.00),
 (5, 'Jacket', 140000.00),
 (6, 'Coach', 135000.00),

@@ -99,7 +99,7 @@
       </div>
 
       <!-- Trust Ribbon -->
-      <div class="mt-14 pt-8 border-t border-borderCard grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto text-left">
+      <div class="mt-14 pt-8 border-t border-borderCard grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto text-left">
         <div class="p-4 rounded-xl bg-card border border-borderCard shadow-sm">
           <span class="text-xs font-mono text-brand font-bold uppercase block">All Product</span>
           <span class="font-bold text-dark text-base sm:text-lg">Include Packaging</span>
@@ -114,11 +114,6 @@
           <span class="text-xs font-mono text-brand font-bold uppercase block">Layanan Kreatif</span>
           <span class="font-bold text-dark text-base sm:text-lg">7 Jasa Desain</span>
           <p class="text-[11px] text-muted mt-0.5">Brand Identity, layout, editorial &amp; social media.</p>
-        </div>
-        <div class="p-4 rounded-xl bg-card border border-borderCard shadow-sm">
-          <span class="text-xs font-mono text-brand font-bold uppercase block">DrizzleOS Suite</span>
-          <span class="font-bold text-dark text-base sm:text-lg">CRM &bull; ERP &bull; SCM</span>
-          <p class="text-[11px] text-muted mt-0.5">Sistem terintegrasi penuh &amp; pelacakan live.</p>
         </div>
       </div>
     </section>
@@ -140,7 +135,7 @@
             <button onclick="filterServices('ALL', this)" class="srv-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-brand text-white transition shadow-sm">Semua Layanan (19)</button>
             <button onclick="filterServices('APPAREL', this)" class="srv-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-canvas text-muted hover:text-dark border border-borderCard transition">Apparel (9)</button>
             <button onclick="filterServices('MERCH', this)" class="srv-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-canvas text-muted hover:text-dark border border-borderCard transition">Merchandise (3)</button>
-            <button onclick="filterServices('DESIGN', this)" class="srv-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-canvas text-muted hover:text-dark border border-borderCard transition">Creative &amp; Hybrid (7)</button>
+            <button onclick="filterServices('DESIGN', this)" class="srv-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-canvas text-muted hover:text-dark border border-borderCard transition">Creative (7)</button>
           </div>
         </div>
 
@@ -170,15 +165,15 @@
 
           <!-- Category Filter Buttons -->
           <div class="flex flex-wrap gap-1.5 mt-4 md:mt-0" id="portfolio-filters">
-            <button onclick="filterPortfolio('ALL', this)" class="port-filter-btn px-3 py-1 rounded-lg text-xs font-semibold bg-brand text-white transition shadow-sm">Semua (17)</button>
-            <button onclick="filterPortfolio('TSHIRT', this)" class="port-filter-btn px-3 py-1 rounded-lg text-xs font-semibold bg-card text-muted hover:text-dark border border-borderCard transition">T-Shirt</button>
-            <button onclick="filterPortfolio('SHIRT', this)" class="port-filter-btn px-3 py-1 rounded-lg text-xs font-semibold bg-card text-muted hover:text-dark border border-borderCard transition">Kemeja/PDH</button>
-            <button onclick="filterPortfolio('OUTER', this)" class="port-filter-btn px-3 py-1 rounded-lg text-xs font-semibold bg-card text-muted hover:text-dark border border-borderCard transition">Jaket &amp; Polo</button>
+            <button onclick="filterPortfolio('ALL', this)" class="port-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-brand text-white transition shadow-sm">Semua Kategori (17)</button>
+            <button onclick="filterPortfolio('TSHIRT', this)" class="port-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-card text-muted hover:text-dark border border-borderCard transition">👕 T-Shirt (9)</button>
+            <button onclick="filterPortfolio('SHIRT', this)" class="port-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-card text-muted hover:text-dark border border-borderCard transition">👔 Kemeja / PDH (4)</button>
+            <button onclick="filterPortfolio('OUTER', this)" class="port-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-card text-muted hover:text-dark border border-borderCard transition">🧥 Jaket &amp; Polo (4)</button>
           </div>
         </div>
 
-        <!-- 17 Real Clients Grid -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="portfolio-grid">
+        <!-- 17 Real Clients Container (Tersusun Rapi Berdasarkan Kategori) -->
+        <div id="portfolio-container" class="space-y-10">
           <!-- Populated dynamically via JS -->
         </div>
       </div>
@@ -312,14 +307,16 @@
         card.className = 'bg-card border border-borderCard rounded-xl p-5 flex flex-col justify-between hover:border-brand transition group shadow-sm';
         
         let packNotice = p.category === 'DESIGN' 
-          ? '<span class="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-50 text-purple-700 border border-purple-200 font-bold">Studio Creative</span>'
+          ? (p.basePrice === 0 
+              ? '<span class="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 font-bold">Gratis Min. 2 Lusin</span>'
+              : '<span class="text-[10px] font-mono px-2 py-0.5 rounded bg-purple-50 text-purple-700 border border-purple-200 font-bold">Studio Creative</span>')
           : '<span class="text-[10px] font-mono px-2 py-0.5 rounded bg-brandLight text-brand border border-brand/20 font-bold">Include Packaging 1:1</span>';
 
         card.innerHTML = `
           <div>
             <div class="flex justify-between items-start mb-2">
               ${packNotice}
-              <span class="text-[10px] font-mono text-muted">${p.minQty > 1 ? 'Min ' + p.minQty + ' pcs' : 'Paket Desain'}</span>
+              <span class="text-[10px] font-mono text-muted">${p.minQty > 1 ? 'Min ' + p.minQty + ' pcs' : (p.basePrice === 0 ? 'Min 2 Lusin' : 'Paket Desain')}</span>
             </div>
             <h3 class="font-bold text-dark text-base group-hover:text-brand transition-colors mt-1">${p.name}</h3>
             <p class="text-xs text-muted mt-1.5 leading-relaxed">${p.desc}</p>
@@ -327,7 +324,7 @@
           <div class="mt-5 pt-3.5 border-t border-borderCard flex items-center justify-between">
             <div>
               <span class="text-[10px] text-muted block font-mono">Mulai Dari</span>
-              <span class="font-bold text-dark font-mono text-sm">${window.DrizzleApp.formatRupiah(p.basePrice)}</span>
+              <span class="font-bold text-dark font-mono text-sm">${p.basePrice === 0 ? 'Gratis (Min. 2 Lusin)' : window.DrizzleApp.formatRupiah(p.basePrice)}</span>
             </div>
             <a href="order.html?product=${encodeURIComponent(p.name)}" class="text-xs font-semibold text-brand hover:text-brandDark flex items-center gap-1 font-mono">
               Pesan &rarr;
@@ -338,45 +335,73 @@
       });
     }
 
+    const PORTFOLIO_CATEGORIES = [
+      { key: 'TSHIRT', label: 'T-Shirt & Kaos Komunitas', icon: '👕', badgeClass: 'bg-amber-50 text-amber-700 border-amber-200' },
+      { key: 'SHIRT', label: 'Kemeja PDH & Seragam Instansi', icon: '👔', badgeClass: 'bg-blue-50 text-blue-700 border-blue-200' },
+      { key: 'OUTER', label: 'Jaket, Outerwear & Polo Shirt', icon: '🧥', badgeClass: 'bg-emerald-50 text-emerald-700 border-emerald-200' }
+    ];
+
     function filterPortfolio(filterKey, btnEl) {
       currentPortFilter = filterKey;
       document.querySelectorAll('.port-filter-btn').forEach(btn => {
-        btn.className = 'port-filter-btn px-3 py-1 rounded-lg text-xs font-semibold bg-card text-muted hover:text-dark border border-borderCard transition';
+        btn.className = 'port-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-card text-muted hover:text-dark border border-borderCard transition';
       });
       const targetBtn = btnEl || (window.event && (window.event.currentTarget || window.event.target));
       if (targetBtn) {
-        targetBtn.className = 'port-filter-btn px-3 py-1 rounded-lg text-xs font-semibold bg-brand text-white transition shadow-sm';
+        targetBtn.className = 'port-filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-brand text-white transition shadow-sm';
       }
       renderPortfolio();
     }
 
     function renderPortfolio() {
-      const grid = document.getElementById('portfolio-grid');
-      grid.innerHTML = '';
+      const container = document.getElementById('portfolio-container');
+      container.innerHTML = '';
 
-      const filtered = CLIENT_PROJECTS.filter(p => {
-        if (currentPortFilter === 'ALL') return true;
-        return p.category === currentPortFilter;
-      });
+      const catsToRender = currentPortFilter === 'ALL'
+        ? PORTFOLIO_CATEGORIES
+        : PORTFOLIO_CATEGORIES.filter(c => c.key === currentPortFilter);
 
-      filtered.forEach(p => {
-        const card = document.createElement('div');
-        card.className = 'p-5 rounded-xl border border-borderCard bg-card hover:border-brand transition shadow-sm flex flex-col justify-between group';
-        card.innerHTML = `
-          <div>
-            <div class="flex justify-between items-start">
-              <span class="font-bold text-dark text-sm sm:text-base group-hover:text-brand transition-colors">${p.client}</span>
-              <span class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-brandLight text-brand border border-brand/20">${p.qty} Pcs</span>
+      catsToRender.forEach(cat => {
+        const items = CLIENT_PROJECTS.filter(p => p.category === cat.key);
+        if (items.length === 0) return;
+
+        const section = document.createElement('div');
+        section.className = 'category-group';
+        section.innerHTML = `
+          <div class="flex items-center justify-between gap-3 mb-4 pb-2.5 border-b border-borderCard">
+            <div class="flex items-center gap-2">
+              <span class="text-base">${cat.icon}</span>
+              <h3 class="font-extrabold text-dark text-sm sm:text-base font-mono">${cat.label}</h3>
             </div>
-            <div class="text-xs font-semibold text-secondary mt-1">${p.item}</div>
-            <p class="text-xs text-muted mt-2 leading-relaxed">${p.desc}</p>
+            <span class="text-[11px] font-mono font-bold px-2.5 py-0.5 rounded-full ${cat.badgeClass} border">${items.length} Proyek</span>
           </div>
-          <div class="mt-4 pt-3 border-t border-borderCard flex items-center justify-between text-[11px] font-mono">
-            <a href="tracking.html?code=${p.id}" class="text-brand font-bold hover:underline">Lacak Status &rarr;</a>
-            <a href="order.html?reorder=${p.id}" class="text-muted hover:text-dark font-medium underline">Pesan Model Ini</a>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" id="cat-grid-${cat.key}">
           </div>
         `;
-        grid.appendChild(card);
+
+        const grid = section.querySelector(`#cat-grid-${cat.key}`);
+        items.forEach(p => {
+          const card = document.createElement('div');
+          card.className = 'p-5 rounded-xl border border-borderCard bg-card hover:border-brand transition shadow-sm flex flex-col justify-between group';
+          card.innerHTML = `
+            <div>
+              <div class="flex justify-between items-start gap-2 mb-2">
+                <span class="text-[10px] font-mono font-bold px-2 py-0.5 rounded ${cat.badgeClass} border uppercase">${cat.key === 'TSHIRT' ? 'T-Shirt' : (cat.key === 'SHIRT' ? 'Kemeja' : 'Outerwear')}</span>
+                <span class="text-xs font-mono font-bold px-2 py-0.5 rounded bg-brandLight text-brand border border-brand/20 whitespace-nowrap">${p.qty} Pcs</span>
+              </div>
+              <span class="font-bold text-dark text-sm sm:text-base group-hover:text-brand transition-colors block">${p.client}</span>
+              <div class="text-xs font-semibold text-secondary mt-1">${p.item}</div>
+              <p class="text-xs text-muted mt-2 leading-relaxed">${p.desc}</p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-borderCard flex items-center justify-between text-[11px] font-mono">
+              <a href="tracking.html?code=${p.id}" class="text-brand font-bold hover:underline">Lacak Status &rarr;</a>
+              <a href="order.html?reorder=${p.id}" class="text-muted hover:text-dark font-medium underline">Pesan Model Ini</a>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+
+        container.appendChild(section);
       });
     }
 

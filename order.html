@@ -76,7 +76,7 @@
   <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full">
     <!-- Header Page -->
     <div class="mb-8">
-      <span class="text-xs font-mono font-bold text-brand uppercase tracking-wider block">Formulir Terpadu // CRM Portal</span>
+      <span class="text-xs font-mono font-bold text-brand uppercase tracking-wider block">Formulir Terpadu // Portal Pemesanan</span>
       <h1 class="text-3xl sm:text-4xl font-extrabold text-dark mt-1">Form Pemesanan & Konsultasi</h1>
       <p class="text-sm text-muted mt-1">Pilih kategori layanan di bawah ini. Kode tracking otomatis <span class="font-mono text-dark font-semibold">DRZ-2026-XXX</span> akan diterbitkan langsung setelah pengiriman formulir.</p>
     </div>
@@ -90,7 +90,7 @@
         <span>🎁 Merchandise</span>
       </button>
       <button type="button" id="tab-btn-creative" class="py-2.5 px-3 rounded-lg font-semibold text-xs sm:text-sm transition text-center flex items-center justify-center gap-1.5 text-muted hover:text-dark">
-        <span>🎨 Creative & Hybrid</span>
+        <span>🎨 Creative</span>
       </button>
     </div>
 
@@ -121,7 +121,7 @@
       <div class="flex items-start gap-2.5">
         <span class="text-base">🔁</span>
         <div>
-          <strong class="font-bold">Mode Pesanan Ulang (CRM Reorder 1-Klik):</strong>
+          <strong class="font-bold">Mode Pesanan Ulang (Reorder 1-Klik):</strong>
           <p class="mt-0.5 text-dark" id="reorder-banner-text">Data dan spesifikasi berhasil disalin dari riwayat pesanan sebelumnya.</p>
         </div>
       </div>
@@ -138,7 +138,7 @@
         <div class="bg-card border border-borderCard rounded-xl p-6 shadow-sm space-y-4">
           <div class="flex items-center gap-2 pb-3 border-b border-borderCard">
             <span class="w-6 h-6 rounded-full bg-brandLight text-brand font-mono font-bold text-xs flex items-center justify-center">1</span>
-            <h2 class="font-bold text-base text-dark">Identitas Pemesan & Alamat (CRM)</h2>
+            <h2 class="font-bold text-base text-dark">Identitas Pemesan & Alamat</h2>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -156,7 +156,7 @@
             <div>
               <label class="block text-xs font-semibold text-dark mb-1">Nomor WhatsApp Aktif *</label>
               <input type="tel" id="cust-phone" required placeholder="Contoh: xxxxx" class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand font-mono">
-              <span class="text-[10px] text-muted mt-0.5 block">Sistem CRM otomatis mendeteksi riwayat belanja & segmen pelanggan dari WhatsApp.</span>
+              <span class="text-[10px] text-muted mt-0.5 block">Sistem otomatis mendeteksi riwayat belanja & segmen pelanggan dari WhatsApp.</span>
             </div>
             <div>
               <label class="block text-xs font-semibold text-dark mb-1">Alamat Email Aktif *</label>
@@ -165,7 +165,7 @@
           </div>
 
           <div>
-            <label class="block text-xs font-semibold text-dark mb-1">Alamat Lengkap Pengiriman (SCM Outbound) *</label>
+            <label class="block text-xs font-semibold text-dark mb-1">Alamat Lengkap Pengiriman *</label>
             <textarea id="cust-address" required rows="2" placeholder="Contoh: Jl. xxxxx, Kota xxxxx" class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand"></textarea>
           </div>
         </div>
@@ -174,7 +174,7 @@
         <div id="section-apparel" class="bg-card border border-borderCard rounded-xl p-6 shadow-sm space-y-5">
           <div class="flex items-center gap-2 pb-3 border-b border-borderCard">
             <span class="w-6 h-6 rounded-full bg-brandLight text-brand font-mono font-bold text-xs flex items-center justify-center">2</span>
-            <h2 class="font-bold text-base text-dark" id="section-apparel-title">Spesifikasi Apparel & Matrix Ukuran (ERP)</h2>
+            <h2 class="font-bold text-base text-dark" id="section-apparel-title">Spesifikasi Apparel & Matrix Ukuran</h2>
           </div>
 
           <!-- Pilihan Produk -->
@@ -261,7 +261,7 @@
         <div id="section-creative" class="hidden bg-card border border-borderCard rounded-xl p-6 shadow-sm space-y-5">
           <div class="flex items-center gap-2 pb-3 border-b border-borderCard">
             <span class="w-6 h-6 rounded-full bg-brandLight text-brand font-mono font-bold text-xs flex items-center justify-center">2</span>
-            <h2 class="font-bold text-base text-dark">Paket Jasa Desain & Konsultasi Brand (Hybrid)</h2>
+            <h2 class="font-bold text-base text-dark">Paket Jasa Desain & Konsultasi Brand</h2>
           </div>
 
           <!-- Pilihan Layanan Kreatif -->
@@ -391,7 +391,7 @@
         ✓
       </div>
       <div>
-        <span class="text-xs font-mono font-bold text-brand uppercase tracking-wider block">Pesanan Berhasil Terdaftar (CRM & ERP)</span>
+        <span class="text-xs font-mono font-bold text-brand uppercase tracking-wider block">Pesanan Berhasil Terdaftar</span>
         <h3 class="text-2xl font-extrabold text-dark mt-1">Kode Tracking Diterbitkan!</h3>
         <p class="text-xs text-muted mt-1">Simpan kode tracking unik di bawah ini untuk memantau status verifikasi DP dan tahapan produksi secara real-time.</p>
       </div>
@@ -408,10 +408,10 @@
       </div>
       <div id="copy-feedback" class="text-[11px] font-mono text-emerald-600 h-4"></div>
 
-      <!-- CRM Detection & Bill Breakdown Card -->
+      <!-- Detection & Bill Breakdown Card -->
       <div class="bg-card border border-borderCard rounded-xl p-3.5 text-left text-xs space-y-2">
         <div class="flex justify-between items-center pb-2 border-b border-borderCard">
-          <span class="text-muted">Status Pelanggan (CRM):</span>
+          <span class="text-muted">Status Pelanggan:</span>
           <span id="modal-cust-segment" class="font-mono font-bold px-2 py-0.5 rounded bg-brandLight text-brand border border-brand/20 text-[10px]">Baru</span>
         </div>
         <div class="text-dark">
@@ -511,16 +511,25 @@
       // Render 17 Portfolio Reference List
       const refList = document.getElementById('portfolio-ref-list');
       PORTFOLIO_RECAPS.forEach(p => {
+        const catBadge = p.item.includes('T-Shirt') ? 'bg-amber-50 text-amber-700 border-amber-200'
+          : (p.item.includes('Shirt') || p.item.includes('PDH') ? 'bg-blue-50 text-blue-700 border-blue-200'
+          : 'bg-emerald-50 text-emerald-700 border-emerald-200');
+        const catLabel = p.item.includes('T-Shirt') ? 'T-Shirt'
+          : (p.item.includes('Shirt') || p.item.includes('PDH') ? 'Kemeja' : 'Outerwear');
+
         const item = document.createElement('div');
         item.className = 'p-3 bg-canvas border border-borderCard rounded-xl hover:border-brand transition text-xs flex flex-col justify-between';
         item.innerHTML = `
           <div>
-            <div class="flex justify-between items-start">
+            <div class="flex justify-between items-start gap-1">
               <strong class="font-bold text-dark text-xs">${p.client}</strong>
-              <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-brandLight text-brand font-bold">${p.qty} Pcs</span>
+              <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-brandLight text-brand font-bold whitespace-nowrap">${p.qty} Pcs</span>
             </div>
-            <div class="text-[11px] text-brandDark font-medium mt-0.5">${p.item} &bull; ${p.fabric}</div>
-            <p class="text-[10px] text-muted mt-1">${p.notes}</p>
+            <div class="flex items-center gap-1 mt-1">
+              <span class="text-[9px] font-mono font-bold px-1.5 py-0.2 rounded ${catBadge} border">${catLabel}</span>
+              <span class="text-[11px] text-brandDark font-medium truncate">${p.item} &bull; ${p.fabric}</span>
+            </div>
+            <p class="text-[10px] text-muted mt-1 leading-normal">${p.notes}</p>
           </div>
           <button type="button" class="mt-2.5 w-full py-1.5 bg-card hover:bg-brand hover:text-white border border-borderCard text-dark font-semibold rounded-lg text-[10px] transition text-center btn-apply-ref">
             Gunakan Format Ini &rarr;
@@ -591,8 +600,12 @@
           list.forEach(s => {
             const opt = document.createElement('option');
             opt.value = s.serviceId;
-            opt.textContent = `${s.name} (${window.DrizzleApp.formatRupiah(s.basePrice)})`;
+            const priceLabel = s.basePrice === 0 
+              ? 'Gratis - Min. 2 Lusin Pemesanan' 
+              : window.DrizzleApp.formatRupiah(s.basePrice);
+            opt.textContent = `${s.name} (${priceLabel})`;
             opt.dataset.basePrice = s.basePrice;
+            opt.dataset.minQty = s.minQty;
             opt.dataset.desc = s.desc;
             creativeSelect.appendChild(opt);
           });
@@ -614,8 +627,8 @@
           sectionApparel.classList.remove('hidden');
           sectionCreative.classList.add('hidden');
           sectionApparelTitle.textContent = cat === 'APPAREL' 
-            ? 'Spesifikasi Apparel & Matrix Ukuran (ERP)' 
-            : 'Spesifikasi Merchandise & Aksesoris (ERP)';
+            ? 'Spesifikasi Apparel & Matrix Ukuran' 
+            : 'Spesifikasi Merchandise & Aksesoris';
           document.getElementById('product-select-label').textContent = cat === 'APPAREL' ? 'Pilih Item Produk Apparel *' : 'Pilih Item Merchandise *';
         } else {
           populateSelectOptions('DESIGN');
@@ -729,11 +742,11 @@
           const remainingAmount = basePrice - dpAmount;
 
           document.getElementById('live-service-name').textContent = selectedOpt.text.split('(')[0].trim();
-          document.getElementById('live-qty').textContent = `1 Paket`;
-          document.getElementById('live-unit-price').textContent = window.DrizzleApp.formatRupiah(basePrice);
-          document.getElementById('live-total-price').textContent = window.DrizzleApp.formatRupiah(basePrice);
-          document.getElementById('live-dp-amount').textContent = window.DrizzleApp.formatRupiah(dpAmount);
-          document.getElementById('live-remaining-amount').textContent = window.DrizzleApp.formatRupiah(remainingAmount);
+          document.getElementById('live-qty').textContent = basePrice === 0 ? `1 Paket (Min. 2 Lusin)` : `1 Paket`;
+          document.getElementById('live-unit-price').textContent = basePrice === 0 ? 'Gratis (Free Design)' : window.DrizzleApp.formatRupiah(basePrice);
+          document.getElementById('live-total-price').textContent = basePrice === 0 ? 'Rp 0 (Gratis)' : window.DrizzleApp.formatRupiah(basePrice);
+          document.getElementById('live-dp-amount').textContent = basePrice === 0 ? 'Rp 0' : window.DrizzleApp.formatRupiah(dpAmount);
+          document.getElementById('live-remaining-amount').textContent = basePrice === 0 ? 'Rp 0' : window.DrizzleApp.formatRupiah(remainingAmount);
 
           // Creative has no physical packaging
           document.getElementById('live-pack-poly').textContent = `0 Pcs (Digital)`;

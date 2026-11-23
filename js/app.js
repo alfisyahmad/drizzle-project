@@ -8,7 +8,7 @@
  */
 
 const DRIZZLE_SIM_DB_KEY = 'drizzle_sim_db_clean_v1';
-const CURRENT_SCHEMA_VERSION = 'v3.1.0';
+const CURRENT_SCHEMA_VERSION = 'v3.2.0';
 
 // Daftar seluruh key legacy/usang yang dibersihkan otomatis dari localStorage
 const DRIZZLE_LEGACY_KEYS = [
@@ -84,8 +84,8 @@ const INITIAL_SERVICES = [
     serviceId: 'SRV-01',
     category: 'APPAREL',
     name: 'Kaos Cotton Combed 24s',
-    basePrice: 65000,
-    hppUnit: 42000,
+    basePrice: 73000,
+    hppUnit: 47000,
     leadTimeDays: 7,
     minQty: 12,
     badge: 'BESTSELLER',
@@ -101,8 +101,8 @@ const INITIAL_SERVICES = [
     serviceId: 'SRV-02',
     category: 'APPAREL',
     name: 'Hoodie / Crewneck Fleece',
-    basePrice: 145000,
-    hppUnit: 98000,
+    basePrice: 155000,
+    hppUnit: 105000,
     leadTimeDays: 10,
     minQty: 12,
     badge: 'HEAVYWEIGHT',
@@ -117,8 +117,8 @@ const INITIAL_SERVICES = [
     serviceId: 'SRV-03',
     category: 'APPAREL',
     name: 'Kemeja PDH / Workshirt American Drill',
-    basePrice: 110000,
-    hppUnit: 72000,
+    basePrice: 120000,
+    hppUnit: 78000,
     leadTimeDays: 10,
     minQty: 12,
     badge: 'KOMUNITAS & KANTOR',
@@ -149,12 +149,12 @@ const INITIAL_SERVICES = [
     serviceId: 'SRV-05',
     category: 'DESIGN',
     name: 'Jasa Desain Grafis & Mockup',
-    basePrice: 350000,
-    hppUnit: 100000,
+    basePrice: 0,
+    hppUnit: 0,
     leadTimeDays: 3,
-    minQty: 1,
-    badge: 'STUDIO DESAIN',
-    desc: 'Pembuatan artwork kaos, apparel mockup 3D visual, tracing logo vector, dan brief teknis produksi.',
+    minQty: 24,
+    badge: 'GRATIS (MIN 2 LUSIN)',
+    desc: 'Pembuatan artwork kaos, apparel mockup 3D visual, tracing logo vector, dan brief teknis produksi (Gratis dengan minimal pemesanan 2 lusin / 24 pcs).',
     bomRecipe: []
   }
 ];
@@ -242,7 +242,7 @@ function formatRupiah(num) {
 function calculateTieredPrice(serviceId, totalPcs) {
   const db = getDB();
   const srv = (db.services || []).find(s => s.serviceId === serviceId || (serviceId && typeof serviceId === 'string' && s.name.toLowerCase() === serviceId.toLowerCase()));
-  if (!srv) return 65000;
+  if (!srv) return 73000;
   const base = srv.basePrice;
 
   // Volume Tier Discount
@@ -323,6 +323,7 @@ function getDB() {
     // Pengecekan versi skema otomatis
     if (data.schemaVersion !== CURRENT_SCHEMA_VERSION) {
       data.schemaVersion = CURRENT_SCHEMA_VERSION;
+      data.services = INITIAL_SERVICES;
       changed = true;
     }
 
@@ -333,7 +334,7 @@ function getDB() {
     }
 
     // Ensure services are present (master data only — never touched by transactions)
-    if (!data.services || data.services.length !== INITIAL_SERVICES.length || data.services[0].name !== INITIAL_SERVICES[0].name) {
+    if (!data.services || data.services.length !== INITIAL_SERVICES.length || data.services[0].name !== INITIAL_SERVICES[0].name || data.services[0].basePrice !== INITIAL_SERVICES[0].basePrice) {
       data.services = INITIAL_SERVICES;
       changed = true;
     }
