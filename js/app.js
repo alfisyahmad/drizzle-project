@@ -241,7 +241,7 @@ function formatRupiah(num) {
 // Tiered Price Calculator
 function calculateTieredPrice(serviceId, totalPcs) {
   const db = getDB();
-  const srv = (db.services || []).find(s => s.serviceId === serviceId || s.name.toLowerCase() === serviceId.toLowerCase());
+  const srv = (db.services || []).find(s => s.serviceId === serviceId || (serviceId && typeof serviceId === 'string' && s.name.toLowerCase() === serviceId.toLowerCase()));
   if (!srv) return 65000;
   const base = srv.basePrice;
 
@@ -1133,8 +1133,15 @@ function registerOrUpdateCustomer(custData, orderTotalPrice = 0) {
 
   if (!customer) {
     // NEW CUSTOMER: Segment = "Instansi" (if has org) or "Baru"
-    const nextNum = db.customers.length + 1;
-    const custId = `CUST-${String(nextNum).padStart(3, '0')}`;
+    let maxNum = 0;
+    (db.customers || []).forEach(c => {
+      const id = c.customerId || '';
+      if (id.startsWith('CUST-')) {
+        const num = parseInt(id.replace('CUST-', ''), 10);
+        if (!isNaN(num) && num > maxNum) maxNum = num;
+      }
+    });
+    const custId = `CUST-${String(maxNum + 1).padStart(3, '0')}`;
     const initialSegment = isInstansi ? 'Instansi' : 'Baru';
 
     customer = {

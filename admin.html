@@ -765,9 +765,6 @@
   <script>
     let activeTab = 'kanban';
 
-    function openTenantModal() { const m = document.getElementById('tenant-modal'); if (m) m.classList.remove('hidden'); }
-    function closeTenantModal() { const m = document.getElementById('tenant-modal'); if (m) m.classList.add('hidden'); }
-
     function switchTab(tabId) {
       activeTab = tabId;
       const tabs = ['kanban', 'crm', 'scm', 'finance'];
@@ -820,7 +817,7 @@
       const totalIncome = ledger.filter(l => l.txType === 'INCOME').reduce((sum, l) => sum + l.amount, 0);
       const totalReceivable = orders.reduce((sum, o) => {
         if (o.kanbanStage === 'CANCELLED' || o.kanbanStage === 'RETURNED' || o.cancelled || o.returned) return sum;
-        const paid = o.paidAmount || (o.paymentStatus === 'LUNAS' ? o.totalPrice : (o.paymentStatus === 'DP_50_PAID' ? o.dpAmount : 0));
+        const paid = o.paidAmount || (o.paymentStatus === 'LUNAS' ? o.totalPrice : (o.paymentStatus === 'DP_50_PAID' || o.paymentStatus === 'DP_PAID' ? (o.dpAmount || Math.round(o.totalPrice * 0.5)) : 0));
         return sum + Math.max(0, o.totalPrice - paid);
       }, 0);
       document.getElementById('kpi-total-revenue').textContent = window.DrizzleApp.formatRupiah(totalIncome);
@@ -1213,14 +1210,14 @@
             <span class="text-[11px] text-muted">${c.organization || 'Umum'}</span>
           </td>
           <td class="px-4 py-3 font-mono">
-            <a href="https://wa.me/${c.whatsapp.replace(/[^\d]/g, '').replace(/^0/, '62')}" target="_blank" class="text-brand hover:underline flex items-center gap-1">
-              <span>💬 ${c.whatsapp}</span>
+            <a href="${c.whatsapp ? 'https://wa.me/' + String(c.whatsapp).replace(/[^\d]/g, '').replace(/^0/, '62') : '#'}" target="_blank" class="text-brand hover:underline flex items-center gap-1">
+              <span>💬 ${c.whatsapp || '-'}</span>
             </a>
           </td>
           <td class="px-4 py-3">
             <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${segBadge}">${c.segment}</span>
           </td>
-          <td class="px-4 py-3 text-center font-mono font-bold tabular-nums">${c.totalOrders || cOrders.length || 1}</td>
+          <td class="px-4 py-3 text-center font-mono font-bold tabular-nums">${c.totalOrders !== undefined ? c.totalOrders : cOrders.length}</td>
           <td class="px-4 py-3 font-mono font-bold text-dark tabular-nums">${window.DrizzleApp.formatRupiah(c.totalSpent || 0)}</td>
           <td class="px-4 py-3 text-muted max-w-xs truncate">${c.address || '-'}</td>
           <td class="px-4 py-3 text-right whitespace-nowrap">
@@ -1248,8 +1245,8 @@
       document.getElementById('cust-modal-org').textContent = cust.organization || 'Umum';
 
       const waLink = document.getElementById('cust-modal-wa');
-      waLink.textContent = cust.whatsapp;
-      waLink.href = `https://wa.me/${cust.whatsapp.replace(/[^\d]/g, '').replace(/^0/, '62')}`;
+      waLink.textContent = cust.whatsapp || '-';
+      waLink.href = cust.whatsapp ? `https://wa.me/${String(cust.whatsapp).replace(/[^\d]/g, '').replace(/^0/, '62')}` : '#';
 
       const segBadge = document.getElementById('cust-modal-seg');
       segBadge.textContent = cust.segment;
@@ -1276,7 +1273,7 @@
 
           let payBadge = 'bg-amber-50 text-amber-700 border-amber-200';
           if (ord.paymentStatus === 'LUNAS') payBadge = 'bg-emerald-50 text-emerald-700 border-emerald-200';
-          else if (ord.paymentStatus === 'DP_50_PAID') payBadge = 'bg-sky-50 text-sky-700 border-sky-200';
+          else if (ord.paymentStatus === 'DP_50_PAID' || ord.paymentStatus === 'DP_PAID') payBadge = 'bg-sky-50 text-sky-700 border-sky-200';
 
           row.innerHTML = `
             <td class="px-3.5 py-2.5 font-mono font-bold text-dark">${ord.orderId}</td>
@@ -1397,7 +1394,7 @@
 
           let payBadge = 'bg-amber-50 text-amber-700 border-amber-200';
           if (isLunas) payBadge = 'bg-emerald-50 text-emerald-700 border-emerald-200';
-          else if (o.paymentStatus === 'DP_50_PAID') payBadge = 'bg-sky-50 text-sky-700 border-sky-200';
+          else if (o.paymentStatus === 'DP_50_PAID' || o.paymentStatus === 'DP_PAID') payBadge = 'bg-sky-50 text-sky-700 border-sky-200';
 
           let actionBtn = '';
           if (isShipped) {
@@ -1530,7 +1527,7 @@
       const netCash = totalIncome - totalExpense;
       const totalReceivable = orders.reduce((sum, o) => {
         if (o.kanbanStage === 'CANCELLED' || o.kanbanStage === 'RETURNED' || o.cancelled || o.returned) return sum;
-        const paid = o.paidAmount || (o.paymentStatus === 'LUNAS' ? o.totalPrice : (o.paymentStatus === 'DP_50_PAID' ? o.dpAmount : 0));
+        const paid = o.paidAmount || (o.paymentStatus === 'LUNAS' ? o.totalPrice : (o.paymentStatus === 'DP_50_PAID' || o.paymentStatus === 'DP_PAID' ? (o.dpAmount || Math.round(o.totalPrice * 0.5)) : 0));
         return sum + Math.max(0, o.totalPrice - paid);
       }, 0);
 
