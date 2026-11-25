@@ -60,10 +60,10 @@ Aplikasi DrizzleOS telah diaudit dan diperkeras keamanannya melalui analisis ker
 
 ## Tim Pengembang (Kelompok 7)
 
-* **Alfi Syahrin Ramadhan** (12010225140068) — Full-Stack Development, Database & Deployment
-- **Muhammad Rozaki** (12010225140078) — System Analysis, Business Process & Testing
-* **Dewa Arungjiwa Mahardika** (12010225140093) — UI/UX Design & Quality Assurance
-* **Brocklyn Diga Pratama** (12010225140080) — Documentation & Data Modeling
+- Alfi Syahrin Ramadhan (068)
+- Muhammad Rozaki (078)
+- Dewa Arungjiwa Mahardika (093)
+- Brocklyn Diga Pratama (080)
 
 
 ---
