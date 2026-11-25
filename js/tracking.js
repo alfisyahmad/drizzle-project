@@ -50,12 +50,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Sample WhatsApp Chips
+    const esc = (s) => (window.DrizzleApp && window.DrizzleApp.escapeHTML) ? window.DrizzleApp.escapeHTML(s) : String(s === null || s === undefined ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     const phoneChips = customers.filter(c => c.whatsapp).slice(0, 2);
     phoneChips.forEach(c => {
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'px-2.5 py-1 rounded-lg bg-brandLight text-brand hover:bg-brand hover:text-white text-xs font-mono font-bold border border-brand/20 transition shadow-sm flex items-center gap-1';
-      btn.innerHTML = `<span>WA: ${c.whatsapp}</span>`;
+      btn.innerHTML = `<span>WA: ${esc(c.whatsapp)}</span>`;
       btn.title = `Lacak via WhatsApp (${c.name})`;
       btn.addEventListener('click', () => {
         if (inputCode) inputCode.value = c.whatsapp;
@@ -147,11 +148,12 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    const esc = (s) => (window.DrizzleApp && window.DrizzleApp.escapeHTML) ? window.DrizzleApp.escapeHTML(s) : String(s === null || s === undefined ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     multiOrdersNav.classList.remove('hidden');
     multiOrdersNav.innerHTML = `
       <div class="p-3.5 bg-brandLight/70 border border-brand/20 rounded-xl space-y-2">
         <div class="flex items-center justify-between text-xs">
-          <span class="font-bold text-dark">Ditemukan ${orders.length} Pesanan untuk: <strong>${customer.name || 'Pelanggan'}</strong> (${customer.whatsapp || '-'})</span>
+          <span class="font-bold text-dark">Ditemukan ${orders.length} Pesanan untuk: <strong>${esc(customer.name || 'Pelanggan')}</strong> (${esc(customer.whatsapp || '-')})</span>
           <span class="text-[10px] font-mono font-bold text-brand uppercase bg-card px-2 py-0.5 rounded border border-brand/20">CRM WhatsApp Filter</span>
         </div>
         <div class="flex flex-wrap gap-2 pt-1" id="multi-orders-btn-list"></div>
@@ -395,6 +397,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    const esc = (s) => (window.DrizzleApp && window.DrizzleApp.escapeHTML) ? window.DrizzleApp.escapeHTML(s) : String(s === null || s === undefined ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     logs.forEach(log => {
       const item = document.createElement('div');
       item.className = 'relative flex items-start gap-3 pl-4 pb-4 border-l-2 border-borderCard last:pb-0';
@@ -402,11 +405,11 @@ document.addEventListener('DOMContentLoaded', () => {
         <div class="absolute -left-[5px] top-1.5 w-2 h-2 rounded-full bg-brand"></div>
         <div>
           <div class="flex items-center gap-2">
-            <span class="text-xs font-bold text-dark font-mono">[${log.stage}]</span>
-            <span class="text-[10px] text-muted font-mono">${log.timestamp}</span>
-            <span class="text-[10px] px-1.5 py-0.5 rounded bg-canvas text-muted">${log.author || 'Sistem'}</span>
+            <span class="text-xs font-bold text-dark font-mono">[${esc(log.stage)}]</span>
+            <span class="text-[10px] text-muted font-mono">${esc(log.timestamp)}</span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-canvas text-muted">${esc(log.author || 'Sistem')}</span>
           </div>
-          <p class="text-xs text-dark mt-1">${log.note}</p>
+          <p class="text-xs text-dark mt-1">${esc(log.note)}</p>
         </div>
       `;
       container.appendChild(item);

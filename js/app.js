@@ -238,6 +238,28 @@ function formatRupiah(num) {
   }).format(num || 0);
 }
 
+// Helper: Anti-XSS HTML Sanitizer
+function escapeHTML(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+if (typeof window !== 'undefined') {
+  window.escapeHTML = escapeHTML;
+}
+
+// Helper: Phone Number Validator (Indonesian format 9-15 digits)
+function isValidPhoneNumber(phone) {
+  if (!phone) return false;
+  const digits = String(phone).replace(/\D/g, '');
+  return digits.length >= 9 && digits.length <= 15;
+}
+
 // Tiered Price Calculator
 function calculateTieredPrice(serviceId, totalPcs) {
   const db = getDB();
@@ -300,7 +322,12 @@ function getDB() {
   // Jalankan pembersihan cache & key versi lama setiap getDB dipanggil
   purgeLegacyCaches();
 
-  const raw = localStorage.getItem(DRIZZLE_SIM_DB_KEY);
+  let raw = null;
+  try {
+    raw = localStorage.getItem(DRIZZLE_SIM_DB_KEY);
+  } catch (err) {
+    console.warn('[DrizzleOS] Gagal membaca localStorage:', err);
+  }
   if (!raw) {
     // First run: seed only master data, all transaction collections start EMPTY
     const initData = {
@@ -1110,12 +1137,12 @@ function registerOrUpdateCustomer(custData, orderTotalPrice = 0) {
   const db = getDB();
   if (!db.customers) db.customers = [];
 
-  const rawPhone = custData.whatsapp || '';
+  const rawPhone = String(custData.whatsapp || '').trim().substring(0, 30);
   const cleanPhone = cleanPhoneNumber(rawPhone);
-  const name = (custData.name || '').trim();
-  const org = (custData.organization || '').trim();
-  const email = (custData.email || '').trim();
-  const address = (custData.address || '').trim();
+  const name = String(custData.name || '').trim().substring(0, 100);
+  const org = String(custData.organization || '').trim().substring(0, 100);
+  const email = String(custData.email || '').trim().substring(0, 100);
+  const address = String(custData.address || '').trim().substring(0, 500);
 
   // Search existing customer by clean phone (primary) or exact name if phone not provided
   let customer = db.customers.find(c => {
@@ -1255,7 +1282,9 @@ window.DrizzleApp = {
 
   // Formatting & Helpers
   formatRupiah,
+  escapeHTML,
   cleanPhoneNumber,
+  isValidPhoneNumber,
 
   // CRM
   registerOrUpdateCustomer,

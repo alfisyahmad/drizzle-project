@@ -144,29 +144,29 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-semibold text-dark mb-1">Nama Lengkap / PIC *</label>
-              <input type="text" id="cust-name" required placeholder="Contoh: xxxxx" class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand">
+              <input type="text" id="cust-name" required maxlength="100" placeholder="Contoh: xxxxx" class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand">
             </div>
             <div>
               <label class="block text-xs font-semibold text-dark mb-1">Nama Organisasi / Komunitas / Kampus <span class="text-muted font-normal">(Opsional jika perorangan)</span></label>
-              <input type="text" id="cust-org" placeholder="Contoh: BEM FT UNS, SMANKRAPFANS, dll. (Kosongkan jika perorangan)" class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand">
+              <input type="text" id="cust-org" maxlength="100" placeholder="Contoh: BEM FT UNS, SMANKRAPFANS, dll. (Kosongkan jika perorangan)" class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand">
             </div>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label class="block text-xs font-semibold text-dark mb-1">Nomor WhatsApp Aktif *</label>
-              <input type="tel" id="cust-phone" required placeholder="Contoh: xxxxx" class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand font-mono">
+              <input type="tel" id="cust-phone" required maxlength="20" placeholder="Contoh: xxxxx" class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand font-mono">
               <span class="text-[10px] text-muted mt-0.5 block">Sistem otomatis mendeteksi riwayat belanja & segmen pelanggan dari WhatsApp.</span>
             </div>
             <div>
               <label class="block text-xs font-semibold text-dark mb-1">Alamat Email Aktif *</label>
-              <input type="email" id="cust-email" required placeholder="Contoh: xxxxx@email.com" class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand">
+              <input type="email" id="cust-email" required maxlength="100" placeholder="Contoh: xxxxx@email.com" class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand">
             </div>
           </div>
 
           <div>
             <label class="block text-xs font-semibold text-dark mb-1">Alamat Lengkap Pengiriman *</label>
-            <textarea id="cust-address" required rows="2" placeholder="Contoh: Jl. xxxxx, Kota xxxxx" class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand"></textarea>
+            <textarea id="cust-address" required maxlength="500" rows="2" placeholder="Contoh: Jl. xxxxx, Kota xxxxx" class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand"></textarea>
           </div>
         </div>
 
@@ -233,27 +233,27 @@
             </div>
             <div>
               <label class="block text-xs font-semibold text-dark mb-1">Pilihan Warna Bahan Kain *</label>
-              <input type="text" id="spec-fabric-color" placeholder="Contoh: Hitam Reaktif / Navy / Broken White" class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand">
+              <input type="text" id="spec-fabric-color" maxlength="50" placeholder="Contoh: Hitam Reaktif / Navy / Broken White" class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand">
             </div>
           </div>
 
           <!-- Daftar Nickname / Divisi (Khusus Kemeja/PDH) -->
           <div>
             <label class="block text-xs font-semibold text-dark mb-1">Daftar Nickname / Bordir Nama Dada (Opsional untuk PDH)</label>
-            <textarea id="spec-nicknames" rows="2" placeholder="Contoh format: 1. XXXXX (L) - KETUA, 2. XXXXX (M) - SEKRETARIS..." class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand font-mono text-[11px]"></textarea>
+            <textarea id="spec-nicknames" maxlength="500" rows="2" placeholder="Contoh format: 1. XXXXX (L) - KETUA, 2. XXXXX (M) - SEKRETARIS..." class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand font-mono text-[11px]"></textarea>
           </div>
 
           <!-- Link Google Drive Artwork -->
           <div>
             <label class="block text-xs font-semibold text-dark mb-1">Link Google Drive Desain / Mockup (Opsional)</label>
-            <input type="url" id="spec-artwork-url" placeholder="https://drive.google.com/..." class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand font-mono">
+            <input type="url" id="spec-artwork-url" maxlength="255" placeholder="https://drive.google.com/..." class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand font-mono">
             <span class="text-[10px] text-muted mt-1 block">Pastikan izin akses Google Drive diset ke 'Anyone with link can view'.</span>
           </div>
 
           <!-- Catatan Tambahan -->
           <div>
             <label class="block text-xs font-semibold text-dark mb-1">Catatan Khusus Pengerjaan</label>
-            <textarea id="spec-notes" rows="2" placeholder="Contoh: Label woven di leher, belah samping baju, jahitan rantai rapi..." class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand"></textarea>
+            <textarea id="spec-notes" maxlength="500" rows="2" placeholder="Contoh: Label woven di leher, belah samping baju, jahitan rantai rapi..." class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand"></textarea>
           </div>
         </div>
 
@@ -276,13 +276,13 @@
           <!-- Brief Kebutuhan Desain -->
           <div>
             <label class="block text-xs font-semibold text-dark mb-1">Brief Kebutuhan & Ekspektasi Desain *</label>
-            <textarea id="creative-brief" rows="4" placeholder="Jelaskan konsep, target audiens, filosofi warna, atau referensi visual yang diinginkan..." class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand"></textarea>
+            <textarea id="creative-brief" maxlength="1000" rows="4" placeholder="Jelaskan konsep, target audiens, filosofi warna, atau referensi visual yang diinginkan..." class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand"></textarea>
           </div>
 
           <!-- Link Referensi -->
           <div>
             <label class="block text-xs font-semibold text-dark mb-1">Link Referensi Moodboard / Logo Lama (Opsional)</label>
-            <input type="url" id="creative-ref-url" placeholder="https://pin.it/... atau Google Drive" class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand font-mono">
+            <input type="url" id="creative-ref-url" maxlength="255" placeholder="https://pin.it/... atau Google Drive" class="w-full bg-canvas border border-borderCard rounded-lg px-3.5 py-2 text-xs text-dark focus:outline-none focus:border-brand font-mono">
           </div>
         </div>
 
@@ -773,6 +773,16 @@
           return;
         }
 
+        if (!window.DrizzleApp.isValidPhoneNumber(phone)) {
+          alert('Format nomor WhatsApp tidak valid. Masukkan nomor aktif minimal 9-15 digit angka (contoh: 08123456789 atau 628123456789).');
+          return;
+        }
+
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+          alert('Format alamat email tidak valid.');
+          return;
+        }
+
         const freshDB = window.DrizzleApp.getDB();
         let qty = 1;
         let srvId = '';
@@ -783,11 +793,11 @@
         let totalPrice = 0;
 
         if (currentCategory === 'APPAREL' || currentCategory === 'MERCH') {
-          const s = parseInt(document.getElementById('size-s').value, 10) || 0;
-          const m = parseInt(document.getElementById('size-m').value, 10) || 0;
-          const l = parseInt(document.getElementById('size-l').value, 10) || 0;
-          const xl = parseInt(document.getElementById('size-xl').value, 10) || 0;
-          const xxl = parseInt(document.getElementById('size-xxl').value, 10) || 0;
+          const s = Math.max(0, parseInt(document.getElementById('size-s').value, 10) || 0);
+          const m = Math.max(0, parseInt(document.getElementById('size-m').value, 10) || 0);
+          const l = Math.max(0, parseInt(document.getElementById('size-l').value, 10) || 0);
+          const xl = Math.max(0, parseInt(document.getElementById('size-xl').value, 10) || 0);
+          const xxl = Math.max(0, parseInt(document.getElementById('size-xxl').value, 10) || 0);
           qty = s + m + l + xl + xxl;
 
           if (qty <= 0) {

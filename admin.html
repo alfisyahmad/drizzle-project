@@ -47,6 +47,31 @@
 </head>
 <body class="bg-canvas text-dark font-sans antialiased selection:bg-brand selection:text-white min-h-screen flex flex-col justify-between">
 
+  <!-- ==================== ADMIN PIN GATE (SESSION AUTH) ==================== -->
+  <div id="admin-pin-gate" class="fixed inset-0 z-[100] bg-dark/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="bg-card border border-borderCard rounded-2xl max-w-sm w-full p-6 sm:p-7 shadow-2xl space-y-5 text-center">
+      <div class="w-14 h-14 rounded-2xl bg-brandLight text-brand mx-auto flex items-center justify-center text-2xl shadow-inner">
+        🔐
+      </div>
+      <div>
+        <h2 class="text-xl font-extrabold text-dark tracking-tight">Autentikasi Admin</h2>
+        <p class="text-xs text-muted mt-1 leading-relaxed">Masukkan PIN Otorisasi untuk mengakses DrizzleOS Enterprise Management Console.</p>
+      </div>
+      <form id="admin-pin-form" onsubmit="submitAdminPIN(event)" class="space-y-4">
+        <div>
+          <input type="password" id="admin-pin-input" autofocus maxlength="20" placeholder="••••••••" class="w-full text-center text-lg font-mono tracking-widest bg-canvas border border-borderCard rounded-xl px-4 py-3 text-dark focus:outline-none focus:border-brand">
+          <p id="admin-pin-error" class="hidden text-rose-600 text-xs font-semibold mt-2">PIN salah. Silakan coba lagi.</p>
+        </div>
+        <button type="submit" class="w-full bg-brand hover:bg-brandDark text-white font-bold py-3 px-4 rounded-xl transition shadow-md text-sm">
+          Buka Akses Admin &rarr;
+        </button>
+      </form>
+      <div class="pt-3 border-t border-borderCard text-center">
+        <span class="text-[11px] text-muted">PIN Demo Presentasi: <span class="font-mono font-bold text-dark bg-canvas px-1.5 py-0.5 rounded border border-borderCard">DRZ2026</span></span>
+      </div>
+    </div>
+  </div>
+
   <!-- ==================== NAVBAR ==================== -->
   <header class="sticky top-0 z-50 bg-card/90 backdrop-blur-md border-b border-borderCard">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-18 py-3.5 flex items-center justify-between">
@@ -106,6 +131,9 @@
         </button>
         <button onclick="renderAll()" class="text-xs font-semibold px-3.5 py-2 bg-card border border-borderCard rounded-lg hover:border-dark transition shadow-sm flex items-center gap-1.5">
           <span>↻ Segarkan</span>
+        </button>
+        <button onclick="lockAdminSession()" class="text-xs font-semibold px-3 py-2 bg-slate-100 text-slate-700 border border-slate-300 rounded-lg hover:bg-slate-200 transition shadow-sm flex items-center gap-1.5" title="Kunci sesi admin dan kembali ke layar otorisasi PIN">
+          <span>🔒 Kunci Admin</span>
         </button>
         <button onclick="resetDatabaseToDefault()" class="text-xs font-semibold px-3.5 py-2 bg-rose-50 text-rose-700 border border-rose-200 rounded-lg hover:bg-rose-100 transition shadow-sm">
           Reset DB Default
@@ -763,6 +791,50 @@
 
   <!-- Admin Dashboard Engine -->
   <script>
+    // Anti-XSS Sanitizer helper
+    const esc = (s) => (window.DrizzleApp && window.DrizzleApp.escapeHTML) ? window.DrizzleApp.escapeHTML(s) : String(s === null || s === undefined ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
+    // Admin Session Authentication Gate
+    function checkAdminAuth() {
+      const gate = document.getElementById('admin-pin-gate');
+      const authed = sessionStorage.getItem('drizzle_admin_auth') === 'true';
+      if (gate) {
+        if (authed) {
+          gate.classList.add('hidden');
+        } else {
+          gate.classList.remove('hidden');
+          const pinInput = document.getElementById('admin-pin-input');
+          if (pinInput) {
+            pinInput.value = '';
+            setTimeout(() => pinInput.focus(), 50);
+          }
+        }
+      }
+    }
+
+    function submitAdminPIN(e) {
+      if (e) e.preventDefault();
+      const pinInput = document.getElementById('admin-pin-input');
+      const errorMsg = document.getElementById('admin-pin-error');
+      const val = (pinInput ? pinInput.value : '').trim();
+      if (val === 'DRZ2026') {
+        sessionStorage.setItem('drizzle_admin_auth', 'true');
+        if (errorMsg) errorMsg.classList.add('hidden');
+        checkAdminAuth();
+      } else {
+        if (errorMsg) errorMsg.classList.remove('hidden');
+        if (pinInput) {
+          pinInput.value = '';
+          pinInput.focus();
+        }
+      }
+    }
+
+    function lockAdminSession() {
+      sessionStorage.removeItem('drizzle_admin_auth');
+      checkAdminAuth();
+    }
+
     let activeTab = 'kanban';
 
     function switchTab(tabId) {
@@ -939,7 +1011,7 @@
         let poStatusBadgeHtml = '';
         if (order.waitingPO === true) {
           const shortages = order.poShortage || [];
-          const shortageText = shortages.map(s => `${s.materialName}: perlu ${s.neededQty}, ada ${s.currentStock}`).join(' | ');
+          const shortageText = shortages.map(s => `${esc(s.materialName)}: perlu ${s.neededQty}, ada ${s.currentStock}`).join(' | ');
           poStatusBadgeHtml = `
             <div class="flex items-center gap-1.5 mt-1 px-2 py-1 rounded-lg bg-amber-50 border border-amber-300 text-amber-800 text-[9px] font-mono font-bold">
               <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse flex-shrink-0"></span>
@@ -955,16 +1027,16 @@
 
         card.innerHTML = `
           <div class="flex justify-between items-start gap-1">
-            <span class="font-mono font-bold text-dark">${order.orderId}</span>
+            <span class="font-mono font-bold text-dark">${esc(order.orderId)}</span>
             <div class="flex items-center gap-1">
               ${modeBadge}
-              <span class="text-[9px] font-mono px-1.5 py-0.2 rounded border ${payBadgeColor}">${payStatusText}</span>
+              <span class="text-[9px] font-mono px-1.5 py-0.2 rounded border ${payBadgeColor}">${esc(payStatusText)}</span>
             </div>
           </div>
 
           <div>
-            <div class="font-bold text-dark text-xs">${custName} <span class="text-[10px] text-muted font-normal">[${cust.organization || 'Umum'}]</span></div>
-            <span class="text-[11px] text-muted block mt-0.5">${order.serviceName || order.serviceId} (${order.qty} pcs)</span>
+            <div class="font-bold text-dark text-xs">${esc(custName)} <span class="text-[10px] text-muted font-normal">[${esc(cust.organization || 'Umum')}]</span></div>
+            <span class="text-[11px] text-muted block mt-0.5">${esc(order.serviceName || order.serviceId)} (${order.qty} pcs)</span>
             ${poStatusBadgeHtml}
           </div>
 
@@ -1023,12 +1095,12 @@
             div.className = 'p-3 bg-canvas border border-borderCard rounded-xl space-y-1.5';
             div.innerHTML = `
               <div class="flex justify-between items-start">
-                <span class="font-mono font-bold text-dark">${order.orderId}</span>
-                <span class="text-[9px] font-mono px-1.5 py-0.5 rounded border font-bold ${badgeColor}">${statusLabel}</span>
+                <span class="font-mono font-bold text-dark">${esc(order.orderId)}</span>
+                <span class="text-[9px] font-mono px-1.5 py-0.5 rounded border font-bold ${badgeColor}">${esc(statusLabel)}</span>
               </div>
-              <div class="font-bold text-dark text-xs">${custName} <span class="text-[10px] text-muted font-normal">[${cust.organization || 'Umum'}]</span></div>
-              <span class="text-[11px] text-muted block">${order.serviceName || order.serviceId} (${order.qty} pcs)</span>
-              <p class="text-[10px] text-muted italic bg-card p-1.5 rounded border border-borderCard/60">Alasan: ${reason || '-'}</p>
+              <div class="font-bold text-dark text-xs">${esc(custName)} <span class="text-[10px] text-muted font-normal">[${esc(cust.organization || 'Umum')}]</span></div>
+              <span class="text-[11px] text-muted block">${esc(order.serviceName || order.serviceId)} (${order.qty} pcs)</span>
+              <p class="text-[10px] text-muted italic bg-card p-1.5 rounded border border-borderCard/60">Alasan: ${esc(reason || '-')}</p>
             `;
             cancelledListEl.appendChild(div);
           });
@@ -1058,7 +1130,7 @@
 
       document.getElementById('payment-modal-title').textContent = `Catat Pembayaran — ${order.orderId}`;
       document.getElementById('payment-modal-order-info').innerHTML = `
-        <div class="flex justify-between"><span class="text-muted">Klien:</span><span class="font-bold text-dark">${order.serviceName || order.serviceId} (${order.qty} pcs)</span></div>
+        <div class="flex justify-between"><span class="text-muted">Klien:</span><span class="font-bold text-dark">${esc(order.serviceName || order.serviceId)} (${order.qty} pcs)</span></div>
         <div class="flex justify-between"><span class="text-muted">Total Nilai Pesanan:</span><span class="font-bold text-dark">${window.DrizzleApp.formatRupiah(total)}</span></div>
         <div class="flex justify-between"><span class="text-muted">Sudah Dibayar:</span><span class="font-bold text-emerald-600">${window.DrizzleApp.formatRupiah(paid)}</span></div>
         <div class="flex justify-between font-bold border-t border-borderCard pt-1"><span class="text-dark">Sisa Tagihan:</span><span class="text-brand">${window.DrizzleApp.formatRupiah(remaining)}</span></div>
@@ -1204,24 +1276,24 @@
         else if (c.segment === 'Repeat') segBadge = 'bg-emerald-50 text-emerald-700 border-emerald-200';
 
         tr.innerHTML = `
-          <td class="px-4 py-3 font-mono font-bold text-dark">${c.customerId}</td>
+          <td class="px-4 py-3 font-mono font-bold text-dark">${esc(c.customerId)}</td>
           <td class="px-4 py-3">
-            <span class="font-bold text-dark block">${c.name}</span>
-            <span class="text-[11px] text-muted">${c.organization || 'Umum'}</span>
+            <span class="font-bold text-dark block">${esc(c.name)}</span>
+            <span class="text-[11px] text-muted">${esc(c.organization || 'Umum')}</span>
           </td>
           <td class="px-4 py-3 font-mono">
             <a href="${c.whatsapp ? 'https://wa.me/' + String(c.whatsapp).replace(/[^\d]/g, '').replace(/^0/, '62') : '#'}" target="_blank" class="text-brand hover:underline flex items-center gap-1">
-              <span>💬 ${c.whatsapp || '-'}</span>
+              <span>💬 ${esc(c.whatsapp || '-')}</span>
             </a>
           </td>
           <td class="px-4 py-3">
-            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${segBadge}">${c.segment}</span>
+            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${segBadge}">${esc(c.segment)}</span>
           </td>
           <td class="px-4 py-3 text-center font-mono font-bold tabular-nums">${c.totalOrders !== undefined ? c.totalOrders : cOrders.length}</td>
           <td class="px-4 py-3 font-mono font-bold text-dark tabular-nums">${window.DrizzleApp.formatRupiah(c.totalSpent || 0)}</td>
-          <td class="px-4 py-3 text-muted max-w-xs truncate">${c.address || '-'}</td>
+          <td class="px-4 py-3 text-muted max-w-xs truncate">${esc(c.address || '-')}</td>
           <td class="px-4 py-3 text-right whitespace-nowrap">
-            <button onclick="openCustomerOrdersModal('${c.customerId}')" class="px-2.5 py-1 rounded bg-brandLight text-brand hover:bg-brand hover:text-white transition font-mono font-bold text-[10px] mr-1 shadow-sm">
+            <button onclick="openCustomerOrdersModal('${esc(c.customerId)}')" class="px-2.5 py-1 rounded bg-brandLight text-brand hover:bg-brand hover:text-white transition font-mono font-bold text-[10px] mr-1 shadow-sm">
               Riwayat (${cOrders.length})
             </button>
             <a href="order.html${cOrders.length > 0 ? '?reorder=' + encodeURIComponent(cOrders[0].orderId) : ''}" class="px-2 py-1 rounded bg-canvas border border-borderCard hover:border-dark text-[10px] text-muted">
@@ -1276,19 +1348,19 @@
           else if (ord.paymentStatus === 'DP_50_PAID' || ord.paymentStatus === 'DP_PAID') payBadge = 'bg-sky-50 text-sky-700 border-sky-200';
 
           row.innerHTML = `
-            <td class="px-3.5 py-2.5 font-mono font-bold text-dark">${ord.orderId}</td>
-            <td class="px-3.5 py-2.5 font-mono text-muted text-[11px]">${ord.createdAt ? ord.createdAt.split(' ')[0] : '-'}</td>
-            <td class="px-3.5 py-2.5 font-medium text-dark">${ord.serviceName || ord.serviceId}</td>
+            <td class="px-3.5 py-2.5 font-mono font-bold text-dark">${esc(ord.orderId)}</td>
+            <td class="px-3.5 py-2.5 font-mono text-muted text-[11px]">${ord.createdAt ? esc(ord.createdAt.split(' ')[0]) : '-'}</td>
+            <td class="px-3.5 py-2.5 font-medium text-dark">${esc(ord.serviceName || ord.serviceId)}</td>
             <td class="px-3.5 py-2.5 text-center font-mono font-bold">${ord.qty} pcs</td>
             <td class="px-3.5 py-2.5 font-mono font-bold text-dark tabular-nums">${window.DrizzleApp.formatRupiah(ord.totalPrice)}</td>
             <td class="px-3.5 py-2.5">
-              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${payBadge}">${ord.paymentStatus}</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${payBadge}">${esc(ord.paymentStatus)}</span>
             </td>
             <td class="px-3.5 py-2.5">
-              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-card border border-borderCard text-dark">${ord.kanbanStage}</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-card border border-borderCard text-dark">${esc(ord.kanbanStage)}</span>
             </td>
             <td class="px-3.5 py-2.5 text-right font-mono text-[11px]">
-              <a href="tracking.html?code=${ord.orderId}" target="_blank" class="text-brand font-bold hover:underline">
+              <a href="tracking.html?code=${encodeURIComponent(ord.orderId)}" target="_blank" class="text-brand font-bold hover:underline">
                 Lacak &rarr;
               </a>
             </td>
@@ -1329,16 +1401,16 @@
           : `<span class="text-muted text-[10px] font-mono">-</span>`;
 
         tr.innerHTML = `
-          <td class="px-4 py-3 font-mono font-bold text-dark">${m.materialId}</td>
-          <td class="px-4 py-3 font-bold text-dark">${m.materialName || m.name}</td>
-          <td class="px-4 py-3 text-muted text-[11px]">${m.supplierName || 'Vendor Rekanan'}</td>
-          <td class="px-4 py-3 text-center font-mono font-bold tabular-nums ${isLow ? 'text-rose-600' : 'text-dark'}">${m.currentStock} ${m.unit}</td>
-          <td class="px-4 py-3 text-center font-mono text-muted tabular-nums">${m.minThreshold} ${m.unit}</td>
+          <td class="px-4 py-3 font-mono font-bold text-dark">${esc(m.materialId)}</td>
+          <td class="px-4 py-3 font-bold text-dark">${esc(m.materialName || m.name)}</td>
+          <td class="px-4 py-3 text-muted text-[11px]">${esc(m.supplierName || 'Vendor Rekanan')}</td>
+          <td class="px-4 py-3 text-center font-mono font-bold tabular-nums ${isLow ? 'text-rose-600' : 'text-dark'}">${m.currentStock} ${esc(m.unit)}</td>
+          <td class="px-4 py-3 text-center font-mono text-muted tabular-nums">${m.minThreshold} ${esc(m.unit)}</td>
           <td class="px-4 py-3 font-mono tabular-nums">${window.DrizzleApp.formatRupiah(m.unitCost)}</td>
           <td class="px-4 py-3">${packBadge}</td>
           <td class="px-4 py-3">${statusBadge}</td>
           <td class="px-4 py-3 text-right">
-            <button onclick="openPOModal('${m.materialId}')" class="px-2.5 py-1 rounded bg-brandLight text-brand hover:bg-brand hover:text-white transition font-mono font-bold text-[10px] shadow-sm">
+            <button onclick="openPOModal('${esc(m.materialId)}')" class="px-2.5 py-1 rounded bg-brandLight text-brand hover:bg-brand hover:text-white transition font-mono font-bold text-[10px] shadow-sm">
               Terbitkan PO ke Vendor
             </button>
           </td>
@@ -1362,16 +1434,16 @@
 
         const actionCell = isReceived
           ? `<span class="text-muted text-[10px] font-mono">✓ Masuk Gudang & Kas</span>`
-          : `<button onclick="receivePO('${p.poId}')" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition font-mono font-bold text-[10px] shadow-sm flex items-center gap-1 ml-auto">
+          : `<button onclick="receivePO('${esc(p.poId)}')" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700 transition font-mono font-bold text-[10px] shadow-sm flex items-center gap-1 ml-auto">
                <span>Terima Barang (Receive PO) &rarr;</span>
              </button>`;
 
         tr.innerHTML = `
-          <td class="px-4 py-3 font-mono font-bold text-dark">${p.poId}</td>
-          <td class="px-4 py-3 font-mono text-muted text-[11px]">${p.createdAt ? p.createdAt.split(' ')[0] : '-'}</td>
-          <td class="px-4 py-3 font-bold text-dark">${p.vendorName}</td>
-          <td class="px-4 py-3">${mat.materialName || mat.name || p.materialName || p.materialId}</td>
-          <td class="px-4 py-3 text-center font-mono font-bold tabular-nums">${p.qtyOrdered} ${p.unit || mat.unit || 'unit'}</td>
+          <td class="px-4 py-3 font-mono font-bold text-dark">${esc(p.poId)}</td>
+          <td class="px-4 py-3 font-mono text-muted text-[11px]">${p.createdAt ? esc(p.createdAt.split(' ')[0]) : '-'}</td>
+          <td class="px-4 py-3 font-bold text-dark">${esc(p.vendorName)}</td>
+          <td class="px-4 py-3">${esc(mat.materialName || mat.name || p.materialName || p.materialId)}</td>
+          <td class="px-4 py-3 text-center font-mono font-bold tabular-nums">${p.qtyOrdered} ${esc(p.unit || mat.unit || 'unit')}</td>
           <td class="px-4 py-3 font-mono font-bold text-dark tabular-nums">${window.DrizzleApp.formatRupiah(p.totalCost)}</td>
           <td class="px-4 py-3">${poBadge}</td>
           <td class="px-4 py-3 text-right whitespace-nowrap">${actionCell}</td>
@@ -1400,40 +1472,40 @@
           if (isShipped) {
             actionBtn = `<div class="flex items-center justify-end gap-1.5">
                            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">Terkirim</span>
-                           <button onclick="openResiModal('${o.orderId}')" class="text-[10px] font-mono underline text-muted hover:text-dark">Edit Resi</button>
+                           <button onclick="openResiModal('${esc(o.orderId)}')" class="text-[10px] font-mono underline text-muted hover:text-dark">Edit Resi</button>
                          </div>`;
           } else if (isQC && isLunas) {
-            actionBtn = `<button onclick="openResiModal('${o.orderId}')" class="px-3 py-1.5 rounded-lg bg-brand text-white font-bold text-[11px] hover:bg-brandDark transition shadow-sm flex items-center gap-1 ml-auto">
+            actionBtn = `<button onclick="openResiModal('${esc(o.orderId)}')" class="px-3 py-1.5 rounded-lg bg-brand text-white font-bold text-[11px] hover:bg-brandDark transition shadow-sm flex items-center gap-1 ml-auto">
                            <span>🚚 Input Resi Kurir (Kirim)</span>
                          </button>`;
           } else if (isQC && !isLunas) {
             actionBtn = `<div class="flex items-center justify-end gap-1.5">
                            <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-amber-50 text-amber-700 border border-amber-200">Menunggu Pelunasan</span>
-                           <button onclick="verifyPayment('${o.orderId}', 'LUNAS')" class="text-[10px] font-mono underline text-emerald-700 hover:text-emerald-800 font-bold">Verifikasi Lunas</button>
+                           <button onclick="verifyPayment('${esc(o.orderId)}', 'LUNAS')" class="text-[10px] font-mono underline text-emerald-700 hover:text-emerald-800 font-bold">Verifikasi Lunas</button>
                          </div>`;
           } else {
-            actionBtn = `<span class="text-muted text-[10px] font-mono">Dalam Produksi (${o.kanbanStage})</span>`;
+            actionBtn = `<span class="text-muted text-[10px] font-mono">Dalam Produksi (${esc(o.kanbanStage)})</span>`;
           }
 
           const resiDisplay = o.trackingResi 
-            ? `<span class="font-mono font-bold text-dark block text-[11px]">${o.shippingCarrier || 'Ekspedisi'}: <span class="text-emerald-700">${o.trackingResi}</span></span>` 
+            ? `<span class="font-mono font-bold text-dark block text-[11px]">${esc(o.shippingCarrier || 'Ekspedisi')}: <span class="text-emerald-700">${esc(o.trackingResi)}</span></span>` 
             : `<span class="text-muted text-[10px] font-mono">Belum Ada Resi</span>`;
 
           tr.innerHTML = `
-            <td class="px-4 py-3 font-mono font-bold text-dark">${o.orderId}</td>
+            <td class="px-4 py-3 font-mono font-bold text-dark">${esc(o.orderId)}</td>
             <td class="px-4 py-3">
-              <span class="font-bold text-dark block">${cust.name || 'Klien'}</span>
-              <span class="text-[11px] text-muted">${cust.organization || 'Umum'} &bull; ${cust.address || '-'}</span>
+              <span class="font-bold text-dark block">${esc(cust.name || 'Klien')}</span>
+              <span class="text-[11px] text-muted">${esc(cust.organization || 'Umum')} &bull; ${esc(cust.address || '-')}</span>
             </td>
             <td class="px-4 py-3">
-              <span class="font-medium text-dark">${o.serviceName || o.serviceId}</span>
+              <span class="font-medium text-dark">${esc(o.serviceName || o.serviceId)}</span>
               <span class="text-[11px] font-mono font-bold text-brand block">${o.qty} Pcs (Include Packaging 1:1)</span>
             </td>
             <td class="px-4 py-3">
-              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${payBadge}">${o.paymentStatus}</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold border ${payBadge}">${esc(o.paymentStatus)}</span>
             </td>
             <td class="px-4 py-3">
-              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-card border border-borderCard text-dark">${o.kanbanStage}</span>
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-card border border-borderCard text-dark">${esc(o.kanbanStage)}</span>
             </td>
             <td class="px-4 py-3">${resiDisplay}</td>
             <td class="px-4 py-3 text-right whitespace-nowrap">${actionBtn}</td>
@@ -1553,11 +1625,11 @@
         }
 
         tr.innerHTML = `
-          <td class="px-4 py-3 font-mono font-bold text-dark">${l.txId}</td>
-          <td class="px-4 py-3 font-mono text-muted text-[11px]">${l.txDate}</td>
+          <td class="px-4 py-3 font-mono font-bold text-dark">${esc(l.txId)}</td>
+          <td class="px-4 py-3 font-mono text-muted text-[11px]">${esc(l.txDate)}</td>
           <td class="px-4 py-3">${typeBadge}</td>
-          <td class="px-4 py-3 font-mono text-[11px] text-muted">${l.orderId || l.poId || '-'}</td>
-          <td class="px-4 py-3 text-dark">${l.description || l.note || '-'}</td>
+          <td class="px-4 py-3 font-mono text-[11px] text-muted">${esc(l.orderId || l.poId || '-')}</td>
+          <td class="px-4 py-3 text-dark">${esc(l.description || l.note || '-')}</td>
           <td class="px-4 py-3 text-right font-mono font-bold ${isIncome ? 'text-emerald-600' : 'text-rose-600'}">
             ${isIncome ? '+' : '-'}${window.DrizzleApp.formatRupiah(l.amount)}
           </td>
@@ -1577,10 +1649,10 @@
         const tr = document.createElement('tr');
         tr.className = 'hover:bg-canvas/50 transition';
         tr.innerHTML = `
-          <td class="px-4 py-3 font-mono font-bold text-dark">${o.orderId}</td>
+          <td class="px-4 py-3 font-mono font-bold text-dark">${esc(o.orderId)}</td>
           <td class="px-4 py-3">
-            <span class="font-bold text-dark block">${cust.name || 'Klien'}</span>
-            <span class="text-[11px] text-muted">${o.serviceName || o.serviceId}</span>
+            <span class="font-bold text-dark block">${esc(cust.name || 'Klien')}</span>
+            <span class="text-[11px] text-muted">${esc(o.serviceName || o.serviceId)}</span>
           </td>
           <td class="px-4 py-3 text-center font-mono font-bold">${o.qty} pcs</td>
           <td class="px-4 py-3 font-mono font-bold text-dark">${window.DrizzleApp.formatRupiah(o.totalPrice)}</td>
@@ -1606,26 +1678,26 @@
         <div class="border-b border-dark pb-3 flex justify-between items-start">
           <div>
             <h2 class="font-extrabold text-base uppercase text-dark">SURAT PERINTAH KERJA (SPK)</h2>
-            <span class="font-mono text-xs text-muted">Drizzle Project Studio Solo • No: SPK-${order.orderId}</span>
+            <span class="font-mono text-xs text-muted">Drizzle Project Studio Solo • No: SPK-${esc(order.orderId)}</span>
           </div>
           <div class="text-right font-mono text-xs">
-            <strong>Tgl SPK:</strong> ${order.createdAt || '-'}<br>
-            <strong>Status DP:</strong> ${order.paymentStatus}
+            <strong>Tgl SPK:</strong> ${esc(order.createdAt || '-')}<br>
+            <strong>Status DP:</strong> ${esc(order.paymentStatus)}
           </div>
         </div>
 
         <div class="grid grid-cols-2 gap-4 text-xs pt-2">
           <div>
             <strong class="text-muted block text-[10px] uppercase font-mono">Informasi Pemesan:</strong>
-            <span class="font-bold text-dark block">${cust.name || 'Klien'} [${cust.organization || 'Umum'}]</span>
-            <span class="text-muted block">WhatsApp: ${cust.whatsapp || '-'}</span>
-            <span class="text-muted block">Alamat: ${cust.address || '-'}</span>
+            <span class="font-bold text-dark block">${esc(cust.name || 'Klien')} [${esc(cust.organization || 'Umum')}]</span>
+            <span class="text-muted block">WhatsApp: ${esc(cust.whatsapp || '-')}</span>
+            <span class="text-muted block">Alamat: ${esc(cust.address || '-')}</span>
           </div>
           <div>
             <strong class="text-muted block text-[10px] uppercase font-mono">Detail Pesanan:</strong>
-            <span class="font-bold text-dark block">${order.serviceName || order.serviceId}</span>
+            <span class="font-bold text-dark block">${esc(order.serviceName || order.serviceId)}</span>
             <span class="font-mono text-brand font-bold block">${order.qty} Pcs (Include Packaging 1:1)</span>
-            <span class="text-muted block">Tahap Saat Ini: [${order.kanbanStage}]</span>
+            <span class="text-muted block">Tahap Saat Ini: [${esc(order.kanbanStage)}]</span>
           </div>
         </div>
 
@@ -1653,7 +1725,7 @@
         <div class="pt-2">
           <strong class="text-muted block text-[10px] uppercase font-mono mb-1">Spesifikasi Pengerjaan & Kemasan:</strong>
           <div class="bg-canvas p-3 rounded border border-borderCard font-mono text-[11px] leading-relaxed">
-            ${order.briefUrl || 'Spesifikasi standar studio.'}<br>
+            ${esc(order.briefUrl || 'Spesifikasi standar studio.')}<br>
             <span class="text-emerald-700 font-bold block mt-1">✓ Wajib Kemasan 1:1: ${order.qty} pcs Polymailer/Box & Thank You Card.</span>
           </div>
         </div>
@@ -1681,6 +1753,7 @@
 
     // Init
     document.addEventListener('DOMContentLoaded', () => {
+      checkAdminAuth();
       renderAll();
 
       // Show Live Sync badge
