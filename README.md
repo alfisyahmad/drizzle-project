@@ -47,16 +47,6 @@ Sistem manajemen operasional terintegrasi berbasis web untuk Drizzle Project (ve
 
 ---
 
-## Keamanan Sistem (Cybersecurity)
-
-Aplikasi DrizzleOS telah diaudit dan diperkeras keamanannya melalui analisis kerentanan claude-security dengan 4 lapisan proteksi utama:
-
-1. **Proteksi Anti-XSS (Output Sanitization):** Seluruh input pengguna (nama, instansi, nomor WhatsApp, alamat, catatan, serta detail item pesanan) disanitasi menggunakan fungsi escapeHTML pada rendering dashboard admin maupun halaman pelacakan pelanggan untuk mencegah injeksi skrip berbahaya.
-2. **Gerbang Autentikasi Admin (PIN Gate):** Akses ke halaman admin.html dilindungi layar otorisasi PIN berbasis sessionStorage serta tombol Kunci Admin pada header console. PIN demo presentasi: DRZ2026.
-3. **Validasi Input & Safe Storage:** Form pemesanan menerapkan validasi ketat (kuantitas minimal 1 pcs, batas panjang karakter pada seluruh kolom input, dan validasi format nomor WhatsApp), sementara pembacaan maupun penyimpanan localStorage dibungkus blok try-catch untuk mencegah kegagalan akibat data korup.
-4. **HTTP Security Headers (Cloudflare Pages):** Konfigurasi header _headers aktif di root proyek meliputi X-Frame-Options: DENY, X-Content-Type-Options: nosniff, Referrer-Policy: strict-origin-when-cross-origin, Permissions-Policy, serta Content-Security-Policy yang membatasi sumber skrip, gaya, dan font hanya ke origin resmi (self, Tailwind CSS CDN, dan Google Fonts).
-
----
 
 ## Tim Pengembang (Kelompok 7)
 
