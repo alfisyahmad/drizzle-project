@@ -962,11 +962,14 @@ function updatePaymentStatus(orderId, newStatus) {
   }
 }
 
-// ERP/SCM Module: Cancel Order — kembalikan stok, catat refund jika ada
+// ERP/SCM/CRM Module: Cancel Order — kembalikan stok, catat refund jika ada, perbarui metrik CRM
 function cancelOrder(orderId, reason = '') {
   const db = getDB();
   const order = (db.orders || []).find(o => o.orderId === orderId || o.tracking_code === orderId);
   if (!order) return { success: false, reason: 'Order not found' };
+  if (order.cancelled || order.kanbanStage === 'CANCELLED') {
+    return { success: false, reason: 'Order sudah dibatalkan sebelumnya' };
+  }
 
   const now = new Date().toISOString().replace('T', ' ').substring(0, 16);
   if (!order.historyLogs) order.historyLogs = [];
@@ -975,6 +978,8 @@ function cancelOrder(orderId, reason = '') {
   order.kanbanStage = 'CANCELLED';
   order.cancelled = true;
   order.cancelReason = reason || '';
+  order.waitingPO = false;
+  order.readyForProduction = false;
 
   // 2. Kembalikan stok bahan yang sudah dialokasikan (reverse deductOrderMaterials)
   if (order.materialsDeducted && order.serviceMode !== 'DESIGN_ONLY') {
@@ -1026,7 +1031,17 @@ function cancelOrder(orderId, reason = '') {
     });
   }
 
-  // 4. Log ke historyLogs
+  // 4. Sinkronkan CRM: kurangi totalOrders & totalSpent pelanggan atas order yang dibatalkan
+  const cust = (db.customers || []).find(c => c.customerId === order.customerId);
+  if (cust) {
+    cust.totalOrders = Math.max(0, (cust.totalOrders || 1) - 1);
+    cust.totalSpent = Math.max(0, (cust.totalSpent || 0) - (order.totalPrice || 0));
+    if (cust.segment === 'Repeat' && cust.totalOrders <= 1) {
+      cust.segment = 'Baru';
+    }
+  }
+
+  // 5. Log ke historyLogs
   order.historyLogs.unshift({
     timestamp: now,
     stage: 'CANCELLED',
@@ -1034,16 +1049,19 @@ function cancelOrder(orderId, reason = '') {
     author: 'Drizzle ERP Admin'
   });
 
-  // 5. saveAndSyncDB
+  // 6. saveAndSyncDB
   saveAndSyncDB(db, `Pesanan ${order.orderId} dibatalkan. ${paidAmount > 0 ? 'Refund ' + formatRupiah(paidAmount) + ' diproses.' : ''}`);
   return { success: true, order };
 }
 
-// ERP Module: Return Order — catat retur, kembalikan stok, proses refund
+// ERP/SCM/CRM Module: Return Order — catat retur, kembalikan stok, proses refund, perbarui CRM
 function returnOrder(orderId, reason = '', refundAmount = 0) {
   const db = getDB();
   const order = (db.orders || []).find(o => o.orderId === orderId || o.tracking_code === orderId);
   if (!order) return { success: false, reason: 'Order not found' };
+  if (order.returned || order.kanbanStage === 'RETURNED') {
+    return { success: false, reason: 'Order sudah diretur sebelumnya' };
+  }
 
   const now = new Date().toISOString().replace('T', ' ').substring(0, 16);
   if (!order.historyLogs) order.historyLogs = [];
@@ -1068,7 +1086,7 @@ function returnOrder(orderId, reason = '', refundAmount = 0) {
     author: 'SCM Warehouse'
   });
 
-  // 3. Jika refundAmount > 0 → catat REFUND di financeLedger
+  // 3. Jika refundAmount > 0 → catat REFUND di financeLedger & kurangi totalSpent di CRM
   if (refundAmount > 0) {
     const txId = generateNextTxId(db);
     db.financeLedger.unshift({
@@ -1080,6 +1098,11 @@ function returnOrder(orderId, reason = '', refundAmount = 0) {
       description: `Refund retur Pesanan ${order.orderId} (${order.serviceName || order.serviceId})${reason ? ' — ' + reason : ''}`,
       txDate: now
     });
+
+    const cust = (db.customers || []).find(c => c.customerId === order.customerId);
+    if (cust) {
+      cust.totalSpent = Math.max(0, (cust.totalSpent || 0) - refundAmount);
+    }
   }
 
   // 4. Log ke historyLogs
